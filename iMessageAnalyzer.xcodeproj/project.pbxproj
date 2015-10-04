@@ -14,6 +14,8 @@
 		94A9924A1BBDC734003BA1D5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 94A992481BBDC734003BA1D5 /* Main.storyboard */; };
 		94A992551BBDC734003BA1D5 /* iMessageAnalyzerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A992541BBDC734003BA1D5 /* iMessageAnalyzerTests.m */; };
 		94A992601BBDC734003BA1D5 /* iMessageAnalyzerUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A9925F1BBDC734003BA1D5 /* iMessageAnalyzerUITests.m */; };
+		94F3AC371BC1D9C600948A23 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 94F3AC351BC1D9C600948A23 /* libsqlite3.0.tbd */; };
+		94F3AC381BC1D9C600948A23 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 94F3AC361BC1D9C600948A23 /* libsqlite3.tbd */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +51,8 @@
 		94A9925B1BBDC734003BA1D5 /* iMessageAnalyzerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iMessageAnalyzerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		94A9925F1BBDC734003BA1D5 /* iMessageAnalyzerUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = iMessageAnalyzerUITests.m; sourceTree = "<group>"; };
 		94A992611BBDC734003BA1D5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		94F3AC351BC1D9C600948A23 /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
+		94F3AC361BC1D9C600948A23 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +60,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				94F3AC371BC1D9C600948A23 /* libsqlite3.0.tbd in Frameworks */,
+				94F3AC381BC1D9C600948A23 /* libsqlite3.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -79,6 +85,8 @@
 		94A992311BBDC733003BA1D5 = {
 			isa = PBXGroup;
 			children = (
+				94F3AC351BC1D9C600948A23 /* libsqlite3.0.tbd */,
+				94F3AC361BC1D9C600948A23 /* libsqlite3.tbd */,
 				94A9923C1BBDC733003BA1D5 /* iMessageAnalyzer */,
 				94A992531BBDC734003BA1D5 /* iMessageAnalyzerTests */,
 				94A9925E1BBDC734003BA1D5 /* iMessageAnalyzerUITests */,
@@ -489,6 +497,7 @@
 				94A992661BBDC734003BA1D5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		94A992671BBDC734003BA1D5 /* Build configuration list for PBXNativeTarget "iMessageAnalyzerTests" */ = {
 			isa = XCConfigurationList;
@@ -497,6 +506,7 @@
 				94A992691BBDC734003BA1D5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		94A9926A1BBDC734003BA1D5 /* Build configuration list for PBXNativeTarget "iMessageAnalyzerUITests" */ = {
 			isa = XCConfigurationList;
@@ -505,6 +515,7 @@
 				94A9926C1BBDC734003BA1D5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
