@@ -17,6 +17,7 @@
 		94F3AC371BC1D9C600948A23 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 94F3AC351BC1D9C600948A23 /* libsqlite3.0.tbd */; };
 		94F3AC381BC1D9C600948A23 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 94F3AC361BC1D9C600948A23 /* libsqlite3.tbd */; };
 		94F3AC3B1BC32BD500948A23 /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = 94F3AC3A1BC32BD500948A23 /* Person.m */; settings = {ASSET_TAGS = (); }; };
+		94F3AC3E1BC4803500948A23 /* Attachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 94F3AC3D1BC4803500948A23 /* Attachment.m */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +57,8 @@
 		94F3AC361BC1D9C600948A23 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		94F3AC391BC32BD500948A23 /* Person.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Person.h; sourceTree = "<group>"; };
 		94F3AC3A1BC32BD500948A23 /* Person.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Person.m; sourceTree = "<group>"; };
+		94F3AC3C1BC4803500948A23 /* Attachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Attachment.h; sourceTree = "<group>"; };
+		94F3AC3D1BC4803500948A23 /* Attachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Attachment.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,6 +123,8 @@
 				94A992401BBDC733003BA1D5 /* Supporting Files */,
 				94F3AC391BC32BD500948A23 /* Person.h */,
 				94F3AC3A1BC32BD500948A23 /* Person.m */,
+				94F3AC3C1BC4803500948A23 /* Attachment.h */,
+				94F3AC3D1BC4803500948A23 /* Attachment.m */,
 			);
 			path = iMessageAnalyzer;
 			sourceTree = "<group>";
@@ -283,6 +288,7 @@
 				94A992421BBDC733003BA1D5 /* main.m in Sources */,
 				94F3AC3B1BC32BD500948A23 /* Person.m in Sources */,
 				94A9923F1BBDC733003BA1D5 /* AppDelegate.m in Sources */,
+				94F3AC3E1BC4803500948A23 /* Attachment.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
