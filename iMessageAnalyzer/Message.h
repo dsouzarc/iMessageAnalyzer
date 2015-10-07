@@ -1,0 +1,29 @@
+//
+//  Message.h
+//  iMessageAnalyzer
+//
+//  Created by Ryan D'souza on 10/6/15.
+//  Copyright © 2015 Ryan D'souza. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+
+@interface Message : NSObject
+
+- (instancetype) initWithMessageId:(NSInteger)messageId personId:(NSInteger)personId handleId:(NSInteger)handleId messageGUID:(NSString*)messageGUID messageText:(NSString*)messageText dateSent:(NSDate*)dateSent dateRead:(NSDate*)dateRead isIMessage:(BOOL)isIMessage isFromMe:(BOOL)isFromMe;
+
+@property (strong, nonatomic) NSString *messageText;
+@property (strong, nonatomic) NSString *messageGUID;
+
+@property (strong, nonatomic) NSDate *dateSent;
+@property (strong, nonatomic) NSDate *dateRead;
+
+@property NSInteger messageId;
+@property NSInteger personId;
+@property NSInteger handleId;
+
+@property BOOL isIMessage;
+@property BOOL isFromMe;
+
+
+@end
