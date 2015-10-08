@@ -19,6 +19,7 @@
 		94F3AC3B1BC32BD500948A23 /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = 94F3AC3A1BC32BD500948A23 /* Person.m */; settings = {ASSET_TAGS = (); }; };
 		94F3AC3E1BC4803500948A23 /* Attachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 94F3AC3D1BC4803500948A23 /* Attachment.m */; settings = {ASSET_TAGS = (); }; };
 		94F3AC411BC481B900948A23 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 94F3AC401BC481B900948A23 /* Message.m */; settings = {ASSET_TAGS = (); }; };
+		94F3AC441BC727BE00948A23 /* MessageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 94F3AC431BC727BE00948A23 /* MessageManager.m */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +63,8 @@
 		94F3AC3D1BC4803500948A23 /* Attachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Attachment.m; sourceTree = "<group>"; };
 		94F3AC3F1BC481B900948A23 /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
 		94F3AC401BC481B900948A23 /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Message.m; sourceTree = "<group>"; };
+		94F3AC421BC727BE00948A23 /* MessageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageManager.h; sourceTree = "<group>"; };
+		94F3AC431BC727BE00948A23 /* MessageManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,6 +133,8 @@
 				94F3AC3D1BC4803500948A23 /* Attachment.m */,
 				94F3AC3F1BC481B900948A23 /* Message.h */,
 				94F3AC401BC481B900948A23 /* Message.m */,
+				94F3AC421BC727BE00948A23 /* MessageManager.h */,
+				94F3AC431BC727BE00948A23 /* MessageManager.m */,
 			);
 			path = iMessageAnalyzer;
 			sourceTree = "<group>";
@@ -290,6 +295,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				94A992451BBDC733003BA1D5 /* ViewController.m in Sources */,
+				94F3AC441BC727BE00948A23 /* MessageManager.m in Sources */,
 				94F3AC411BC481B900948A23 /* Message.m in Sources */,
 				94A992421BBDC733003BA1D5 /* main.m in Sources */,
 				94F3AC3B1BC32BD500948A23 /* Person.m in Sources */,
