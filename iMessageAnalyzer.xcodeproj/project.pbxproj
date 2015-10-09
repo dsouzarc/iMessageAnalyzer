@@ -20,6 +20,7 @@
 		94F3AC3E1BC4803500948A23 /* Attachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 94F3AC3D1BC4803500948A23 /* Attachment.m */; settings = {ASSET_TAGS = (); }; };
 		94F3AC411BC481B900948A23 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 94F3AC401BC481B900948A23 /* Message.m */; settings = {ASSET_TAGS = (); }; };
 		94F3AC441BC727BE00948A23 /* MessageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 94F3AC431BC727BE00948A23 /* MessageManager.m */; settings = {ASSET_TAGS = (); }; };
+		94F3AC471BC7282A00948A23 /* DatabaseManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 94F3AC461BC7282A00948A23 /* DatabaseManager.m */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +66,8 @@
 		94F3AC401BC481B900948A23 /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Message.m; sourceTree = "<group>"; };
 		94F3AC421BC727BE00948A23 /* MessageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageManager.h; sourceTree = "<group>"; };
 		94F3AC431BC727BE00948A23 /* MessageManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageManager.m; sourceTree = "<group>"; };
+		94F3AC451BC7282A00948A23 /* DatabaseManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatabaseManager.h; sourceTree = "<group>"; };
+		94F3AC461BC7282A00948A23 /* DatabaseManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatabaseManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,6 +138,8 @@
 				94F3AC401BC481B900948A23 /* Message.m */,
 				94F3AC421BC727BE00948A23 /* MessageManager.h */,
 				94F3AC431BC727BE00948A23 /* MessageManager.m */,
+				94F3AC451BC7282A00948A23 /* DatabaseManager.h */,
+				94F3AC461BC7282A00948A23 /* DatabaseManager.m */,
 			);
 			path = iMessageAnalyzer;
 			sourceTree = "<group>";
@@ -298,6 +303,7 @@
 				94F3AC441BC727BE00948A23 /* MessageManager.m in Sources */,
 				94F3AC411BC481B900948A23 /* Message.m in Sources */,
 				94A992421BBDC733003BA1D5 /* main.m in Sources */,
+				94F3AC471BC7282A00948A23 /* DatabaseManager.m in Sources */,
 				94F3AC3B1BC32BD500948A23 /* Person.m in Sources */,
 				94A9923F1BBDC733003BA1D5 /* AppDelegate.m in Sources */,
 				94F3AC3E1BC4803500948A23 /* Attachment.m in Sources */,
