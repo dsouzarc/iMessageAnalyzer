@@ -8,6 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
+#import "Person.h"
+#import "Attachment.h"
+#import "Message.h"
+
 @interface MessageManager : NSObject
 
 + (instancetype) getInstance;
