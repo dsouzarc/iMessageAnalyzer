@@ -8,6 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import "DatabaseManager.h"
+
 @interface AppDelegate : NSObject <NSApplicationDelegate>
 
 

@@ -16,7 +16,7 @@ static DatabaseManager *databaseInstance;
 {
     @synchronized(self) {
         if(!databaseInstance) {
-            databaseInstance = [self init];
+            databaseInstance = [[self alloc] init];
         }
     }
     
@@ -27,6 +27,8 @@ static DatabaseManager *databaseInstance;
 {
     if(!databaseInstance) {
         databaseInstance = [super init];
+        
+        
     }
     
     return self;
