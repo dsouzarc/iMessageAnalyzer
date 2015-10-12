@@ -10,7 +10,13 @@
 
 static DatabaseManager *databaseInstance;
 
-static NSString *pathToDB = "/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
+static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
+
+@interface DatabaseManager ()
+
+@property sqlite3 *database;
+
+@end
 
 @implementation DatabaseManager
 
@@ -30,7 +36,12 @@ static NSString *pathToDB = "/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
     if(!databaseInstance) {
         databaseInstance = [super init];
         
-        
+        if(sqlite3_open([pathToDB cStringUsingEncoding:NSASCIIStringEncoding], &_database) == SQLITE_OK) {
+            printf("DATABASE SUCCESSFULLY OPENED\n");
+        }
+        else {
+            printf("ERROR OPENING DB: %s", sqlite3_errmsg(_database));
+        }
     }
     
     return self;
