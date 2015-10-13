@@ -42,9 +42,27 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
         else {
             printf("ERROR OPENING DB: %s", sqlite3_errmsg(_database));
         }
+        
+        [self getMessages];
     }
     
     return self;
+}
+
+- (void) getMessages
+{
+    const char *query = "SELECT * FROM message";
+    sqlite3_stmt *statement;
+    
+    
+    if(sqlite3_prepare_v2(_database, query, -1, &statement, NULL) == SQLITE_OK) {
+        while(sqlite3_step(statement) == SQLITE_ROW) {
+            printf("MESSAGE: %s\n", sqlite3_column_text(statement, 2));
+        }
+    }
+    else {
+        printf("ERROR GETTING MESSAGES: %s\n", sqlite3_errmsg(_database));
+    }
 }
 
 @end
