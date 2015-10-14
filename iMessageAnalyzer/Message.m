@@ -10,13 +10,12 @@
 
 @implementation Message
 
-- (instancetype) initWithMessageId:(NSInteger)messageId personId:(NSInteger)personId handleId:(NSInteger)handleId messageGUID:(NSString *)messageGUID messageText:(NSString *)messageText dateSent:(NSDate *)dateSent dateRead:(NSDate *)dateRead isIMessage:(BOOL)isIMessage isFromMe:(BOOL)isFromMe
+- (instancetype) initWithMessageId:(NSInteger)messageId handleId:(NSInteger)handleId messageGUID:(NSString *)messageGUID messageText:(NSString *)messageText dateSent:(NSDate *)dateSent dateRead:(NSDate *)dateRead isIMessage:(BOOL)isIMessage isFromMe:(BOOL)isFromMe
 {
     self = [super init];
     
     if(self) {
         self.messageId = messageId;
-        self.personId = personId;
         self.handleId = handleId;
         self.messageGUID = messageGUID;
         self.messageText = messageText;
