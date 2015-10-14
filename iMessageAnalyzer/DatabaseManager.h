@@ -9,6 +9,10 @@
 #import <Foundation/Foundation.h>
 #import <sqlite3.h>
 
+#include <string.h>
+
+#import "Message.h"
+
 @interface DatabaseManager : NSObject
 
 + (instancetype) getInstance;
