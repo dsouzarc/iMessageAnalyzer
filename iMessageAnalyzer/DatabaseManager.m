@@ -16,6 +16,8 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
 
 @property sqlite3 *database;
 
+@property (strong, nonatomic) NSMutableDictionary *allContacts;
+
 @end
 
 @implementation DatabaseManager
@@ -43,10 +45,81 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
             printf("ERROR OPENING DB: %s", sqlite3_errmsg(_database));
         }
         
-        [self getMessagesForHandleId:5];
+        self.allContacts = [[NSMutableDictionary alloc] init];
+        [self getAllContacts];
+        
+        [self getContactNameForNumber:@"(609) 915-4930"];
+        //[self getMessagesForHandleId:5];
     }
     
     return self;
+}
+
+- (void) getAllContacts
+{
+    ABAddressBook *addressBook = [ABAddressBook sharedAddressBook];
+ 
+    for(ABPerson *person in addressBook.people) {
+        
+        ABMultiValue *phoneValues = [person valueForProperty:kABPhoneProperty];
+        
+        if(phoneValues) {
+            
+            NSString *phoneNumber = nil;
+            
+            for(int i = 0; i < phoneValues.count; i++) {
+                
+                NSString *phoneLabel = [phoneValues labelAtIndex:i];
+                
+                //Save iPhone first
+                if([phoneLabel isEqualToString:kABPhoneiPhoneLabel]) {
+                    phoneNumber = [phoneValues valueAtIndex:i];
+                }
+                
+                //If we haven't found anything, save the regular mobile number
+                else if(!phoneNumber && [phoneLabel isEqualToString:kABPhoneMobileLabel]) {
+                    phoneNumber = [phoneValues valueAtIndex:i];
+                }
+            }
+            
+            //Save it if we have a number
+            if(phoneNumber) {
+                
+                //Clean up the number
+                phoneNumber = [self cleanNumber:phoneNumber];
+                
+                NSString *firstName = [person valueForProperty:kABFirstNameProperty];
+                NSString *lastName = [person valueForProperty:kABLastNameProperty];
+                
+                //Add it to our dictionary
+                Contact *contact = [[Contact alloc] initWithFirstName:firstName lastName:lastName number:phoneNumber person:person];
+                [self.allContacts setObject:contact forKey:phoneNumber];
+            }
+        }
+    }
+}
+
+- (NSString*) cleanNumber:(NSString*)originalNumber
+{
+    NSCharacterSet *removeChars = [NSCharacterSet characterSetWithCharactersInString:@" ()-"];
+    return [[originalNumber componentsSeparatedByCharactersInSet:removeChars] componentsJoinedByString:@""];
+}
+
+- (void) getContactNameForNumber:(NSString*)phoneNumber
+{
+    //phoneNumber = [self cleanNumber:phoneNumber];
+    ABAddressBook *addressBook = [ABAddressBook sharedAddressBook];
+    for(ABPerson *person in addressBook.people) {
+        //NSLog(@"PERSON: %@", person);
+    }
+    
+    ABSearchElement *search = [ABPerson searchElementForProperty:kABPhoneProperty label:kABPhoneMobileLabel key:kABPhoneiPhoneLabel value:phoneNumber comparison:kABEqualCaseInsensitive];
+    
+    NSArray *peopleFound = [addressBook recordsMatchingSearchElement:search];
+    //NSLog(@"FOUND: %@", peopleFound);
+    for(ABPerson *item in peopleFound) {
+        //NSLog(@"ITEM: %@\n\n", item);
+    }
 }
 
 - (NSMutableArray*) getMessagesForHandleId:(int32_t)handleId

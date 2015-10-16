@@ -8,9 +8,11 @@
 
 #import <Foundation/Foundation.h>
 #import <sqlite3.h>
+#import <AddressBook/AddressBook.h>
 
 #include <string.h>
 
+#import "Contact.h"
 #import "Message.h"
 
 @interface DatabaseManager : NSObject

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9438FC371BD049DA00B239BE /* Contact.m in Sources */ = {isa = PBXBuildFile; fileRef = 9438FC361BD049DA00B239BE /* Contact.m */; settings = {ASSET_TAGS = (); }; };
 		94A9923F1BBDC733003BA1D5 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A9923E1BBDC733003BA1D5 /* AppDelegate.m */; };
 		94A992421BBDC733003BA1D5 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A992411BBDC733003BA1D5 /* main.m */; };
 		94A992451BBDC733003BA1D5 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A992441BBDC733003BA1D5 /* ViewController.m */; };
@@ -41,6 +42,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9438FC351BD049DA00B239BE /* Contact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Contact.h; sourceTree = "<group>"; };
+		9438FC361BD049DA00B239BE /* Contact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Contact.m; sourceTree = "<group>"; };
 		94A9923A1BBDC733003BA1D5 /* iMessageAnalyzer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iMessageAnalyzer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		94A9923D1BBDC733003BA1D5 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		94A9923E1BBDC733003BA1D5 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -140,6 +143,8 @@
 				94F3AC431BC727BE00948A23 /* MessageManager.m */,
 				94F3AC451BC7282A00948A23 /* DatabaseManager.h */,
 				94F3AC461BC7282A00948A23 /* DatabaseManager.m */,
+				9438FC351BD049DA00B239BE /* Contact.h */,
+				9438FC361BD049DA00B239BE /* Contact.m */,
 			);
 			path = iMessageAnalyzer;
 			sourceTree = "<group>";
@@ -306,6 +311,7 @@
 				94F3AC471BC7282A00948A23 /* DatabaseManager.m in Sources */,
 				94F3AC3B1BC32BD500948A23 /* Person.m in Sources */,
 				94A9923F1BBDC733003BA1D5 /* AppDelegate.m in Sources */,
+				9438FC371BD049DA00B239BE /* Contact.m in Sources */,
 				94F3AC3E1BC4803500948A23 /* Attachment.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
