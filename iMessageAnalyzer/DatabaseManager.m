@@ -105,20 +105,15 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
     return [[originalNumber componentsSeparatedByCharactersInSet:removeChars] componentsJoinedByString:@""];
 }
 
-- (void) getContactNameForNumber:(NSString*)phoneNumber
+- (NSString*) getContactNameForNumber:(NSString*)phoneNumber
 {
-    //phoneNumber = [self cleanNumber:phoneNumber];
-    ABAddressBook *addressBook = [ABAddressBook sharedAddressBook];
-    for(ABPerson *person in addressBook.people) {
-        //NSLog(@"PERSON: %@", person);
+    Contact *contact = [self.allContacts objectForKey:[self cleanNumber:phoneNumber]];
+    
+    if(contact) {
+        return [contact getName];
     }
-    
-    ABSearchElement *search = [ABPerson searchElementForProperty:kABPhoneProperty label:kABPhoneMobileLabel key:kABPhoneiPhoneLabel value:phoneNumber comparison:kABEqualCaseInsensitive];
-    
-    NSArray *peopleFound = [addressBook recordsMatchingSearchElement:search];
-    //NSLog(@"FOUND: %@", peopleFound);
-    for(ABPerson *item in peopleFound) {
-        //NSLog(@"ITEM: %@\n\n", item);
+    else {
+        return @"";
     }
 }
 
