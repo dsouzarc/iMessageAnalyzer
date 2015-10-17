@@ -18,4 +18,6 @@
 @property (strong, nonatomic) NSString *number;
 @property (strong, nonatomic) ABPerson *person;
 
+- (NSString*) getName;
+
 @end

@@ -24,4 +24,20 @@
     return self;
 }
 
+- (NSString*) getName
+{
+    if(self.firstName && self.lastName) {
+        return [NSString stringWithFormat:@"%@ %@", self.firstName, self.lastName];
+    }
+    else if(self.firstName) {
+        return self.firstName;
+    }
+    else if(self.lastName) {
+        return self.lastName;
+    }
+    else {
+        return @"ERROR WITH CONTACT NAME";
+    }
+}
+
 @end
