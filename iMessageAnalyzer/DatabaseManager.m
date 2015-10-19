@@ -17,6 +17,7 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
 @property sqlite3 *database;
 
 @property (strong, nonatomic) NSMutableDictionary *allContacts;
+@property (strong, nonatomic) NSMutableDictionary *allChats;
 
 @end
 
@@ -48,11 +49,39 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
         self.allContacts = [[NSMutableDictionary alloc] init];
         [self getAllContacts];
         
-        [self getContactNameForNumber:@"(609) 915-4930"];
+        self.allChats = [[NSMutableDictionary alloc] init];
+        [self getAllChats];
+        
+        NSLog(@"NAME: %@", [self getContactNameForNumber:@"(609) 915-4930"]);
         //[self getMessagesForHandleId:5];
     }
     
     return self;
+}
+
+- (void) getAllChats
+{
+    const char *query = "SELECT ROWID, guid, account_id, chat_identifier, service_name, group_id FROM chat";
+    sqlite3_stmt *statement;
+    
+    if(sqlite3_prepare_v2(_database, query, -1, &statement, NULL) == SQLITE_OK) {
+        while(sqlite3_step(statement) == SQLITE_ROW) {
+            int chatId = sqlite3_column_int(statement, 0);
+            NSString *guid = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 1)];
+            NSString *accountID = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 2)];
+            NSString *chatIdentifier = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 3)];
+            NSString *number = [self cleanNumber:chatIdentifier];
+            BOOL isIMessage = [self isIMessage:sqlite3_column_text(statement, 4)];
+            NSString *groupID = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 5)];
+            
+            NSString *name = [self getContactNameForNumber:number];
+            
+            Person *person = [[Person alloc] initWithChatId:chatId guid:guid accountId:accountID chatIdentifier:chatIdentifier groupId:groupID isIMessage:isIMessage personName:name];
+            [self.allChats setObject:person forKey:number];
+        }
+    }
+    
+    sqlite3_finalize(statement);
 }
 
 - (void) getAllContacts
@@ -62,6 +91,12 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
     for(ABPerson *person in addressBook.people) {
         
         NSString *firstName = [person valueForProperty:kABFirstNameProperty];
+        
+        //Add the middle name to the first name
+        if([person valueForProperty:kABMiddleNameProperty]) {
+            firstName = [NSString stringWithFormat:@"%@ %@", firstName, [person valueForProperty:kABMiddleNameProperty]];
+        }
+        
         NSString *lastName = [person valueForProperty:kABLastNameProperty];
         
         //Save all the phone numbers
@@ -93,8 +128,14 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
 
 - (NSString*) cleanNumber:(NSString*)originalNumber
 {
-    NSCharacterSet *removeChars = [NSCharacterSet characterSetWithCharactersInString:@" ()-"];
-    return [[originalNumber componentsSeparatedByCharactersInSet:removeChars] componentsJoinedByString:@""];
+    NSCharacterSet *removeChars = [NSCharacterSet characterSetWithCharactersInString:@" ()-+"];
+    NSString *newNumber = [[originalNumber componentsSeparatedByCharactersInSet:removeChars] componentsJoinedByString:@""];
+    
+    if([newNumber characterAtIndex:0] == '1') {
+        newNumber = [newNumber substringFromIndex:1];
+    }
+    
+    return newNumber;
 }
 
 - (NSString*) getContactNameForNumber:(NSString*)phoneNumber
@@ -138,6 +179,8 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
     else {
         printf("ERROR GETTING MESSAGES: %s\n", sqlite3_errmsg(_database));
     }
+    
+    sqlite3_finalize(statement);
     
     return result;
 }

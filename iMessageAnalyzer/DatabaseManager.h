@@ -14,6 +14,7 @@
 
 #import "Contact.h"
 #import "Message.h"
+#import "Person.h"
 
 @interface DatabaseManager : NSObject
 
