@@ -52,6 +52,11 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
         self.allChats = [[NSMutableDictionary alloc] init];
         [self getAllChats];
         
+        Person *person = [self.allChats objectForKey:@"7327130193"];
+        NSLog(@"PERSON: %@", person.personName);
+        
+        [self getAllMessagesForChatID:person.chatId];
+        
         NSLog(@"NAME: %@", [self getContactNameForNumber:@"(609) 915-4930"]);
         //[self getMessagesForHandleId:5];
     }
@@ -82,6 +87,54 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
     }
     
     sqlite3_finalize(statement);
+}
+
+- (int32_t) getHandleForChatID:(int32_t)chatID
+{
+    char *query = [[NSString stringWithFormat:@"SELECT handle_id FROM chat_handle_join WHERE chat_id=%d", chatID] UTF8String];
+    sqlite3_stmt *statement;
+    
+    int result = 0;
+    
+    if(sqlite3_prepare_v2(_database, query, -1, &statement, NULL) == SQLITE_OK) {
+        while(sqlite3_step(statement) == SQLITE_ROW) {
+            result = sqlite3_column_int(statement, 0);
+        }
+    }
+
+    sqlite3_finalize(statement);
+    
+    return result;
+}
+
+- (void) getAllMessagesForChatID:(int32_t)chatID
+{
+    int handleID = [self getHandleForChatID:chatID];
+    
+    char *query = [[NSString stringWithFormat:@"SELECT ROWID, guid, text, service, account_guid, date, date_read, is_from_me FROM message WHERE handle_id=%d ORDER BY date", handleID] UTF8String];
+    sqlite3_stmt *statement;
+    
+    if(sqlite3_prepare_v2(_database, query, -1, &statement, NULL) == SQLITE_OK) {
+        while(sqlite3_step(statement) == SQLITE_ROW) {
+            int32_t messageID = sqlite3_column_int(statement, 0);
+            NSString *guid = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 1)];
+            NSString *text = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 2)];
+            BOOL isIMessage = [self isIMessage:sqlite3_column_text(statement, 3)];
+            NSString *accountGUID = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 4)];
+            int32_t dateInt = sqlite3_column_int(statement, 5);
+            int32_t dateReadInt = sqlite3_column_int(statement, 6);
+            BOOL isFromMe = sqlite3_column_int(statement, 7) == 1 ? YES : NO;
+            
+            NSLog(@"MESSAGE: %@", text);
+            
+        }
+    }
+    else {
+        NSLog(@"ERROR COMPILING ALL MESSAGES QUERY: %s", sqlite3_errmsg(_database));
+    }
+    
+    sqlite3_finalize(statement);
+    
 }
 
 - (void) getAllContacts
