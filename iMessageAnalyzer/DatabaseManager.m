@@ -10,6 +10,8 @@
 
 static DatabaseManager *databaseInstance;
 
+static NSString *pathToDB = "/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
+
 @implementation DatabaseManager
 
 + (instancetype) getInstance
