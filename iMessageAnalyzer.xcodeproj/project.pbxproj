@@ -100,11 +100,34 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		94A992311BBDC733003BA1D5 = {
+		9438FD021BE077E400B239BE /* Objects */ = {
+			isa = PBXGroup;
+			children = (
+				94F3AC391BC32BD500948A23 /* Person.h */,
+				94F3AC3A1BC32BD500948A23 /* Person.m */,
+				94F3AC3C1BC4803500948A23 /* Attachment.h */,
+				94F3AC3D1BC4803500948A23 /* Attachment.m */,
+				94F3AC3F1BC481B900948A23 /* Message.h */,
+				94F3AC401BC481B900948A23 /* Message.m */,
+				9438FC351BD049DA00B239BE /* Contact.h */,
+				9438FC361BD049DA00B239BE /* Contact.m */,
+			);
+			name = Objects;
+			sourceTree = "<group>";
+		};
+		9438FD031BE0780500B239BE /* SQLite */ = {
 			isa = PBXGroup;
 			children = (
 				94F3AC351BC1D9C600948A23 /* libsqlite3.0.tbd */,
 				94F3AC361BC1D9C600948A23 /* libsqlite3.tbd */,
+			);
+			name = SQLite;
+			sourceTree = "<group>";
+		};
+		94A992311BBDC733003BA1D5 = {
+			isa = PBXGroup;
+			children = (
+				9438FD031BE0780500B239BE /* SQLite */,
 				94A9923C1BBDC733003BA1D5 /* iMessageAnalyzer */,
 				94A992531BBDC734003BA1D5 /* iMessageAnalyzerTests */,
 				94A9925E1BBDC734003BA1D5 /* iMessageAnalyzerUITests */,
@@ -129,22 +152,12 @@
 				94A9923E1BBDC733003BA1D5 /* AppDelegate.m */,
 				94A992431BBDC733003BA1D5 /* ViewController.h */,
 				94A992441BBDC733003BA1D5 /* ViewController.m */,
-				94A992461BBDC733003BA1D5 /* Assets.xcassets */,
-				94A992481BBDC734003BA1D5 /* Main.storyboard */,
-				94A9924B1BBDC734003BA1D5 /* Info.plist */,
-				94A992401BBDC733003BA1D5 /* Supporting Files */,
-				94F3AC391BC32BD500948A23 /* Person.h */,
-				94F3AC3A1BC32BD500948A23 /* Person.m */,
-				94F3AC3C1BC4803500948A23 /* Attachment.h */,
-				94F3AC3D1BC4803500948A23 /* Attachment.m */,
-				94F3AC3F1BC481B900948A23 /* Message.h */,
-				94F3AC401BC481B900948A23 /* Message.m */,
 				94F3AC421BC727BE00948A23 /* MessageManager.h */,
 				94F3AC431BC727BE00948A23 /* MessageManager.m */,
 				94F3AC451BC7282A00948A23 /* DatabaseManager.h */,
 				94F3AC461BC7282A00948A23 /* DatabaseManager.m */,
-				9438FC351BD049DA00B239BE /* Contact.h */,
-				9438FC361BD049DA00B239BE /* Contact.m */,
+				9438FD021BE077E400B239BE /* Objects */,
+				94A992401BBDC733003BA1D5 /* Supporting Files */,
 			);
 			path = iMessageAnalyzer;
 			sourceTree = "<group>";
@@ -152,6 +165,9 @@
 		94A992401BBDC733003BA1D5 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				94A992461BBDC733003BA1D5 /* Assets.xcassets */,
+				94A992481BBDC734003BA1D5 /* Main.storyboard */,
+				94A9924B1BBDC734003BA1D5 /* Info.plist */,
 				94A992411BBDC733003BA1D5 /* main.m */,
 			);
 			name = "Supporting Files";
