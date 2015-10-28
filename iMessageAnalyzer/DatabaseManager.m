@@ -55,8 +55,6 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
         Person *person = [self.allChats objectForKey:@"7323577282"];
         NSLog(@"PERSON: %@", person.personName);
         
-        printf("\n\nEND\n\n");
-        
         [self getAllMessagesForChatID:person.chatId];
         
         NSLog(@"NAME: %@", [self getContactNameForNumber:@"(609) 915-4930"]);

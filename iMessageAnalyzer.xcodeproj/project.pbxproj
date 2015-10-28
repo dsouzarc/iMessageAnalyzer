@@ -8,8 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		9438FC371BD049DA00B239BE /* Contact.m in Sources */ = {isa = PBXBuildFile; fileRef = 9438FC361BD049DA00B239BE /* Contact.m */; settings = {ASSET_TAGS = (); }; };
+		9438FD071BE07CFF00B239BE /* MainWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9438FD051BE07CFF00B239BE /* MainWindowController.m */; settings = {ASSET_TAGS = (); }; };
+		9438FD081BE07CFF00B239BE /* MainWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9438FD061BE07CFF00B239BE /* MainWindowController.xib */; settings = {ASSET_TAGS = (); }; };
+		9438FD111BE07D2600B239BE /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9438FD0F1BE07D2600B239BE /* MainViewController.m */; settings = {ASSET_TAGS = (); }; };
+		9438FD121BE07D2600B239BE /* MainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9438FD101BE07D2600B239BE /* MainViewController.xib */; settings = {ASSET_TAGS = (); }; };
+		9438FD181BE07DAC00B239BE /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9438FD171BE07DAC00B239BE /* main.m */; settings = {ASSET_TAGS = (); }; };
 		94A9923F1BBDC733003BA1D5 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A9923E1BBDC733003BA1D5 /* AppDelegate.m */; };
-		94A992421BBDC733003BA1D5 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A992411BBDC733003BA1D5 /* main.m */; };
 		94A992451BBDC733003BA1D5 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A992441BBDC733003BA1D5 /* ViewController.m */; };
 		94A992471BBDC733003BA1D5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 94A992461BBDC733003BA1D5 /* Assets.xcassets */; };
 		94A9924A1BBDC734003BA1D5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 94A992481BBDC734003BA1D5 /* Main.storyboard */; };
@@ -44,10 +48,16 @@
 /* Begin PBXFileReference section */
 		9438FC351BD049DA00B239BE /* Contact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Contact.h; sourceTree = "<group>"; };
 		9438FC361BD049DA00B239BE /* Contact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Contact.m; sourceTree = "<group>"; };
+		9438FD041BE07CFF00B239BE /* MainWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainWindowController.h; sourceTree = "<group>"; };
+		9438FD051BE07CFF00B239BE /* MainWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainWindowController.m; sourceTree = "<group>"; };
+		9438FD061BE07CFF00B239BE /* MainWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainWindowController.xib; sourceTree = "<group>"; };
+		9438FD0E1BE07D2600B239BE /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
+		9438FD0F1BE07D2600B239BE /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
+		9438FD101BE07D2600B239BE /* MainViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainViewController.xib; sourceTree = "<group>"; };
+		9438FD171BE07DAC00B239BE /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		94A9923A1BBDC733003BA1D5 /* iMessageAnalyzer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iMessageAnalyzer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		94A9923D1BBDC733003BA1D5 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		94A9923E1BBDC733003BA1D5 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		94A992411BBDC733003BA1D5 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		94A992431BBDC733003BA1D5 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		94A992441BBDC733003BA1D5 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		94A992461BBDC733003BA1D5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -158,6 +168,12 @@
 				94F3AC461BC7282A00948A23 /* DatabaseManager.m */,
 				9438FD021BE077E400B239BE /* Objects */,
 				94A992401BBDC733003BA1D5 /* Supporting Files */,
+				9438FD041BE07CFF00B239BE /* MainWindowController.h */,
+				9438FD051BE07CFF00B239BE /* MainWindowController.m */,
+				9438FD061BE07CFF00B239BE /* MainWindowController.xib */,
+				9438FD0E1BE07D2600B239BE /* MainViewController.h */,
+				9438FD0F1BE07D2600B239BE /* MainViewController.m */,
+				9438FD101BE07D2600B239BE /* MainViewController.xib */,
 			);
 			path = iMessageAnalyzer;
 			sourceTree = "<group>";
@@ -168,7 +184,7 @@
 				94A992461BBDC733003BA1D5 /* Assets.xcassets */,
 				94A992481BBDC734003BA1D5 /* Main.storyboard */,
 				94A9924B1BBDC734003BA1D5 /* Info.plist */,
-				94A992411BBDC733003BA1D5 /* main.m */,
+				9438FD171BE07DAC00B239BE /* main.m */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -295,7 +311,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				94A992471BBDC733003BA1D5 /* Assets.xcassets in Resources */,
+				9438FD081BE07CFF00B239BE /* MainWindowController.xib in Resources */,
 				94A9924A1BBDC734003BA1D5 /* Main.storyboard in Resources */,
+				9438FD121BE07D2600B239BE /* MainViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -320,14 +338,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9438FD111BE07D2600B239BE /* MainViewController.m in Sources */,
+				9438FD071BE07CFF00B239BE /* MainWindowController.m in Sources */,
 				94A992451BBDC733003BA1D5 /* ViewController.m in Sources */,
 				94F3AC441BC727BE00948A23 /* MessageManager.m in Sources */,
 				94F3AC411BC481B900948A23 /* Message.m in Sources */,
-				94A992421BBDC733003BA1D5 /* main.m in Sources */,
 				94F3AC471BC7282A00948A23 /* DatabaseManager.m in Sources */,
 				94F3AC3B1BC32BD500948A23 /* Person.m in Sources */,
 				94A9923F1BBDC733003BA1D5 /* AppDelegate.m in Sources */,
 				9438FC371BD049DA00B239BE /* Contact.m in Sources */,
+				9438FD181BE07DAC00B239BE /* main.m in Sources */,
 				94F3AC3E1BC4803500948A23 /* Attachment.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

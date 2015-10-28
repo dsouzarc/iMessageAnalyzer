@@ -10,6 +10,8 @@
 
 @interface AppDelegate ()
 
+@property (strong, nonatomic) MainWindowController *mainWindowController;
+
 @end
 
 @implementation AppDelegate
@@ -17,7 +19,9 @@
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     // Insert code here to initialize your application
     
-    DatabaseManager *dbManager = [DatabaseManager getInstance];
+    self.mainWindowController = [[MainWindowController alloc] initWithWindowNibName:@"MainWindowController"];
+    [self.mainWindowController showWindow:self];
+    [self.mainWindowController.window makeKeyAndOrderFront:self];
     
 }
 
