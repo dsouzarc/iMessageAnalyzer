@@ -18,6 +18,8 @@
 @property (strong, nonatomic) NSString *chatIdentifier;
 @property (strong, nonatomic) NSString *groupId;
 
+@property (strong, nonatomic) NSString *number;
+
 @property NSInteger chatId;
 @property BOOL isIMessage;
 
