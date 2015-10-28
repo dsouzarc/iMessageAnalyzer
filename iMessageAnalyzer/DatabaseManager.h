@@ -20,4 +20,6 @@
 
 + (instancetype) getInstance;
 
+- (NSMutableArray*) getAllChats;
+
 @end

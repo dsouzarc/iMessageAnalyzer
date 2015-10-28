@@ -50,7 +50,7 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
         [self getAllContacts];
         
         self.allChats = [[NSMutableDictionary alloc] init];
-        [self getAllChats];
+        [self updateAllChatsGlobalVariable];
         
         Person *person = [self.allChats objectForKey:@"7323577282"];
         NSLog(@"PERSON: %@", person.personName);
@@ -64,7 +64,12 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
     return self;
 }
 
-- (void) getAllChats
+- (NSMutableArray*) getAllChats
+{
+    return [self.allChats allValues];
+}
+
+- (void) updateAllChatsGlobalVariable
 {
     const char *query = "SELECT ROWID, guid, account_id, chat_identifier, service_name, group_id FROM chat";
     sqlite3_stmt *statement;

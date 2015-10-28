@@ -10,6 +10,12 @@
 
 static MessageManager *messageInstance;
 
+@interface MessageManager ()
+
+@property (strong, nonatomic) DatabaseManager *databaseManager;
+
+@end
+
 @implementation MessageManager
 
 + (instancetype) getInstance
@@ -27,9 +33,15 @@ static MessageManager *messageInstance;
 {
     if(!messageInstance) {
         messageInstance = [super init];
+        self.databaseManager = [DatabaseManager getInstance];
     }
     
     return self;
+}
+
+- (NSMutableArray*) getAllChats
+{
+    return [self.databaseManager getAllChats];
 }
 
 

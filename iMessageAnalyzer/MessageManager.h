@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+#import "DatabaseManager.h"
+
 #import "Person.h"
 #import "Attachment.h"
 #import "Message.h"
@@ -15,5 +17,7 @@
 @interface MessageManager : NSObject
 
 + (instancetype) getInstance;
+
+- (NSMutableArray*) getAllChats;
 
 @end
