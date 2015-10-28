@@ -8,6 +8,12 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface MainViewController : NSViewController
+#import "MessageManager.h"
+
+#import "Contact.h"
+#import "Message.h"
+#import "Person.h"
+
+@interface MainViewController : NSViewController <NSTableViewDataSource, NSTableViewDelegate>
 
 @end

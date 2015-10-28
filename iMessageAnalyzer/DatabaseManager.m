@@ -145,7 +145,7 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
                 int32_t dateReadInt = sqlite3_column_int(statement, 6);
                 BOOL isFromMe = sqlite3_column_int(statement, 7) == 1 ? YES : NO;
                 int32_t handleID = sqlite3_column_int(statement, 8);
-                printf("%s\n", [text UTF8String]);
+                //printf("%s\n", [text UTF8String]);
             }
         }
         else {
@@ -174,7 +174,7 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
             int32_t dateReadInt = sqlite3_column_int(statement, 6);
             BOOL isFromMe = sqlite3_column_int(statement, 7) == 1 ? YES : NO;
             
-            printf("%s\n", [text UTF8String]);
+            //printf("%s\n", [text UTF8String]);
             
         }
     }

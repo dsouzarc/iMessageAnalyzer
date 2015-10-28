@@ -22,7 +22,7 @@ static MessageManager *messageInstance;
 {
     @synchronized(self) {
         if(!messageInstance) {
-            messageInstance = [self init];
+            messageInstance = [[self alloc] init];
         }
     }
     
