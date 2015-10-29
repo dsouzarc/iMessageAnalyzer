@@ -34,7 +34,7 @@
             </subviews>
             <connections>
                 <outlet property="contactName" destination="hbl-AI-E5e" id="m88-hu-bEP"/>
-                <outlet property="contactPhoto" destination="nzL-Pq-aYn" id="CiB-WM-GCt"/>
+                <outlet property="contactPhoto" destination="nzL-Pq-aYn" id="oDU-Og-sdM"/>
                 <outlet property="contactPicture" destination="nzL-Pq-aYn" id="qkg-np-Gad"/>
                 <outlet property="lastMessageSent" destination="Y0R-UN-1SQ" id="gXJ-Ll-3Hf"/>
             </connections>

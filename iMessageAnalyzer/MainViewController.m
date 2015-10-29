@@ -11,9 +11,13 @@
 @interface MainViewController ()
 
 @property (strong) IBOutlet NSTableView *contactsTableView;
+@property (strong) IBOutlet NSTableView *messagesTableView;
 
 @property (strong, nonatomic) MessageManager *messageManager;
 @property (strong, nonatomic) NSMutableArray *chats;
+
+@property (strong, nonatomic) NSMutableArray *currentConversationChats;
+
 @end
 
 @implementation MainViewController
@@ -26,6 +30,7 @@
         self.messageManager = [MessageManager getInstance];
         
         self.chats = [self.messageManager getAllChats];
+        self.currentConversationChats = [[NSMutableArray alloc] init];
     }
     
     return self;
@@ -36,12 +41,20 @@
     
     NSNib *cellNib = [[NSNib alloc] initWithNibNamed:@"ChatTableViewCell" bundle:[NSBundle mainBundle]];
     [self.contactsTableView registerNib:cellNib forIdentifier:@"chatTableViewCell"];
+    
+    Person *firstPerson = self.chats[0];
+    self.currentConversationChats = [self.messageManager getAllMessagesForPerson:firstPerson];
+    [self.messagesTableView reloadData];
+    NSLog(@"SIZE: %d", self.currentConversationChats.count);
 }
 
 - (NSInteger) numberOfRowsInTableView:(NSTableView *)tableView
 {
     if(tableView == self.contactsTableView) {
         return self.chats.count;
+    }
+    else if(tableView == self.messagesTableView) {
+        return self.currentConversationChats.count;
     }
     else {
         return 0;
@@ -50,6 +63,13 @@
 
 - (NSView*) tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
+    if(tableView == self.messagesTableView) {
+        Message *message = self.currentConversationChats[row];
+        NSTableCellView *view = [tableView makeViewWithIdentifier:@"messageCellViewIdentifier" owner:self];
+        view.textField.stringValue = message.messageText;
+        return view;
+    }
+    
     ChatTableViewCell *cell = (ChatTableViewCell*)[tableView makeViewWithIdentifier:@"chatTableViewCell" owner:self];
     Person *person = self.chats[row];
     
@@ -74,14 +94,11 @@
 
 - (NSCell*) tableView:(NSTableView *)tableView dataCellForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
-    if(!tableColumn) {
-        return nil;
-    }
     if([[tableColumn identifier] isEqualToString:@"chatsIdentifier"]) {
         return nil;
     }
-
-    return [[NSCell alloc] initTextCell:@""];
+    
+    return [[NSCell alloc] initTextCell:@"Something..."];
 }
 
 - (id) tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
@@ -89,6 +106,13 @@
     if(tableView == self.contactsTableView) {
         return nil;
     }
+    
+    else if(tableView == self.messagesTableView) {
+        NSLog(@"YOOOOO");
+        Message *message = self.currentConversationChats[row];
+        return message.messageText;
+    }
+    
     return @"PROBLEM";
 }
 

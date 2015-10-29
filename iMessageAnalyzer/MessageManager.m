@@ -13,6 +13,7 @@ static MessageManager *messageInstance;
 @interface MessageManager ()
 
 @property (strong, nonatomic) DatabaseManager *databaseManager;
+@property (strong, nonatomic) NSMutableDictionary* allChatsAndConversations;
 
 @end
 
@@ -34,9 +35,15 @@ static MessageManager *messageInstance;
     if(!messageInstance) {
         messageInstance = [super init];
         self.databaseManager = [DatabaseManager getInstance];
+        self.allChatsAndConversations = [self.databaseManager getAllChatsAndConversations];
     }
     
     return self;
+}
+
+- (NSMutableArray*) getAllMessagesForPerson:(Person *)person
+{
+    return [self.allChatsAndConversations objectForKey:person.number];
 }
 
 - (NSMutableArray*) getAllChats

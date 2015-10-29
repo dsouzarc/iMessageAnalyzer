@@ -21,4 +21,6 @@
 - (NSMutableArray*) getAllChats;
 - (NSMutableDictionary*) getAllChatsAndConversations;
 
+- (NSMutableArray*) getAllMessagesForPerson:(Person*)person;
+
 @end
