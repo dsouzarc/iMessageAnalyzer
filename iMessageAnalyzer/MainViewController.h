@@ -10,6 +10,8 @@
 
 #import "MessageManager.h"
 
+#import "ChatTableViewCell.h"
+
 #import "Contact.h"
 #import "Message.h"
 #import "Person.h"

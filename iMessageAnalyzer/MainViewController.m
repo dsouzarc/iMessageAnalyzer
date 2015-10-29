@@ -33,6 +33,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    NSNib *cellNib = [[NSNib alloc] initWithNibNamed:@"ChatTableViewCell" bundle:[NSBundle mainBundle]];
+    [self.contactsTableView registerNib:cellNib forIdentifier:@"chatTableViewCell"];
 }
 
 - (NSInteger) numberOfRowsInTableView:(NSTableView *)tableView
@@ -45,29 +48,39 @@
     }
 }
 
+- (NSView*) tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
+{
+    ChatTableViewCell *cell = (ChatTableViewCell*)[tableView makeViewWithIdentifier:@"chatTableViewCell" owner:self];
+    [cell.textField setStringValue:((Person*)self.chats[row]).number];
+    
+    [cell.contactPhoto setWantsLayer: YES];  // edit: enable the layer for the view.  Thanks omz
+    
+    cell.contactPhoto.layer.borderWidth = 1.0;
+    cell.contactPhoto.layer.cornerRadius = 3.0;
+    cell.contactPhoto.layer.masksToBounds = YES;
+    
+    cell.contactPhoto.image = [[NSImage alloc] initWithData:[((Person*)self.chats[row]).contact imageData]];
+    
+
+    return cell;
+}
+
 - (NSCell*) tableView:(NSTableView *)tableView dataCellForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
     if(!tableColumn) {
         return nil;
     }
     if([[tableColumn identifier] isEqualToString:@"chatsIdentifier"]) {
-        return [[NSTextFieldCell alloc] initTextCell:((Person*)self.chats[row]).number];
+        return nil;
     }
-    
-    return [[NSTextFieldCell alloc] initTextCell:@"Uh oh"];
+
+    return [[NSCell alloc] initTextCell:@""];
 }
 
 - (id) tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
     if(tableView == self.contactsTableView) {
-        Person *person = ((Person*)self.chats[row]);
-        
-        if(person.personName && person.personName.length > 0) {
-            return person.personName;
-        }
-        else {
-            return person.number;
-        }
+        return nil;
     }
     return @"PROBLEM";
 }
