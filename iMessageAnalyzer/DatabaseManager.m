@@ -88,6 +88,11 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
             
             Person *person = [[Person alloc] initWithChatId:chatId guid:guid accountId:accountID chatIdentifier:chatIdentifier groupId:groupID isIMessage:isIMessage personName:name];
             person.number = number;
+            
+            Contact *contact = [self.allContacts objectForKey:[self cleanNumber:number]];
+            
+            person.contact = contact.person;
+        
             [self.allChats setObject:person forKey:number];
         }
     }
