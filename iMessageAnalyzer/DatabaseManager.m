@@ -180,6 +180,11 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
     }
 }
 
+- (NSMutableDictionary*) getAllChatsAndConversations
+{
+    return self.chatsAndMessages;
+}
+
 - (NSMutableArray*) getAllMessagesForChatID:(int32_t)chatID
 {
     NSMutableArray *allMessagesForChat = [[NSMutableArray alloc] init];

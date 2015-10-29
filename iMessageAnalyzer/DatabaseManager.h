@@ -21,5 +21,6 @@
 + (instancetype) getInstance;
 
 - (NSMutableArray*) getAllChats;
+- (NSMutableDictionary*) getAllChatsAndConversations;
 
 @end

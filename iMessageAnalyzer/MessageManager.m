@@ -44,5 +44,10 @@ static MessageManager *messageInstance;
     return [self.databaseManager getAllChats];
 }
 
+- (NSMutableDictionary*) getAllChatsAndConversations
+{
+    return [self.databaseManager getAllChatsAndConversations];
+}
+
 
 @end
