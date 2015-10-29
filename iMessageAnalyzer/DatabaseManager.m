@@ -84,14 +84,13 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
             BOOL isIMessage = [self isIMessage:sqlite3_column_text(statement, 4)];
             NSString *groupID = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 5)];
             
-            NSString *name = [self getContactNameForNumber:number];
+            Contact *contact = [self.allContacts objectForKey:number];
+            NSString *name = contact ? contact.getName : @"";
+            ABPerson *abPerson = contact ? contact.person : nil;
             
             Person *person = [[Person alloc] initWithChatId:chatId guid:guid accountId:accountID chatIdentifier:chatIdentifier groupId:groupID isIMessage:isIMessage personName:name];
             person.number = number;
-            
-            Contact *contact = [self.allContacts objectForKey:[self cleanNumber:number]];
-            
-            person.contact = contact.person;
+            person.contact = abPerson;
         
             [self.allChats setObject:person forKey:number];
         }
@@ -180,7 +179,6 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
             BOOL isFromMe = sqlite3_column_int(statement, 7) == 1 ? YES : NO;
             
             //printf("%s\n", [text UTF8String]);
-            
         }
     }
     else {

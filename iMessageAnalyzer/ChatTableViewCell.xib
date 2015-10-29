@@ -24,7 +24,7 @@
                     </textFieldCell>
                 </textField>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Y0R-UN-1SQ">
-                    <rect key="frame" x="93" y="47" width="274" height="17"/>
+                    <rect key="frame" x="91" y="52" width="274" height="17"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Helloo" id="p8Q-Jv-fdB">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
