@@ -18,6 +18,7 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
 
 @property (strong, nonatomic) NSMutableDictionary *allContacts;
 @property (strong, nonatomic) NSMutableDictionary *allChats;
+@property (strong, nonatomic) NSMutableDictionary *chatsAndMessages;
 
 @end
 
@@ -50,7 +51,10 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
         [self getAllContacts];
         
         self.allChats = [[NSMutableDictionary alloc] init];
+        self.chatsAndMessages = [[NSMutableDictionary alloc] init];
+        
         [self updateAllChatsGlobalVariable];
+        [self getAllMessagesForChats];
         
         Person *person = [self.allChats objectForKey:@"7323577282"];
         NSLog(@"PERSON: %@", person.personName);
@@ -62,6 +66,16 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
     }
     
     return self;
+}
+
+- (void) getAllMessagesForChats
+{
+    for(NSString *number in self.chatsAndMessages) {
+        Person *person = [self.allChats objectForKey:number];
+        NSMutableArray *messagesForPerson = [self getAllMessagesForChatID:person.chatId];
+        NSMutableArray *temp = [self.chatsAndMessages objectForKey:number];
+        [temp addObjectsFromArray:messagesForPerson];
+    }
 }
 
 - (NSMutableArray*) getAllChats
@@ -91,8 +105,9 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
             Person *person = [[Person alloc] initWithChatId:chatId guid:guid accountId:accountID chatIdentifier:chatIdentifier groupId:groupID isIMessage:isIMessage personName:name];
             person.number = number;
             person.contact = abPerson;
-        
+            
             [self.allChats setObject:person forKey:number];
+            [self.chatsAndMessages setObject:[[NSMutableArray alloc] init] forKey:number];
         }
     }
     
@@ -149,6 +164,11 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
                 int32_t dateReadInt = sqlite3_column_int(statement, 6);
                 BOOL isFromMe = sqlite3_column_int(statement, 7) == 1 ? YES : NO;
                 int32_t handleID = sqlite3_column_int(statement, 8);
+                
+                NSDate *date = [NSDate dateWithTimeIntervalSinceReferenceDate:dateInt];
+                NSDate *dateRead = dateReadInt == 0 ? nil : [NSDate dateWithTimeIntervalSinceReferenceDate:dateReadInt];
+                
+                Message *message = [[Message alloc] initWithMessageId:messageID handleId:handleID messageGUID:guid messageText:text dateSent:date dateRead:dateRead isIMessage:isIMessage isFromMe:isFromMe];
                 //printf("%s\n", [text UTF8String]);
             }
         }
@@ -160,8 +180,10 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
     }
 }
 
-- (void) getAllMessagesForChatID:(int32_t)chatID
+- (NSMutableArray*) getAllMessagesForChatID:(int32_t)chatID
 {
+    NSMutableArray *allMessagesForChat = [[NSMutableArray alloc] init];
+    
     int handleID = [self getHandleForChatID:chatID];
     
     char *query = [[NSString stringWithFormat:@"SELECT ROWID, guid, text, service, account_guid, date, date_read, is_from_me FROM message WHERE handle_id=%d ORDER BY date", handleID] UTF8String];
@@ -178,6 +200,13 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
             int32_t dateReadInt = sqlite3_column_int(statement, 6);
             BOOL isFromMe = sqlite3_column_int(statement, 7) == 1 ? YES : NO;
             
+            NSDate *date = [NSDate dateWithTimeIntervalSinceReferenceDate:dateInt];
+            NSDate *dateRead = dateReadInt == 0 ? nil : [NSDate dateWithTimeIntervalSinceReferenceDate:dateReadInt];
+            
+            Message *message = [[Message alloc] initWithMessageId:messageID handleId:handleID messageGUID:guid messageText:text dateSent:date dateRead:dateRead isIMessage:isIMessage isFromMe:isFromMe];
+            
+            [allMessagesForChat addObject:message];
+            
             //printf("%s\n", [text UTF8String]);
         }
     }
@@ -187,6 +216,7 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
     
     sqlite3_finalize(statement);
     
+    return allMessagesForChat;
 }
 
 - (void) getAllContacts

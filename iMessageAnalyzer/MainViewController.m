@@ -53,16 +53,22 @@
     ChatTableViewCell *cell = (ChatTableViewCell*)[tableView makeViewWithIdentifier:@"chatTableViewCell" owner:self];
     Person *person = self.chats[row];
     
-    [cell.textField setStringValue:((Person*)self.chats[row]).number];
+    if(person.personName.length > 0) {
+        [cell.contactName setStringValue:person.personName];
+    }
+    else {
+        [cell.contactName setStringValue:person.number];
+    }
+    
+    [cell.lastMessageSent setStringValue:person.number];
     
     [cell.contactPhoto setWantsLayer: YES];
     cell.contactPhoto.layer.borderWidth = 0.0;
     cell.contactPhoto.layer.cornerRadius = 30.0;
     cell.contactPhoto.layer.masksToBounds = YES;
     
-    cell.contactPhoto.image = [[NSImage alloc] initWithData:[((Person*)self.chats[row]).contact imageData]];
+    [cell.contactPhoto setImage:[[NSImage alloc] initWithData:[person.contact imageData]]];
     
-
     return cell;
 }
 
