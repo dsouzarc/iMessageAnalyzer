@@ -23,7 +23,7 @@
                             <rect key="frame" x="0.0" y="0.0" width="219" height="701"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <subviews>
-                                <searchField wantsLayer="YES" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Kpw-Oj-Sda">
+                                <searchField wantsLayer="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Kpw-Oj-Sda">
                                     <rect key="frame" x="0.0" y="679" width="219" height="22"/>
                                     <searchFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" usesSingleLineMode="YES" bezelStyle="round" id="Lca-Nf-RM7">
                                         <font key="font" metaFont="system"/>
@@ -31,13 +31,13 @@
                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     </searchFieldCell>
                                 </searchField>
-                                <scrollView autohidesScrollers="YES" horizontalLineScroll="152" horizontalPageScroll="10" verticalLineScroll="152" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wz5-YH-6OO">
+                                <scrollView autohidesScrollers="YES" horizontalLineScroll="92" horizontalPageScroll="10" verticalLineScroll="92" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wz5-YH-6OO">
                                     <rect key="frame" x="0.0" y="0.0" width="219" height="681"/>
                                     <clipView key="contentView" id="K04-yK-RYh">
                                         <rect key="frame" x="1" y="17" width="217" height="663"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <subviews>
-                                            <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="150" rowSizeStyle="automatic" headerView="bSy-gm-tsh" viewBased="YES" id="S3H-Yk-c4c">
+                                            <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="90" rowSizeStyle="automatic" headerView="bSy-gm-tsh" viewBased="YES" id="S3H-Yk-c4c">
                                                 <rect key="frame" x="0.0" y="0.0" width="217" height="663"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <size key="intercellSpacing" width="3" height="2"/>
@@ -54,7 +54,7 @@
                                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                         <prototypeCellViews>
                                                             <tableCellView id="dew-g9-0QF" customClass="ChatTableViewCell">
-                                                                <rect key="frame" x="1" y="1" width="214" height="150"/>
+                                                                <rect key="frame" x="1" y="1" width="214" height="90"/>
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             </tableCellView>
                                                         </prototypeCellViews>
@@ -83,8 +83,11 @@
                                 </scrollView>
                             </subviews>
                             <constraints>
+                                <constraint firstItem="Kpw-Oj-Sda" firstAttribute="leading" secondItem="jQ9-qK-j6u" secondAttribute="leading" id="9OO-09-Caa"/>
                                 <constraint firstAttribute="bottom" secondItem="wz5-YH-6OO" secondAttribute="bottom" id="WSG-p6-tkN"/>
+                                <constraint firstItem="Kpw-Oj-Sda" firstAttribute="top" secondItem="jQ9-qK-j6u" secondAttribute="top" id="WoS-58-phO"/>
                                 <constraint firstItem="wz5-YH-6OO" firstAttribute="top" secondItem="jQ9-qK-j6u" secondAttribute="top" constant="20" id="igA-mX-Cjz"/>
+                                <constraint firstAttribute="trailing" secondItem="Kpw-Oj-Sda" secondAttribute="trailing" id="oa3-pP-sHs"/>
                                 <constraint firstItem="wz5-YH-6OO" firstAttribute="leading" secondItem="jQ9-qK-j6u" secondAttribute="leading" id="uA2-7j-5ke"/>
                                 <constraint firstAttribute="trailing" secondItem="wz5-YH-6OO" secondAttribute="trailing" id="wF2-hC-p2I"/>
                             </constraints>

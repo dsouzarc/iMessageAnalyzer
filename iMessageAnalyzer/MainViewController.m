@@ -51,12 +51,13 @@
 - (NSView*) tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
     ChatTableViewCell *cell = (ChatTableViewCell*)[tableView makeViewWithIdentifier:@"chatTableViewCell" owner:self];
+    Person *person = self.chats[row];
+    
     [cell.textField setStringValue:((Person*)self.chats[row]).number];
     
-    [cell.contactPhoto setWantsLayer: YES];  // edit: enable the layer for the view.  Thanks omz
-    
-    cell.contactPhoto.layer.borderWidth = 1.0;
-    cell.contactPhoto.layer.cornerRadius = 3.0;
+    [cell.contactPhoto setWantsLayer: YES];
+    cell.contactPhoto.layer.borderWidth = 0.0;
+    cell.contactPhoto.layer.cornerRadius = 30.0;
     cell.contactPhoto.layer.masksToBounds = YES;
     
     cell.contactPhoto.image = [[NSImage alloc] initWithData:[((Person*)self.chats[row]).contact imageData]];
