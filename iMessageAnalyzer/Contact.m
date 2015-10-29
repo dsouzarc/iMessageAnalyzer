@@ -36,7 +36,7 @@
         return self.lastName;
     }
     else {
-        return @"ERROR WITH CONTACT NAME";
+        return self.number ? self.number : @"PROBLEM WITH CONTACT NAME";
     }
 }
 
