@@ -67,6 +67,11 @@
         Message *message = self.currentConversationChats[row];
         NSTableCellView *view = [tableView makeViewWithIdentifier:@"messageCellViewIdentifier" owner:self];
         view.textField.stringValue = message.messageText;
+        
+        if(message.isFromMe) {
+            [view.textField setAlignment:NSTextAlignmentRight];
+        }
+        
         return view;
     }
     
@@ -108,9 +113,7 @@
     }
     
     else if(tableView == self.messagesTableView) {
-        NSLog(@"YOOOOO");
-        Message *message = self.currentConversationChats[row];
-        return message.messageText;
+        return nil;
     }
     
     return @"PROBLEM";
