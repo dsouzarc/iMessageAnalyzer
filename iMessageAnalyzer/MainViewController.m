@@ -71,6 +71,9 @@
         if(message.isFromMe) {
             [view.textField setAlignment:NSTextAlignmentRight];
         }
+        else {
+            [view.textField setAlignment:NSTextAlignmentLeft];
+        }
         
         return view;
     }
@@ -95,6 +98,18 @@
     [cell.contactPhoto setImage:[[NSImage alloc] initWithData:[person.contact imageData]]];
     
     return cell;
+}
+
+- (BOOL) tableView:(NSTableView *)tableView shouldSelectRow:(NSInteger)row
+{
+    if(tableView == self.contactsTableView) {
+        Person *person = self.chats[row];
+        self.currentConversationChats = [self.messageManager getAllMessagesForPerson:person];
+        [self.messagesTableView reloadData];
+        
+        return YES;
+    }
+    return NO;
 }
 
 - (NSCell*) tableView:(NSTableView *)tableView dataCellForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row

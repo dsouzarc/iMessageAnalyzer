@@ -198,7 +198,14 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
         while(sqlite3_step(statement) == SQLITE_ROW) {
             int32_t messageID = sqlite3_column_int(statement, 0);
             NSString *guid = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 1)];
-            NSString *text = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 2)];
+            
+            NSString *text = @"";
+            
+            if(sqlite3_column_text(statement, 2)) {
+                text = [NSString stringWithUTF8String:sqlite3_column_text(statement, 2)];//[NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 2)];
+            }
+            
+            NSLog(@"Yo: %@", text);
             BOOL isIMessage = [self isIMessage:sqlite3_column_text(statement, 3)];
             NSString *accountGUID = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 4)];
             int32_t dateInt = sqlite3_column_int(statement, 5);
