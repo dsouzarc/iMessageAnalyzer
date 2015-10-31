@@ -23,6 +23,8 @@
         self.isIMessage = isImessage;
         self.personName = personName;
         self.secondaryChatId = -1;
+        
+        self.statistics = [[Statistics alloc] init];
     }
     
     return self;

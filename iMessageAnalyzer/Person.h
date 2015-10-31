@@ -10,6 +10,8 @@
 
 #import <AddressBook/AddressBook.h>
 
+#include "Statistics.h"
+
 @interface Person : NSObject
 
 - (instancetype) initWithChatId:(NSInteger)chatId guid:(NSString*)guid accountId:(NSString*)accountId chatIdentifier:(NSString*)chatIdentifier groupId:(NSString*)groupId isIMessage:(bool)isImessage personName:(NSString*)personName;
@@ -23,6 +25,8 @@
 @property (strong, nonatomic) NSString *number;
 
 @property (strong, nonatomic) ABPerson *contact;
+
+@property (strong, nonatomic) Statistics *statistics;
 
 @property NSInteger chatId;
 @property NSInteger secondaryChatId;

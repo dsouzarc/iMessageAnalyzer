@@ -14,6 +14,7 @@
 		9438FD121BE07D2600B239BE /* MainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9438FD101BE07D2600B239BE /* MainViewController.xib */; settings = {ASSET_TAGS = (); }; };
 		9438FD181BE07DAC00B239BE /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9438FD171BE07DAC00B239BE /* main.m */; settings = {ASSET_TAGS = (); }; };
 		944E19581BE540E9005132E1 /* blank_profile_outline.png in Resources */ = {isa = PBXBuildFile; fileRef = 944E19571BE540E9005132E1 /* blank_profile_outline.png */; settings = {ASSET_TAGS = (); }; };
+		946D2A6C1BE55BF900270BF0 /* Statistics.m in Sources */ = {isa = PBXBuildFile; fileRef = 946D2A6B1BE55BF900270BF0 /* Statistics.m */; settings = {ASSET_TAGS = (); }; };
 		947B53CB1BE1AA2700484D66 /* ChatTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 947B53C81BE1AA2700484D66 /* ChatTableViewCell.xib */; settings = {ASSET_TAGS = (); }; };
 		947B53CC1BE1AA2700484D66 /* ChatTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 947B53CA1BE1AA2700484D66 /* ChatTableViewCell.m */; settings = {ASSET_TAGS = (); }; };
 		94A9923F1BBDC733003BA1D5 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A9923E1BBDC733003BA1D5 /* AppDelegate.m */; };
@@ -59,6 +60,8 @@
 		9438FD101BE07D2600B239BE /* MainViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainViewController.xib; sourceTree = "<group>"; };
 		9438FD171BE07DAC00B239BE /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		944E19571BE540E9005132E1 /* blank_profile_outline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blank_profile_outline.png; sourceTree = "<group>"; };
+		946D2A6A1BE55BF900270BF0 /* Statistics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Statistics.h; sourceTree = "<group>"; };
+		946D2A6B1BE55BF900270BF0 /* Statistics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Statistics.m; sourceTree = "<group>"; };
 		947B53C81BE1AA2700484D66 /* ChatTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChatTableViewCell.xib; sourceTree = "<group>"; };
 		947B53C91BE1AA2700484D66 /* ChatTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatTableViewCell.h; sourceTree = "<group>"; };
 		947B53CA1BE1AA2700484D66 /* ChatTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatTableViewCell.m; sourceTree = "<group>"; };
@@ -124,6 +127,8 @@
 				947B53CE1BE1ADCB00484D66 /* Attachment */,
 				947B53CF1BE1ADD300484D66 /* Message */,
 				947B53D01BE1ADDE00484D66 /* Contact */,
+				946D2A6A1BE55BF900270BF0 /* Statistics.h */,
+				946D2A6B1BE55BF900270BF0 /* Statistics.m */,
 			);
 			name = Objects;
 			sourceTree = "<group>";
@@ -441,6 +446,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9438FD111BE07D2600B239BE /* MainViewController.m in Sources */,
+				946D2A6C1BE55BF900270BF0 /* Statistics.m in Sources */,
 				9438FD071BE07CFF00B239BE /* MainWindowController.m in Sources */,
 				94A992451BBDC733003BA1D5 /* ViewController.m in Sources */,
 				94F3AC441BC727BE00948A23 /* MessageManager.m in Sources */,
