@@ -78,32 +78,36 @@
         return view;
     }
     
-    ChatTableViewCell *cell = (ChatTableViewCell*)[tableView makeViewWithIdentifier:@"chatTableViewCell" owner:self];
-    Person *person = self.chats[row];
-    
-    if(person.personName.length > 0) {
-        [cell.contactName setStringValue:person.personName];
+    else if(tableView == self.contactsTableView) {
+        ChatTableViewCell *cell = (ChatTableViewCell*)[tableView makeViewWithIdentifier:@"chatTableViewCell" owner:self];
+        Person *person = self.chats[row];
+        
+        if(person.personName.length > 0) {
+            [cell.contactName setStringValue:person.personName];
+        }
+        else {
+            [cell.contactName setStringValue:person.number];
+        }
+        
+        [cell.lastMessageSent setStringValue:person.number];
+        
+        [cell.contactPhoto setWantsLayer: YES];
+        cell.contactPhoto.layer.borderWidth = 0.0;
+        cell.contactPhoto.layer.cornerRadius = 30.0;
+        cell.contactPhoto.layer.masksToBounds = YES;
+        
+        NSData *contactPhotoData = [person.contact imageData];
+        
+        if(!contactPhotoData) {
+            contactPhotoData = [[NSData alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"blank_profile_outline" ofType:@"png"]];
+        }
+        
+        [cell.contactPhoto setImage:[[NSImage alloc] initWithData:contactPhotoData]];
+        
+        return cell;
     }
-    else {
-        [cell.contactName setStringValue:person.number];
-    }
     
-    [cell.lastMessageSent setStringValue:person.number];
-    
-    [cell.contactPhoto setWantsLayer: YES];
-    cell.contactPhoto.layer.borderWidth = 0.0;
-    cell.contactPhoto.layer.cornerRadius = 30.0;
-    cell.contactPhoto.layer.masksToBounds = YES;
-    
-    NSData *contactPhotoData = [person.contact imageData];
-    
-    if(!contactPhotoData) {
-        contactPhotoData = [[NSData alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"blank_profile_outline" ofType:@"png"]];
-    }
-    
-    [cell.contactPhoto setImage:[[NSImage alloc] initWithData:contactPhotoData]];
-    
-    return cell;
+    return [[NSView alloc] init];
 }
 
 - (BOOL) tableView:(NSTableView *)tableView shouldSelectRow:(NSInteger)row
