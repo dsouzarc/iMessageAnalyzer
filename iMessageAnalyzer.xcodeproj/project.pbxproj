@@ -13,6 +13,7 @@
 		9438FD111BE07D2600B239BE /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9438FD0F1BE07D2600B239BE /* MainViewController.m */; settings = {ASSET_TAGS = (); }; };
 		9438FD121BE07D2600B239BE /* MainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9438FD101BE07D2600B239BE /* MainViewController.xib */; settings = {ASSET_TAGS = (); }; };
 		9438FD181BE07DAC00B239BE /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9438FD171BE07DAC00B239BE /* main.m */; settings = {ASSET_TAGS = (); }; };
+		944E19581BE540E9005132E1 /* blank_profile_outline.png in Resources */ = {isa = PBXBuildFile; fileRef = 944E19571BE540E9005132E1 /* blank_profile_outline.png */; settings = {ASSET_TAGS = (); }; };
 		947B53CB1BE1AA2700484D66 /* ChatTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 947B53C81BE1AA2700484D66 /* ChatTableViewCell.xib */; settings = {ASSET_TAGS = (); }; };
 		947B53CC1BE1AA2700484D66 /* ChatTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 947B53CA1BE1AA2700484D66 /* ChatTableViewCell.m */; settings = {ASSET_TAGS = (); }; };
 		94A9923F1BBDC733003BA1D5 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A9923E1BBDC733003BA1D5 /* AppDelegate.m */; };
@@ -57,6 +58,7 @@
 		9438FD0F1BE07D2600B239BE /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
 		9438FD101BE07D2600B239BE /* MainViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainViewController.xib; sourceTree = "<group>"; };
 		9438FD171BE07DAC00B239BE /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		944E19571BE540E9005132E1 /* blank_profile_outline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blank_profile_outline.png; sourceTree = "<group>"; };
 		947B53C81BE1AA2700484D66 /* ChatTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChatTableViewCell.xib; sourceTree = "<group>"; };
 		947B53C91BE1AA2700484D66 /* ChatTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatTableViewCell.h; sourceTree = "<group>"; };
 		947B53CA1BE1AA2700484D66 /* ChatTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatTableViewCell.m; sourceTree = "<group>"; };
@@ -231,6 +233,14 @@
 			name = "Main View Controller";
 			sourceTree = "<group>";
 		};
+		947B53DB1BE53F6500484D66 /* Icons */ = {
+			isa = PBXGroup;
+			children = (
+				944E19571BE540E9005132E1 /* blank_profile_outline.png */,
+			);
+			name = Icons;
+			sourceTree = "<group>";
+		};
 		94A992311BBDC733003BA1D5 = {
 			isa = PBXGroup;
 			children = (
@@ -254,6 +264,7 @@
 		94A9923C1BBDC733003BA1D5 /* iMessageAnalyzer */ = {
 			isa = PBXGroup;
 			children = (
+				947B53DB1BE53F6500484D66 /* Icons */,
 				947B53D51BE1AE4C00484D66 /* Main Window Controller */,
 				947B53D61BE1AE5400484D66 /* Main View Controller */,
 				947B53D11BE1AE0D00484D66 /* Managers */,
@@ -400,6 +411,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				94A992471BBDC733003BA1D5 /* Assets.xcassets in Resources */,
+				944E19581BE540E9005132E1 /* blank_profile_outline.png in Resources */,
 				9438FD081BE07CFF00B239BE /* MainWindowController.xib in Resources */,
 				947B53CB1BE1AA2700484D66 /* ChatTableViewCell.xib in Resources */,
 				94A9924A1BBDC734003BA1D5 /* Main.storyboard in Resources */,

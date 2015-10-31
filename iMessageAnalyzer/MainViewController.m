@@ -95,14 +95,13 @@
     cell.contactPhoto.layer.cornerRadius = 30.0;
     cell.contactPhoto.layer.masksToBounds = YES;
     
-    NSImage *contactPhoto = [[NSImage alloc] initWithData:[person.contact imageData]];
+    NSData *contactPhotoData = [person.contact imageData];
     
-    if(!contactPhoto) {
-        [NSGraphicsContext saveGraphicsState];
-        
+    if(!contactPhotoData) {
+        contactPhotoData = [[NSData alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"blank_profile_outline" ofType:@"png"]];
     }
     
-    [cell.contactPhoto setImage:contactPhoto];
+    [cell.contactPhoto setImage:[[NSImage alloc] initWithData:contactPhotoData]];
     
     return cell;
 }
