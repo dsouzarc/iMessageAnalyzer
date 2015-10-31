@@ -10,7 +10,7 @@
 
 @interface Message : NSObject
 
-- (instancetype) initWithMessageId:(NSInteger)messageId handleId:(NSInteger)handleId messageGUID:(NSString*)messageGUID messageText:(NSString*)messageText dateSent:(NSDate*)dateSent dateRead:(NSDate*)dateRead isIMessage:(BOOL)isIMessage isFromMe:(BOOL)isFromMe;
+- (instancetype) initWithMessageId:(NSInteger)messageId handleId:(NSInteger)handleId messageGUID:(NSString*)messageGUID messageText:(NSString*)messageText dateSent:(NSDate*)dateSent dateRead:(NSDate*)dateRead isIMessage:(BOOL)isIMessage isFromMe:(BOOL)isFromMe hasAttachment:(BOOL)hasAttachment;
 
 @property (strong, nonatomic) NSString *messageText;
 @property (strong, nonatomic) NSString *messageGUID;
@@ -23,6 +23,7 @@
 
 @property BOOL isIMessage;
 @property BOOL isFromMe;
+@property BOOL hasAttachment;
 
 
 @end

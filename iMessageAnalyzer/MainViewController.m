@@ -95,7 +95,14 @@
     cell.contactPhoto.layer.cornerRadius = 30.0;
     cell.contactPhoto.layer.masksToBounds = YES;
     
-    [cell.contactPhoto setImage:[[NSImage alloc] initWithData:[person.contact imageData]]];
+    NSImage *contactPhoto = [[NSImage alloc] initWithData:[person.contact imageData]];
+    
+    if(!contactPhoto) {
+        [NSGraphicsContext saveGraphicsState];
+        
+    }
+    
+    [cell.contactPhoto setImage:contactPhoto];
     
     return cell;
 }

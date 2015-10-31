@@ -10,7 +10,7 @@
 
 @implementation Message
 
-- (instancetype) initWithMessageId:(NSInteger)messageId handleId:(NSInteger)handleId messageGUID:(NSString *)messageGUID messageText:(NSString *)messageText dateSent:(NSDate *)dateSent dateRead:(NSDate *)dateRead isIMessage:(BOOL)isIMessage isFromMe:(BOOL)isFromMe
+- (instancetype) initWithMessageId:(NSInteger)messageId handleId:(NSInteger)handleId messageGUID:(NSString *)messageGUID messageText:(NSString *)messageText dateSent:(NSDate *)dateSent dateRead:(NSDate *)dateRead isIMessage:(BOOL)isIMessage isFromMe:(BOOL)isFromMe hasAttachment:(BOOL)hasAttachment
 {
     self = [super init];
     
@@ -23,6 +23,7 @@
         self.dateRead = dateRead;
         self.isIMessage = isIMessage;
         self.isFromMe = isFromMe;
+        self.hasAttachment = hasAttachment;
     }
     
     return self;
