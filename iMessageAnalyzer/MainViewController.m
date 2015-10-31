@@ -65,16 +65,42 @@
 
 - (void) controlTextDidChange:(NSNotification *)obj
 {
-    [self.searchConversationChats removeAllObjects];
-    
-    NSString *searchText = self.searchField.stringValue;
-    
-    for(Person *person in self.chats) {
-        if([person.personName containsString:searchText]) {
-            [self.searchConversationChats addObject:person];
+    if(self.searchField.stringValue.length == 0) {
+        self.searchConversationChats = [[NSMutableArray alloc] initWithArray:self.chats];
+    }
+    else {
+        [self.searchConversationChats removeAllObjects];
+        
+        NSString *searchText = self.searchField.stringValue;
+        
+        for(Person *person in self.chats) {
+            if([self conversationMatchesRequirement:person searchText:searchText]) {
+                [self.searchConversationChats addObject:person];
+            }
         }
     }
     [self.contactsTableView reloadData];
+}
+
+- (BOOL) conversationMatchesRequirement:(Person*)person searchText:(NSString*)searchText {
+    
+    if([person.personName rangeOfString:searchText options:NSCaseInsensitiveSearch].location != NSNotFound) {
+        return YES;
+    }
+    
+    if([person.number rangeOfString:searchText options:NSCaseInsensitiveSearch].location != NSNotFound) {
+        return YES;
+    }
+    
+    NSMutableArray *messages = [self.messageManager getAllMessagesForPerson:person];
+    
+    for(Message *message in messages) {
+        if([message.messageText rangeOfString:searchText options:NSCaseInsensitiveSearch].location != NSNotFound) {
+            return YES;
+        }
+    }
+    
+    return NO;
 }
 
 - (NSInteger) numberOfRowsInTableView:(NSTableView *)tableView
