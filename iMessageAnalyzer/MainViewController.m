@@ -55,32 +55,14 @@
     }
 }
 
-- (void) controlTextDidEndEditing:(NSNotification *)obj
-{
-    if(self.searchField.stringValue.length == 0) {
-        self.searchConversationChats = [[NSMutableArray alloc] initWithArray:self.chats];
-    }
-    [self.contactsTableView reloadData];
-}
 
-- (void) controlTextDidChange:(NSNotification *)obj
-{
-    if(self.searchField.stringValue.length == 0) {
-        self.searchConversationChats = [[NSMutableArray alloc] initWithArray:self.chats];
-    }
-    else {
-        [self.searchConversationChats removeAllObjects];
-        
-        NSString *searchText = self.searchField.stringValue;
-        
-        for(Person *person in self.chats) {
-            if([self conversationMatchesRequirement:person searchText:searchText]) {
-                [self.searchConversationChats addObject:person];
-            }
-        }
-    }
-    [self.contactsTableView reloadData];
-}
+/****************************************************************
+ *
+ *              HELPER METHODS
+ *
+*****************************************************************/
+
+# pragma mark HELPERS
 
 - (BOOL) conversationMatchesRequirement:(Person*)person searchText:(NSString*)searchText {
     
@@ -101,6 +83,15 @@
     
     return NO;
 }
+
+
+/****************************************************************
+ *
+ *              NSTABLEVIEW DELEGATE
+ *
+ *****************************************************************/
+
+# pragma mark TABLEVIEW_DELEGATE
 
 - (NSInteger) numberOfRowsInTableView:(NSTableView *)tableView
 {
@@ -196,6 +187,42 @@
     }
     
     return @"PROBLEM";
+}
+
+
+/****************************************************************
+ *
+ *              NSSEARCHFIELD DELEGATE
+ *
+ *****************************************************************/
+
+# pragma mark SEARCHFIELD_DELEGATE
+
+- (void) controlTextDidEndEditing:(NSNotification *)obj
+{
+    if(self.searchField.stringValue.length == 0) {
+        self.searchConversationChats = [[NSMutableArray alloc] initWithArray:self.chats];
+    }
+    [self.contactsTableView reloadData];
+}
+
+- (void) controlTextDidChange:(NSNotification *)obj
+{
+    if(self.searchField.stringValue.length == 0) {
+        self.searchConversationChats = [[NSMutableArray alloc] initWithArray:self.chats];
+    }
+    else {
+        [self.searchConversationChats removeAllObjects];
+        
+        NSString *searchText = self.searchField.stringValue;
+        
+        for(Person *person in self.chats) {
+            if([self conversationMatchesRequirement:person searchText:searchText]) {
+                [self.searchConversationChats addObject:person];
+            }
+        }
+    }
+    [self.contactsTableView reloadData];
 }
 
 @end
