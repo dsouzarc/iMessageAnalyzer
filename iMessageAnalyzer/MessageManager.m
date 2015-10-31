@@ -35,7 +35,7 @@ static MessageManager *messageInstance;
     if(!messageInstance) {
         messageInstance = [super init];
         self.databaseManager = [DatabaseManager getInstance];
-        self.allChatsAndConversations = [self.databaseManager getAllChatsAndConversations];
+        self.allChatsAndConversations = [[NSMutableDictionary alloc] init];
     }
     
     return self;
@@ -43,7 +43,17 @@ static MessageManager *messageInstance;
 
 - (NSMutableArray*) getAllMessagesForPerson:(Person *)person
 {
-    return [self.allChatsAndConversations objectForKey:person.number];
+    //If we've already cached it
+    if([self.allChatsAndConversations objectForKey:person.number]) {
+        return [self.allChatsAndConversations objectForKey:person.number];
+    }
+    
+    //Otherwise, get it from the DB and return it
+    else {
+        NSMutableArray *messagesForPerson = [self.databaseManager getAllMessagesForChatID:person.chatId];
+        [self.allChatsAndConversations setObject:messagesForPerson forKey:person.number];
+        return messagesForPerson;
+    }
 }
 
 - (NSMutableArray*) getAllChats
@@ -53,7 +63,7 @@ static MessageManager *messageInstance;
 
 - (NSMutableDictionary*) getAllChatsAndConversations
 {
-    return [self.databaseManager getAllChatsAndConversations];
+    return self.allChatsAndConversations;
 }
 
 

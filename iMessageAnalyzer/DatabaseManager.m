@@ -18,7 +18,6 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
 
 @property (strong, nonatomic) NSMutableDictionary *allContacts;
 @property (strong, nonatomic) NSMutableDictionary *allChats;
-@property (strong, nonatomic) NSMutableDictionary *chatsAndMessages;
 
 @end
 
@@ -51,31 +50,12 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
         [self getAllContacts];
         
         self.allChats = [[NSMutableDictionary alloc] init];
-        self.chatsAndMessages = [[NSMutableDictionary alloc] init];
         
         [self updateAllChatsGlobalVariable];
-        [self getAllMessagesForChats];
-        
-        Person *person = [self.allChats objectForKey:@"7323577282"];
-        NSLog(@"PERSON: %@", person.personName);
-        
-        [self getAllMessagesForChatID:person.chatId];
-        
-        NSLog(@"NAME: %@", [self getContactNameForNumber:@"(609) 915-4930"]);
         //[self getMessagesForHandleId:5];
     }
     
     return self;
-}
-
-- (void) getAllMessagesForChats
-{
-    for(NSString *number in self.chatsAndMessages) {
-        Person *person = [self.allChats objectForKey:number];
-        NSMutableArray *messagesForPerson = [self getAllMessagesForChatID:person.chatId];
-        NSMutableArray *temp = [self.chatsAndMessages objectForKey:number];
-        [temp addObjectsFromArray:messagesForPerson];
-    }
 }
 
 - (NSMutableArray*) getAllChats
@@ -107,7 +87,6 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
             person.contact = abPerson;
             
             [self.allChats setObject:person forKey:number];
-            [self.chatsAndMessages setObject:[[NSMutableArray alloc] init] forKey:number];
         }
     }
     
@@ -179,11 +158,6 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
         
         sqlite3_finalize(statement);
     }
-}
-
-- (NSMutableDictionary*) getAllChatsAndConversations
-{
-    return self.chatsAndMessages;
 }
 
 - (NSMutableArray*) getAllMessagesForChatID:(int32_t)chatID

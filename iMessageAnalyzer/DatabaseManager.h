@@ -21,6 +21,6 @@
 + (instancetype) getInstance;
 
 - (NSMutableArray*) getAllChats;
-- (NSMutableDictionary*) getAllChatsAndConversations;
+- (NSMutableArray*) getAllMessagesForChatID:(int32_t)chatID;
 
 @end
