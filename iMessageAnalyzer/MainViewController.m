@@ -93,7 +93,6 @@
     }
     
     NSMutableArray *messages = [self.messageManager getAllMessagesForPerson:person];
-    
     for(Message *message in messages) {
         if([message.messageText rangeOfString:searchText options:NSCaseInsensitiveSearch].location != NSNotFound) {
             return YES;

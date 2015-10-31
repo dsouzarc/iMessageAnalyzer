@@ -40,7 +40,7 @@ static MessageManager *messageInstance;
         self.allChatsAndConversations = [[NSMutableDictionary alloc] init];
         
         for(Person *person in self.allChats) {
-            NSMutableArray *messagesForPerson = [self.databaseManager getAllMessagesForChatID:person.chatId];
+            NSMutableArray *messagesForPerson = [self.databaseManager getAllMessagesForChatID:person.chatId secondaryID:person.secondaryChatId];
             [self.allChatsAndConversations setObject:messagesForPerson forKey:person.number];
         }
     }

@@ -25,6 +25,7 @@
 @property (strong, nonatomic) ABPerson *contact;
 
 @property NSInteger chatId;
+@property NSInteger secondaryChatId;
 @property BOOL isIMessage;
 
 @end
