@@ -8,6 +8,7 @@
             <connections>
                 <outlet property="contactsTableView" destination="S3H-Yk-c4c" id="GQw-hH-Kjr"/>
                 <outlet property="messagesTableView" destination="gb8-do-be4" id="xJj-Lr-fAB"/>
+                <outlet property="searchField" destination="Kpw-Oj-Sda" id="o5r-QY-eCu"/>
                 <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
             </connections>
         </customObject>
@@ -31,6 +32,9 @@
                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     </searchFieldCell>
+                                    <connections>
+                                        <outlet property="delegate" destination="-2" id="Md1-F8-JXt"/>
+                                    </connections>
                                 </searchField>
                                 <scrollView autohidesScrollers="YES" horizontalLineScroll="92" horizontalPageScroll="10" verticalLineScroll="92" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wz5-YH-6OO">
                                     <rect key="frame" x="0.0" y="0.0" width="219" height="681"/>
@@ -39,7 +43,7 @@
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <subviews>
                                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="90" rowSizeStyle="automatic" headerView="bSy-gm-tsh" viewBased="YES" id="S3H-Yk-c4c">
-                                                <rect key="frame" x="0.0" y="0.0" width="217" height="663"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="217" height="0.0"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <size key="intercellSpacing" width="3" height="2"/>
                                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -152,7 +156,7 @@
                                         <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     </clipView>
                                     <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="PfC-Z1-Uxq">
-                                        <rect key="frame" x="1" y="119" width="223" height="15"/>
+                                        <rect key="frame" x="1" y="-15" width="0.0" height="16"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                     </scroller>
                                     <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="NZa-nT-qO8">
@@ -175,7 +179,7 @@
                 <constraint firstAttribute="trailing" secondItem="7Cg-fX-aMs" secondAttribute="trailing" id="uAF-Jv-6qc"/>
                 <constraint firstItem="7Cg-fX-aMs" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" id="uDQ-zn-Hc5"/>
             </constraints>
-            <point key="canvasLocation" x="-220.5" y="255.5"/>
+            <point key="canvasLocation" x="-538.5" y="247.5"/>
         </customView>
         <userDefaultsController representsSharedInstance="YES" id="MPa-76-IVI"/>
     </objects>

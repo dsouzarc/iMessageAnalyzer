@@ -16,6 +16,6 @@
 #import "Message.h"
 #import "Person.h"
 
-@interface MainViewController : NSViewController <NSTableViewDataSource, NSTableViewDelegate>
+@interface MainViewController : NSViewController <NSTableViewDataSource, NSTableViewDelegate, NSSearchFieldDelegate>
 
 @end

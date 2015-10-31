@@ -12,9 +12,12 @@
 
 @property (strong) IBOutlet NSTableView *contactsTableView;
 @property (strong) IBOutlet NSTableView *messagesTableView;
+@property (strong) IBOutlet NSSearchField *searchField;
 
 @property (strong, nonatomic) MessageManager *messageManager;
+
 @property (strong, nonatomic) NSMutableArray *chats;
+@property (strong, nonatomic) NSMutableArray *searchConversationChats;
 
 @property (strong, nonatomic) NSMutableArray *currentConversationChats;
 
@@ -30,6 +33,8 @@
         self.messageManager = [MessageManager getInstance];
         
         self.chats = [self.messageManager getAllChats];
+        self.searchConversationChats = [[NSMutableArray alloc] initWithArray:self.chats];
+        
         self.currentConversationChats = [[NSMutableArray alloc] init];
     }
     
@@ -42,16 +47,40 @@
     NSNib *cellNib = [[NSNib alloc] initWithNibNamed:@"ChatTableViewCell" bundle:[NSBundle mainBundle]];
     [self.contactsTableView registerNib:cellNib forIdentifier:@"chatTableViewCell"];
     
-    Person *firstPerson = self.chats[0];
-    self.currentConversationChats = [self.messageManager getAllMessagesForPerson:firstPerson];
-    [self.messagesTableView reloadData];
-    NSLog(@"SIZE: %d", self.currentConversationChats.count);
+    if(self.searchConversationChats.count > 0) {
+        Person *firstPerson = self.searchConversationChats[0];
+        self.currentConversationChats = [self.messageManager getAllMessagesForPerson:firstPerson];
+        [self.messagesTableView reloadData];
+        NSLog(@"SIZE: %d", self.currentConversationChats.count);
+    }
+}
+
+- (void) controlTextDidEndEditing:(NSNotification *)obj
+{
+    if(self.searchField.stringValue.length == 0) {
+        self.searchConversationChats = [[NSMutableArray alloc] initWithArray:self.chats];
+    }
+    [self.contactsTableView reloadData];
+}
+
+- (void) controlTextDidChange:(NSNotification *)obj
+{
+    [self.searchConversationChats removeAllObjects];
+    
+    NSString *searchText = self.searchField.stringValue;
+    
+    for(Person *person in self.chats) {
+        if([person.personName containsString:searchText]) {
+            [self.searchConversationChats addObject:person];
+        }
+    }
+    [self.contactsTableView reloadData];
 }
 
 - (NSInteger) numberOfRowsInTableView:(NSTableView *)tableView
 {
     if(tableView == self.contactsTableView) {
-        return self.chats.count;
+        return self.searchConversationChats.count;
     }
     else if(tableView == self.messagesTableView) {
         return self.currentConversationChats.count;
@@ -80,7 +109,7 @@
     
     else if(tableView == self.contactsTableView) {
         ChatTableViewCell *cell = (ChatTableViewCell*)[tableView makeViewWithIdentifier:@"chatTableViewCell" owner:self];
-        Person *person = self.chats[row];
+        Person *person = self.searchConversationChats[row];
         
         if(person.personName.length > 0) {
             [cell.contactName setStringValue:person.personName];
@@ -113,7 +142,7 @@
 - (BOOL) tableView:(NSTableView *)tableView shouldSelectRow:(NSInteger)row
 {
     if(tableView == self.contactsTableView) {
-        Person *person = self.chats[row];
+        Person *person = self.searchConversationChats[row];
         self.currentConversationChats = [self.messageManager getAllMessagesForPerson:person];
         [self.messagesTableView reloadData];
         
