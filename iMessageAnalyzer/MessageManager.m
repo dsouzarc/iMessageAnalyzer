@@ -40,8 +40,10 @@ static MessageManager *messageInstance;
         self.allChatsAndConversations = [[NSMutableDictionary alloc] init];
         
         for(Person *person in self.allChats) {
-            NSMutableArray *messagesForPerson = [self.databaseManager getAllMessagesForChatID:person.chatId secondaryID:person.secondaryChatId];
+            NSMutableArray *messagesForPerson = [self.databaseManager getAllMessagesForPerson:person];
             [self.allChatsAndConversations setObject:messagesForPerson forKey:person.number];
+            
+            NSLog(@"%@\tSENT: %d\tRECEIVED: %d\tSENT ATTACHMENTS: %d\tRECEIVED ATTACHMENTS: %d\tHANDLE_1: %d\tHANDLE_2: %d", person.personName, person.statistics.numberOfSentMessages, person.statistics.numberOfReceivedMessages, person.statistics.numberOfSentAttachments, person.statistics.numberOfReceivedAttachments, [self.databaseManager getHandleForChatID:person.chatId], [self.databaseManager getHandleForChatID:person.secondaryChatId]);
         }
     }
     

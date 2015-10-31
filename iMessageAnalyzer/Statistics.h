@@ -13,5 +13,8 @@
 @property NSInteger numberOfSentMessages;
 @property NSInteger numberOfReceivedMessages;
 
+@property NSInteger numberOfSentAttachments;
+@property NSInteger numberOfReceivedAttachments;
+
 
 @end

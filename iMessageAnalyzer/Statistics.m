@@ -17,6 +17,8 @@
     if(self) {
         self.numberOfReceivedMessages = 0;
         self.numberOfSentMessages = 0;
+        self.numberOfReceivedAttachments = 0;
+        self.numberOfSentAttachments = 0;
     }
     
     return self;

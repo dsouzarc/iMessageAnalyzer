@@ -13,6 +13,7 @@
 #import "Person.h"
 #import "Attachment.h"
 #import "Message.h"
+#import "Statistics.h"
 
 @interface MessageManager : NSObject
 

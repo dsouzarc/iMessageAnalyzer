@@ -15,12 +15,14 @@
 #import "Contact.h"
 #import "Message.h"
 #import "Person.h"
+#import "Statistics.h" 
 
 @interface DatabaseManager : NSObject
 
 + (instancetype) getInstance;
 
 - (NSMutableArray*) getAllChats;
-- (NSMutableArray*) getAllMessagesForChatID:(int32_t)chatID secondaryID:(int32_t)secondaryID;
+- (NSMutableArray*) getAllMessagesForPerson:(Person*)person;
+- (int32_t) getHandleForChatID:(int32_t)chatID;
 
 @end
