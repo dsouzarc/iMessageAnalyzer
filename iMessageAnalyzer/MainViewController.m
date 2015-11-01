@@ -21,6 +21,10 @@
 
 @property (strong, nonatomic) NSMutableArray *currentConversationChats;
 
+@property (strong, nonatomic) NSTextView *sizingView;
+@property NSRect messageFromMe;
+@property NSRect messageToMe;
+
 @end
 
 @implementation MainViewController
@@ -36,6 +40,11 @@
         self.searchConversationChats = [[NSMutableArray alloc] initWithArray:self.chats];
         
         self.currentConversationChats = [[NSMutableArray alloc] init];
+        
+        NSRect frame = NSMakeRect(0, 0, 360, MAXFLOAT);
+        self.sizingView = [[NSTextView alloc] initWithFrame:frame];
+        [self.sizingView setHorizontallyResizable:YES];
+        
     }
     
     return self;
@@ -43,6 +52,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.messageFromMe = NSMakeRect(self.messagesTableView.tableColumns[0].width/2, 0, 360, MAXFLOAT);
+    self.messageToMe = NSMakeRect(0, 0, 360, MAXFLOAT);
     
     NSNib *cellNib = [[NSNib alloc] initWithNibNamed:@"ChatTableViewCell" bundle:[NSBundle mainBundle]];
     [self.contactsTableView registerNib:cellNib forIdentifier:@"chatTableViewCell"];
@@ -112,36 +124,30 @@
 - (CGFloat) tableView:(NSTableView *)tableView heightOfRow:(NSInteger)row
 {
     if(tableView == self.messagesTableView) {
-        
         if(!self.currentConversationChats || self.currentConversationChats.count == 0) {
             return 80.0;
         }
         
         NSString *text = ((Message*) self.currentConversationChats[row]).messageText;
         
-        NSRect frame = NSMakeRect(0, 0, 360, MAXFLOAT);
-        NSTextView *viewForSize = [[NSTextView alloc] initWithFrame:frame];
-        [[viewForSize textStorage] setAttributedString:[[NSAttributedString alloc] initWithString:text]];
-        [viewForSize setHorizontallyResizable:YES];
-        [viewForSize sizeToFit];
-        
-        return viewForSize.frame.size.height;
+        [self.sizingView setString:text];
+        [self.sizingView sizeToFit];
+
+        return self.sizingView.frame.size.height;
     }
     
     return 80.0;
-    
 }
 
 
 - (NSView*) tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
     if(tableView == self.messagesTableView) {
+        
         Message *message = self.currentConversationChats[row];
+        NSView *encompassingView = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, 0, 0)];
         
-        TextTableCellView *tempView = [tableView makeViewWithIdentifier:@"textTableCellView" owner:self];
-        NSView *encompassingView = [[NSView alloc] initWithFrame:tempView.frame];
-        
-        NSRect frame = NSMakeRect(message.isFromMe ? tableColumn.width/2 : 0, 0, 360, MAXFLOAT);
+        NSRect frame = message.isFromMe ? self.messageFromMe : self.messageToMe;
         
         NSTextView *viewForSize = [[NSTextView alloc] initWithFrame:frame];
         [viewForSize setString:message.messageText];
@@ -193,10 +199,11 @@
 - (BOOL) tableView:(NSTableView *)tableView shouldSelectRow:(NSInteger)row
 {
     if(tableView == self.contactsTableView) {
+        
         Person *person = self.searchConversationChats[row];
         self.currentConversationChats = [self.messageManager getAllMessagesForPerson:person];
-        [self.messagesTableView reloadData];
         
+        [self.messagesTableView reloadData];
         return YES;
     }
     return NO;
@@ -204,7 +211,10 @@
 
 - (NSCell*) tableView:(NSTableView *)tableView dataCellForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
-    if([[tableColumn identifier] isEqualToString:@"chatsIdentifier"]) {
+    if(tableView == self.contactsTableView) {
+        return nil;
+    }
+    else if(tableView == self.messagesTableView) {
         return nil;
     }
     

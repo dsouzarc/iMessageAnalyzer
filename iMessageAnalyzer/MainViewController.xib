@@ -127,13 +127,13 @@
                                                         </textFieldCell>
                                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                         <prototypeCellViews>
-                                                            <tableCellView identifier="messageCellViewIdentifier" id="UQe-54-NMG">
+                                                            <tableCellView id="KqD-Lh-vJX">
                                                                 <rect key="frame" x="1" y="1" width="823" height="17"/>
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                 <subviews>
-                                                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3fm-8p-I21">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="822" height="17"/>
-                                                                        <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="sMN-9q-mV6">
+                                                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="r5h-lo-D71">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="100" height="17"/>
+                                                                        <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="pzF-1H-wju">
                                                                             <font key="font" metaFont="system"/>
                                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -141,7 +141,7 @@
                                                                     </textField>
                                                                 </subviews>
                                                                 <connections>
-                                                                    <outlet property="textField" destination="3fm-8p-I21" id="Yu4-BP-5nD"/>
+                                                                    <outlet property="textField" destination="r5h-lo-D71" id="pxW-Bj-lVj"/>
                                                                 </connections>
                                                             </tableCellView>
                                                         </prototypeCellViews>
