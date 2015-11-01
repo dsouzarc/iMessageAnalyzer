@@ -38,7 +38,7 @@
                 <outlet property="contactPicture" destination="nzL-Pq-aYn" id="qkg-np-Gad"/>
                 <outlet property="lastMessageSent" destination="Y0R-UN-1SQ" id="gXJ-Ll-3Hf"/>
             </connections>
-            <point key="canvasLocation" x="495" y="242"/>
+            <point key="canvasLocation" x="18" y="160"/>
         </customView>
     </objects>
     <resources>

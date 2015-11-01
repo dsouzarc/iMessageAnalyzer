@@ -15,6 +15,8 @@
 		9438FD181BE07DAC00B239BE /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9438FD171BE07DAC00B239BE /* main.m */; settings = {ASSET_TAGS = (); }; };
 		944E19581BE540E9005132E1 /* blank_profile_outline.png in Resources */ = {isa = PBXBuildFile; fileRef = 944E19571BE540E9005132E1 /* blank_profile_outline.png */; settings = {ASSET_TAGS = (); }; };
 		946D2A6C1BE55BF900270BF0 /* Statistics.m in Sources */ = {isa = PBXBuildFile; fileRef = 946D2A6B1BE55BF900270BF0 /* Statistics.m */; settings = {ASSET_TAGS = (); }; };
+		946D2A6F1BE5DBC800270BF0 /* TextTableCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 946D2A6E1BE5DBC800270BF0 /* TextTableCellView.m */; settings = {ASSET_TAGS = (); }; };
+		946D2A711BE5EAA700270BF0 /* TextTableCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 946D2A701BE5EAA700270BF0 /* TextTableCellView.xib */; settings = {ASSET_TAGS = (); }; };
 		947B53CB1BE1AA2700484D66 /* ChatTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 947B53C81BE1AA2700484D66 /* ChatTableViewCell.xib */; settings = {ASSET_TAGS = (); }; };
 		947B53CC1BE1AA2700484D66 /* ChatTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 947B53CA1BE1AA2700484D66 /* ChatTableViewCell.m */; settings = {ASSET_TAGS = (); }; };
 		94A9923F1BBDC733003BA1D5 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A9923E1BBDC733003BA1D5 /* AppDelegate.m */; };
@@ -62,6 +64,9 @@
 		944E19571BE540E9005132E1 /* blank_profile_outline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blank_profile_outline.png; sourceTree = "<group>"; };
 		946D2A6A1BE55BF900270BF0 /* Statistics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Statistics.h; sourceTree = "<group>"; };
 		946D2A6B1BE55BF900270BF0 /* Statistics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Statistics.m; sourceTree = "<group>"; };
+		946D2A6D1BE5DBC800270BF0 /* TextTableCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextTableCellView.h; sourceTree = "<group>"; };
+		946D2A6E1BE5DBC800270BF0 /* TextTableCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextTableCellView.m; sourceTree = "<group>"; };
+		946D2A701BE5EAA700270BF0 /* TextTableCellView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TextTableCellView.xib; sourceTree = "<group>"; };
 		947B53C81BE1AA2700484D66 /* ChatTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChatTableViewCell.xib; sourceTree = "<group>"; };
 		947B53C91BE1AA2700484D66 /* ChatTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatTableViewCell.h; sourceTree = "<group>"; };
 		947B53CA1BE1AA2700484D66 /* ChatTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatTableViewCell.m; sourceTree = "<group>"; };
@@ -269,7 +274,9 @@
 		94A9923C1BBDC733003BA1D5 /* iMessageAnalyzer */ = {
 			isa = PBXGroup;
 			children = (
-				947B53DB1BE53F6500484D66 /* Icons */,
+				946D2A701BE5EAA700270BF0 /* TextTableCellView.xib */,
+				946D2A6D1BE5DBC800270BF0 /* TextTableCellView.h */,
+				946D2A6E1BE5DBC800270BF0 /* TextTableCellView.m */,
 				947B53D51BE1AE4C00484D66 /* Main Window Controller */,
 				947B53D61BE1AE5400484D66 /* Main View Controller */,
 				947B53D11BE1AE0D00484D66 /* Managers */,
@@ -277,6 +284,7 @@
 				9438FD021BE077E400B239BE /* Objects */,
 				947B53D31BE1AE2E00484D66 /* App Delegate */,
 				947B53D41BE1AE3B00484D66 /* VIew Controller - Default */,
+				947B53DB1BE53F6500484D66 /* Icons */,
 				94A992401BBDC733003BA1D5 /* Supporting Files */,
 			);
 			path = iMessageAnalyzer;
@@ -421,6 +429,7 @@
 				947B53CB1BE1AA2700484D66 /* ChatTableViewCell.xib in Resources */,
 				94A9924A1BBDC734003BA1D5 /* Main.storyboard in Resources */,
 				9438FD121BE07D2600B239BE /* MainViewController.xib in Resources */,
+				946D2A711BE5EAA700270BF0 /* TextTableCellView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -453,6 +462,7 @@
 				94F3AC411BC481B900948A23 /* Message.m in Sources */,
 				947B53CC1BE1AA2700484D66 /* ChatTableViewCell.m in Sources */,
 				94F3AC471BC7282A00948A23 /* DatabaseManager.m in Sources */,
+				946D2A6F1BE5DBC800270BF0 /* TextTableCellView.m in Sources */,
 				94F3AC3B1BC32BD500948A23 /* Person.m in Sources */,
 				94A9923F1BBDC733003BA1D5 /* AppDelegate.m in Sources */,
 				9438FC371BD049DA00B239BE /* Contact.m in Sources */,

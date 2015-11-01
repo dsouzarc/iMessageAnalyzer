@@ -11,6 +11,7 @@
 #import "MessageManager.h"
 
 #import "ChatTableViewCell.h"
+#import "TextTableCellView.h"
 
 #import "Contact.h"
 #import "Message.h"

@@ -47,6 +47,9 @@
     NSNib *cellNib = [[NSNib alloc] initWithNibNamed:@"ChatTableViewCell" bundle:[NSBundle mainBundle]];
     [self.contactsTableView registerNib:cellNib forIdentifier:@"chatTableViewCell"];
     
+    NSNib *cellNib2 = [[NSNib alloc] initWithNibNamed:@"TextTableCellView" bundle:[NSBundle mainBundle]];
+    [self.messagesTableView registerNib:cellNib2 forIdentifier:@"textTableCellView"];
+    
     if(self.searchConversationChats.count > 0) {
         Person *firstPerson = self.searchConversationChats[0];
         self.currentConversationChats = [self.messageManager getAllMessagesForPerson:firstPerson];
@@ -106,18 +109,58 @@
     }
 }
 
+- (CGFloat) tableView:(NSTableView *)tableView heightOfRow:(NSInteger)row
+{
+    if(tableView == self.messagesTableView) {
+        
+        if(!self.currentConversationChats || self.currentConversationChats.count == 0) {
+            return 80.0;
+        }
+        
+        NSString *text = ((Message*) self.currentConversationChats[row]).messageText;
+        
+        NSRect frame = NSMakeRect(0, 0, 360, MAXFLOAT);
+        NSTextView *viewForSize = [[NSTextView alloc] initWithFrame:frame];
+        [[viewForSize textStorage] setAttributedString:[[NSAttributedString alloc] initWithString:text]];
+        [viewForSize setHorizontallyResizable:YES];
+        [viewForSize sizeToFit];
+        
+        return viewForSize.frame.size.height + 40;
+    }
+    
+    return 80.0;
+    
+}
+
+
 - (NSView*) tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
     if(tableView == self.messagesTableView) {
         Message *message = self.currentConversationChats[row];
-        NSTableCellView *view = [tableView makeViewWithIdentifier:@"messageCellViewIdentifier" owner:self];
-        view.textField.stringValue = message.messageText;
+        TextTableCellView *view = [tableView makeViewWithIdentifier:@"textTableCellView" owner:self];
         
         if(message.isFromMe) {
-            [view.textField setAlignment:NSTextAlignmentRight];
+            [view.rightSideTextField setBackgroundColor:[NSColor blueColor]];
+            [view.rightSideTextField setDrawsBackground:YES];
+            
+            [view.rightSideTextField setTextColor:[NSColor whiteColor]];
+            [view.rightSideTextField setStringValue:message.messageText];
+            
+            [view.rightSideTextField setHidden:NO];
+            [view.leftSideTextField setHidden:YES];
+            
+            [view setFrameSize:CGSizeMake(view.frame.size.width, 400)];
+            [view.rightSideTextField setFrameSize:[view.rightSideTextField.cell cellSize]];
+            
+            
         }
         else {
-            [view.textField setAlignment:NSTextAlignmentLeft];
+            [view.leftSideTextField setBackgroundColor:[NSColor grayColor]];
+            [view.leftSideTextField setDrawsBackground:YES];
+            [view.rightSideTextField setHidden:YES];
+            [view.leftSideTextField setHidden:NO];
+            [view.leftSideTextField setStringValue:message.messageText];
+            [view.leftSideTextField sizeToFit];
         }
         
         return view;
