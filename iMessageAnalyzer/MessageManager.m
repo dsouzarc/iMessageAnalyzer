@@ -52,7 +52,14 @@ static MessageManager *messageInstance;
 
 - (NSMutableArray*) getAllMessagesForPerson:(Person *)person
 {
-    return [self.allChatsAndConversations objectForKey:person.number];
+    NSMutableArray *messages = [self.allChatsAndConversations objectForKey:person.number];
+    
+    if(!messages) {
+        messages = [self.databaseManager getAllMessagesForPerson:person];
+        [self.allChatsAndConversations setObject:messages forKey:person.number];
+    }
+    
+    return messages;
 }
 
 - (NSMutableArray*) getAllChats
