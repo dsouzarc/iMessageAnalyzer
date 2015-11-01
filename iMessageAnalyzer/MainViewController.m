@@ -137,30 +137,25 @@
 {
     if(tableView == self.messagesTableView) {
         Message *message = self.currentConversationChats[row];
-        TextTableCellView *view = [tableView makeViewWithIdentifier:@"textTableCellView" owner:self];
         
-        NSView *v = [[NSView alloc] initWithFrame:view.frame];
+        TextTableCellView *tempView = [tableView makeViewWithIdentifier:@"textTableCellView" owner:self];
+        NSView *encompassingView = [[NSView alloc] initWithFrame:tempView.frame];
         
         NSRect frame = NSMakeRect(message.isFromMe ? tableColumn.width/2 : 0, 0, 360, MAXFLOAT);
         
         NSTextView *viewForSize = [[NSTextView alloc] initWithFrame:frame];
-        [[viewForSize textStorage] setAttributedString:[[NSAttributedString alloc] initWithString:message.messageText]];
+        [viewForSize setString:message.messageText];
         
-        if(message.isFromMe) {
-            [viewForSize setAlignment:NSTextAlignmentRight];
-        }
-        else {
-            [viewForSize setAlignment:NSTextAlignmentLeft];
-        }
-        
+        [viewForSize setAlignment:(message.isFromMe ? NSTextAlignmentRight : NSTextAlignmentLeft)];
         [viewForSize setHorizontallyResizable:YES];
         [viewForSize sizeToFit];
         
-        //[viewForSize setFrameOrigin:CGPointMake(600, 0)];
-    
-        [v addSubview:viewForSize];
+        if(message.isFromMe) {
+            [viewForSize setFrameOrigin:CGPointMake(tableColumn.width - viewForSize.frame.size.width, viewForSize.frame.origin.y)];
+        }
         
-        return v;
+        [encompassingView addSubview:viewForSize];
+        return encompassingView;
     }
     
     else if(tableView == self.contactsTableView) {
