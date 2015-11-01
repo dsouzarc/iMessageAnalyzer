@@ -148,19 +148,21 @@
             
             [view.rightSideTextField setHidden:NO];
             [view.leftSideTextField setHidden:YES];
-            
-            [view setFrameSize:CGSizeMake(view.frame.size.width, 400)];
+
             [view.rightSideTextField setFrameSize:[view.rightSideTextField.cell cellSize]];
-            
             
         }
         else {
             [view.leftSideTextField setBackgroundColor:[NSColor grayColor]];
             [view.leftSideTextField setDrawsBackground:YES];
-            [view.rightSideTextField setHidden:YES];
-            [view.leftSideTextField setHidden:NO];
+            
+            [view.leftSideTextField setTextColor:[NSColor blackColor]];
             [view.leftSideTextField setStringValue:message.messageText];
-            [view.leftSideTextField sizeToFit];
+            
+            [view.leftSideTextField setHidden:NO];
+            [view.rightSideTextField setHidden:YES];
+
+            [view.leftSideTextField setFrameSize:[view.leftSideTextField.cell cellSize]];
         }
         
         return view;
