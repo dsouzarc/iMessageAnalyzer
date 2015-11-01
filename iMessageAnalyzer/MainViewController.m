@@ -22,6 +22,8 @@
 @property (strong, nonatomic) NSMutableArray *currentConversationChats;
 
 @property (strong, nonatomic) NSTextView *sizingView;
+@property (strong, nonatomic) NSTextField *sizingField;
+
 @property NSRect messageFromMe;
 @property NSRect messageToMe;
 
@@ -43,6 +45,7 @@
         
         NSRect frame = NSMakeRect(0, 0, 360, MAXFLOAT);
         self.sizingView = [[NSTextView alloc] initWithFrame:frame];
+        self.sizingField = [[NSTextField alloc] initWithFrame:frame];
     }
     
     return self;
@@ -127,11 +130,12 @@
         }
         
         NSString *text = ((Message*) self.currentConversationChats[row]).messageText;
-        
-        [self.sizingView setString:text];
-        [self.sizingView sizeToFit];
+        [self.sizingField setStringValue:text];
+        return [self.sizingField.cell cellSizeForBounds:self.sizingField.frame].height + 10;
     
-        return self.sizingView.frame.size.height;
+        /*[self.sizingView setString:text];
+        [self.sizingView sizeToFit];
+        return self.sizingView.frame.size.height; */
     }
     
     return 80.0;
@@ -144,9 +148,9 @@
         
         Message *message = self.currentConversationChats[row];
         NSView *encompassingView = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, 0, 0)];
-        
         NSRect frame = message.isFromMe ? self.messageFromMe : self.messageToMe;
         
+        /*
         NSTextView *viewForSize = [[NSTextView alloc] initWithFrame:frame];
         [viewForSize setString:message.messageText];
         
@@ -163,17 +167,35 @@
         else {
             [viewForSize setBackgroundColor:[NSColor lightGrayColor]];
             [viewForSize setTextColor:[NSColor blackColor]];
+        } 
+        
+         float minSize = size.width > viewForSize.frame.size.width ? size.width : viewForSize.frame.size.width;
+         [viewForSize setFrameSize:CGSizeMake(minSize, viewForSize.frame.size.height)];
+         [encompassingView addSubview:viewForSize];
+         */
+        
+        NSTextField *field = [[NSTextField alloc] initWithFrame:frame];
+        [field setStringValue:message.messageText];
+        [field setTextColor:[NSColor blackColor]];
+        
+        [field setDrawsBackground:YES];
+        [field setWantsLayer:YES];
+        
+        NSSize goodFrame = [field.cell cellSizeForBounds:frame];
+        [field setFrameSize:CGSizeMake(goodFrame.width, goodFrame.height + 10)];
+        
+        if(message.isFromMe) {
+            [field setFrameOrigin:CGPointMake(tableColumn.width - field.frame.size.width, field.frame.origin.y)];
+            [field setBackgroundColor:[NSColor blueColor]];
+            [field setTextColor:[NSColor whiteColor]];
+        }
+        else {
+            [field setBackgroundColor:[NSColor lightGrayColor]];
+            [field setTextColor:[NSColor blackColor]];
         }
         
+        [encompassingView addSubview:field];
         
-       // NSDictionary *attributes = @{NSFontAttributeName: viewForSize.font};
-        //CGSize size = [message.messageText sizeWithAttributes:attributes];
-        
-        //float minSize = size.width > viewForSize.frame.size.width ? size.width : viewForSize.frame.size.width;
-        
-        //[viewForSize setFrameSize:CGSizeMake(minSize, viewForSize.frame.size.height)];
-        
-        [encompassingView addSubview:viewForSize];
         return encompassingView;
     }
     
