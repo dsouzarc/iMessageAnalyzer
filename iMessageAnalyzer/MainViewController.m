@@ -43,8 +43,6 @@
         
         NSRect frame = NSMakeRect(0, 0, 360, MAXFLOAT);
         self.sizingView = [[NSTextView alloc] initWithFrame:frame];
-        [self.sizingView setHorizontallyResizable:YES];
-        
     }
     
     return self;
@@ -132,7 +130,7 @@
         
         [self.sizingView setString:text];
         [self.sizingView sizeToFit];
-
+    
         return self.sizingView.frame.size.height;
     }
     
@@ -155,10 +153,25 @@
         [viewForSize setAlignment:(message.isFromMe ? NSTextAlignmentRight : NSTextAlignmentLeft)];
         [viewForSize setHorizontallyResizable:YES];
         [viewForSize sizeToFit];
+        [viewForSize setDrawsBackground:YES];
         
         if(message.isFromMe) {
             [viewForSize setFrameOrigin:CGPointMake(tableColumn.width - viewForSize.frame.size.width, viewForSize.frame.origin.y)];
+            [viewForSize setBackgroundColor:[NSColor blueColor]];
+            [viewForSize setTextColor:[NSColor whiteColor]];
         }
+        else {
+            [viewForSize setBackgroundColor:[NSColor lightGrayColor]];
+            [viewForSize setTextColor:[NSColor blackColor]];
+        }
+        
+        
+       // NSDictionary *attributes = @{NSFontAttributeName: viewForSize.font};
+        //CGSize size = [message.messageText sizeWithAttributes:attributes];
+        
+        //float minSize = size.width > viewForSize.frame.size.width ? size.width : viewForSize.frame.size.width;
+        
+        //[viewForSize setFrameSize:CGSizeMake(minSize, viewForSize.frame.size.height)];
         
         [encompassingView addSubview:viewForSize];
         return encompassingView;
