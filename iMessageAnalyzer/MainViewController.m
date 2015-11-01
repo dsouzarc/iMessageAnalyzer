@@ -125,7 +125,7 @@
         [viewForSize setHorizontallyResizable:YES];
         [viewForSize sizeToFit];
         
-        return viewForSize.frame.size.height + 40;
+        return viewForSize.frame.size.height;
     }
     
     return 80.0;
@@ -139,33 +139,28 @@
         Message *message = self.currentConversationChats[row];
         TextTableCellView *view = [tableView makeViewWithIdentifier:@"textTableCellView" owner:self];
         
+        NSView *v = [[NSView alloc] initWithFrame:view.frame];
+        
+        NSRect frame = NSMakeRect(message.isFromMe ? tableColumn.width/2 : 0, 0, 360, MAXFLOAT);
+        
+        NSTextView *viewForSize = [[NSTextView alloc] initWithFrame:frame];
+        [[viewForSize textStorage] setAttributedString:[[NSAttributedString alloc] initWithString:message.messageText]];
+        
         if(message.isFromMe) {
-            [view.rightSideTextField setBackgroundColor:[NSColor blueColor]];
-            [view.rightSideTextField setDrawsBackground:YES];
-            
-            [view.rightSideTextField setTextColor:[NSColor whiteColor]];
-            [view.rightSideTextField setStringValue:message.messageText];
-            
-            [view.rightSideTextField setHidden:NO];
-            [view.leftSideTextField setHidden:YES];
-
-            [view.rightSideTextField setFrameSize:[view.rightSideTextField.cell cellSize]];
-            
+            [viewForSize setAlignment:NSTextAlignmentRight];
         }
         else {
-            [view.leftSideTextField setBackgroundColor:[NSColor grayColor]];
-            [view.leftSideTextField setDrawsBackground:YES];
-            
-            [view.leftSideTextField setTextColor:[NSColor blackColor]];
-            [view.leftSideTextField setStringValue:message.messageText];
-            
-            [view.leftSideTextField setHidden:NO];
-            [view.rightSideTextField setHidden:YES];
-
-            [view.leftSideTextField setFrameSize:[view.leftSideTextField.cell cellSize]];
+            [viewForSize setAlignment:NSTextAlignmentLeft];
         }
         
-        return view;
+        [viewForSize setHorizontallyResizable:YES];
+        [viewForSize sizeToFit];
+        
+        //[viewForSize setFrameOrigin:CGPointMake(600, 0)];
+    
+        [v addSubview:viewForSize];
+        
+        return v;
     }
     
     else if(tableView == self.contactsTableView) {
