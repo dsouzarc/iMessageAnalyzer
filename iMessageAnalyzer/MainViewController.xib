@@ -6,6 +6,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="MainViewController">
             <connections>
+                <outlet property="contactNameTextField" destination="YFw-ne-ukc" id="67j-H9-XYi"/>
                 <outlet property="contactsTableView" destination="S3H-Yk-c4c" id="GQw-hH-Kjr"/>
                 <outlet property="messagesTableView" destination="gb8-do-be4" id="xJj-Lr-fAB"/>
                 <outlet property="searchField" destination="Kpw-Oj-Sda" id="o5r-QY-eCu"/>
@@ -164,6 +165,14 @@
                                         <autoresizingMask key="autoresizingMask"/>
                                     </scroller>
                                 </scrollView>
+                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YFw-ne-ukc">
+                                    <rect key="frame" x="13" y="672" width="370" height="17"/>
+                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Label" id="Nql-XI-kdV">
+                                        <font key="font" metaFont="system"/>
+                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                </textField>
                             </subviews>
                         </customView>
                     </subviews>

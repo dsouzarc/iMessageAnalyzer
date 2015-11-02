@@ -20,6 +20,7 @@
 @property (strong, nonatomic) NSMutableArray *searchConversationChats;
 
 @property (strong, nonatomic) NSMutableArray *currentConversationChats;
+@property (strong) IBOutlet NSTextField *contactNameTextField;
 
 @property (strong, nonatomic) NSTextView *sizingView;
 @property (strong, nonatomic) NSTextField *sizingField;
@@ -67,6 +68,7 @@
         Person *firstPerson = self.searchConversationChats[0];
         self.currentConversationChats = [self.messageManager getAllMessagesForPerson:firstPerson];
         [self.messagesTableView reloadData];
+        [self.contactNameTextField setStringValue:[NSString stringWithFormat:@"%@ %@", firstPerson.personName, firstPerson.number]];
         NSLog(@"SIZE: %d", self.currentConversationChats.count);
     }
 }
@@ -242,6 +244,8 @@
         
         Person *person = self.searchConversationChats[row];
         self.currentConversationChats = [self.messageManager getAllMessagesForPerson:person];
+        
+        [self.contactNameTextField setStringValue:[NSString stringWithFormat:@"%@ %@", person.personName, person.number]];
         
         [self.messagesTableView reloadData];
         return YES;
