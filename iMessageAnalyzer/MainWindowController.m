@@ -31,6 +31,12 @@
     [super windowDidLoad];
     
     [self.window setContentViewController:self.mainViewController];
+    [self.window setShowsResizeIndicator:NO];
+}
+
+- (NSSize) windowWillResize:(NSWindow *)sender toSize:(NSSize)frameSize
+{
+    return self.window.frame.size;
 }
 
 @end

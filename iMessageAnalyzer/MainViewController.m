@@ -42,10 +42,6 @@
         self.searchConversationChats = [[NSMutableArray alloc] initWithArray:self.chats];
         
         self.currentConversationChats = [[NSMutableArray alloc] init];
-        
-        NSRect frame = NSMakeRect(0, 0, 360, MAXFLOAT);
-        self.sizingView = [[NSTextView alloc] initWithFrame:frame];
-        self.sizingField = [[NSTextField alloc] initWithFrame:frame];
     }
     
     return self;
@@ -54,8 +50,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.messageFromMe = NSMakeRect(self.messagesTableView.tableColumns[0].width/2, 0, 360, MAXFLOAT);
-    self.messageToMe = NSMakeRect(0, 0, 360, MAXFLOAT);
+    NSRect frame = NSMakeRect(0, 0, 400, MAXFLOAT);
+    self.sizingView = [[NSTextView alloc] initWithFrame:frame];
+    self.sizingField = [[NSTextField alloc] initWithFrame:frame];
+    
+    self.messageFromMe = NSMakeRect(self.messagesTableView.tableColumns[0].width/2, 0, 400, MAXFLOAT);
+    self.messageToMe = NSMakeRect(0, 0, 400, MAXFLOAT);
     
     NSNib *cellNib = [[NSNib alloc] initWithNibNamed:@"ChatTableViewCell" bundle:[NSBundle mainBundle]];
     [self.contactsTableView registerNib:cellNib forIdentifier:@"chatTableViewCell"];
@@ -175,14 +175,13 @@
          */
         
         NSTextField *field = [[NSTextField alloc] initWithFrame:frame];
-        [field setStringValue:message.messageText];
-        [field setTextColor:[NSColor blackColor]];
+        [field setStringValue:[NSString stringWithFormat:@"  %@", message.messageText]];
         
         [field setDrawsBackground:YES];
         [field setWantsLayer:YES];
         
         NSSize goodFrame = [field.cell cellSizeForBounds:frame];
-        [field setFrameSize:CGSizeMake(goodFrame.width, goodFrame.height + 10)];
+        [field setFrameSize:CGSizeMake(goodFrame.width + 10, goodFrame.height + 4)];
         
         if(message.isFromMe) {
             [field setFrameOrigin:CGPointMake(tableColumn.width - field.frame.size.width, field.frame.origin.y)];
@@ -193,6 +192,12 @@
             [field setBackgroundColor:[NSColor lightGrayColor]];
             [field setTextColor:[NSColor blackColor]];
         }
+        
+        [field setWantsLayer:YES];
+        [field.layer setCornerRadius:14.0f];
+        [field setFocusRingType:NSFocusRingTypeNone];
+        [field setBordered:NO];
+        
         
         [encompassingView addSubview:field];
         

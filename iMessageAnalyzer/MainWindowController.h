@@ -10,6 +10,6 @@
 
 #import "MainViewController.h"
 
-@interface MainWindowController : NSWindowController
+@interface MainWindowController : NSWindowController <NSWindowDelegate>
 
 @end

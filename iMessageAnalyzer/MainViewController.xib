@@ -179,7 +179,7 @@
                 <constraint firstAttribute="trailing" secondItem="7Cg-fX-aMs" secondAttribute="trailing" id="uAF-Jv-6qc"/>
                 <constraint firstItem="7Cg-fX-aMs" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" id="uDQ-zn-Hc5"/>
             </constraints>
-            <point key="canvasLocation" x="-830.5" y="249.5"/>
+            <point key="canvasLocation" x="-691.5" y="51.5"/>
         </customView>
         <userDefaultsController representsSharedInstance="YES" id="MPa-76-IVI"/>
     </objects>
