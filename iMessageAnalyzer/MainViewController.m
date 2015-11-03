@@ -17,6 +17,8 @@
 
 @property (strong, nonatomic) MessageManager *messageManager;
 
+@property (strong, nonatomic) NSPopover *calendarPopover;
+
 @property (strong, nonatomic) NSMutableArray *chats;
 @property (strong, nonatomic) NSMutableArray *searchConversationChats;
 
@@ -75,16 +77,17 @@
 }
 
 - (IBAction)calendarButtonClick:(id)sender {
-    NSLog(@"CLICKKK");
-    NSPopover *popover = [[NSPopover alloc] init];
-    NSView *tempView = [[NSView alloc] initWithFrame:CGRectMake(0, 0, 300, 300)];
-    NSTextField *field = [[NSTextField alloc] init];
-    [field setStringValue:@"Hellooo"];
-    [tempView addSubview:field];
-    [popover setContentSize:CGSizeMake(300, 300)];
-    [popover setContentViewController:[[CalendarPopUpViewController alloc] initWithNibName:@"CalendarPopUpViewController" bundle:[NSBundle mainBundle]]];
-    [popover setAnimates:YES];
-    [popover showRelativeToRect:[self.calendarButton bounds] ofView:self.calendarButton preferredEdge:NSMaxXEdge];
+
+    if(!self.calendarPopover) {
+        CalendarPopUpViewController *viewController = [[CalendarPopUpViewController alloc] initWithNibName:@"CalendarPopUpViewController" bundle:[NSBundle mainBundle]];
+        self.calendarPopover = [[NSPopover alloc] init];
+        [self.calendarPopover setContentSize:viewController.view.bounds.size];
+        [self.calendarPopover setContentViewController:viewController];
+        [self.calendarPopover setAnimates:YES];
+        [self.calendarPopover setBehavior:NSPopoverBehaviorTransient];
+    }
+    
+    [self.calendarPopover showRelativeToRect:[self.calendarButton bounds] ofView:self.calendarButton preferredEdge:NSMaxXEdge];
 }
 
 /****************************************************************

@@ -8,6 +8,6 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface CalendarPopUpViewController : NSViewController
+@interface CalendarPopUpViewController : NSViewController <NSDatePickerCellDelegate>
 
 @end

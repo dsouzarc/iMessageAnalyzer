@@ -6,18 +6,20 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="CalendarPopUpViewController">
             <connections>
+                <outlet property="datePicker" destination="Mo7-pD-yMa" id="jFD-ug-AMK"/>
+                <outlet property="resetToAllButton" destination="GKv-J7-ufS" id="SfG-4c-Jgm"/>
                 <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView id="Hz6-mo-xeY">
-            <rect key="frame" x="0.0" y="0.0" width="300" height="300"/>
+            <rect key="frame" x="0.0" y="0.0" width="139" height="168"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <datePicker verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Mo7-pD-yMa">
-                    <rect key="frame" x="81" y="76" width="139" height="148"/>
-                    <datePickerCell key="cell" borderStyle="bezel" alignment="left" datePickerStyle="clockAndCalendar" id="Nud-G4-tpp">
+                    <rect key="frame" x="0.0" y="20" width="139" height="148"/>
+                    <datePickerCell key="cell" borderStyle="bezel" alignment="left" datePickerMode="range" datePickerStyle="clockAndCalendar" id="Nud-G4-tpp">
                         <font key="font" metaFont="system"/>
                         <calendarDate key="date" timeIntervalSinceReferenceDate="-595929600" calendarFormat="%Y-%m-%d %H:%M:%S %z">
                             <!--1982-02-12 08:00:00 -0800-->
@@ -25,10 +27,23 @@
                         </calendarDate>
                         <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <connections>
+                            <outlet property="delegate" destination="-2" id="ZJJ-8B-yQW"/>
+                        </connections>
                     </datePickerCell>
                 </datePicker>
+                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GKv-J7-ufS">
+                    <rect key="frame" x="-6" y="-7" width="151" height="32"/>
+                    <buttonCell key="cell" type="push" title="Reset to all" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="apr-dy-QwT">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                        <connections>
+                            <action selector="resetToAllButtonClick:" target="-2" id="e4p-MA-lf5"/>
+                        </connections>
+                    </buttonCell>
+                </button>
             </subviews>
-            <point key="canvasLocation" x="366" y="351"/>
+            <point key="canvasLocation" x="366.5" y="341"/>
         </customView>
     </objects>
 </document>

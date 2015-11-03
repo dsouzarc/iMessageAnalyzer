@@ -10,13 +10,31 @@
 
 @interface CalendarPopUpViewController ()
 
+@property (strong) IBOutlet NSDatePicker *datePicker;
+@property (strong) IBOutlet NSButton *resetToAllButton;
+
 @end
 
 @implementation CalendarPopUpViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do view setup here.
+    
+    [self.datePicker setDateValue:[NSDate date]];
+    
 }
+- (IBAction)resetToAllButtonClick:(id)sender {
+    
+}
+
+- (void) datePickerCell:(NSDatePickerCell *)aDatePickerCell validateProposedDateValue:(NSDate *__autoreleasing  _Nonnull *)proposedDateValue timeInterval:(NSTimeInterval *)proposedTimeInterval
+{
+    NSDateFormatter *d = [[NSDateFormatter alloc] init];
+    [d setDateFormat:@"MM/dd/yyyy HH:mm"];
+    NSString *aDate = [d stringFromDate:*proposedDateValue];
+    NSLog(@"Date: %@", aDate);
+}
+
+
 
 @end
