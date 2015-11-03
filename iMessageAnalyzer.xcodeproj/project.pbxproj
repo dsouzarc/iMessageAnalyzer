@@ -25,6 +25,9 @@
 		94A9924A1BBDC734003BA1D5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 94A992481BBDC734003BA1D5 /* Main.storyboard */; };
 		94A992551BBDC734003BA1D5 /* iMessageAnalyzerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A992541BBDC734003BA1D5 /* iMessageAnalyzerTests.m */; };
 		94A992601BBDC734003BA1D5 /* iMessageAnalyzerUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A9925F1BBDC734003BA1D5 /* iMessageAnalyzerUITests.m */; };
+		94DAC4A51BE7DAF90016ED35 /* calendar-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 94DAC4A41BE7DAF90016ED35 /* calendar-icon.png */; settings = {ASSET_TAGS = (); }; };
+		94F01DDD1BE852CF00B47D9D /* CalendarPopUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94F01DDB1BE852CF00B47D9D /* CalendarPopUpViewController.m */; settings = {ASSET_TAGS = (); }; };
+		94F01DDE1BE852CF00B47D9D /* CalendarPopUpViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94F01DDC1BE852CF00B47D9D /* CalendarPopUpViewController.xib */; settings = {ASSET_TAGS = (); }; };
 		94F3AC371BC1D9C600948A23 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 94F3AC351BC1D9C600948A23 /* libsqlite3.0.tbd */; };
 		94F3AC381BC1D9C600948A23 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 94F3AC361BC1D9C600948A23 /* libsqlite3.tbd */; };
 		94F3AC3B1BC32BD500948A23 /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = 94F3AC3A1BC32BD500948A23 /* Person.m */; settings = {ASSET_TAGS = (); }; };
@@ -84,6 +87,10 @@
 		94A9925B1BBDC734003BA1D5 /* iMessageAnalyzerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iMessageAnalyzerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		94A9925F1BBDC734003BA1D5 /* iMessageAnalyzerUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = iMessageAnalyzerUITests.m; sourceTree = "<group>"; };
 		94A992611BBDC734003BA1D5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		94DAC4A41BE7DAF90016ED35 /* calendar-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "calendar-icon.png"; sourceTree = "<group>"; };
+		94F01DDA1BE852CF00B47D9D /* CalendarPopUpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalendarPopUpViewController.h; sourceTree = "<group>"; };
+		94F01DDB1BE852CF00B47D9D /* CalendarPopUpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalendarPopUpViewController.m; sourceTree = "<group>"; };
+		94F01DDC1BE852CF00B47D9D /* CalendarPopUpViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CalendarPopUpViewController.xib; sourceTree = "<group>"; };
 		94F3AC351BC1D9C600948A23 /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
 		94F3AC361BC1D9C600948A23 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		94F3AC391BC32BD500948A23 /* Person.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Person.h; sourceTree = "<group>"; };
@@ -246,6 +253,7 @@
 		947B53DB1BE53F6500484D66 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				94DAC4A41BE7DAF90016ED35 /* calendar-icon.png */,
 				944E19571BE540E9005132E1 /* blank_profile_outline.png */,
 			);
 			name = Icons;
@@ -277,6 +285,9 @@
 				946D2A701BE5EAA700270BF0 /* TextTableCellView.xib */,
 				946D2A6D1BE5DBC800270BF0 /* TextTableCellView.h */,
 				946D2A6E1BE5DBC800270BF0 /* TextTableCellView.m */,
+				94F01DDA1BE852CF00B47D9D /* CalendarPopUpViewController.h */,
+				94F01DDB1BE852CF00B47D9D /* CalendarPopUpViewController.m */,
+				94F01DDC1BE852CF00B47D9D /* CalendarPopUpViewController.xib */,
 				947B53D51BE1AE4C00484D66 /* Main Window Controller */,
 				947B53D61BE1AE5400484D66 /* Main View Controller */,
 				947B53D11BE1AE0D00484D66 /* Managers */,
@@ -427,9 +438,11 @@
 				944E19581BE540E9005132E1 /* blank_profile_outline.png in Resources */,
 				9438FD081BE07CFF00B239BE /* MainWindowController.xib in Resources */,
 				947B53CB1BE1AA2700484D66 /* ChatTableViewCell.xib in Resources */,
+				94DAC4A51BE7DAF90016ED35 /* calendar-icon.png in Resources */,
 				94A9924A1BBDC734003BA1D5 /* Main.storyboard in Resources */,
 				9438FD121BE07D2600B239BE /* MainViewController.xib in Resources */,
 				946D2A711BE5EAA700270BF0 /* TextTableCellView.xib in Resources */,
+				94F01DDE1BE852CF00B47D9D /* CalendarPopUpViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -455,6 +468,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9438FD111BE07D2600B239BE /* MainViewController.m in Sources */,
+				94F01DDD1BE852CF00B47D9D /* CalendarPopUpViewController.m in Sources */,
 				946D2A6C1BE55BF900270BF0 /* Statistics.m in Sources */,
 				9438FD071BE07CFF00B239BE /* MainWindowController.m in Sources */,
 				94A992451BBDC733003BA1D5 /* ViewController.m in Sources */,

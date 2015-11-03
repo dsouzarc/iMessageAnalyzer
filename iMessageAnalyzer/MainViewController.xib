@@ -6,6 +6,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="MainViewController">
             <connections>
+                <outlet property="calendarButton" destination="OKw-Su-VQR" id="4aH-2F-Dcy"/>
                 <outlet property="contactNameTextField" destination="YFw-ne-ukc" id="67j-H9-XYi"/>
                 <outlet property="contactsTableView" destination="S3H-Yk-c4c" id="GQw-hH-Kjr"/>
                 <outlet property="messagesTableView" destination="gb8-do-be4" id="xJj-Lr-fAB"/>
@@ -166,13 +167,23 @@
                                     </scroller>
                                 </scrollView>
                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YFw-ne-ukc">
-                                    <rect key="frame" x="13" y="672" width="370" height="17"/>
+                                    <rect key="frame" x="13" y="672" width="491" height="17"/>
                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Label" id="Nql-XI-kdV">
                                         <font key="font" metaFont="system"/>
                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
+                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OKw-Su-VQR">
+                                    <rect key="frame" x="795" y="666" width="25" height="29"/>
+                                    <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="calendar-icon" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="gA3-Oy-ptL">
+                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                        <font key="font" metaFont="system"/>
+                                    </buttonCell>
+                                    <connections>
+                                        <action selector="calendarButtonClick:" target="-2" id="xt2-YT-TBP"/>
+                                    </connections>
+                                </button>
                             </subviews>
                         </customView>
                     </subviews>
@@ -188,8 +199,11 @@
                 <constraint firstAttribute="trailing" secondItem="7Cg-fX-aMs" secondAttribute="trailing" id="uAF-Jv-6qc"/>
                 <constraint firstItem="7Cg-fX-aMs" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" id="uDQ-zn-Hc5"/>
             </constraints>
-            <point key="canvasLocation" x="-691.5" y="51.5"/>
+            <point key="canvasLocation" x="-843.5" y="39.5"/>
         </customView>
         <userDefaultsController representsSharedInstance="YES" id="MPa-76-IVI"/>
     </objects>
+    <resources>
+        <image name="calendar-icon" width="360" height="360"/>
+    </resources>
 </document>

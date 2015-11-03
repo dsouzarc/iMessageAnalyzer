@@ -8,11 +8,11 @@
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView identifier="textTableCellView" id="c22-O7-iKe" customClass="TextTableCellView">
-            <rect key="frame" x="0.0" y="0.0" width="823" height="10004"/>
+            <rect key="frame" x="0.0" y="0.0" width="823" height="10000"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hFz-dj-2lD">
-                    <rect key="frame" x="6" y="-16" width="380" height="10000"/>
+                    <rect key="frame" x="6" y="-20" width="380" height="10000"/>
                     <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" alignment="left" title="Multiline Label" id="7kv-KL-DBJ">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -20,7 +20,7 @@
                     </textFieldCell>
                 </textField>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WUu-nD-rvy">
-                    <rect key="frame" x="440" y="-16" width="380" height="10000"/>
+                    <rect key="frame" x="440" y="-20" width="380" height="10000"/>
                     <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" borderStyle="bezel" alignment="right" title="Multiline Label" id="e61-U7-dnQ">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>

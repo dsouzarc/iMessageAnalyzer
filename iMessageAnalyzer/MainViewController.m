@@ -13,6 +13,7 @@
 @property (strong) IBOutlet NSTableView *contactsTableView;
 @property (strong) IBOutlet NSTableView *messagesTableView;
 @property (strong) IBOutlet NSSearchField *searchField;
+@property (strong) IBOutlet NSButton *calendarButton;
 
 @property (strong, nonatomic) MessageManager *messageManager;
 
@@ -73,6 +74,18 @@
     }
 }
 
+- (IBAction)calendarButtonClick:(id)sender {
+    NSLog(@"CLICKKK");
+    NSPopover *popover = [[NSPopover alloc] init];
+    NSView *tempView = [[NSView alloc] initWithFrame:CGRectMake(0, 0, 300, 300)];
+    NSTextField *field = [[NSTextField alloc] init];
+    [field setStringValue:@"Hellooo"];
+    [tempView addSubview:field];
+    [popover setContentSize:CGSizeMake(300, 300)];
+    [popover setContentViewController:[[CalendarPopUpViewController alloc] initWithNibName:@"CalendarPopUpViewController" bundle:[NSBundle mainBundle]]];
+    [popover setAnimates:YES];
+    [popover showRelativeToRect:[self.calendarButton bounds] ofView:self.calendarButton preferredEdge:NSMaxXEdge];
+}
 
 /****************************************************************
  *
