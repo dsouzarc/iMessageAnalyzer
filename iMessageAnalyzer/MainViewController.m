@@ -30,6 +30,9 @@
 @property (strong, nonatomic) NSTextView *sizingView;
 @property (strong, nonatomic) NSTextField *sizingField;
 
+@property (strong, nonatomic) NSTextField *noMessagesField;
+@property (strong, nonatomic) NSDateFormatter *dateFormatter;
+
 @property (strong, nonatomic) Person *lastChosenPerson;
 
 @property NSRect messageFromMe;
@@ -50,6 +53,8 @@
         self.searchConversationChats = [[NSMutableArray alloc] initWithArray:self.chats];
         
         self.currentConversationChats = [[NSMutableArray alloc] init];
+        self.dateFormatter = [[NSDateFormatter alloc] init];
+        [self.dateFormatter setDateFormat:@"MM/dd/yyyy"];
     }
     
     return self;
@@ -171,7 +176,14 @@
         return self.searchConversationChats.count;
     }
     else if(tableView == self.messagesTableView) {
-        return self.currentConversationChats.count;
+        
+        if(self.currentConversationChats.count > 0) {
+            if(self.noMessagesField) {
+                [self.noMessagesField setHidden:YES];
+            }
+            return self.currentConversationChats.count;
+        }
+        return 1;
     }
     else {
         return 0;
@@ -201,6 +213,31 @@
 - (NSView*) tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
     if(tableView == self.messagesTableView) {
+        
+        if(row > self.currentConversationChats.count || self.currentConversationChats.count == 0) {
+            self.noMessagesField = [[NSTextField alloc] initWithFrame:CGRectMake(0, 0, self.messagesTableView.bounds.size.width, self.messagesTableView.bounds.size.height)];
+            
+            NSString *text;
+            
+            if(!self.lastChosenPerson) {
+                text = @"No messages or conversations";
+            }
+            else {
+                text = [NSString stringWithFormat:@"No messages with %@ (%@)", self.lastChosenPerson.personName, self.lastChosenPerson.number];
+                
+                if(self.calendarChosenDate) {
+                    text = [NSString stringWithFormat:@"%@ on %@", text, [self.dateFormatter stringFromDate:self.calendarChosenDate]];
+                }
+            }
+            [self.noMessagesField setStringValue:text];
+            [self.noMessagesField setAlignment:NSTextAlignmentCenter];
+            [self.noMessagesField setFocusRingType:NSFocusRingTypeNone];
+            [self.noMessagesField setBordered:NO];
+            
+            [self.messagesTableView addSubview:self.noMessagesField];
+            
+            return self.noMessagesField;
+        }
         
         Message *message = self.currentConversationChats[row];
         NSView *encompassingView = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, 0, 0)];
