@@ -28,6 +28,8 @@
 @property (strong, nonatomic) NSTextView *sizingView;
 @property (strong, nonatomic) NSTextField *sizingField;
 
+@property (strong, nonatomic) Person *lastChosenPerson;
+
 @property NSRect messageFromMe;
 @property NSRect messageToMe;
 
@@ -68,10 +70,10 @@
     [self.messagesTableView registerNib:cellNib2 forIdentifier:@"textTableCellView"];
     
     if(self.searchConversationChats.count > 0) {
-        Person *firstPerson = self.searchConversationChats[0];
-        self.currentConversationChats = [self.messageManager getAllMessagesForPerson:firstPerson];
+        self.lastChosenPerson = self.searchConversationChats[0];
+        self.currentConversationChats = [self.messageManager getAllMessagesForPerson:self.lastChosenPerson];
         [self.messagesTableView reloadData];
-        [self.contactNameTextField setStringValue:[NSString stringWithFormat:@"%@ %@", firstPerson.personName, firstPerson.number]];
+        [self.contactNameTextField setStringValue:[NSString stringWithFormat:@"%@ %@", self.lastChosenPerson.personName, self.lastChosenPerson.number]];
         NSLog(@"SIZE: %d", self.currentConversationChats.count);
     }
 }
@@ -80,6 +82,7 @@
 
     if(!self.calendarPopover) {
         CalendarPopUpViewController *viewController = [[CalendarPopUpViewController alloc] initWithNibName:@"CalendarPopUpViewController" bundle:[NSBundle mainBundle]];
+        viewController.delegate = self;
         self.calendarPopover = [[NSPopover alloc] init];
         [self.calendarPopover setContentSize:viewController.view.bounds.size];
         [self.calendarPopover setContentViewController:viewController];
@@ -88,6 +91,15 @@
     }
     
     [self.calendarPopover showRelativeToRect:[self.calendarButton bounds] ofView:self.calendarButton preferredEdge:NSMaxXEdge];
+}
+
+- (void) dateChosen:(NSDate *)chosenDate
+{
+    //Reset to show all messages
+    if(!chosenDate) {
+        self.currentConversationChats = [self.messageManager getAllMessagesForPerson:self.lastChosenPerson];
+        
+    }
 }
 
 /****************************************************************
@@ -258,10 +270,10 @@
 {
     if(tableView == self.contactsTableView) {
         
-        Person *person = self.searchConversationChats[row];
-        self.currentConversationChats = [self.messageManager getAllMessagesForPerson:person];
+        self.lastChosenPerson = self.searchConversationChats[row];
+        self.currentConversationChats = [self.messageManager getAllMessagesForPerson:self.lastChosenPerson];
         
-        [self.contactNameTextField setStringValue:[NSString stringWithFormat:@"%@ %@", person.personName, person.number]];
+        [self.contactNameTextField setStringValue:[NSString stringWithFormat:@"%@ %@", self.lastChosenPerson.personName, self.lastChosenPerson.number]];
         
         [self.messagesTableView reloadData];
         return YES;

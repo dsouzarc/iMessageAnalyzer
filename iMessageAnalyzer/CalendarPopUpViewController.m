@@ -24,17 +24,12 @@
     
 }
 - (IBAction)resetToAllButtonClick:(id)sender {
-    
+    [self.delegate dateChosen:nil];
 }
 
 - (void) datePickerCell:(NSDatePickerCell *)aDatePickerCell validateProposedDateValue:(NSDate *__autoreleasing  _Nonnull *)proposedDateValue timeInterval:(NSTimeInterval *)proposedTimeInterval
 {
-    NSDateFormatter *d = [[NSDateFormatter alloc] init];
-    [d setDateFormat:@"MM/dd/yyyy HH:mm"];
-    NSString *aDate = [d stringFromDate:*proposedDateValue];
-    NSLog(@"Date: %@", aDate);
+    [self.delegate dateChosen:*proposedDateValue];
 }
-
-
 
 @end

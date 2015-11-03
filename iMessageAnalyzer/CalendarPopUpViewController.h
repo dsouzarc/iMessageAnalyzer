@@ -8,6 +8,14 @@
 
 #import <Cocoa/Cocoa.h>
 
+@protocol CalendarPopUpViewControllerDelegate <NSObject>
+
+- (void) dateChosen:(NSDate*)chosenDate;
+
+@end
+
 @interface CalendarPopUpViewController : NSViewController <NSDatePickerCellDelegate>
+
+@property (weak, nonatomic) id<CalendarPopUpViewControllerDelegate> delegate;
 
 @end
