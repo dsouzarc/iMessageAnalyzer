@@ -25,5 +25,6 @@
 @property BOOL isFromMe;
 @property BOOL hasAttachment;
 
+- (NSString*) getTimeStampAsString;
 
 @end
