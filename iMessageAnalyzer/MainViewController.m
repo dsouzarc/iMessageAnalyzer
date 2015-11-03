@@ -37,6 +37,7 @@
 
 @property NSRect messageFromMe;
 @property NSRect messageToMe;
+@property NSRect timeStampRect;
 
 @end
 
@@ -69,6 +70,8 @@
     
     self.messageFromMe = NSMakeRect(self.messagesTableView.tableColumns[0].width/2, 0, 400, MAXFLOAT);
     self.messageToMe = NSMakeRect(0, 0, 400, MAXFLOAT);
+    
+    self.timeStampRect = NSMakeRect(0, 0, 400, MAXFLOAT);
     
     NSNib *cellNib = [[NSNib alloc] initWithNibNamed:@"ChatTableViewCell" bundle:[NSBundle mainBundle]];
     [self.contactsTableView registerNib:cellNib forIdentifier:@"chatTableViewCell"];
@@ -199,7 +202,7 @@
         
         NSString *text = ((Message*) self.currentConversationChats[row]).messageText;
         [self.sizingField setStringValue:text];
-        return [self.sizingField.cell cellSizeForBounds:self.sizingField.frame].height + 10;
+        return [self.sizingField.cell cellSizeForBounds:self.sizingField.frame].height + 30;
     
         /*[self.sizingView setString:text];
         [self.sizingView sizeToFit];
@@ -243,6 +246,11 @@
         NSView *encompassingView = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, 0, 0)];
         NSRect frame = message.isFromMe ? self.messageFromMe : self.messageToMe;
         
+        NSTextField *timeField = [[NSTextField alloc] initWithFrame:self.timeStampRect];
+        [timeField setStringValue:[message getTimeStampAsString]];
+        [timeField setFocusRingType:NSFocusRingTypeNone];
+        [timeField setBordered:NO];
+        
         /*
         NSTextView *viewForSize = [[NSTextView alloc] initWithFrame:frame];
         [viewForSize setString:message.messageText];
@@ -267,32 +275,40 @@
          [encompassingView addSubview:viewForSize];
          */
         
-        NSTextField *field = [[NSTextField alloc] initWithFrame:frame];
-        [field setStringValue:[NSString stringWithFormat:@"  %@", message.messageText]];
+        NSTextField *messageField = [[NSTextField alloc] initWithFrame:frame];
+        [messageField setStringValue:[NSString stringWithFormat:@"  %@", message.messageText]];
         
-        [field setDrawsBackground:YES];
-        [field setWantsLayer:YES];
+        [messageField setDrawsBackground:YES];
+        [messageField setWantsLayer:YES];
         
-        NSSize goodFrame = [field.cell cellSizeForBounds:frame];
-        [field setFrameSize:CGSizeMake(goodFrame.width + 10, goodFrame.height + 4)];
+        NSSize goodFrame = [messageField.cell cellSizeForBounds:frame];
+        [messageField setFrameSize:CGSizeMake(goodFrame.width + 10, goodFrame.height + 4)];
+        
+        goodFrame = [timeField.cell cellSizeForBounds:self.timeStampRect];
+        [timeField setFrameSize:CGSizeMake(goodFrame.width + 2, goodFrame.height)];
         
         if(message.isFromMe) {
-            [field setFrameOrigin:CGPointMake(tableColumn.width - field.frame.size.width, field.frame.origin.y)];
-            [field setBackgroundColor:[NSColor blueColor]];
-            [field setTextColor:[NSColor whiteColor]];
+            [messageField setFrameOrigin:CGPointMake(tableColumn.width - messageField.frame.size.width, 15)];
+            [messageField setBackgroundColor:[NSColor blueColor]];
+            [messageField setTextColor:[NSColor whiteColor]];
+            
+            [timeField setFrameOrigin:CGPointMake(tableColumn.width - timeField.frame.size.width, 0)];
         }
         else {
-            [field setBackgroundColor:[NSColor lightGrayColor]];
-            [field setTextColor:[NSColor blackColor]];
+            [messageField setFrameOrigin:CGPointMake(0, 15)];
+            [messageField setBackgroundColor:[NSColor lightGrayColor]];
+            [messageField setTextColor:[NSColor blackColor]];
+            
+            [timeField setFrameOrigin:CGPointMake(2, 0)];
         }
         
-        [field setWantsLayer:YES];
-        [field.layer setCornerRadius:14.0f];
-        [field setFocusRingType:NSFocusRingTypeNone];
-        [field setBordered:NO];
-        
-        
-        [encompassingView addSubview:field];
+        [messageField setWantsLayer:YES];
+        [messageField.layer setCornerRadius:14.0f];
+        [messageField setFocusRingType:NSFocusRingTypeNone];
+        [messageField setBordered:NO];
+
+        [encompassingView addSubview:messageField];
+        [encompassingView addSubview:timeField];
         
         return encompassingView;
     }
