@@ -60,6 +60,11 @@ static MessageManager *messageInstance;
     long startTime = [self timeAtBeginningOfDayForDate:day];
     long endTime = [self timeAtEndOfDayForDate:day];
     
+    /*NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"MM/dd/yyyy HH:mm"];
+    NSLog(@"%@\t%@", [formatter stringFromDate:[[NSDate alloc] initWithTimeIntervalSinceReferenceDate:startTime]], [formatter stringFromDate:[[NSDate alloc] initWithTimeIntervalSinceReferenceDate:endTime]]);
+    NSLog(@"time: %ld\t%ld\t%d", startTime, endTime, person.handleID); */
+    
     return [self.databaseManager getAllMessagesForPerson:person startTimeInSeconds:startTime endTimeInSeconds:endTime];
 }
 
@@ -75,7 +80,7 @@ static MessageManager *messageInstance;
     
     // Convert back
     NSDate *endOfDay = [self.calendar dateFromComponents:dateComps];
-    return [endOfDay timeIntervalSince1970];
+    return [endOfDay timeIntervalSinceReferenceDate];
 }
 
 - (long)timeAtBeginningOfDayForDate:(NSDate*)inputDate
@@ -90,7 +95,7 @@ static MessageManager *messageInstance;
     
     // Convert back
     NSDate *beginningOfDay = [self.calendar dateFromComponents:dateComps];
-    return [beginningOfDay timeIntervalSince1970];
+    return [beginningOfDay timeIntervalSinceReferenceDate];
 }
 
 - (NSMutableArray*) getAllMessagesForPerson:(Person *)person

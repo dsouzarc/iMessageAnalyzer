@@ -105,20 +105,23 @@
 - (void) popoverDidClose:(NSNotification *)notification
 {
     if(((NSPopover*)notification.object) == self.calendarPopover) {
-        //Reset to show all messages
-        if(!self.calendarChosenDate) {
-            self.currentConversationChats = [self.messageManager getAllMessagesForPerson:self.lastChosenPerson];
-        }
-        else {
-            self.currentConversationChats = [self.messageManager getAllMessagesForPerson:self.lastChosenPerson onDay:self.calendarChosenDate];
-        }
-        [self.messagesTableView reloadData];
+        //Do nothing for now
     }
 }
 
 - (void) dateChosen:(NSDate *)chosenDate
 {
     self.calendarChosenDate = chosenDate;
+    
+    //Reset to show all messages
+    if(!self.calendarChosenDate) {
+        self.currentConversationChats = [self.messageManager getAllMessagesForPerson:self.lastChosenPerson];
+    }
+    else {
+        self.currentConversationChats = [self.messageManager getAllMessagesForPerson:self.lastChosenPerson onDay:self.calendarChosenDate];
+    }
+    
+    [self.messagesTableView reloadData];
     
     if(!chosenDate) {
         [self.calendarPopover performClose:@"close"];
