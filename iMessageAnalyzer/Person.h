@@ -30,6 +30,10 @@
 
 @property NSInteger chatId;
 @property NSInteger secondaryChatId;
+
+@property int32_t handleID;
+@property int32_t secondaryHandleId;
+
 @property BOOL isIMessage;
 
 @end
