@@ -98,8 +98,11 @@
     //Reset to show all messages
     if(!chosenDate) {
         self.currentConversationChats = [self.messageManager getAllMessagesForPerson:self.lastChosenPerson];
-        
     }
+    else {
+        self.currentConversationChats = [self.messageManager getAllMessagesForPerson:self.lastChosenPerson onDay:chosenDate];
+    }
+    [self.messagesTableView reloadData];
 }
 
 /****************************************************************

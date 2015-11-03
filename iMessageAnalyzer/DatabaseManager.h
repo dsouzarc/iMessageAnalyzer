@@ -22,7 +22,10 @@
 + (instancetype) getInstance;
 
 - (NSMutableArray*) getAllChats;
+
 - (NSMutableArray*) getAllMessagesForPerson:(Person*)person;
+- (NSMutableArray*) getAllMessagesForPerson:(Person *)person startTimeInSeconds:(long)startTimeInSeconds endTimeInSeconds:(long)endTimeInSeconds;
+
 - (int32_t) getHandleForChatID:(int32_t)chatID;
 
 @end

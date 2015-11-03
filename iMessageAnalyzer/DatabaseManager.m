@@ -117,6 +117,67 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
     return result;
 }
 
+- (NSMutableArray*) getAllMessagesForPerson:(Person *)person startTimeInSeconds:(long)startTimeInSeconds endTimeInSeconds:(long)endTimeInSeconds
+{
+    NSMutableArray *messages = [[NSMutableArray alloc] init];
+    
+    [self updateHandleIDsForPerson:person];
+    int handleID = person.handleID;
+    int handleID2 = person.secondaryHandleId;
+    
+    char *query = [[NSString stringWithFormat:@"SELECT ROWID, guid, text, service, account_guid, date, date_read, is_from_me, cache_has_attachments FROM message WHERE (handle_id=%d OR handle_id=%d) AND date > %ld AND date < %ld ORDER BY date", handleID, handleID2, startTimeInSeconds, endTimeInSeconds] UTF8String];
+    
+    sqlite3_stmt *statement;
+    
+    if(sqlite3_prepare_v2(_database, query, -1, &statement, NULL) == SQLITE_OK) {
+        while(sqlite3_step(statement) == SQLITE_ROW) {
+            int32_t messageID = sqlite3_column_int(statement, 0);
+            NSString *guid = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 1)];
+            
+            NSString *text = @"";
+            if(sqlite3_column_text(statement, 2)) {
+                text = [NSString stringWithUTF8String:sqlite3_column_text(statement, 2)];//[NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 2)];
+            }
+            
+            BOOL isIMessage = [self isIMessage:sqlite3_column_text(statement, 3)];
+            NSString *accountGUID = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 4)];
+            int32_t dateInt = sqlite3_column_int(statement, 5);
+            int32_t dateReadInt = sqlite3_column_int(statement, 6);
+            
+            BOOL isFromMe = sqlite3_column_int(statement, 7) == 1 ? YES : NO;
+            BOOL hasAttachment = sqlite3_column_int(statement, 8) == 1 ? YES: NO;
+            
+            NSDate *date = [NSDate dateWithTimeIntervalSinceReferenceDate:dateInt];
+            NSDate *dateRead = dateReadInt == 0 ? nil : [NSDate dateWithTimeIntervalSinceReferenceDate:dateReadInt];
+            
+            Message *message = [[Message alloc] initWithMessageId:messageID handleId:handleID messageGUID:guid messageText:text dateSent:date dateRead:dateRead isIMessage:isIMessage isFromMe:isFromMe hasAttachment:hasAttachment];
+            
+            [messages addObject:message];
+            
+            //printf("%s\n", [text UTF8String]);
+        }
+    }
+    else {
+        NSLog(@"ERROR COMPILING ALL MESSAGES QUERY: %s", sqlite3_errmsg(_database));
+    }
+    
+    sqlite3_finalize(statement);
+    return messages;
+}
+
+- (void) updateHandleIDsForPerson:(Person*)person
+{
+    //Uninitialized handleID
+    if(person.handleID < 0) {
+        int handleID = [self getHandleForChatID:person.chatId];
+        person.handleID = handleID;
+        
+        //If there is a secondary chat id, get its handle form
+        int handleID2 = person.secondaryChatId < 0 ? handleID : [self getHandleForChatID:person.secondaryChatId];
+        person.secondaryHandleId = handleID2;
+    }
+}
+
 - (NSMutableArray*) getAllMessagesForPerson:(Person *)person
 {
     NSMutableArray *allMessagesForChat = [[NSMutableArray alloc] init];
@@ -130,10 +191,9 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
         statistics = person.statistics;
     }
     
-    int handleID = [self getHandleForChatID:person.chatId];
-    
-    //If there is a secondary chat id, get its handle form
-    int handleID2 = person.secondaryChatId < 0 ? handleID : [self getHandleForChatID:person.secondaryChatId];
+    [self updateHandleIDsForPerson:person];
+    int handleID = person.handleID;
+    int handleID2 = person.secondaryHandleId;
     
     char *query = [[NSString stringWithFormat:@"SELECT ROWID, guid, text, service, account_guid, date, date_read, is_from_me, cache_has_attachments FROM message WHERE handle_id=%d OR handle_id=%d ORDER BY date", handleID, handleID2] UTF8String];
 
