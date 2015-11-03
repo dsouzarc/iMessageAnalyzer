@@ -18,6 +18,8 @@
 @property (strong, nonatomic) MessageManager *messageManager;
 
 @property (strong, nonatomic) NSPopover *calendarPopover;
+@property (strong, nonatomic) CalendarPopUpViewController *calendarPopUpViewController;
+@property (strong, nonatomic) NSDate *calendarChosenDate;
 
 @property (strong, nonatomic) NSMutableArray *chats;
 @property (strong, nonatomic) NSMutableArray *searchConversationChats;
@@ -81,28 +83,46 @@
 - (IBAction)calendarButtonClick:(id)sender {
 
     if(!self.calendarPopover) {
-        CalendarPopUpViewController *viewController = [[CalendarPopUpViewController alloc] initWithNibName:@"CalendarPopUpViewController" bundle:[NSBundle mainBundle]];
-        viewController.delegate = self;
+        self.calendarPopUpViewController = [[CalendarPopUpViewController alloc] initWithNibName:@"CalendarPopUpViewController" bundle:[NSBundle mainBundle]];
+        self.calendarPopUpViewController.delegate = self;
         self.calendarPopover = [[NSPopover alloc] init];
-        [self.calendarPopover setContentSize:viewController.view.bounds.size];
-        [self.calendarPopover setContentViewController:viewController];
+        [self.calendarPopover setContentSize:self.calendarPopUpViewController.view.bounds.size];
+        [self.calendarPopover setContentViewController:self.calendarPopUpViewController];
         [self.calendarPopover setAnimates:YES];
         [self.calendarPopover setBehavior:NSPopoverBehaviorTransient];
+        self.calendarPopover.delegate = self;
     }
     
+    NSDate *lastDate = [NSDate date];
+    if(self.currentConversationChats.count > 0) {
+        Message *lastMessage = self.currentConversationChats[self.currentConversationChats.count - 1];
+        lastDate = lastMessage.dateSent;
+    }
+    self.calendarPopUpViewController.dateToShow = lastDate;
     [self.calendarPopover showRelativeToRect:[self.calendarButton bounds] ofView:self.calendarButton preferredEdge:NSMaxXEdge];
+}
+
+- (void) popoverDidClose:(NSNotification *)notification
+{
+    if(((NSPopover*)notification.object) == self.calendarPopover) {
+        //Reset to show all messages
+        if(!self.calendarChosenDate) {
+            self.currentConversationChats = [self.messageManager getAllMessagesForPerson:self.lastChosenPerson];
+        }
+        else {
+            self.currentConversationChats = [self.messageManager getAllMessagesForPerson:self.lastChosenPerson onDay:self.calendarChosenDate];
+        }
+        [self.messagesTableView reloadData];
+    }
 }
 
 - (void) dateChosen:(NSDate *)chosenDate
 {
-    //Reset to show all messages
+    self.calendarChosenDate = chosenDate;
+    
     if(!chosenDate) {
-        self.currentConversationChats = [self.messageManager getAllMessagesForPerson:self.lastChosenPerson];
+        [self.calendarPopover performClose:@"close"];
     }
-    else {
-        self.currentConversationChats = [self.messageManager getAllMessagesForPerson:self.lastChosenPerson onDay:chosenDate];
-    }
-    [self.messagesTableView reloadData];
 }
 
 /****************************************************************

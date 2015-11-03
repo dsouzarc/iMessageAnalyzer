@@ -60,8 +60,6 @@ static MessageManager *messageInstance;
     long startTime = [self timeAtBeginningOfDayForDate:day];
     long endTime = [self timeAtEndOfDayForDate:day];
     
-    NSLog(@"Querying for: %ld\t%ld\t%d", startTime, endTime, person.handleID);
-    
     return [self.databaseManager getAllMessagesForPerson:person startTimeInSeconds:startTime endTimeInSeconds:endTime];
 }
 

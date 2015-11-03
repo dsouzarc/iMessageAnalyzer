@@ -21,8 +21,18 @@
     [super viewDidLoad];
     
     [self.datePicker setDateValue:[NSDate date]];
-    
 }
+
+- (void) viewDidAppear
+{
+    if(!self.dateToShow) {
+        [self.datePicker setDateValue:[NSDate date]];
+    }
+    else {
+        [self.datePicker setDateValue:self.dateToShow];
+    }
+}
+
 - (IBAction)resetToAllButtonClick:(id)sender {
     [self.delegate dateChosen:nil];
 }

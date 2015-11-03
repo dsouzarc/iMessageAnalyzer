@@ -17,5 +17,6 @@
 @interface CalendarPopUpViewController : NSViewController <NSDatePickerCellDelegate>
 
 @property (weak, nonatomic) id<CalendarPopUpViewControllerDelegate> delegate;
+@property (strong, nonatomic) NSDate *dateToShow;
 
 @end
