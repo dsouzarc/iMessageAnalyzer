@@ -25,7 +25,7 @@
 @property (strong, nonatomic) NSMutableArray *searchConversationChats;
 
 @property (strong, nonatomic) NSMutableArray *currentConversationChats;
-@property (strong) IBOutlet NSTextField *contactNameTextField;
+@property (strong, nonatomic) IBOutlet NSTextField *contactNameTextField;
 
 @property (strong, nonatomic) NSTextView *sizingView;
 @property (strong, nonatomic) NSTextField *sizingField;
@@ -289,7 +289,13 @@
         
         if(message.isFromMe) {
             [messageField setFrameOrigin:CGPointMake(tableColumn.width - messageField.frame.size.width, 15)];
-            [messageField setBackgroundColor:[NSColor blueColor]];
+            
+            if(message.isIMessage) {
+                [messageField setBackgroundColor:[NSColor blueColor]];
+            }
+            else {
+                [messageField setBackgroundColor:[NSColor greenColor]];
+            }
             [messageField setTextColor:[NSColor whiteColor]];
             
             [timeField setFrameOrigin:CGPointMake(tableColumn.width - timeField.frame.size.width, 0)];
