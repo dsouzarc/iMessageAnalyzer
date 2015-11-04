@@ -62,8 +62,8 @@ static MessageManager *messageInstance;
     
     /*NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"MM/dd/yyyy HH:mm"];
-    NSLog(@"%@\t%@", [formatter stringFromDate:[[NSDate alloc] initWithTimeIntervalSinceReferenceDate:startTime]], [formatter stringFromDate:[[NSDate alloc] initWithTimeIntervalSinceReferenceDate:endTime]]);
-    NSLog(@"time: %ld\t%ld\t%d", startTime, endTime, person.handleID); */
+    NSLog(@"IN HERE: %@\t%@", [formatter stringFromDate:[[NSDate alloc] initWithTimeIntervalSinceReferenceDate:startTime]], [formatter stringFromDate:[[NSDate alloc] initWithTimeIntervalSinceReferenceDate:endTime]]);
+    NSLog(@"time: %ld\t%ld\t%d", startTime, endTime, person.handleID);*/
     
     return [self.databaseManager getAllMessagesForPerson:person startTimeInSeconds:startTime endTimeInSeconds:endTime];
 }
@@ -74,7 +74,7 @@ static MessageManager *messageInstance;
     NSDateComponents *dateComps = [self.calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay fromDate:inputDate];
     
     // Set the time components manually
-    [dateComps setHour:11];
+    [dateComps setHour:23];
     [dateComps setMinute:59];
     [dateComps setSecond:59];
     

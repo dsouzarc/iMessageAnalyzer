@@ -39,6 +39,10 @@
 
 - (void) datePickerCell:(NSDatePickerCell *)aDatePickerCell validateProposedDateValue:(NSDate *__autoreleasing  _Nonnull *)proposedDateValue timeInterval:(NSTimeInterval *)proposedTimeInterval
 {
+    /*NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"MM/dd/yyyy HH:mm"];
+    NSLog(@"Chosen: %@\t%ld", [formatter stringFromDate:*proposedDateValue], (long) [*proposedDateValue timeIntervalSinceReferenceDate]);*/
+    
     [self.delegate dateChosen:*proposedDateValue];
 }
 
