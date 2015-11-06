@@ -405,6 +405,11 @@
     if(self.searchField.stringValue.length == 0) {
         self.searchConversationChats = [[NSMutableArray alloc] initWithArray:self.chats];
     }
+    
+    if([[[obj userInfo] objectForKey:@"NSTextMovement"] intValue] == NSReturnTextMovement) {
+        NSLog(@"Enter pressed");
+    }
+    
     [self.contactsTableView reloadData];
 }
 
@@ -425,6 +430,20 @@
         }
     }
     [self.contactsTableView reloadData];
+    
+    if(self.searchConversationChats > 0) {
+        if(self.lastChosenPerson == self.searchConversationChats[0]) {
+            return;
+        }
+        self.lastChosenPerson = self.searchConversationChats[0];
+        self.currentConversationChats = [self.messageManager getAllMessagesForPerson:self.lastChosenPerson];
+        [self.contactNameTextField setStringValue:[NSString stringWithFormat:@"%@ %@", self.lastChosenPerson.personName, self.lastChosenPerson.number]];
+    }
+    else {
+        self.lastChosenPerson = nil;
+        self.currentConversationChats = nil;
+    }
+    [self.messagesTableView reloadData];
 }
 
 @end
