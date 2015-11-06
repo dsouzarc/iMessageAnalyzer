@@ -33,6 +33,8 @@
 @property (strong, nonatomic) NSTextField *noMessagesField;
 @property (strong, nonatomic) NSDateFormatter *dateFormatter;
 
+@property int lastSearchIndex;
+
 @property (strong, nonatomic) Person *lastChosenPerson;
 
 @property NSRect messageFromMe;
@@ -304,8 +306,13 @@
             [messageField setFrameOrigin:CGPointMake(0, 15)];
             [messageField setBackgroundColor:[NSColor lightGrayColor]];
             [messageField setTextColor:[NSColor blackColor]];
-            
             [timeField setFrameOrigin:CGPointMake(2, 0)];
+        }
+        
+        if(row == self.lastSearchIndex) {
+            NSMutableAttributedString *searchString = [[NSMutableAttributedString alloc] initWithString:message.messageText];
+            [searchString addAttribute:NSBackgroundColorAttributeName value:[NSColor yellowColor] range:[message.messageText rangeOfString:self.searchField.stringValue]];
+            [messageField setAttributedStringValue:searchString];
         }
         
         [messageField setWantsLayer:YES];
@@ -361,6 +368,8 @@
         [self.contactNameTextField setStringValue:[NSString stringWithFormat:@"%@ %@", self.lastChosenPerson.personName, self.lastChosenPerson.number]];
         
         [self.messagesTableView reloadData];
+        
+        self.lastSearchIndex = -1;
         return YES;
     }
     return NO;
@@ -406,8 +415,20 @@
         self.searchConversationChats = [[NSMutableArray alloc] initWithArray:self.chats];
     }
     
+    NSString *searchText = [self.searchField stringValue];
     if([[[obj userInfo] objectForKey:@"NSTextMovement"] intValue] == NSReturnTextMovement) {
-        NSLog(@"Enter pressed");
+        if(self.lastSearchIndex >= self.currentConversationChats.count) {
+            self.lastSearchIndex = -1;
+        }
+        for(int i = self.lastSearchIndex + 1; i < self.currentConversationChats.count; i++) {
+            Message *message = self.currentConversationChats[i];
+            if([message.messageText rangeOfString:searchText options:NSCaseInsensitiveSearch].location != NSNotFound) {
+                self.lastSearchIndex = i;
+                [self.messagesTableView scrollRowToVisible:self.lastSearchIndex];
+                i = INT16_MAX;
+            }
+        }
+        //[self.messagesTableView reloadData];
     }
     
     [self.contactsTableView reloadData];
