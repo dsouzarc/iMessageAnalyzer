@@ -413,25 +413,25 @@
 {
     if(self.searchField.stringValue.length == 0) {
         self.searchConversationChats = [[NSMutableArray alloc] initWithArray:self.chats];
+        [self.contactsTableView reloadData];
     }
-    
-    NSString *searchText = [self.searchField stringValue];
-    if([[[obj userInfo] objectForKey:@"NSTextMovement"] intValue] == NSReturnTextMovement) {
-        if(self.lastSearchIndex >= self.currentConversationChats.count) {
-            self.lastSearchIndex = -1;
-        }
-        for(int i = self.lastSearchIndex + 1; i < self.currentConversationChats.count; i++) {
-            Message *message = self.currentConversationChats[i];
-            if([message.messageText rangeOfString:searchText options:NSCaseInsensitiveSearch].location != NSNotFound) {
-                self.lastSearchIndex = i;
-                [self.messagesTableView scrollRowToVisible:self.lastSearchIndex];
-                i = INT16_MAX;
+    else {
+        NSString *searchText = [self.searchField stringValue];
+        if([[[obj userInfo] objectForKey:@"NSTextMovement"] intValue] == NSReturnTextMovement) {
+            if(self.lastSearchIndex >= self.currentConversationChats.count) {
+                self.lastSearchIndex = -1;
             }
+            for(int i = self.lastSearchIndex + 1; i < self.currentConversationChats.count; i++) {
+                Message *message = self.currentConversationChats[i];
+                if([message.messageText rangeOfString:searchText options:NSCaseInsensitiveSearch].location != NSNotFound) {
+                    self.lastSearchIndex = i;
+                    [self.messagesTableView scrollRowToVisible:self.lastSearchIndex];
+                    i = INT16_MAX;
+                }
+            }
+            //[self.messagesTableView reloadData];
         }
-        //[self.messagesTableView reloadData];
     }
-    
-    [self.contactsTableView reloadData];
 }
 
 - (void) controlTextDidChange:(NSNotification *)obj
@@ -460,7 +460,8 @@
     }
     else if(self.searchConversationChats.count == 0) {
         self.lastChosenPerson = nil;
-        self.currentConversationChats = [NSMutableArray init];
+        self.currentConversationChats = [[NSMutableArray alloc] init];
+        [self.contactNameTextField setStringValue:@""];
         [self.messagesTableView reloadData];
     }
 }
