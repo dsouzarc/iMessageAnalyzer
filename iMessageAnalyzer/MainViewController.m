@@ -421,16 +421,32 @@
             if(self.lastSearchIndex >= self.currentConversationChats.count) {
                 self.lastSearchIndex = -1;
             }
-            for(int i = self.lastSearchIndex + 1; i < self.currentConversationChats.count; i++) {
+            int i;
+            for(i = self.lastSearchIndex + 1; i < self.currentConversationChats.count; i++) {
                 Message *message = self.currentConversationChats[i];
                 if([message.messageText rangeOfString:searchText options:NSCaseInsensitiveSearch].location != NSNotFound) {
                     self.lastSearchIndex = i;
-                    [self.messagesTableView scrollRowToVisible:self.lastSearchIndex];
-                    [self.messagesTableView reloadDataForRowIndexes:[NSIndexSet indexSetWithIndex:self.lastSearchIndex] columnIndexes:[NSIndexSet indexSetWithIndex:0]];
                     i = INT16_MAX;
                 }
             }
-            //[self.messagesTableView reloadData];
+            
+            //We reached the end without finding anything, so start from the beginning
+            if(i == self.currentConversationChats.count) {
+                for(i = 0; i < self.currentConversationChats.count; i++) {
+                    Message *message = self.currentConversationChats[i];
+                    if([message.messageText rangeOfString:searchText options:NSCaseInsensitiveSearch].location != NSNotFound) {
+                        self.lastSearchIndex = i;
+                        i = INT16_MAX;
+                    }
+                }
+            }
+            
+            [self.messagesTableView reloadDataForRowIndexes:[NSIndexSet indexSetWithIndex:self.lastSearchIndex] columnIndexes:[NSIndexSet indexSetWithIndex:0]];
+            //Results in a smoother scroll
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                [self.messagesTableView scrollRowToVisible:self.lastSearchIndex];
+            }];
+
         }
     }
 }
