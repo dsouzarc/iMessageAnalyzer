@@ -311,7 +311,7 @@
         
         if(row == self.lastSearchIndex) {
             NSMutableAttributedString *searchString = [[NSMutableAttributedString alloc] initWithString:message.messageText];
-            [searchString addAttribute:NSBackgroundColorAttributeName value:[NSColor yellowColor] range:[message.messageText rangeOfString:self.searchField.stringValue]];
+            [searchString addAttribute:NSBackgroundColorAttributeName value:[NSColor yellowColor] range:[message.messageText rangeOfString:self.searchField.stringValue options:NSCaseInsensitiveSearch]];
             [messageField setAttributedStringValue:searchString];
         }
         
@@ -426,6 +426,7 @@
                 if([message.messageText rangeOfString:searchText options:NSCaseInsensitiveSearch].location != NSNotFound) {
                     self.lastSearchIndex = i;
                     [self.messagesTableView scrollRowToVisible:self.lastSearchIndex];
+                    [self.messagesTableView reloadDataForRowIndexes:[NSIndexSet indexSetWithIndex:self.lastSearchIndex] columnIndexes:[NSIndexSet indexSetWithIndex:0]];
                     i = INT16_MAX;
                 }
             }
