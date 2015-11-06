@@ -431,19 +431,17 @@
     }
     [self.contactsTableView reloadData];
     
-    if(self.searchConversationChats > 0) {
-        if(self.lastChosenPerson == self.searchConversationChats[0]) {
-            return;
-        }
+    if(self.searchConversationChats.count > 0 && self.searchConversationChats[0] != self.lastChosenPerson) {
         self.lastChosenPerson = self.searchConversationChats[0];
         self.currentConversationChats = [self.messageManager getAllMessagesForPerson:self.lastChosenPerson];
         [self.contactNameTextField setStringValue:[NSString stringWithFormat:@"%@ %@", self.lastChosenPerson.personName, self.lastChosenPerson.number]];
+        [self.messagesTableView reloadData];
     }
-    else {
+    else if(self.searchConversationChats.count == 0) {
         self.lastChosenPerson = nil;
-        self.currentConversationChats = nil;
+        self.currentConversationChats = [NSMutableArray init];
+        [self.messagesTableView reloadData];
     }
-    [self.messagesTableView reloadData];
 }
 
 @end
