@@ -19,9 +19,10 @@ Uses the user's iMessage database (chat.db) - can be configured to run using the
 - Searching for text shows conversations where that text was used as well as contacts with that text in their username
   + Search for text in all conversations is unique from iMessage
 
+- Viewing messages sent on a certain date
+    + Calendar view pops up and a date can be chosen to view all messages with that conversant on
+
 ####Features in implementation:
 - Showing usage of search text throughout conversation
-
-- Viewing messages sent on a certain date
 
 - Statistics on actual messaging habits
