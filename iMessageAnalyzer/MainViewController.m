@@ -253,30 +253,6 @@
         [timeField setFocusRingType:NSFocusRingTypeNone];
         [timeField setBordered:NO];
         
-        /*
-        NSTextView *viewForSize = [[NSTextView alloc] initWithFrame:frame];
-        [viewForSize setString:message.messageText];
-        
-        [viewForSize setAlignment:(message.isFromMe ? NSTextAlignmentRight : NSTextAlignmentLeft)];
-        [viewForSize setHorizontallyResizable:YES];
-        [viewForSize sizeToFit];
-        [viewForSize setDrawsBackground:YES];
-        
-        if(message.isFromMe) {
-            [viewForSize setFrameOrigin:CGPointMake(tableColumn.width - viewForSize.frame.size.width, viewForSize.frame.origin.y)];
-            [viewForSize setBackgroundColor:[NSColor blueColor]];
-            [viewForSize setTextColor:[NSColor whiteColor]];
-        }
-        else {
-            [viewForSize setBackgroundColor:[NSColor lightGrayColor]];
-            [viewForSize setTextColor:[NSColor blackColor]];
-        } 
-        
-         float minSize = size.width > viewForSize.frame.size.width ? size.width : viewForSize.frame.size.width;
-         [viewForSize setFrameSize:CGSizeMake(minSize, viewForSize.frame.size.height)];
-         [encompassingView addSubview:viewForSize];
-         */
-        
         NSTextField *messageField = [[NSTextField alloc] initWithFrame:frame];
         [messageField setStringValue:[NSString stringWithFormat:@"  %@", message.messageText]];
         

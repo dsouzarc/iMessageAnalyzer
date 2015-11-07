@@ -32,6 +32,7 @@
     
     [self.window setContentViewController:self.mainViewController];
     [self.window setShowsResizeIndicator:NO];
+    [self.window setTitle:@"iMessage Analyzer"];
 }
 
 - (NSSize) windowWillResize:(NSWindow *)sender toSize:(NSSize)frameSize
