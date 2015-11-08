@@ -53,6 +53,8 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
         
         [self updateAllChatsGlobalVariable];
         //[self getMessagesForHandleId:5];
+        
+        [self getHandleIDsForMessageText:@"Hi"];
     }
     
     return self;
@@ -61,6 +63,29 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
 - (NSMutableArray*) getAllChats
 {
     return [self.allChats allValues];
+}
+
+- (NSMutableArray*) getHandleIDsForMessageText:(NSString*)messageText
+{
+    NSMutableArray *handle_ids = [[NSMutableArray alloc] init];
+    
+    NSString *query = [NSString stringWithFormat:@"SELECT handle_id from message WHERE text like '%%%@%%' GROUP BY handle_id", messageText];
+    
+    sqlite3_stmt *statement;
+    
+    if(sqlite3_prepare(_database, [query UTF8String], -1, &statement, NULL) == SQLITE_OK) {
+        while(sqlite3_step(statement) == SQLITE_ROW) {
+            int32_t handle_id = sqlite3_column_int(statement, 0);
+            [handle_ids addObject:[NSNumber numberWithInt:handle_id]];
+        }
+    }
+    else {
+        NSLog(@"PROBLEM HERE: %s", sqlite3_errmsg(_database));
+    }
+    
+    sqlite3_finalize(statement);
+    
+    return handle_ids;
 }
 
 - (void) updateAllChatsGlobalVariable
