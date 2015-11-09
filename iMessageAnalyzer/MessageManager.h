@@ -25,4 +25,6 @@
 - (NSMutableArray*) getAllMessagesForPerson:(Person*)person;
 - (NSMutableArray*) getAllMessagesForPerson:(Person*)person onDay:(NSDate*)day;
 
+- (NSMutableArray*) getAllNumbersForSearchText:(NSString*)text;
+
 @end

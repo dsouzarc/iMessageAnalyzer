@@ -318,6 +318,33 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
     }
 }
 
+- (NSMutableArray*) getAllNumbersForSearchText:(NSString*)text
+{
+    NSMutableArray *numbers = [[NSMutableArray alloc] init];
+    
+    NSMutableArray *handle_ids = [self getHandleIDsForMessageText:text];
+    
+    sqlite3_stmt *statement;
+    
+    for(NSNumber *number in handle_ids) {
+        char *query = [[NSString stringWithFormat:@"SELECT id FROM handle WHERE ROWID='%d'", [number intValue]] UTF8String];
+        
+        if(sqlite3_prepare(_database, query, -1, &statement, NULL) == SQLITE_OK) {
+            while(sqlite3_step(statement) == SQLITE_ROW) {
+                NSString *number = [self cleanNumber:[NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 0)]];
+                [numbers addObject:number];
+            }
+        }
+        else {
+            NSLog(@"ERROR: %s", sqlite3_errmsg(_database));
+        }
+        
+        sqlite3_finalize(statement);
+    }
+    
+    return numbers;
+}
+
 - (NSString*) cleanNumber:(NSString*)originalNumber
 {
     NSCharacterSet *removeChars = [NSCharacterSet characterSetWithCharactersInString:@" ()-+"];

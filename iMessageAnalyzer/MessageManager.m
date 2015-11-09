@@ -55,6 +55,8 @@ static MessageManager *messageInstance;
     return self;
 }
 
+
+
 - (NSMutableArray*) getAllMessagesForPerson:(Person *)person onDay:(NSDate *)day
 {
     long startTime = [self timeAtBeginningOfDayForDate:day];
