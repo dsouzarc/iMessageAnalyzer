@@ -444,6 +444,7 @@
             [self.searchConversationChats addObject:[self.messageManager personForPhoneNumber:number]];
         }
     }
+    
     [self.contactsTableView reloadData];
     
     if(self.searchConversationChats.count > 0 && self.searchConversationChats[0] != self.lastChosenPerson) {

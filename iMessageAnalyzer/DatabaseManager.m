@@ -85,9 +85,7 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
     else {
         NSLog(@"PROBLEM HERE: %s", sqlite3_errmsg(_database));
     }
-    
-    NSLog(@"TOTAL HERE: %d", counter);
-    
+
     sqlite3_finalize(statement);
     
     return handle_ids;

@@ -36,4 +36,6 @@
 
 @property BOOL isIMessage;
 
+@property long timeOfLastMessage;
+
 @end

@@ -27,6 +27,8 @@
         self.handleID = -1;
         self.secondaryHandleId = -1;
         
+        self.timeOfLastMessage = 0;
+        
         self.statistics = [[Statistics alloc] init];
     }
     

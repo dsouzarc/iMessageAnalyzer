@@ -48,16 +48,26 @@ static MessageManager *messageInstance;
             [self.allChatsAndConversations setObject:messagesForPerson forKey:person.number];
             [self.allPeople setObject:person forKey:person.number];
             
+            if(messagesForPerson.count > 0) {
+                Message *lastMessage = messagesForPerson[messagesForPerson.count - 1];
+                person.timeOfLastMessage = [lastMessage.dateSent timeIntervalSinceReferenceDate];
+            }
+            
             //NSLog(@"%@ %@\tSENT: %d\tRECEIVED: %d\tSENT ATTACHMENTS: %d\tRECEIVED ATTACHMENTS: %d\tHANDLE_1: %d\tHANDLE_2: %d\tCHAT ID: %d, %d", person.personName, person.number, person.statistics.numberOfSentMessages, person.statistics.numberOfReceivedMessages, person.statistics.numberOfSentAttachments, person.statistics.numberOfReceivedAttachments, [self.databaseManager getHandleForChatID:person.chatId], [self.databaseManager getHandleForChatID:person.secondaryChatId], person.chatId, person.secondaryChatId);
         }
         
         self.calendar = [NSCalendar currentCalendar];
         [self.calendar setTimeZone:[NSTimeZone systemTimeZone]];
-        
-        [self getAllNumbersForSearchText:@"Hi"];
+        self.allChats = [self sortChatsByLastMessageSent];
     }
     
     return self;
+}
+
+- (NSMutableArray*) sortChatsByLastMessageSent
+{
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"timeOfLastMessage" ascending:NO];
+    return [[NSMutableArray alloc] initWithArray:[self.allChats sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]]];
 }
 
 - (Person*) personForPhoneNumber:(NSString *)number
