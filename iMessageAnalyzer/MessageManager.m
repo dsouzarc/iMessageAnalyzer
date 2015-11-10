@@ -19,6 +19,8 @@ static MessageManager *messageInstance;
 
 @property (strong, nonatomic) NSCalendar *calendar;
 
+@property (strong, nonatomic) NSSortDescriptor *lastMessageSentDescriptor;
+
 @end
 
 @implementation MessageManager
@@ -40,8 +42,11 @@ static MessageManager *messageInstance;
         messageInstance = [super init];
         self.databaseManager = [DatabaseManager getInstance];
         self.allChats = [self.databaseManager getAllChats];
+        
         self.allPeople = [[NSMutableDictionary alloc] init];
         self.allChatsAndConversations = [[NSMutableDictionary alloc] init];
+        
+        self.lastMessageSentDescriptor = [[NSSortDescriptor alloc] initWithKey:@"timeOfLastMessage" ascending:NO];
         
         for(Person *person in self.allChats) {
             NSMutableArray *messagesForPerson = [self.databaseManager getAllMessagesForPerson:person];
@@ -58,21 +63,38 @@ static MessageManager *messageInstance;
         
         self.calendar = [NSCalendar currentCalendar];
         [self.calendar setTimeZone:[NSTimeZone systemTimeZone]];
-        self.allChats = [self sortChatsByLastMessageSent];
+        self.allChats = [self sortChatsByLastMessageSent:self.allChats];
+        
     }
     
     return self;
 }
 
-- (NSMutableArray*) sortChatsByLastMessageSent
+- (NSArray*) sortChatsByLastMessageSent:(NSMutableArray*)arrayOfPeople
 {
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"timeOfLastMessage" ascending:NO];
-    return [[NSMutableArray alloc] initWithArray:[self.allChats sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]]];
+    return [arrayOfPeople sortedArrayUsingDescriptors:[NSArray arrayWithObject:self.lastMessageSentDescriptor]];
 }
 
 - (Person*) personForPhoneNumber:(NSString *)number
 {
     return [self.allPeople objectForKey:number];
+}
+
+- (NSArray*) peopleForSearchCriteria:(NSString*)searchText
+{
+    NSMutableArray *numbers = [self getAllNumbersForSearchText:searchText];
+    return [self peopleForNumbers:numbers];
+}
+
+- (NSArray*) peopleForNumbers:(NSMutableArray*)numbers
+{
+    NSMutableArray *results = [[NSMutableArray alloc] init];
+    
+    for(NSString *number in numbers) {
+        [results addObject:[self.allPeople objectForKey:number]];
+    }
+
+    return [self sortChatsByLastMessageSent:results];
 }
 
 - (NSMutableArray*) getAllNumbersForSearchText:(NSString *)text

@@ -438,11 +438,7 @@
         
         NSString *searchText = self.searchField.stringValue;
         
-        NSMutableArray *phoneNumbersThatMatchCriteria = [self.messageManager getAllNumbersForSearchText:searchText];
-        
-        for(NSString *number in phoneNumbersThatMatchCriteria) {
-            [self.searchConversationChats addObject:[self.messageManager personForPhoneNumber:number]];
-        }
+        [self.searchConversationChats addObjectsFromArray:[self.messageManager peopleForSearchCriteria:searchText]];
     }
     
     [self.contactsTableView reloadData];
