@@ -26,7 +26,7 @@
 - (NSMutableArray*) getAllMessagesForPerson:(Person*)person;
 - (NSMutableArray*) getAllMessagesForPerson:(Person *)person startTimeInSeconds:(long)startTimeInSeconds endTimeInSeconds:(long)endTimeInSeconds;
 
-- (NSMutableArray*) getAllNumbersForSearchText:(NSString*)text;
+- (NSMutableSet*) getHandleIDsForMessageText:(NSString*)messageText;
 - (int32_t) getHandleForChatID:(int32_t)chatID;
 
 @end

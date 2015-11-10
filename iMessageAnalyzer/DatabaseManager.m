@@ -65,23 +65,28 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
     return [self.allChats allValues];
 }
 
-- (NSMutableArray*) getHandleIDsForMessageText:(NSString*)messageText
+- (NSMutableSet*) getHandleIDsForMessageText:(NSString*)messageText
 {
-    NSMutableArray *handle_ids = [[NSMutableArray alloc] init];
+    NSMutableSet *handle_ids = [[NSMutableSet alloc] init];
     
     NSString *query = [NSString stringWithFormat:@"SELECT handle_id from message WHERE text like '%%%@%%' GROUP BY handle_id", messageText];
     
     sqlite3_stmt *statement;
     
+    int counter = 0;
+    
     if(sqlite3_prepare(_database, [query UTF8String], -1, &statement, NULL) == SQLITE_OK) {
         while(sqlite3_step(statement) == SQLITE_ROW) {
             int32_t handle_id = sqlite3_column_int(statement, 0);
             [handle_ids addObject:[NSNumber numberWithInt:handle_id]];
+            counter++;
         }
     }
     else {
         NSLog(@"PROBLEM HERE: %s", sqlite3_errmsg(_database));
     }
+    
+    NSLog(@"TOTAL HERE: %d", counter);
     
     sqlite3_finalize(statement);
     
@@ -322,7 +327,7 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
 {
     NSMutableArray *numbers = [[NSMutableArray alloc] init];
     
-    NSMutableArray *handle_ids = [self getHandleIDsForMessageText:text];
+    NSMutableArray *handle_ids = [[self getHandleIDsForMessageText:text] allObjects];
     
     sqlite3_stmt *statement;
     

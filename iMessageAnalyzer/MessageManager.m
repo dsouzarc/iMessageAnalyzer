@@ -50,12 +50,42 @@ static MessageManager *messageInstance;
         
         self.calendar = [NSCalendar currentCalendar];
         [self.calendar setTimeZone:[NSTimeZone systemTimeZone]];
+        
+        [self getAllNumbersForSearchText:@"Hi"];
     }
     
     return self;
 }
 
-
+- (NSMutableArray*) getAllNumbersForSearchText:(NSString *)text
+{
+    NSMutableSet *results = [[NSMutableSet alloc] init];
+    
+    //All handle_ids of those who sent text that match this condition
+    NSMutableSet *handle_ids = [self.databaseManager getHandleIDsForMessageText:text];
+    
+    for(Person *person in self.allChats) {
+        
+        //If the person sent text that contains the text (from handle_ids method), save them
+        NSNumber *handleID = [NSNumber numberWithInt:person.handleID];
+        NSNumber *handleID2 = [NSNumber numberWithInt:person.secondaryHandleId];
+        if([handle_ids containsObject:handleID] || [handle_ids containsObject:handleID2]) {
+            [results addObject:person.number];
+        }
+        
+        //If the contact name contains the search text
+        else if([person.personName rangeOfString:text options:NSCaseInsensitiveSearch].location != NSNotFound) {
+            [results addObject:person.number];
+        }
+        
+        //If the contact info contains the search text
+        else if([person.number rangeOfString:text options:NSCaseInsensitiveSearch].location != NSNotFound) {
+            [results addObject:person.number];
+        }
+    }
+    
+    return [results allObjects];
+}
 
 - (NSMutableArray*) getAllMessagesForPerson:(Person *)person onDay:(NSDate *)day
 {
