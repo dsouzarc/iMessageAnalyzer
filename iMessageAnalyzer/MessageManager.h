@@ -27,4 +27,6 @@
 
 - (NSMutableArray*) getAllNumbersForSearchText:(NSString*)text;
 
+- (Person*) personForPhoneNumber:(NSString*)number;
+
 @end

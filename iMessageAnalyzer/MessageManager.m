@@ -14,6 +14,7 @@ static MessageManager *messageInstance;
 
 @property (strong, nonatomic) DatabaseManager *databaseManager;
 @property (strong, nonatomic) NSMutableDictionary* allChatsAndConversations;
+@property (strong, nonatomic) NSMutableDictionary *allPeople;
 @property (strong, nonatomic) NSMutableArray *allChats;
 
 @property (strong, nonatomic) NSCalendar *calendar;
@@ -39,11 +40,13 @@ static MessageManager *messageInstance;
         messageInstance = [super init];
         self.databaseManager = [DatabaseManager getInstance];
         self.allChats = [self.databaseManager getAllChats];
+        self.allPeople = [[NSMutableDictionary alloc] init];
         self.allChatsAndConversations = [[NSMutableDictionary alloc] init];
         
         for(Person *person in self.allChats) {
             NSMutableArray *messagesForPerson = [self.databaseManager getAllMessagesForPerson:person];
             [self.allChatsAndConversations setObject:messagesForPerson forKey:person.number];
+            [self.allPeople setObject:person forKey:person.number];
             
             //NSLog(@"%@ %@\tSENT: %d\tRECEIVED: %d\tSENT ATTACHMENTS: %d\tRECEIVED ATTACHMENTS: %d\tHANDLE_1: %d\tHANDLE_2: %d\tCHAT ID: %d, %d", person.personName, person.number, person.statistics.numberOfSentMessages, person.statistics.numberOfReceivedMessages, person.statistics.numberOfSentAttachments, person.statistics.numberOfReceivedAttachments, [self.databaseManager getHandleForChatID:person.chatId], [self.databaseManager getHandleForChatID:person.secondaryChatId], person.chatId, person.secondaryChatId);
         }
@@ -55,6 +58,11 @@ static MessageManager *messageInstance;
     }
     
     return self;
+}
+
+- (Person*) personForPhoneNumber:(NSString *)number
+{
+    return [self.allPeople objectForKey:number];
 }
 
 - (NSMutableArray*) getAllNumbersForSearchText:(NSString *)text

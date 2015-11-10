@@ -146,6 +146,7 @@
 
 # pragma mark HELPERS
 
+/** Deprecated */
 - (BOOL) conversationMatchesRequirement:(Person*)person searchText:(NSString*)searchText {
     
     if([person.personName rangeOfString:searchText options:NSCaseInsensitiveSearch].location != NSNotFound) {
@@ -437,10 +438,10 @@
         
         NSString *searchText = self.searchField.stringValue;
         
-        for(Person *person in self.chats) {
-            if([self conversationMatchesRequirement:person searchText:searchText]) {
-                [self.searchConversationChats addObject:person];
-            }
+        NSMutableArray *phoneNumbersThatMatchCriteria = [self.messageManager getAllNumbersForSearchText:searchText];
+        
+        for(NSString *number in phoneNumbersThatMatchCriteria) {
+            [self.searchConversationChats addObject:[self.messageManager personForPhoneNumber:number]];
         }
     }
     [self.contactsTableView reloadData];
