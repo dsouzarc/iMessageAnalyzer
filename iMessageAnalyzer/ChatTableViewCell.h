@@ -12,7 +12,8 @@
 
 @property (strong) IBOutlet NSTextField *contactName;
 @property (strong) IBOutlet NSImageView *contactPhoto;
-@property (strong) IBOutlet NSTextField *lastMessageSent;
+@property (strong) IBOutlet NSTextField *contactNumber;
 
+@property (strong) IBOutlet NSTextField *lastMessagedOn;
 
 @end

@@ -38,6 +38,16 @@ static NSDateFormatter *dateFormatter;
     return self;
 }
 
+- (NSString*) lastMessagedOn
+{
+    if(!self.dateSent) {
+        return @"Error in last messaged on";
+    }
+    else {
+        return [dateFormatter stringFromDate:self.dateSent];
+    }
+}
+
 - (NSString*) getTimeStampAsString
 {
     if(!self.dateSent) {

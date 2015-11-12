@@ -26,5 +26,6 @@
 @property BOOL hasAttachment;
 
 - (NSString*) getTimeStampAsString;
+- (NSString*) lastMessagedOn;
 
 @end

@@ -7,34 +7,34 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9438FC371BD049DA00B239BE /* Contact.m in Sources */ = {isa = PBXBuildFile; fileRef = 9438FC361BD049DA00B239BE /* Contact.m */; settings = {ASSET_TAGS = (); }; };
-		9438FD071BE07CFF00B239BE /* MainWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9438FD051BE07CFF00B239BE /* MainWindowController.m */; settings = {ASSET_TAGS = (); }; };
-		9438FD081BE07CFF00B239BE /* MainWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9438FD061BE07CFF00B239BE /* MainWindowController.xib */; settings = {ASSET_TAGS = (); }; };
-		9438FD111BE07D2600B239BE /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9438FD0F1BE07D2600B239BE /* MainViewController.m */; settings = {ASSET_TAGS = (); }; };
-		9438FD121BE07D2600B239BE /* MainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9438FD101BE07D2600B239BE /* MainViewController.xib */; settings = {ASSET_TAGS = (); }; };
-		9438FD181BE07DAC00B239BE /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9438FD171BE07DAC00B239BE /* main.m */; settings = {ASSET_TAGS = (); }; };
-		944E19581BE540E9005132E1 /* blank_profile_outline.png in Resources */ = {isa = PBXBuildFile; fileRef = 944E19571BE540E9005132E1 /* blank_profile_outline.png */; settings = {ASSET_TAGS = (); }; };
-		946D2A6C1BE55BF900270BF0 /* Statistics.m in Sources */ = {isa = PBXBuildFile; fileRef = 946D2A6B1BE55BF900270BF0 /* Statistics.m */; settings = {ASSET_TAGS = (); }; };
-		946D2A6F1BE5DBC800270BF0 /* TextTableCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 946D2A6E1BE5DBC800270BF0 /* TextTableCellView.m */; settings = {ASSET_TAGS = (); }; };
-		946D2A711BE5EAA700270BF0 /* TextTableCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 946D2A701BE5EAA700270BF0 /* TextTableCellView.xib */; settings = {ASSET_TAGS = (); }; };
-		947B53CB1BE1AA2700484D66 /* ChatTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 947B53C81BE1AA2700484D66 /* ChatTableViewCell.xib */; settings = {ASSET_TAGS = (); }; };
-		947B53CC1BE1AA2700484D66 /* ChatTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 947B53CA1BE1AA2700484D66 /* ChatTableViewCell.m */; settings = {ASSET_TAGS = (); }; };
+		9438FC371BD049DA00B239BE /* Contact.m in Sources */ = {isa = PBXBuildFile; fileRef = 9438FC361BD049DA00B239BE /* Contact.m */; };
+		9438FD071BE07CFF00B239BE /* MainWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9438FD051BE07CFF00B239BE /* MainWindowController.m */; };
+		9438FD081BE07CFF00B239BE /* MainWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9438FD061BE07CFF00B239BE /* MainWindowController.xib */; };
+		9438FD111BE07D2600B239BE /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9438FD0F1BE07D2600B239BE /* MainViewController.m */; };
+		9438FD121BE07D2600B239BE /* MainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9438FD101BE07D2600B239BE /* MainViewController.xib */; };
+		9438FD181BE07DAC00B239BE /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9438FD171BE07DAC00B239BE /* main.m */; };
+		944E19581BE540E9005132E1 /* blank_profile_outline.png in Resources */ = {isa = PBXBuildFile; fileRef = 944E19571BE540E9005132E1 /* blank_profile_outline.png */; };
+		946D2A6C1BE55BF900270BF0 /* Statistics.m in Sources */ = {isa = PBXBuildFile; fileRef = 946D2A6B1BE55BF900270BF0 /* Statistics.m */; };
+		946D2A6F1BE5DBC800270BF0 /* TextTableCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 946D2A6E1BE5DBC800270BF0 /* TextTableCellView.m */; };
+		946D2A711BE5EAA700270BF0 /* TextTableCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 946D2A701BE5EAA700270BF0 /* TextTableCellView.xib */; };
+		947B53CB1BE1AA2700484D66 /* ChatTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 947B53C81BE1AA2700484D66 /* ChatTableViewCell.xib */; };
+		947B53CC1BE1AA2700484D66 /* ChatTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 947B53CA1BE1AA2700484D66 /* ChatTableViewCell.m */; };
 		94A9923F1BBDC733003BA1D5 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A9923E1BBDC733003BA1D5 /* AppDelegate.m */; };
 		94A992451BBDC733003BA1D5 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A992441BBDC733003BA1D5 /* ViewController.m */; };
 		94A992471BBDC733003BA1D5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 94A992461BBDC733003BA1D5 /* Assets.xcassets */; };
 		94A9924A1BBDC734003BA1D5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 94A992481BBDC734003BA1D5 /* Main.storyboard */; };
 		94A992551BBDC734003BA1D5 /* iMessageAnalyzerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A992541BBDC734003BA1D5 /* iMessageAnalyzerTests.m */; };
 		94A992601BBDC734003BA1D5 /* iMessageAnalyzerUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A9925F1BBDC734003BA1D5 /* iMessageAnalyzerUITests.m */; };
-		94DAC4A51BE7DAF90016ED35 /* calendar-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 94DAC4A41BE7DAF90016ED35 /* calendar-icon.png */; settings = {ASSET_TAGS = (); }; };
-		94F01DDD1BE852CF00B47D9D /* CalendarPopUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94F01DDB1BE852CF00B47D9D /* CalendarPopUpViewController.m */; settings = {ASSET_TAGS = (); }; };
-		94F01DDE1BE852CF00B47D9D /* CalendarPopUpViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94F01DDC1BE852CF00B47D9D /* CalendarPopUpViewController.xib */; settings = {ASSET_TAGS = (); }; };
+		94DAC4A51BE7DAF90016ED35 /* calendar-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 94DAC4A41BE7DAF90016ED35 /* calendar-icon.png */; };
+		94F01DDD1BE852CF00B47D9D /* CalendarPopUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94F01DDB1BE852CF00B47D9D /* CalendarPopUpViewController.m */; };
+		94F01DDE1BE852CF00B47D9D /* CalendarPopUpViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94F01DDC1BE852CF00B47D9D /* CalendarPopUpViewController.xib */; };
 		94F3AC371BC1D9C600948A23 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 94F3AC351BC1D9C600948A23 /* libsqlite3.0.tbd */; };
 		94F3AC381BC1D9C600948A23 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 94F3AC361BC1D9C600948A23 /* libsqlite3.tbd */; };
-		94F3AC3B1BC32BD500948A23 /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = 94F3AC3A1BC32BD500948A23 /* Person.m */; settings = {ASSET_TAGS = (); }; };
-		94F3AC3E1BC4803500948A23 /* Attachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 94F3AC3D1BC4803500948A23 /* Attachment.m */; settings = {ASSET_TAGS = (); }; };
-		94F3AC411BC481B900948A23 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 94F3AC401BC481B900948A23 /* Message.m */; settings = {ASSET_TAGS = (); }; };
-		94F3AC441BC727BE00948A23 /* MessageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 94F3AC431BC727BE00948A23 /* MessageManager.m */; settings = {ASSET_TAGS = (); }; };
-		94F3AC471BC7282A00948A23 /* DatabaseManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 94F3AC461BC7282A00948A23 /* DatabaseManager.m */; settings = {ASSET_TAGS = (); }; };
+		94F3AC3B1BC32BD500948A23 /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = 94F3AC3A1BC32BD500948A23 /* Person.m */; };
+		94F3AC3E1BC4803500948A23 /* Attachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 94F3AC3D1BC4803500948A23 /* Attachment.m */; };
+		94F3AC411BC481B900948A23 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 94F3AC401BC481B900948A23 /* Message.m */; };
+		94F3AC441BC727BE00948A23 /* MessageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 94F3AC431BC727BE00948A23 /* MessageManager.m */; };
+		94F3AC471BC7282A00948A23 /* DatabaseManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 94F3AC461BC7282A00948A23 /* DatabaseManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -153,6 +153,26 @@
 			);
 			name = SQLite;
 			path = ..;
+			sourceTree = "<group>";
+		};
+		947549681BF207B2006CD211 /* iMessage Text Table Cell View */ = {
+			isa = PBXGroup;
+			children = (
+				946D2A701BE5EAA700270BF0 /* TextTableCellView.xib */,
+				946D2A6D1BE5DBC800270BF0 /* TextTableCellView.h */,
+				946D2A6E1BE5DBC800270BF0 /* TextTableCellView.m */,
+			);
+			name = "iMessage Text Table Cell View";
+			sourceTree = "<group>";
+		};
+		947549691BF207CB006CD211 /* Calendar Popup View Controller */ = {
+			isa = PBXGroup;
+			children = (
+				94F01DDA1BE852CF00B47D9D /* CalendarPopUpViewController.h */,
+				94F01DDB1BE852CF00B47D9D /* CalendarPopUpViewController.m */,
+				94F01DDC1BE852CF00B47D9D /* CalendarPopUpViewController.xib */,
+			);
+			name = "Calendar Popup View Controller";
 			sourceTree = "<group>";
 		};
 		947B53CD1BE1ADC400484D66 /* Person */ = {
@@ -282,18 +302,14 @@
 		94A9923C1BBDC733003BA1D5 /* iMessageAnalyzer */ = {
 			isa = PBXGroup;
 			children = (
-				946D2A701BE5EAA700270BF0 /* TextTableCellView.xib */,
-				946D2A6D1BE5DBC800270BF0 /* TextTableCellView.h */,
-				946D2A6E1BE5DBC800270BF0 /* TextTableCellView.m */,
-				94F01DDA1BE852CF00B47D9D /* CalendarPopUpViewController.h */,
-				94F01DDB1BE852CF00B47D9D /* CalendarPopUpViewController.m */,
-				94F01DDC1BE852CF00B47D9D /* CalendarPopUpViewController.xib */,
 				947B53D61BE1AE5400484D66 /* Main View Controller */,
 				947B53D51BE1AE4C00484D66 /* Main Window Controller */,
 				947B53D11BE1AE0D00484D66 /* Managers */,
 				947B53D21BE1AE1F00484D66 /* Chats Cell */,
+				947549691BF207CB006CD211 /* Calendar Popup View Controller */,
 				9438FD021BE077E400B239BE /* Objects */,
 				947B53D31BE1AE2E00484D66 /* App Delegate */,
+				947549681BF207B2006CD211 /* iMessage Text Table Cell View */,
 				947B53D41BE1AE3B00484D66 /* VIew Controller - Default */,
 				947B53DB1BE53F6500484D66 /* Icons */,
 				94A992401BBDC733003BA1D5 /* Supporting Files */,

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="8191" systemVersion="14F27" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9059" systemVersion="14F27" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8191"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9059"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner"/>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView identifier="chatTableViewCell" id="c22-O7-iKe" customClass="ChatTableViewCell">
-            <rect key="frame" x="0.0" y="0.0" width="480" height="88"/>
+            <rect key="frame" x="0.0" y="0.0" width="256" height="88"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nzL-Pq-aYn">
@@ -16,7 +16,7 @@
                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSUserGuest" id="myy-NH-Xrt"/>
                 </imageView>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hbl-AI-E5e">
-                    <rect key="frame" x="91" y="61" width="298" height="23"/>
+                    <rect key="frame" x="91" y="61" width="274" height="23"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Contact Name" id="ehb-pH-as7">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -24,8 +24,16 @@
                     </textFieldCell>
                 </textField>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Y0R-UN-1SQ">
-                    <rect key="frame" x="91" y="20" width="274" height="33"/>
-                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Helloo" id="p8Q-Jv-fdB">
+                    <rect key="frame" x="91" y="33" width="274" height="22"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Contact Number" id="p8Q-Jv-fdB">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MQQ-po-lK1">
+                    <rect key="frame" x="91" y="5" width="274" height="22"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Never Messaged" id="XBu-2d-a93">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -34,11 +42,12 @@
             </subviews>
             <connections>
                 <outlet property="contactName" destination="hbl-AI-E5e" id="m88-hu-bEP"/>
+                <outlet property="contactNumber" destination="Y0R-UN-1SQ" id="ucx-sI-MWd"/>
                 <outlet property="contactPhoto" destination="nzL-Pq-aYn" id="oDU-Og-sdM"/>
                 <outlet property="contactPicture" destination="nzL-Pq-aYn" id="qkg-np-Gad"/>
-                <outlet property="lastMessageSent" destination="Y0R-UN-1SQ" id="gXJ-Ll-3Hf"/>
+                <outlet property="lastMessagedOn" destination="MQQ-po-lK1" id="Xp6-Fw-FEz"/>
             </connections>
-            <point key="canvasLocation" x="18" y="160"/>
+            <point key="canvasLocation" x="36" y="160"/>
         </customView>
     </objects>
     <resources>

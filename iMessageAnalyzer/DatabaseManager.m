@@ -325,12 +325,12 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
 {
     NSMutableArray *numbers = [[NSMutableArray alloc] init];
     
-    NSMutableArray *handle_ids = [[self getHandleIDsForMessageText:text] allObjects];
+    NSArray *handle_ids = [[self getHandleIDsForMessageText:text] allObjects];
     
     sqlite3_stmt *statement;
     
     for(NSNumber *number in handle_ids) {
-        char *query = [[NSString stringWithFormat:@"SELECT id FROM handle WHERE ROWID='%d'", [number intValue]] UTF8String];
+        const char *query = [[NSString stringWithFormat:@"SELECT id FROM handle WHERE ROWID='%d'", [number intValue]] UTF8String];
         
         if(sqlite3_prepare(_database, query, -1, &statement, NULL) == SQLITE_OK) {
             while(sqlite3_step(statement) == SQLITE_ROW) {

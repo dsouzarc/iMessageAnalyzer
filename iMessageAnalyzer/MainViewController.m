@@ -313,8 +313,13 @@
         else {
             [cell.contactName setStringValue:person.number];
         }
-        
-        [cell.lastMessageSent setStringValue:person.number];
+        [cell.contactNumber setStringValue:person.number];
+
+        NSMutableArray *messages = [self.messageManager getAllMessagesForPerson:person];
+        if(messages && messages.count > 0) {
+            Message *lastMessage = messages[messages.count - 1];
+            [cell.lastMessagedOn setStringValue:[lastMessage lastMessagedOn]];
+        }
         
         [cell.contactPhoto setWantsLayer: YES];
         cell.contactPhoto.layer.borderWidth = 0.0;
