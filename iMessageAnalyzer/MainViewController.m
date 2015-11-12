@@ -36,6 +36,7 @@
 @property int lastSearchIndex;
 
 @property (strong, nonatomic) Person *lastChosenPerson;
+@property (nonatomic) NSInteger lastChosenPersonIndex;
 
 @property NSRect messageFromMe;
 @property NSRect messageToMe;
@@ -94,7 +95,20 @@
 
 - (void) doubleClickedContactCell:(id)object
 {
-    NSLog(@"Clickec here: %@", self.lastChosenPerson.personName);
+    NSInteger selectedRow = self.contactsTableView.selectedRow;
+    
+    SimpleAnalyticsPopUpViewController *simpleAnalytics = [[SimpleAnalyticsPopUpViewController alloc] initWithNibName:@"SimpleAnalyticsPopUpViewController" bundle:[NSBundle mainBundle]];
+    
+    NSPopover *popOvers = [[NSPopover alloc] init];
+    [popOvers setContentSize:simpleAnalytics.view.bounds.size];
+    [popOvers setContentViewController:simpleAnalytics];
+    [popOvers setAnimates:YES];
+    [popOvers setDelegate:self];
+    [popOvers setBehavior:NSPopoverBehaviorTransient];
+    
+    NSView *selectedView = [self.contactsTableView viewAtColumn:0 row:self.lastChosenPersonIndex makeIfNecessary:NO];
+    [popOvers showRelativeToRect:selectedView.bounds ofView:selectedView preferredEdge:NSMaxXEdge];
+    
 }
 
 - (IBAction)calendarButtonClick:(id)sender {
@@ -351,6 +365,7 @@
 {
     if(tableView == self.contactsTableView) {
         
+        self.lastChosenPersonIndex = row;
         self.lastChosenPerson = self.searchConversationChats[row];
         self.currentConversationChats = [self.messageManager getAllMessagesForPerson:self.lastChosenPerson];
         
