@@ -88,6 +88,13 @@
         [self.contactNameTextField setStringValue:[NSString stringWithFormat:@"%@ %@", self.lastChosenPerson.personName, self.lastChosenPerson.number]];
         NSLog(@"SIZE: %d", self.currentConversationChats.count);
     }
+    
+    [self.contactsTableView setDoubleAction:@selector(doubleClickedContactCell:)];
+}
+
+- (void) doubleClickedContactCell:(id)object
+{
+    NSLog(@"Clickec here: %@", self.lastChosenPerson.personName);
 }
 
 - (IBAction)calendarButtonClick:(id)sender {
@@ -431,6 +438,18 @@
 
         }
     }
+}
+
+- (void) doubleClickContactCell
+{
+    self.calendarPopUpViewController = [[CalendarPopUpViewController alloc] initWithNibName:@"CalendarPopUpViewController" bundle:[NSBundle mainBundle]];
+    self.calendarPopUpViewController.delegate = self;
+    self.calendarPopover = [[NSPopover alloc] init];
+    [self.calendarPopover setContentSize:self.calendarPopUpViewController.view.bounds.size];
+    [self.calendarPopover setContentViewController:self.calendarPopUpViewController];
+    [self.calendarPopover setAnimates:YES];
+    [self.calendarPopover setBehavior:NSPopoverBehaviorTransient];
+    self.calendarPopover.delegate = self;
 }
 
 - (void) controlTextDidChange:(NSNotification *)obj

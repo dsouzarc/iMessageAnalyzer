@@ -12,7 +12,10 @@
 
 #import "ChatTableViewCell.h"
 #import "TextTableCellView.h"
+
 #import "CalendarPopUpViewController.h"
+#import "SimpleAnalyticsPopupViewController.h"
+
 #import "Contact.h"
 #import "Message.h"
 #import "Person.h"

@@ -14,6 +14,8 @@
 		9438FD121BE07D2600B239BE /* MainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9438FD101BE07D2600B239BE /* MainViewController.xib */; };
 		9438FD181BE07DAC00B239BE /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9438FD171BE07DAC00B239BE /* main.m */; };
 		944E19581BE540E9005132E1 /* blank_profile_outline.png in Resources */ = {isa = PBXBuildFile; fileRef = 944E19571BE540E9005132E1 /* blank_profile_outline.png */; };
+		945037121BF59F4700F995E7 /* SimpleAnalyticsPopUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 945037101BF59F4700F995E7 /* SimpleAnalyticsPopUpViewController.m */; };
+		945037131BF59F4700F995E7 /* SimpleAnalyticsPopUpViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 945037111BF59F4700F995E7 /* SimpleAnalyticsPopUpViewController.xib */; };
 		946D2A6C1BE55BF900270BF0 /* Statistics.m in Sources */ = {isa = PBXBuildFile; fileRef = 946D2A6B1BE55BF900270BF0 /* Statistics.m */; };
 		946D2A6F1BE5DBC800270BF0 /* TextTableCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 946D2A6E1BE5DBC800270BF0 /* TextTableCellView.m */; };
 		946D2A711BE5EAA700270BF0 /* TextTableCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 946D2A701BE5EAA700270BF0 /* TextTableCellView.xib */; };
@@ -65,6 +67,9 @@
 		9438FD101BE07D2600B239BE /* MainViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainViewController.xib; sourceTree = "<group>"; };
 		9438FD171BE07DAC00B239BE /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		944E19571BE540E9005132E1 /* blank_profile_outline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blank_profile_outline.png; sourceTree = "<group>"; };
+		9450370F1BF59F4700F995E7 /* SimpleAnalyticsPopUpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleAnalyticsPopUpViewController.h; sourceTree = "<group>"; };
+		945037101BF59F4700F995E7 /* SimpleAnalyticsPopUpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimpleAnalyticsPopUpViewController.m; sourceTree = "<group>"; };
+		945037111BF59F4700F995E7 /* SimpleAnalyticsPopUpViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SimpleAnalyticsPopUpViewController.xib; sourceTree = "<group>"; };
 		946D2A6A1BE55BF900270BF0 /* Statistics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Statistics.h; sourceTree = "<group>"; };
 		946D2A6B1BE55BF900270BF0 /* Statistics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Statistics.m; sourceTree = "<group>"; };
 		946D2A6D1BE5DBC800270BF0 /* TextTableCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextTableCellView.h; sourceTree = "<group>"; };
@@ -302,6 +307,9 @@
 		94A9923C1BBDC733003BA1D5 /* iMessageAnalyzer */ = {
 			isa = PBXGroup;
 			children = (
+				9450370F1BF59F4700F995E7 /* SimpleAnalyticsPopUpViewController.h */,
+				945037101BF59F4700F995E7 /* SimpleAnalyticsPopUpViewController.m */,
+				945037111BF59F4700F995E7 /* SimpleAnalyticsPopUpViewController.xib */,
 				947B53D61BE1AE5400484D66 /* Main View Controller */,
 				947B53D51BE1AE4C00484D66 /* Main Window Controller */,
 				947B53D11BE1AE0D00484D66 /* Managers */,
@@ -458,6 +466,7 @@
 				94A9924A1BBDC734003BA1D5 /* Main.storyboard in Resources */,
 				9438FD121BE07D2600B239BE /* MainViewController.xib in Resources */,
 				946D2A711BE5EAA700270BF0 /* TextTableCellView.xib in Resources */,
+				945037131BF59F4700F995E7 /* SimpleAnalyticsPopUpViewController.xib in Resources */,
 				94F01DDE1BE852CF00B47D9D /* CalendarPopUpViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -487,6 +496,7 @@
 				94F01DDD1BE852CF00B47D9D /* CalendarPopUpViewController.m in Sources */,
 				946D2A6C1BE55BF900270BF0 /* Statistics.m in Sources */,
 				9438FD071BE07CFF00B239BE /* MainWindowController.m in Sources */,
+				945037121BF59F4700F995E7 /* SimpleAnalyticsPopUpViewController.m in Sources */,
 				94A992451BBDC733003BA1D5 /* ViewController.m in Sources */,
 				94F3AC441BC727BE00948A23 /* MessageManager.m in Sources */,
 				94F3AC411BC481B900948A23 /* Message.m in Sources */,
