@@ -10,4 +10,9 @@
 
 @interface SimpleAnalyticsPopUpViewController : NSViewController
 
+@property (strong) IBOutlet NSTextField *numberOfSentMessages;
+@property (strong) IBOutlet NSTextField *numberOfReceivedMessages;
+@property (strong) IBOutlet NSTextField *totalNumberOfMessages;
+
+
 @end
