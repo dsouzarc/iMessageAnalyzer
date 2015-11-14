@@ -35,6 +35,10 @@
 @property (strong, nonatomic) NSTextView *sizingView;
 @property (strong, nonatomic) NSTextField *sizingField;
 
+@property NSRect messageFromMe;
+@property NSRect messageToMe;
+@property NSRect timeStampRect;
+
 @property (strong, nonatomic) NSTextField *noMessagesField;
 @property (strong, nonatomic) NSDateFormatter *dateFormatter;
 
@@ -43,9 +47,6 @@
 @property (strong, nonatomic) Person *lastChosenPerson;
 @property (nonatomic) NSInteger lastChosenPersonIndex;
 
-@property NSRect messageFromMe;
-@property NSRect messageToMe;
-@property NSRect timeStampRect;
 
 @end
 

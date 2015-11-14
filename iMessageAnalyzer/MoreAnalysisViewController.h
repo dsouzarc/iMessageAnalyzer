@@ -12,7 +12,7 @@
 #import "Statistics.h"
 #import "Message.h"
 
-@interface MoreAnalysisViewController : NSViewController
+@interface MoreAnalysisViewController : NSViewController <NSTableViewDataSource, NSTableViewDelegate>
 
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil person:(Person*)person messages:(NSMutableArray*)messages;
 

@@ -297,6 +297,36 @@
 			name = Icons;
 			sourceTree = "<group>";
 		};
+		9480B16B1BF7B93900ECDE38 /* Simple Analytics View Controller */ = {
+			isa = PBXGroup;
+			children = (
+				9450370F1BF59F4700F995E7 /* SimpleAnalyticsPopUpViewController.h */,
+				945037101BF59F4700F995E7 /* SimpleAnalyticsPopUpViewController.m */,
+				945037111BF59F4700F995E7 /* SimpleAnalyticsPopUpViewController.xib */,
+			);
+			name = "Simple Analytics View Controller";
+			sourceTree = "<group>";
+		};
+		9480B16C1BF7B94B00ECDE38 /* More Analysis View Controller */ = {
+			isa = PBXGroup;
+			children = (
+				9480B1661BF7B60700ECDE38 /* MoreAnalysisViewController.h */,
+				9480B1671BF7B60700ECDE38 /* MoreAnalysisViewController.m */,
+				9480B1681BF7B60700ECDE38 /* MoreAnalysisViewController.xib */,
+			);
+			name = "More Analysis View Controller";
+			sourceTree = "<group>";
+		};
+		9480B16D1BF7B95A00ECDE38 /* More Analysis Window Controller */ = {
+			isa = PBXGroup;
+			children = (
+				9480B1611BF7B5F300ECDE38 /* MoreAnalysisWindowController.h */,
+				9480B1621BF7B5F300ECDE38 /* MoreAnalysisWindowController.m */,
+				9480B1631BF7B5F300ECDE38 /* MoreAnalysisWindowController.xib */,
+			);
+			name = "More Analysis Window Controller";
+			sourceTree = "<group>";
+		};
 		94A992311BBDC733003BA1D5 = {
 			isa = PBXGroup;
 			children = (
@@ -320,15 +350,9 @@
 		94A9923C1BBDC733003BA1D5 /* iMessageAnalyzer */ = {
 			isa = PBXGroup;
 			children = (
-				9480B1661BF7B60700ECDE38 /* MoreAnalysisViewController.h */,
-				9480B1671BF7B60700ECDE38 /* MoreAnalysisViewController.m */,
-				9480B1681BF7B60700ECDE38 /* MoreAnalysisViewController.xib */,
-				9480B1611BF7B5F300ECDE38 /* MoreAnalysisWindowController.h */,
-				9480B1621BF7B5F300ECDE38 /* MoreAnalysisWindowController.m */,
-				9480B1631BF7B5F300ECDE38 /* MoreAnalysisWindowController.xib */,
-				9450370F1BF59F4700F995E7 /* SimpleAnalyticsPopUpViewController.h */,
-				945037101BF59F4700F995E7 /* SimpleAnalyticsPopUpViewController.m */,
-				945037111BF59F4700F995E7 /* SimpleAnalyticsPopUpViewController.xib */,
+				9480B16C1BF7B94B00ECDE38 /* More Analysis View Controller */,
+				9480B16D1BF7B95A00ECDE38 /* More Analysis Window Controller */,
+				9480B16B1BF7B93900ECDE38 /* Simple Analytics View Controller */,
 				947B53D61BE1AE5400484D66 /* Main View Controller */,
 				947B53D51BE1AE4C00484D66 /* Main Window Controller */,
 				947B53D11BE1AE0D00484D66 /* Managers */,
