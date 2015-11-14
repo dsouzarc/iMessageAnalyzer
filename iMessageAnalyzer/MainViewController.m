@@ -27,6 +27,9 @@
 @property (strong, nonatomic) NSMutableArray *currentConversationChats;
 @property (strong, nonatomic) IBOutlet NSTextField *contactNameTextField;
 
+@property (strong, nonatomic) SimpleAnalyticsPopUpViewController *simpleAnalyticsViewController;
+@property (strong, nonatomic) NSPopover *simpleAnalyticsPopOver;
+
 @property (strong, nonatomic) NSTextView *sizingView;
 @property (strong, nonatomic) NSTextField *sizingField;
 
@@ -95,19 +98,30 @@
 
 - (void) doubleClickedContactCell:(id)object
 {
-    NSInteger selectedRow = self.contactsTableView.selectedRow;
+    if(!self.simpleAnalyticsPopOver || !self.simpleAnalyticsViewController) {
+        self.simpleAnalyticsViewController = [[SimpleAnalyticsPopUpViewController alloc] initWithNibName:@"SimpleAnalyticsPopUpViewController" bundle:[NSBundle mainBundle]];
+        
+        self.simpleAnalyticsPopOver = [[NSPopover alloc] init];
+        [self.simpleAnalyticsPopOver setContentSize:self.simpleAnalyticsViewController.view.bounds.size];
+        [self.simpleAnalyticsPopOver setContentViewController:self.simpleAnalyticsViewController];
+        [self.simpleAnalyticsPopOver setAnimates:YES];
+        [self.simpleAnalyticsPopOver setDelegate:self];
+        [self.simpleAnalyticsPopOver setBehavior:NSPopoverBehaviorTransient];
+    }
     
-    SimpleAnalyticsPopUpViewController *simpleAnalytics = [[SimpleAnalyticsPopUpViewController alloc] initWithNibName:@"SimpleAnalyticsPopUpViewController" bundle:[NSBundle mainBundle]];
+    Statistics *statistics = self.lastChosenPerson.statistics;
     
-    NSPopover *popOvers = [[NSPopover alloc] init];
-    [popOvers setContentSize:simpleAnalytics.view.bounds.size];
-    [popOvers setContentViewController:simpleAnalytics];
-    [popOvers setAnimates:YES];
-    [popOvers setDelegate:self];
-    [popOvers setBehavior:NSPopoverBehaviorTransient];
+    if(statistics) {
+        int totalSent = statistics.numberOfSentAttachments + statistics.numberOfSentMessages;
+        int totalReceived = statistics.numberOfReceivedMessages + statistics.numberOfReceivedAttachments;
+        
+        [self.simpleAnalyticsViewController.numberOfSentMessages setStringValue:[NSString stringWithFormat:@"%d", totalSent]];
+        [self.simpleAnalyticsViewController.numberOfReceivedMessages setStringValue:[NSString stringWithFormat:@"%d", totalReceived]];
+        [self.simpleAnalyticsViewController.totalNumberOfMessages setStringValue:[NSString stringWithFormat:@"%d", totalReceived + totalSent]];
+    }
     
-    NSView *selectedView = [self.contactsTableView viewAtColumn:0 row:self.lastChosenPersonIndex makeIfNecessary:NO];
-    [popOvers showRelativeToRect:selectedView.bounds ofView:selectedView preferredEdge:NSMaxXEdge];
+    NSView *selectedView = [self.contactsTableView viewAtColumn:0 row:self.lastChosenPersonIndex makeIfNecessary:YES];
+    [self.simpleAnalyticsPopOver showRelativeToRect:selectedView.bounds ofView:selectedView preferredEdge:NSMaxXEdge];
     
 }
 
