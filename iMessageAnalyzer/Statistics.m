@@ -19,6 +19,8 @@
         self.numberOfSentMessages = 0;
         self.numberOfReceivedAttachments = 0;
         self.numberOfSentAttachments = 0;
+        
+        self.hasPerformedDetailedAnalysis = NO;
     }
     
     return self;

@@ -16,5 +16,13 @@
 @property NSInteger numberOfSentAttachments;
 @property NSInteger numberOfReceivedAttachments;
 
+@property BOOL hasPerformedDetailedAnalysis;
+
+@property NSInteger numberOfSentWords;
+@property NSInteger numberOfReceivedWords;
+
+@property NSString *mostFrequentedSentWord;
+@property NSString *mostFrequentedReceivedWord;
+
 
 @end

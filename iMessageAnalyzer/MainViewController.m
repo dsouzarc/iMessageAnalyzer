@@ -100,6 +100,7 @@
 {
     if(!self.simpleAnalyticsPopOver || !self.simpleAnalyticsViewController) {
         self.simpleAnalyticsViewController = [[SimpleAnalyticsPopUpViewController alloc] initWithNibName:@"SimpleAnalyticsPopUpViewController" bundle:[NSBundle mainBundle]];
+        self.simpleAnalyticsViewController.delegate = self;
         
         self.simpleAnalyticsPopOver = [[NSPopover alloc] init];
         [self.simpleAnalyticsPopOver setContentSize:self.simpleAnalyticsViewController.view.bounds.size];
@@ -122,6 +123,10 @@
     
     NSView *selectedView = [self.contactsTableView viewAtColumn:0 row:self.lastChosenPersonIndex makeIfNecessary:YES];
     [self.simpleAnalyticsPopOver showRelativeToRect:selectedView.bounds ofView:selectedView preferredEdge:NSMaxXEdge];
+}
+
+- (void) wantsMoreAnalysis
+{
     
 }
 

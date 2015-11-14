@@ -18,5 +18,8 @@
     [super viewDidLoad];
     // Do view setup here.
 }
+- (IBAction)wantsMoreAnalysis:(id)sender {
+    [self.delegate wantsMoreAnalysis];
+}
 
 @end
