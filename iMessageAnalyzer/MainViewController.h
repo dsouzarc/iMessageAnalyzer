@@ -13,6 +13,8 @@
 #import "ChatTableViewCell.h"
 #import "TextTableCellView.h"
 
+#import "MoreAnalysisWindowController.h"
+
 #import "CalendarPopUpViewController.h"
 #import "SimpleAnalyticsPopupViewController.h"
 

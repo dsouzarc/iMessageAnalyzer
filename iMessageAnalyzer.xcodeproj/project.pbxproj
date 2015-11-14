@@ -22,6 +22,10 @@
 		947B53CB1BE1AA2700484D66 /* ChatTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 947B53C81BE1AA2700484D66 /* ChatTableViewCell.xib */; };
 		947B53CC1BE1AA2700484D66 /* ChatTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 947B53CA1BE1AA2700484D66 /* ChatTableViewCell.m */; };
 		9480B1601BF7B48900ECDE38 /* more_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 9480B15F1BF7B48900ECDE38 /* more_icon.png */; };
+		9480B1641BF7B5F300ECDE38 /* MoreAnalysisWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9480B1621BF7B5F300ECDE38 /* MoreAnalysisWindowController.m */; };
+		9480B1651BF7B5F300ECDE38 /* MoreAnalysisWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9480B1631BF7B5F300ECDE38 /* MoreAnalysisWindowController.xib */; };
+		9480B1691BF7B60700ECDE38 /* MoreAnalysisViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9480B1671BF7B60700ECDE38 /* MoreAnalysisViewController.m */; };
+		9480B16A1BF7B60700ECDE38 /* MoreAnalysisViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9480B1681BF7B60700ECDE38 /* MoreAnalysisViewController.xib */; };
 		94A9923F1BBDC733003BA1D5 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A9923E1BBDC733003BA1D5 /* AppDelegate.m */; };
 		94A992451BBDC733003BA1D5 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A992441BBDC733003BA1D5 /* ViewController.m */; };
 		94A992471BBDC733003BA1D5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 94A992461BBDC733003BA1D5 /* Assets.xcassets */; };
@@ -80,6 +84,12 @@
 		947B53C91BE1AA2700484D66 /* ChatTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatTableViewCell.h; sourceTree = "<group>"; };
 		947B53CA1BE1AA2700484D66 /* ChatTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatTableViewCell.m; sourceTree = "<group>"; };
 		9480B15F1BF7B48900ECDE38 /* more_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = more_icon.png; sourceTree = "<group>"; };
+		9480B1611BF7B5F300ECDE38 /* MoreAnalysisWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoreAnalysisWindowController.h; sourceTree = "<group>"; };
+		9480B1621BF7B5F300ECDE38 /* MoreAnalysisWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MoreAnalysisWindowController.m; sourceTree = "<group>"; };
+		9480B1631BF7B5F300ECDE38 /* MoreAnalysisWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MoreAnalysisWindowController.xib; sourceTree = "<group>"; };
+		9480B1661BF7B60700ECDE38 /* MoreAnalysisViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoreAnalysisViewController.h; sourceTree = "<group>"; };
+		9480B1671BF7B60700ECDE38 /* MoreAnalysisViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MoreAnalysisViewController.m; sourceTree = "<group>"; };
+		9480B1681BF7B60700ECDE38 /* MoreAnalysisViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MoreAnalysisViewController.xib; sourceTree = "<group>"; };
 		94A9923A1BBDC733003BA1D5 /* iMessageAnalyzer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iMessageAnalyzer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		94A9923D1BBDC733003BA1D5 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		94A9923E1BBDC733003BA1D5 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -310,6 +320,12 @@
 		94A9923C1BBDC733003BA1D5 /* iMessageAnalyzer */ = {
 			isa = PBXGroup;
 			children = (
+				9480B1661BF7B60700ECDE38 /* MoreAnalysisViewController.h */,
+				9480B1671BF7B60700ECDE38 /* MoreAnalysisViewController.m */,
+				9480B1681BF7B60700ECDE38 /* MoreAnalysisViewController.xib */,
+				9480B1611BF7B5F300ECDE38 /* MoreAnalysisWindowController.h */,
+				9480B1621BF7B5F300ECDE38 /* MoreAnalysisWindowController.m */,
+				9480B1631BF7B5F300ECDE38 /* MoreAnalysisWindowController.xib */,
 				9450370F1BF59F4700F995E7 /* SimpleAnalyticsPopUpViewController.h */,
 				945037101BF59F4700F995E7 /* SimpleAnalyticsPopUpViewController.m */,
 				945037111BF59F4700F995E7 /* SimpleAnalyticsPopUpViewController.xib */,
@@ -461,11 +477,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9480B1651BF7B5F300ECDE38 /* MoreAnalysisWindowController.xib in Resources */,
 				94A992471BBDC733003BA1D5 /* Assets.xcassets in Resources */,
 				944E19581BE540E9005132E1 /* blank_profile_outline.png in Resources */,
 				9438FD081BE07CFF00B239BE /* MainWindowController.xib in Resources */,
 				947B53CB1BE1AA2700484D66 /* ChatTableViewCell.xib in Resources */,
 				94DAC4A51BE7DAF90016ED35 /* calendar-icon.png in Resources */,
+				9480B16A1BF7B60700ECDE38 /* MoreAnalysisViewController.xib in Resources */,
 				94A9924A1BBDC734003BA1D5 /* Main.storyboard in Resources */,
 				9480B1601BF7B48900ECDE38 /* more_icon.png in Resources */,
 				9438FD121BE07D2600B239BE /* MainViewController.xib in Resources */,
@@ -505,9 +523,11 @@
 				94F3AC441BC727BE00948A23 /* MessageManager.m in Sources */,
 				94F3AC411BC481B900948A23 /* Message.m in Sources */,
 				947B53CC1BE1AA2700484D66 /* ChatTableViewCell.m in Sources */,
+				9480B1691BF7B60700ECDE38 /* MoreAnalysisViewController.m in Sources */,
 				94F3AC471BC7282A00948A23 /* DatabaseManager.m in Sources */,
 				946D2A6F1BE5DBC800270BF0 /* TextTableCellView.m in Sources */,
 				94F3AC3B1BC32BD500948A23 /* Person.m in Sources */,
+				9480B1641BF7B5F300ECDE38 /* MoreAnalysisWindowController.m in Sources */,
 				94A9923F1BBDC733003BA1D5 /* AppDelegate.m in Sources */,
 				9438FC371BD049DA00B239BE /* Contact.m in Sources */,
 				9438FD181BE07DAC00B239BE /* main.m in Sources */,

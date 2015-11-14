@@ -30,6 +30,8 @@
 @property (strong, nonatomic) SimpleAnalyticsPopUpViewController *simpleAnalyticsViewController;
 @property (strong, nonatomic) NSPopover *simpleAnalyticsPopOver;
 
+@property (strong, nonatomic) MoreAnalysisWindowController *moreAnalysisWindowController;
+
 @property (strong, nonatomic) NSTextView *sizingView;
 @property (strong, nonatomic) NSTextField *sizingField;
 
@@ -127,7 +129,9 @@
 
 - (void) wantsMoreAnalysis
 {
+    self.moreAnalysisWindowController = [[MoreAnalysisWindowController alloc] initWithWindowNibName:@"MoreAnalysisWindowController" person:self.lastChosenPerson messages:[self.messageManager getAllMessagesForPerson:self.lastChosenPerson]];
     
+    [self.moreAnalysisWindowController showWindow:self];
 }
 
 - (IBAction)calendarButtonClick:(id)sender {
