@@ -41,15 +41,14 @@
     return self;
 }
 
-//200
-
 - (void) updateArrayWithAllWords:(NSMutableArray**)words andFrequencies:(NSMutableArray**)frequencies
 {
-    NSInteger counter = 0;
     while (self.size > 0) {
-        [*words addObject:self.underlyingWords[1]];
-        [*frequencies addObject:self.underlyingFrequencies[1]];
-        counter++;
+        
+        if(![self.underlyingFrequencies[1] isEqualToNumber:[NSNumber numberWithInteger:INT32_MIN]]) {
+            [*words addObject:self.underlyingWords[1]];
+            [*frequencies addObject:self.underlyingFrequencies[1]];
+        }
         
         [self exchangeIndex:1 withIndex:self.size--];
         [self sinkFromIndex:1];
