@@ -17,6 +17,9 @@
 
 @property (strong) IBOutlet NSTableView *messagesTableView;
 
+@property (strong) IBOutlet NSTableView *myWordFrequenciesTableView;
+@property (strong) IBOutlet NSTableView *friendsWordFrequenciesTableView;
+
 @property (strong, nonatomic) NSTextView *sizingView;
 @property (strong, nonatomic) NSTextField *sizingField;
 
@@ -27,8 +30,9 @@
 @property (strong, nonatomic) NSTextField *noMessagesField;
 @property (strong, nonatomic) NSDateFormatter *dateFormatter;
 
-@property (strong, nonatomic) NSDate *calendarChosenDate;
+@property (strong, nonatomic) MessageManager *messageManager;
 
+@property (strong, nonatomic) NSDate *calendarChosenDate;
 
 @end
 
@@ -43,6 +47,8 @@
         self.messages = messages;
         
         self.messagesToDisplay = messages;
+        
+        self.messageManager = [MessageManager getInstance];
         
         self.dateFormatter = [[NSDateFormatter alloc] init];
         [self.dateFormatter setDateFormat:@"MM/dd/yyyy"];
@@ -163,7 +169,6 @@
         return encompassingView;
     }
     
-
     return [[NSView alloc] init];
 }
 

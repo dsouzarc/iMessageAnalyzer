@@ -8,6 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import "MessageManager.h"
+
 #import "Person.h"
 #import "Statistics.h"
 #import "Message.h"
