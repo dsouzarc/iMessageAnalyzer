@@ -34,6 +34,9 @@
 
 @property (strong, nonatomic) NSDate *calendarChosenDate;
 
+@property (strong, nonatomic) NSMutableDictionary *myWordFrequencies;
+@property (strong, nonatomic) NSMutableDictionary *friendWordFrequencies;
+
 @end
 
 @implementation MoreAnalysisViewController
@@ -52,6 +55,9 @@
         
         self.dateFormatter = [[NSDateFormatter alloc] init];
         [self.dateFormatter setDateFormat:@"MM/dd/yyyy"];
+        
+        self.myWordFrequencies = [[NSMutableDictionary alloc] init];
+        self.friendWordFrequencies = [[NSMutableDictionary alloc] init];
         
         if(self.messagesToDisplay.count > 0) {
             self.calendarChosenDate = [[NSDate alloc] initWithTimeIntervalSinceReferenceDate:(long)((Message*) self.messagesToDisplay[0]).dateSent];
@@ -77,6 +83,29 @@
     
     self.timeStampRect = NSMakeRect(0, 0, 400, MAXFLOAT);
 
+}
+
+- (void) viewDidAppear
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+        for(Message *message in self.messages) {
+            NSArray *words = [message.messageText componentsSeparatedByString:@" "];
+            
+            for(NSString *word in words) {
+                
+                NSNumber *frequency = message.isFromMe ? [self.myWordFrequencies objectForKey:word] : [self.friendWordFrequencies objectForKey:word];
+                
+                if(frequency) {
+                    frequency = [NSNumber numberWithInt:([frequency intValue] + 1)];
+                }
+                else {
+                    frequency = [NSNumber numberWithInt:1];
+                }
+                
+                [message.isFromMe ? self.myWordFrequencies : self.friendWordFrequencies setObject:frequency forKey:word];
+            }
+        }
+    });
 }
 
 - (NSInteger) numberOfRowsInTableView:(NSTableView *)tableView
