@@ -37,6 +37,9 @@
 @property (strong, nonatomic) NSMutableDictionary *myWordFrequencies;
 @property (strong, nonatomic) NSMutableDictionary *friendWordFrequencies;
 
+@property int myWordCount;
+@property int friendCount;
+
 @end
 
 @implementation MoreAnalysisViewController
@@ -88,24 +91,39 @@
 - (void) viewDidAppear
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-        for(Message *message in self.messages) {
-            NSArray *words = [message.messageText componentsSeparatedByString:@" "];
+        [self calculateWordFrequenciesAndCounts];
+    });
+}
+
+- (void) calculateWordFrequenciesAndCounts
+{
+    self.myWordCount = 0;
+    self.friendCount = 0;
+    
+    for(Message *message in self.messagesToDisplay) {
+        NSArray *words = [message.messageText componentsSeparatedByString:@" "];
+        
+        for(NSString *word in words) {
             
-            for(NSString *word in words) {
-                
-                NSNumber *frequency = message.isFromMe ? [self.myWordFrequencies objectForKey:word] : [self.friendWordFrequencies objectForKey:word];
-                
-                if(frequency) {
-                    frequency = [NSNumber numberWithInt:([frequency intValue] + 1)];
-                }
-                else {
-                    frequency = [NSNumber numberWithInt:1];
-                }
-                
-                [message.isFromMe ? self.myWordFrequencies : self.friendWordFrequencies setObject:frequency forKey:word];
+            NSNumber *frequency = message.isFromMe ? [self.myWordFrequencies objectForKey:word] : [self.friendWordFrequencies objectForKey:word];
+            
+            if(frequency) {
+                frequency = [NSNumber numberWithInt:([frequency intValue] + 1)];
+            }
+            else {
+                frequency = [NSNumber numberWithInt:1];
+            }
+            
+            if(message.isFromMe) {
+                [self.myWordFrequencies setObject:frequency forKey:word];
+                self.myWordCount++;
+            }
+            else {
+                [self.friendWordFrequencies setObject:frequency forKey:word];
+                self.friendCount++;
             }
         }
-    });
+    }
 }
 
 - (NSInteger) numberOfRowsInTableView:(NSTableView *)tableView
