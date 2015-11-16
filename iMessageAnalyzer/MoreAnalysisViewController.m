@@ -19,6 +19,7 @@
 
 @property (strong) IBOutlet NSTableView *myWordFrequenciesTableView;
 @property (strong) IBOutlet NSTableView *friendsWordFrequenciesTableView;
+@property (strong) IBOutlet NSTextField *friendsWordsFrequenciesTextField;
 
 @property (strong, nonatomic) NSTextView *sizingView;
 @property (strong, nonatomic) NSTextField *sizingField;
@@ -91,7 +92,18 @@
     self.messageToMe = NSMakeRect(0, 0, 400, MAXFLOAT);
     
     self.timeStampRect = NSMakeRect(0, 0, 400, MAXFLOAT);
-
+    
+    [self.friendsWordsFrequenciesTextField setStringValue:[NSString stringWithFormat:@"%@'s Word Frequencies", self.person.personName]];
+    
+    if(self.person.statistics) {
+        Statistics *stat = self.person.statistics;
+        long totalSent = stat.numberOfSentAttachments + stat.numberOfSentMessages;
+        long totalReceived = stat.numberOfReceivedMessages + stat.numberOfReceivedAttachments;
+        
+        [self setTextFieldLong:totalSent forTag:10];
+        [self setTextFieldLong:totalReceived forTag:14];
+        [self setTextFieldLong:(totalSent + totalReceived) forTag:18];
+    }
 }
 
 - (void) viewDidAppear
@@ -102,8 +114,37 @@
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             [self.friendsWordFrequenciesTableView reloadData];
             [self.myWordFrequenciesTableView reloadData];
+            
+            //First time it's run
+            if(self.messagesToDisplay.count == self.messages.count) {
+                [self setTextFieldLong:self.myWordCount forTag:12];
+                [self setTextFieldLong:self.friendCount forTag:16];
+                [self setTextFieldLong:(self.myWordCount + self.friendCount) forTag:20];
+            }
+            else {
+                [self setTextFieldText:[NSString stringWithFormat:@"Words on %@", [self.dateFormatter stringFromDate:self.calendarChosenDate]] forTag:2];
+                [self setTextFieldLong:self.myWordCount forTag:13];
+                [self setTextFieldLong:self.friendCount forTag:17];
+                [self setTextFieldLong:(self.myWordCount + self.friendCount) forTag:21];
+            }
         });
     });
+}
+
+- (void) setTextFieldLong:(long)value forTag:(NSInteger)tag
+{
+    [self setTextFieldText:[NSString stringWithFormat:@"%ld", value] forTag:tag];
+}
+
+- (void) setTextFieldText:(NSString*)text forTag:(NSInteger)tag
+{
+    NSTextField *field = [self.view viewWithTag:tag];
+    if(field) {
+        [field setStringValue:text];
+    }
+    else {
+        NSLog(@"Error getting view for: %d", tag);
+    }
 }
 
 - (void) calculateWordFrequenciesAndCounts
