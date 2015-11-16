@@ -270,6 +270,9 @@
     
     NSTextField *textField = [[NSTextField alloc] init];
     
+    [textField setFocusRingType:NSFocusRingTypeNone];
+    //[textField setBordered:NO];
+
     if(tableView == self.myWordFrequenciesTableView) {
         return textField;
     }
@@ -279,6 +282,21 @@
     }
     
     return textField;
+}
+
+- (BOOL) tableView:(NSTableView *)tableView shouldEditTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
+{
+    return NO;
+}
+
+- (BOOL) tableView:(NSTableView *)tableView writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard *)pboard
+{
+    return NO;
+}
+
+- (BOOL) tableView:(NSTableView *)tableView shouldSelectRow:(NSInteger)row
+{
+    return NO;
 }
 
 - (NSCell*) tableView:(NSTableView *)tableView dataCellForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
