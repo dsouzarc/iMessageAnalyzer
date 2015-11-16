@@ -24,6 +24,8 @@
 @property (strong, nonatomic) NSTextView *sizingView;
 @property (strong, nonatomic) NSTextField *sizingField;
 
+@property (strong) IBOutlet NSDatePicker *mainDatePicker;
+
 @property NSRect messageFromMe;
 @property NSRect messageToMe;
 @property NSRect timeStampRect;
@@ -64,7 +66,7 @@
         [self.dateFormatter setDateFormat:@"MM/dd/yyyy"];
 
         if(self.messagesToDisplay.count > 0) {
-            self.calendarChosenDate = [[NSDate alloc] initWithTimeIntervalSinceReferenceDate:(long)((Message*) self.messagesToDisplay[0]).dateSent];
+            self.calendarChosenDate = ((Message*) self.messagesToDisplay[0]).dateSent;
         }
         else {
             self.calendarChosenDate = [[NSDate alloc] init];
@@ -82,7 +84,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do view setup here.
     
     NSRect frame = NSMakeRect(0, 0, 400, MAXFLOAT);
     self.sizingView = [[NSTextView alloc] initWithFrame:frame];
@@ -106,7 +107,44 @@
     }
 }
 
+- (void) datePickerCell:(NSDatePickerCell *)aDatePickerCell validateProposedDateValue:(NSDate *__autoreleasing  _Nonnull *)proposedDateValue timeInterval:(NSTimeInterval *)proposedTimeInterval
+{
+    if(self.calendarChosenDate == *proposedDateValue) {
+        return;
+    }
+    
+    self.calendarChosenDate = *proposedDateValue;
+    
+    self.messagesToDisplay = [self.messageManager getAllMessagesForPerson:self.person onDay:self.calendarChosenDate];
+    
+    [self dealWithWordFrequencies];
+    [self.messagesTableView reloadData];
+    
+    [self setTextFieldText:[NSString stringWithFormat:@"Messages on %@", [self.dateFormatter stringFromDate:self.calendarChosenDate]] forTag:1];
+    
+    if(self.messagesToDisplay.count == 0 || !self.person.secondaryStatistics) {
+        [self setTextFieldLong:0 forTag:11];
+        [self setTextFieldLong:0 forTag:15];
+        [self setTextFieldLong:0 forTag:19];
+    }
+    
+    else if(self.person.secondaryStatistics) {
+        Statistics *stat = self.person.secondaryStatistics;
+        long totalSent = stat.numberOfSentAttachments + stat.numberOfSentMessages;
+        long totalReceived = stat.numberOfReceivedMessages + stat.numberOfReceivedAttachments;
+        
+        [self setTextFieldLong:totalSent forTag:11];
+        [self setTextFieldLong:totalReceived forTag:15];
+        [self setTextFieldLong:(totalSent + totalReceived) forTag:19];
+    }
+}
+
 - (void) viewDidAppear
+{
+    [self dealWithWordFrequencies];
+}
+
+- (void) dealWithWordFrequencies
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         [self calculateWordFrequenciesAndCounts];
@@ -127,6 +165,9 @@
                 [self setTextFieldLong:self.friendCount forTag:17];
                 [self setTextFieldLong:(self.myWordCount + self.friendCount) forTag:21];
             }
+            
+            [self.mainDatePicker setDateValue:self.calendarChosenDate];
+            
         });
     });
 }
