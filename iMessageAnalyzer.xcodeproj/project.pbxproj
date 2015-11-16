@@ -155,12 +155,11 @@
 		9438FD021BE077E400B239BE /* Objects */ = {
 			isa = PBXGroup;
 			children = (
+				94E70EAA1BF9BF2E00653F94 /* Statistics */,
 				947B53CD1BE1ADC400484D66 /* Person */,
 				947B53CE1BE1ADCB00484D66 /* Attachment */,
 				947B53CF1BE1ADD300484D66 /* Message */,
 				947B53D01BE1ADDE00484D66 /* Contact */,
-				946D2A6A1BE55BF900270BF0 /* Statistics.h */,
-				946D2A6B1BE55BF900270BF0 /* Statistics.m */,
 			);
 			name = Objects;
 			sourceTree = "<group>";
@@ -316,8 +315,6 @@
 				9480B1661BF7B60700ECDE38 /* MoreAnalysisViewController.h */,
 				9480B1671BF7B60700ECDE38 /* MoreAnalysisViewController.m */,
 				9480B1681BF7B60700ECDE38 /* MoreAnalysisViewController.xib */,
-				948AE9681BF976170031D97C /* WordFrequencyHeapDataStructure.h */,
-				948AE9691BF976170031D97C /* WordFrequencyHeapDataStructure.m */,
 			);
 			name = "More Analysis View Controller";
 			sourceTree = "<group>";
@@ -356,14 +353,15 @@
 			isa = PBXGroup;
 			children = (
 				9480B16C1BF7B94B00ECDE38 /* More Analysis View Controller */,
-				9480B16D1BF7B95A00ECDE38 /* More Analysis Window Controller */,
-				9480B16B1BF7B93900ECDE38 /* Simple Analytics View Controller */,
 				947B53D61BE1AE5400484D66 /* Main View Controller */,
-				947B53D51BE1AE4C00484D66 /* Main Window Controller */,
 				947B53D11BE1AE0D00484D66 /* Managers */,
 				947B53D21BE1AE1F00484D66 /* Chats Cell */,
 				947549691BF207CB006CD211 /* Calendar Popup View Controller */,
+				94E70EA91BF9BF1E00653F94 /* Data Structures */,
 				9438FD021BE077E400B239BE /* Objects */,
+				947B53D51BE1AE4C00484D66 /* Main Window Controller */,
+				9480B16B1BF7B93900ECDE38 /* Simple Analytics View Controller */,
+				9480B16D1BF7B95A00ECDE38 /* More Analysis Window Controller */,
 				947B53D31BE1AE2E00484D66 /* App Delegate */,
 				947549681BF207B2006CD211 /* iMessage Text Table Cell View */,
 				947B53D41BE1AE3B00484D66 /* VIew Controller - Default */,
@@ -401,6 +399,24 @@
 				94A992611BBDC734003BA1D5 /* Info.plist */,
 			);
 			path = iMessageAnalyzerUITests;
+			sourceTree = "<group>";
+		};
+		94E70EA91BF9BF1E00653F94 /* Data Structures */ = {
+			isa = PBXGroup;
+			children = (
+				948AE9681BF976170031D97C /* WordFrequencyHeapDataStructure.h */,
+				948AE9691BF976170031D97C /* WordFrequencyHeapDataStructure.m */,
+			);
+			name = "Data Structures";
+			sourceTree = "<group>";
+		};
+		94E70EAA1BF9BF2E00653F94 /* Statistics */ = {
+			isa = PBXGroup;
+			children = (
+				946D2A6A1BE55BF900270BF0 /* Statistics.h */,
+				946D2A6B1BE55BF900270BF0 /* Statistics.m */,
+			);
+			name = Statistics;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

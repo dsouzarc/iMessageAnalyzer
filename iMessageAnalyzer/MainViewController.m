@@ -12,41 +12,41 @@
 
 @property (strong) IBOutlet NSTableView *contactsTableView;
 @property (strong) IBOutlet NSTableView *messagesTableView;
+
+@property (strong) IBOutlet NSTextField *contactNameTextField;
 @property (strong) IBOutlet NSSearchField *searchField;
 @property (strong) IBOutlet NSButton *calendarButton;
 
-@property (strong, nonatomic) MessageManager *messageManager;
-
-@property (strong, nonatomic) NSPopover *calendarPopover;
-@property (strong, nonatomic) CalendarPopUpViewController *calendarPopUpViewController;
-@property (strong, nonatomic) NSDate *calendarChosenDate;
-
-@property (strong, nonatomic) NSMutableArray *chats;
-@property (strong, nonatomic) NSMutableArray *searchConversationChats;
-
-@property (strong, nonatomic) NSMutableArray *currentConversationChats;
-@property (strong, nonatomic) IBOutlet NSTextField *contactNameTextField;
-
-@property (strong, nonatomic) SimpleAnalyticsPopUpViewController *simpleAnalyticsViewController;
-@property (strong, nonatomic) NSPopover *simpleAnalyticsPopOver;
-
-@property (strong, nonatomic) MoreAnalysisWindowController *moreAnalysisWindowController;
-
 @property (strong, nonatomic) NSTextView *sizingView;
 @property (strong, nonatomic) NSTextField *sizingField;
+@property (strong, nonatomic) NSTextField *noMessagesField;
 
 @property NSRect messageFromMe;
 @property NSRect messageToMe;
 @property NSRect timeStampRect;
 
-@property (strong, nonatomic) NSTextField *noMessagesField;
-@property (strong, nonatomic) NSDateFormatter *dateFormatter;
 
-@property int lastSearchIndex;
+@property (strong, nonatomic) NSPopover *calendarPopover;
+@property (strong, nonatomic) CalendarPopUpViewController *calendarPopUpViewController;
+
+@property (strong, nonatomic) NSPopover *simpleAnalyticsPopOver;
+@property (strong, nonatomic) SimpleAnalyticsPopUpViewController *simpleAnalyticsViewController;
+
+@property (strong, nonatomic) NSDateFormatter *dateFormatter;
+@property (strong, nonatomic) NSDate *calendarChosenDate;
+
+@property (strong, nonatomic) NSMutableArray *chats;
+@property (strong, nonatomic) NSMutableArray *searchConversationChats;
+@property (strong, nonatomic) NSMutableArray *currentConversationChats;
+
+
+@property (strong, nonatomic) MoreAnalysisWindowController *moreAnalysisWindowController;
+
+@property (strong, nonatomic) MessageManager *messageManager;
 
 @property (strong, nonatomic) Person *lastChosenPerson;
 @property (nonatomic) NSInteger lastChosenPersonIndex;
-
+@property int lastSearchIndex;
 
 @end
 
@@ -181,35 +181,6 @@
     if(!chosenDate) {
         [self.calendarPopover performClose:@"close"];
     }
-}
-
-/****************************************************************
- *
- *              HELPER METHODS
- *
-*****************************************************************/
-
-# pragma mark HELPERS
-
-/** Deprecated */
-- (BOOL) conversationMatchesRequirement:(Person*)person searchText:(NSString*)searchText {
-    
-    if([person.personName rangeOfString:searchText options:NSCaseInsensitiveSearch].location != NSNotFound) {
-        return YES;
-    }
-    
-    if([person.number rangeOfString:searchText options:NSCaseInsensitiveSearch].location != NSNotFound) {
-        return YES;
-    }
-    
-    NSMutableArray *messages = [self.messageManager getAllMessagesForPerson:person];
-    for(Message *message in messages) {
-        if([message.messageText rangeOfString:searchText options:NSCaseInsensitiveSearch].location != NSNotFound) {
-            return YES;
-        }
-    }
-    
-    return NO;
 }
 
 
@@ -428,6 +399,18 @@
     return @"PROBLEM";
 }
 
+- (void) doubleClickContactCell
+{
+    self.calendarPopUpViewController = [[CalendarPopUpViewController alloc] initWithNibName:@"CalendarPopUpViewController" bundle:[NSBundle mainBundle]];
+    self.calendarPopUpViewController.delegate = self;
+    self.calendarPopover = [[NSPopover alloc] init];
+    [self.calendarPopover setContentSize:self.calendarPopUpViewController.view.bounds.size];
+    [self.calendarPopover setContentViewController:self.calendarPopUpViewController];
+    [self.calendarPopover setAnimates:YES];
+    [self.calendarPopover setBehavior:NSPopoverBehaviorTransient];
+    self.calendarPopover.delegate = self;
+}
+
 
 /****************************************************************
  *
@@ -479,18 +462,6 @@
     }
 }
 
-- (void) doubleClickContactCell
-{
-    self.calendarPopUpViewController = [[CalendarPopUpViewController alloc] initWithNibName:@"CalendarPopUpViewController" bundle:[NSBundle mainBundle]];
-    self.calendarPopUpViewController.delegate = self;
-    self.calendarPopover = [[NSPopover alloc] init];
-    [self.calendarPopover setContentSize:self.calendarPopUpViewController.view.bounds.size];
-    [self.calendarPopover setContentViewController:self.calendarPopUpViewController];
-    [self.calendarPopover setAnimates:YES];
-    [self.calendarPopover setBehavior:NSPopoverBehaviorTransient];
-    self.calendarPopover.delegate = self;
-}
-
 - (void) controlTextDidChange:(NSNotification *)obj
 {
     if(self.searchField.stringValue.length == 0) {
@@ -518,6 +489,36 @@
         [self.contactNameTextField setStringValue:@""];
         [self.messagesTableView reloadData];
     }
+}
+
+
+/****************************************************************
+ *
+ *              HELPER METHODS
+ *
+ *****************************************************************/
+
+# pragma mark HELPERS
+
+/** Deprecated */
+- (BOOL) conversationMatchesRequirement:(Person*)person searchText:(NSString*)searchText {
+    
+    if([person.personName rangeOfString:searchText options:NSCaseInsensitiveSearch].location != NSNotFound) {
+        return YES;
+    }
+    
+    if([person.number rangeOfString:searchText options:NSCaseInsensitiveSearch].location != NSNotFound) {
+        return YES;
+    }
+    
+    NSMutableArray *messages = [self.messageManager getAllMessagesForPerson:person];
+    for(Message *message in messages) {
+        if([message.messageText rangeOfString:searchText options:NSCaseInsensitiveSearch].location != NSNotFound) {
+            return YES;
+        }
+    }
+    
+    return NO;
 }
 
 @end

@@ -10,38 +10,40 @@
 
 @interface MoreAnalysisViewController ()
 
-@property (strong, nonatomic) Person *person;
-
-@property (strong, nonatomic) NSMutableArray *messages;
-@property (strong, nonatomic) NSMutableArray *messagesToDisplay;
-
 @property (strong) IBOutlet NSTableView *messagesTableView;
 
 @property (strong) IBOutlet NSTableView *myWordFrequenciesTableView;
 @property (strong) IBOutlet NSTableView *friendsWordFrequenciesTableView;
 @property (strong) IBOutlet NSTextField *friendsWordsFrequenciesTextField;
 
+@property (strong) IBOutlet NSDatePicker *mainDatePicker;
+
 @property (strong, nonatomic) NSTextView *sizingView;
 @property (strong, nonatomic) NSTextField *sizingField;
 
-@property (strong) IBOutlet NSDatePicker *mainDatePicker;
+@property (strong, nonatomic) NSTextField *noMessagesField;
 
 @property NSRect messageFromMe;
 @property NSRect messageToMe;
 @property NSRect timeStampRect;
 
-@property (strong, nonatomic) NSTextField *noMessagesField;
+
 @property (strong, nonatomic) NSDateFormatter *dateFormatter;
-
-@property (strong, nonatomic) MessageManager *messageManager;
-
 @property (strong, nonatomic) NSDate *calendarChosenDate;
+
+@property (strong, nonatomic) NSMutableArray *messages;
+@property (strong, nonatomic) NSMutableArray *messagesToDisplay;
 
 @property (strong, nonatomic) NSMutableArray *myWords;
 @property (strong, nonatomic) NSMutableArray *myWordFrequencies;
 
 @property (strong, nonatomic) NSMutableArray *friendWords;
 @property (strong, nonatomic) NSMutableArray *friendWordFrequencies;
+
+
+@property (strong, nonatomic) Person *person;
+@property (strong, nonatomic) MessageManager *messageManager;
+
 
 @property int myWordCount;
 @property int friendCount;
@@ -110,50 +112,6 @@
     }
 }
 
-- (void) datePickerCell:(NSDatePickerCell *)aDatePickerCell validateProposedDateValue:(NSDate *__autoreleasing  _Nonnull *)proposedDateValue timeInterval:(NSTimeInterval *)proposedTimeInterval
-{
-    if(self.calendarChosenDate == *proposedDateValue) {
-        return;
-    }
-    
-    self.calendarChosenDate = *proposedDateValue;
-    
-    self.messagesToDisplay = [self.messageManager getAllMessagesForPerson:self.person onDay:self.calendarChosenDate];
-    
-    [self dealWithWordFrequencies];
-    [self.messagesTableView reloadData];
-    
-    [self setTextFieldText:[NSString stringWithFormat:@"Messages on %@", [self.dateFormatter stringFromDate:self.calendarChosenDate]] forTag:1];
-    
-    if(self.messagesToDisplay.count == 0 || !self.person.secondaryStatistics) {
-        [self setTextFieldLong:0 forTag:11];
-        [self setTextFieldLong:0 forTag:15];
-        [self setTextFieldLong:0 forTag:19];
-        
-        [self setTextFieldLong:0 forTag:33];
-        [self setTextFieldLong:0 forTag:34];
-        [self setTextFieldLong:0 forTag:35];
-    }
-    
-    else if(self.person.secondaryStatistics) {
-        Statistics *stat = self.person.secondaryStatistics;
-        long totalSent = stat.numberOfSentAttachments + stat.numberOfSentMessages;
-        long totalReceived = stat.numberOfReceivedMessages + stat.numberOfReceivedAttachments;
-        
-        [self setTextFieldLong:totalSent forTag:11];
-        [self setTextFieldLong:totalReceived forTag:15];
-        [self setTextFieldLong:(totalSent + totalReceived) forTag:19];
-        
-        self.myAverageWordCountPerMessage = (double) self.myWordCount / totalSent;
-        self.friendAverageWordCountPerMessage = (double) self.friendCount / totalReceived;
-        double average = (self.myAverageWordCountPerMessage + self.friendAverageWordCountPerMessage) / 2;
-        
-        [self setTextFieldDouble:self.myAverageWordCountPerMessage forTag:33];
-        [self setTextFieldDouble:self.friendAverageWordCountPerMessage forTag:34];
-        [self setTextFieldDouble:average forTag:35];
-    }
-}
-
 - (void) viewDidAppear
 {
     [self dealWithWordFrequencies];
@@ -200,27 +158,6 @@
             
         });
     });
-}
-
-- (void) setTextFieldDouble:(double)value forTag:(NSInteger)tag
-{
-    [self setTextFieldText:[NSString stringWithFormat:@"%.2lf", value] forTag:tag];
-}
-
-- (void) setTextFieldLong:(long)value forTag:(NSInteger)tag
-{
-    [self setTextFieldText:[NSString stringWithFormat:@"%ld", value] forTag:tag];
-}
-
-- (void) setTextFieldText:(NSString*)text forTag:(NSInteger)tag
-{
-    NSTextField *field = [self.view viewWithTag:tag];
-    if(field) {
-        [field setStringValue:text];
-    }
-    else {
-        NSLog(@"Error getting view for: %d", tag);
-    }
 }
 
 - (void) calculateWordFrequenciesAndCounts
@@ -286,6 +223,15 @@
     
     [friendWords updateArrayWithAllWords:&temp andFrequencies:&temp1];
 }
+
+
+/****************************************************************
+ *
+ *              NSTABLEVIEW DELEGATE
+ *
+*****************************************************************/
+
+# pragma mark NSTABLEVIEW_DELEGATE
 
 - (NSInteger) numberOfRowsInTableView:(NSTableView *)tableView
 {
@@ -401,21 +347,6 @@
     return textField;
 }
 
-- (BOOL) tableView:(NSTableView *)tableView shouldEditTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
-{
-    return NO;
-}
-
-- (BOOL) tableView:(NSTableView *)tableView writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard *)pboard
-{
-    return NO;
-}
-
-- (BOOL) tableView:(NSTableView *)tableView shouldSelectRow:(NSInteger)row
-{
-    return NO;
-}
-
 - (NSCell*) tableView:(NSTableView *)tableView dataCellForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
     if(tableView == self.messagesTableView) {
@@ -484,6 +415,111 @@
     }
     
     return 80.0;
+}
+
+- (BOOL) tableView:(NSTableView *)tableView shouldEditTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
+{
+    return NO;
+}
+
+- (BOOL) tableView:(NSTableView *)tableView writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard *)pboard
+{
+    return NO;
+}
+
+- (BOOL) tableView:(NSTableView *)tableView shouldSelectRow:(NSInteger)row
+{
+    return NO;
+}
+
+
+/****************************************************************
+ *
+ *              DATEPICKERCELL DELEGATE
+ *
+ *****************************************************************/
+
+# pragma mark DATEPICKERCELL_DELEGATE
+
+- (void) datePickerCell:(NSDatePickerCell *)aDatePickerCell validateProposedDateValue:(NSDate *__autoreleasing  _Nonnull *)proposedDateValue timeInterval:(NSTimeInterval *)proposedTimeInterval
+{
+    if(self.calendarChosenDate == *proposedDateValue) {
+        return;
+    }
+    
+    self.calendarChosenDate = *proposedDateValue;
+    
+    self.messagesToDisplay = [self.messageManager getAllMessagesForPerson:self.person onDay:self.calendarChosenDate];
+    
+    [self dealWithWordFrequencies];
+    [self.messagesTableView reloadData];
+    
+    [self setTextFieldText:[NSString stringWithFormat:@"Messages on %@", [self.dateFormatter stringFromDate:self.calendarChosenDate]] forTag:1];
+    
+    if(self.messagesToDisplay.count == 0 || !self.person.secondaryStatistics) {
+        [self setTextFieldLong:0 forTag:11];
+        [self setTextFieldLong:0 forTag:15];
+        [self setTextFieldLong:0 forTag:19];
+        
+        [self setTextFieldLong:0 forTag:33];
+        [self setTextFieldLong:0 forTag:34];
+        [self setTextFieldLong:0 forTag:35];
+    }
+    
+    else if(self.person.secondaryStatistics) {
+        Statistics *stat = self.person.secondaryStatistics;
+        long totalSent = stat.numberOfSentAttachments + stat.numberOfSentMessages;
+        long totalReceived = stat.numberOfReceivedMessages + stat.numberOfReceivedAttachments;
+        
+        [self setTextFieldLong:totalSent forTag:11];
+        [self setTextFieldLong:totalReceived forTag:15];
+        [self setTextFieldLong:(totalSent + totalReceived) forTag:19];
+        
+        self.myAverageWordCountPerMessage = (double) self.myWordCount / totalSent;
+        self.friendAverageWordCountPerMessage = (double) self.friendCount / totalReceived;
+        double average = (self.myAverageWordCountPerMessage + self.friendAverageWordCountPerMessage) / 2;
+        
+        [self setTextFieldDouble:self.myAverageWordCountPerMessage forTag:33];
+        [self setTextFieldDouble:self.friendAverageWordCountPerMessage forTag:34];
+        [self setTextFieldDouble:average forTag:35];
+    }
+}
+
+
+/****************************************************************
+ *
+ *              MISC_HELPERS
+ *
+*****************************************************************/
+
+# pragma mark MISC_HELPERS
+
+- (IBAction)clearCalendarButton:(id)sender {
+    self.messagesToDisplay = self.messages;
+    
+    [self dealWithWordFrequencies];
+    [self.messagesTableView reloadData];
+}
+
+- (void) setTextFieldDouble:(double)value forTag:(NSInteger)tag
+{
+    [self setTextFieldText:[NSString stringWithFormat:@"%.2lf", value] forTag:tag];
+}
+
+- (void) setTextFieldLong:(long)value forTag:(NSInteger)tag
+{
+    [self setTextFieldText:[NSString stringWithFormat:@"%ld", value] forTag:tag];
+}
+
+- (void) setTextFieldText:(NSString*)text forTag:(NSInteger)tag
+{
+    NSTextField *field = [self.view viewWithTag:tag];
+    if(field) {
+        [field setStringValue:text];
+    }
+    else {
+        NSLog(@"Error getting view for: %ld", tag);
+    }
 }
 
 @end
