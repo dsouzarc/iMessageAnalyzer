@@ -153,6 +153,9 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
     int handleID = person.handleID;
     int handleID2 = person.secondaryHandleId;
     
+    Statistics *tempStats = [[Statistics alloc] init];
+    person.secondaryStatistics = tempStats;
+    
     char *query = [[NSString stringWithFormat:@"SELECT ROWID, guid, text, service, account_guid, date, date_read, is_from_me, cache_has_attachments FROM message WHERE (handle_id=%d OR handle_id=%d) AND date > %ld AND date < %ld ORDER BY date", handleID, handleID2, startTimeInSeconds, endTimeInSeconds] UTF8String];
     
     sqlite3_stmt *statement;
@@ -175,6 +178,21 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
             BOOL isFromMe = sqlite3_column_int(statement, 7) == 1 ? YES : NO;
             BOOL hasAttachment = sqlite3_column_int(statement, 8) == 1 ? YES: NO;
             
+            if(isFromMe) {
+                tempStats.numberOfSentMessages++;
+                
+                if(hasAttachment) {
+                    tempStats.numberOfSentAttachments++;
+                }
+            }
+            else {
+                tempStats.numberOfReceivedMessages++;
+                
+                if(hasAttachment) {
+                    tempStats.numberOfReceivedAttachments++;
+                }
+            }
+
             NSDate *date = [NSDate dateWithTimeIntervalSinceReferenceDate:dateInt];
             NSDate *dateRead = dateReadInt == 0 ? nil : [NSDate dateWithTimeIntervalSinceReferenceDate:dateReadInt];
             

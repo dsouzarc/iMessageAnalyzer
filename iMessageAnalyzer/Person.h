@@ -27,6 +27,7 @@
 @property (strong, nonatomic) ABPerson *contact;
 
 @property (strong, nonatomic) Statistics *statistics;
+@property (strong, nonatomic) Statistics *secondaryStatistics;
 
 @property NSInteger chatId;
 @property NSInteger secondaryChatId;
