@@ -46,6 +46,9 @@
 @property int myWordCount;
 @property int friendCount;
 
+@property double myAverageWordCountPerMessage;
+@property double friendAverageWordCountPerMessage;
+
 @end
 
 @implementation MoreAnalysisViewController
@@ -126,6 +129,10 @@
         [self setTextFieldLong:0 forTag:11];
         [self setTextFieldLong:0 forTag:15];
         [self setTextFieldLong:0 forTag:19];
+        
+        [self setTextFieldLong:0 forTag:33];
+        [self setTextFieldLong:0 forTag:34];
+        [self setTextFieldLong:0 forTag:35];
     }
     
     else if(self.person.secondaryStatistics) {
@@ -136,6 +143,14 @@
         [self setTextFieldLong:totalSent forTag:11];
         [self setTextFieldLong:totalReceived forTag:15];
         [self setTextFieldLong:(totalSent + totalReceived) forTag:19];
+        
+        self.myAverageWordCountPerMessage = (double) self.myWordCount / totalSent;
+        self.friendAverageWordCountPerMessage = (double) self.friendCount / totalReceived;
+        double average = (self.myAverageWordCountPerMessage + self.friendAverageWordCountPerMessage) / 2;
+        
+        [self setTextFieldDouble:self.myAverageWordCountPerMessage forTag:33];
+        [self setTextFieldDouble:self.friendAverageWordCountPerMessage forTag:34];
+        [self setTextFieldDouble:average forTag:35];
     }
 }
 
@@ -158,6 +173,21 @@
                 [self setTextFieldLong:self.myWordCount forTag:12];
                 [self setTextFieldLong:self.friendCount forTag:16];
                 [self setTextFieldLong:(self.myWordCount + self.friendCount) forTag:20];
+                
+                if(self.person.statistics) {
+                    Statistics *stat = self.person.statistics;
+                    long totalSent = stat.numberOfSentAttachments + stat.numberOfSentMessages;
+                    long totalReceived = stat.numberOfReceivedMessages + stat.numberOfReceivedAttachments;
+                    
+                    self.myAverageWordCountPerMessage = (double) self.myWordCount / totalSent;
+                    self.friendAverageWordCountPerMessage = (double) self.friendCount / totalReceived;
+                    double average = (self.myAverageWordCountPerMessage + self.friendAverageWordCountPerMessage) / 2;
+                    
+                    [self setTextFieldDouble:self.myAverageWordCountPerMessage forTag:30];
+                    [self setTextFieldDouble:self.friendAverageWordCountPerMessage forTag:31];
+                    [self setTextFieldDouble:average forTag:32];
+                }
+                
             }
             else {
                 [self setTextFieldText:[NSString stringWithFormat:@"Words on %@", [self.dateFormatter stringFromDate:self.calendarChosenDate]] forTag:2];
@@ -170,6 +200,11 @@
             
         });
     });
+}
+
+- (void) setTextFieldDouble:(double)value forTag:(NSInteger)tag
+{
+    [self setTextFieldText:[NSString stringWithFormat:@"%.2lf", value] forTag:tag];
 }
 
 - (void) setTextFieldLong:(long)value forTag:(NSInteger)tag
