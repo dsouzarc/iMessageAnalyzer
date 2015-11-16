@@ -10,6 +10,8 @@
 
 #import "MessageManager.h"
 
+#import "WordFrequencyHeapDataStructure.h"
+
 #import "Person.h"
 #import "Statistics.h"
 #import "Message.h"

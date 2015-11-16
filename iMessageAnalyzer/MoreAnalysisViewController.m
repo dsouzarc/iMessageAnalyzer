@@ -34,8 +34,11 @@
 
 @property (strong, nonatomic) NSDate *calendarChosenDate;
 
-@property (strong, nonatomic) NSMutableDictionary *myWordFrequencies;
-@property (strong, nonatomic) NSMutableDictionary *friendWordFrequencies;
+@property (strong, nonatomic) NSMutableArray *myWords;
+@property (strong, nonatomic) NSMutableArray *myWordFrequencies;
+
+@property (strong, nonatomic) NSMutableArray *friendWords;
+@property (strong, nonatomic) NSMutableArray *friendWordFrequencies;
 
 @property int myWordCount;
 @property int friendCount;
@@ -58,16 +61,19 @@
         
         self.dateFormatter = [[NSDateFormatter alloc] init];
         [self.dateFormatter setDateFormat:@"MM/dd/yyyy"];
-        
-        self.myWordFrequencies = [[NSMutableDictionary alloc] init];
-        self.friendWordFrequencies = [[NSMutableDictionary alloc] init];
-        
+
         if(self.messagesToDisplay.count > 0) {
             self.calendarChosenDate = [[NSDate alloc] initWithTimeIntervalSinceReferenceDate:(long)((Message*) self.messagesToDisplay[0]).dateSent];
         }
         else {
             self.calendarChosenDate = [[NSDate alloc] init];
         }
+        
+        self.myWordFrequencies = [[NSMutableArray alloc] init];
+        self.myWords = [[NSMutableArray alloc] init];
+        
+        self.friendWordFrequencies = [[NSMutableArray alloc] init];
+        self.friendWords = [[NSMutableArray alloc] init];
     }
     
     return self;
@@ -92,6 +98,11 @@
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         [self calculateWordFrequenciesAndCounts];
+        
+        dispatch_async(dispatch_get_main_queue(), ^(void) {
+            [self.friendsWordFrequenciesTableView reloadData];
+            [self.myWordFrequenciesTableView reloadData];
+        });
     });
 }
 
@@ -100,12 +111,15 @@
     self.myWordCount = 0;
     self.friendCount = 0;
     
+    NSMutableDictionary *myWordFrequencies = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary *friendWordFrequencies = [[NSMutableDictionary alloc] init];
+    
     for(Message *message in self.messagesToDisplay) {
         NSArray *words = [message.messageText componentsSeparatedByString:@" "];
         
         for(NSString *word in words) {
             
-            NSNumber *frequency = message.isFromMe ? [self.myWordFrequencies objectForKey:word] : [self.friendWordFrequencies objectForKey:word];
+            NSNumber *frequency = message.isFromMe ? [myWordFrequencies objectForKey:word] : [friendWordFrequencies objectForKey:word];
             
             if(frequency) {
                 frequency = [NSNumber numberWithInt:([frequency intValue] + 1)];
@@ -114,22 +128,60 @@
                 frequency = [NSNumber numberWithInt:1];
             }
             
+            if(word.length == 0) {
+                continue;
+            }
+            
             if(message.isFromMe) {
-                [self.myWordFrequencies setObject:frequency forKey:word];
+                [myWordFrequencies setObject:frequency forKey:word];
                 self.myWordCount++;
             }
             else {
-                [self.friendWordFrequencies setObject:frequency forKey:word];
+                [friendWordFrequencies setObject:frequency forKey:word];
                 self.friendCount++;
             }
         }
     }
+
+    WordFrequencyHeapDataStructure *myWords = [[WordFrequencyHeapDataStructure alloc] initWithSize:myWordFrequencies.count];
+    WordFrequencyHeapDataStructure *friendWords = [[WordFrequencyHeapDataStructure alloc] initWithSize:myWordFrequencies.count];
+    
+    for(NSString *word in myWordFrequencies.allKeys) {
+        [myWords addWord:word frequency:[myWordFrequencies objectForKey:word]];
+    }
+    
+    for(NSString *word in friendWordFrequencies.allKeys) {
+        [friendWords addWord:word frequency:[friendWordFrequencies objectForKey:word]];
+    }
+    
+    self.myWords = [[NSMutableArray alloc] initWithCapacity:myWordFrequencies.count];
+    self.myWordFrequencies = [[NSMutableArray alloc] initWithCapacity:myWordFrequencies.count];
+    
+    self.friendWords = [[NSMutableArray alloc] initWithCapacity:friendWordFrequencies.count];
+    self.friendWordFrequencies = [[NSMutableArray alloc] initWithCapacity:friendWordFrequencies.count];
+    
+    NSMutableArray *temp = self.myWords;
+    NSMutableArray *temp1 = self.myWordFrequencies;
+    [myWords updateArrayWithAllWords:&temp andFrequencies:&temp1];
+    
+    temp = self.friendWords;
+    temp1 = self.friendWordFrequencies;
+    
+    [friendWords updateArrayWithAllWords:&temp andFrequencies:&temp1];
 }
 
 - (NSInteger) numberOfRowsInTableView:(NSTableView *)tableView
 {
     if(tableView == self.messagesTableView) {
         return self.messagesToDisplay.count;
+    }
+    
+    if(tableView == self.myWordFrequenciesTableView && self.myWordFrequencies) {
+        return self.myWordFrequencies.count;
+    }
+    
+    if(tableView == self.friendsWordFrequenciesTableView && self.friendWordFrequencies) {
+        return self.friendWordFrequencies.count;
     }
     
     return 0;
@@ -216,13 +268,30 @@
         return encompassingView;
     }
     
-    return [[NSView alloc] init];
+    NSTextField *textField = [[NSTextField alloc] init];
+    
+    if(tableView == self.myWordFrequenciesTableView) {
+        return textField;
+    }
+    
+    if(tableView == self.friendsWordFrequenciesTableView) {
+        return textField;
+    }
+    
+    return textField;
 }
-
 
 - (NSCell*) tableView:(NSTableView *)tableView dataCellForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
     if(tableView == self.messagesTableView) {
+        return nil;
+    }
+    
+    if(tableView == self.myWordFrequenciesTableView) {
+        return nil;
+    }
+    
+    if(tableView == self.friendsWordFrequenciesTableView) {
         return nil;
     }
     
@@ -235,6 +304,23 @@
         return nil;
     }
     
+    if(tableView == self.myWordFrequenciesTableView) {
+        if([tableColumn.identifier isEqualToString:@"Occurrence"]) {
+            return [NSString stringWithFormat:@"%ld", [self.myWordFrequencies[row] integerValue]];
+        }
+        else if([tableColumn.identifier isEqualToString:@"Word"]) {
+            return self.myWords[row];
+        }
+    }
+    
+    if(tableView == self.friendsWordFrequenciesTableView) {
+        if([tableColumn.identifier isEqualToString:@"Occurrence"]) {
+            return [NSString stringWithFormat:@"%ld", [self.friendWordFrequencies[row] integerValue]];
+        }
+        else if([tableColumn.identifier isEqualToString:@"Word"]) {
+            return self.friendWords[row];
+        }
+    }
     return @"PROBLEM";
 }
 
@@ -252,6 +338,14 @@
         /*[self.sizingView setString:text];
          [self.sizingView sizeToFit];
          return self.sizingView.frame.size.height; */
+    }
+    
+    if(tableView == self.myWordFrequenciesTableView) {
+        return 20.0;
+    }
+    
+    if(tableView == self.friendsWordFrequenciesTableView) {
+        return 20.0;
     }
     
     return 80.0;
