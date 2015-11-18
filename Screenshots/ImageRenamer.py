@@ -13,12 +13,21 @@ import os;
 files = os.listdir('.');
 index = 0;
 
-prefix = "https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/";
+projectName = "iMessageAnalyzer"
 
-for fileName in files:
+prefix = "https://github.com/dsouzarc/" + projectName + "/blob/master/Screenshots/";
+
+for fileName in sorted(files):
 
     if fileName != "ImageRenamer.py":
-        newFileName = "Screenshot_" + str(index) + ".png";
-        os.rename(fileName, newFileName);
-        print("![Screenshot " + str(index) + "](" + prefix + newFileName + ")");
-        index += 1;
+
+        if "Screenshot_" in fileName:
+            index += 1;
+
+for fileName in sorted(files):
+        if "Screenshot_" not in fileName and fileName != "ImageRenamer.py":
+            newFileName = "Screenshot_" + str(index) + ".png";
+            os.rename(fileName, newFileName);
+            print("![Screenshot " + str(index) + "](" + prefix + newFileName + ")");
+            index += 1;
+
