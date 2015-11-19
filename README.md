@@ -47,3 +47,29 @@ View messages sent on a certain date (messages)
 Searching for text brings up contacts + contacts with messages that match the text
 Pressing Enter brings up the next text occurence 
 Message occurrences are highlighted in yellow and pressing enter scrolls to the next occurrence
+
+
+![Screenshot 4](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_4.png)
+Attachments sent are shown in a message
+Clicking on them opens a popup with that attachment
+
+
+![Screenshot 5](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_5.png)
+For multiple attachments in a message, the popup allows scrolling through each attachment
+As well as the ability to open each attachment in the right application
+
+
+![Screenshot 6](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_6.png)
+Movie attachments and PDFs are also shown and movies begin playing automatically
+
+
+![Screenshot 7](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_7.png)
+Double clicking a contact shows quick statistics and gives the option to view more icon (circle icon)
+
+
+![Screenshot 8](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_8.png)
+
+
+![Screenshot 9](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_9.png)
+
+
