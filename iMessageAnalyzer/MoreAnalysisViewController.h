@@ -18,7 +18,7 @@
 #import "Statistics.h"
 #import "Message.h"
 
-@interface MoreAnalysisViewController : NSViewController <NSTableViewDataSource, NSTableViewDelegate, NSDatePickerCellDelegate>
+@interface MoreAnalysisViewController : NSViewController <NSTableViewDataSource, NSTableViewDelegate, NSDatePickerCellDelegate, CPTScatterPlotDataSource>
 
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil person:(Person*)person messages:(NSMutableArray*)messages;
 

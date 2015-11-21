@@ -9,6 +9,7 @@
                 <outlet property="friendsWordFrequenciesTableView" destination="y4Y-tW-yvY" id="w8g-qG-GWy"/>
                 <outlet property="friendsWordsFrequenciesTextField" destination="trT-RY-Ur1" id="8tL-V0-lBG"/>
                 <outlet property="mainDatePicker" destination="Pk4-FZ-WuY" id="0Uy-U5-VE1"/>
+                <outlet property="mainGraphHostView" destination="QS6-9i-QEV" id="qlr-DI-Obl"/>
                 <outlet property="messagesTableView" destination="Swd-6g-hSP" id="hNA-9R-BRi"/>
                 <outlet property="myWordFrequenciesTableView" destination="4uK-le-o2Z" id="Od2-rv-8Db"/>
                 <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
@@ -176,11 +177,11 @@
                         <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </clipView>
                     <scroller key="horizontalScroller" verticalHuggingPriority="750" horizontal="YES" id="bz1-7D-qeT">
-                        <rect key="frame" x="1" y="119" width="223" height="15"/>
+                        <rect key="frame" x="1" y="118" width="238" height="16"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
                     <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="Yph-bA-jn4">
-                        <rect key="frame" x="224" y="17" width="15" height="102"/>
+                        <rect key="frame" x="-15" y="17" width="16" height="0.0"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
                     <tableHeaderView key="headerView" id="ulU-8r-Mjz">
@@ -222,7 +223,7 @@
                                         </textFieldCell>
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                     </tableColumn>
-                                    <tableColumn identifier="Word" editable="NO" width="150" minWidth="40" maxWidth="1000" id="S7z-Fw-cez">
+                                    <tableColumn identifier="Word" editable="NO" width="40" minWidth="40" maxWidth="1000" id="S7z-Fw-cez">
                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Word">
                                             <font key="font" metaFont="smallSystem"/>
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -245,11 +246,11 @@
                         <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </clipView>
                     <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="MNu-bd-En6">
-                        <rect key="frame" x="1" y="119" width="223" height="15"/>
+                        <rect key="frame" x="1" y="1" width="0.0" height="16"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
                     <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="5fy-Py-gE8">
-                        <rect key="frame" x="224" y="17" width="15" height="102"/>
+                        <rect key="frame" x="-15" y="17" width="16" height="0.0"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
                     <tableHeaderView key="headerView" id="g87-Fz-9Bg">
@@ -466,8 +467,11 @@
                         <action selector="clearCalendarButton:" target="-2" id="QRM-0a-KL8"/>
                     </connections>
                 </button>
+                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QS6-9i-QEV" customClass="CPTGraphHostingView">
+                    <rect key="frame" x="81" y="319" width="498" height="267"/>
+                </customView>
             </subviews>
-            <point key="canvasLocation" x="501.5" y="483.5"/>
+            <point key="canvasLocation" x="-22.5" y="440.5"/>
         </customView>
     </objects>
 </document>
