@@ -145,7 +145,7 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
     return result;
 }
 
-- (int32_t) totalMessagesSentForStartTime:(long)startTimeInSeconds endTimeInSeconds:(long)endTimeInSeconds
+- (int32_t) totalMessagesForStartTime:(long)startTimeInSeconds endTimeInSeconds:(long)endTimeInSeconds
 {
     const char *query = [[NSString stringWithFormat:@"SELECT count(*) from message WHERE date > %ld AND date < %ld", startTimeInSeconds, endTimeInSeconds] UTF8String];
     
@@ -161,7 +161,7 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
     return result;
 }
 
-- (int32_t) messagesSentForPerson:(Person*)person startTimeInSeconds:(long)startTimeInSeconds endTimeInSeconds:(long)endTimeInSeconds
+- (int32_t) messageCountForPerson:(Person*)person startTimeInSeconds:(long)startTimeInSeconds endTimeInSeconds:(long)endTimeInSeconds
 {
     const char *query = [[NSString stringWithFormat:@"SELECT count(*) from message WHERE (handle_id=%d OR handle_id=%d) AND date > %ld AND date < %ld",
                           person.handleID, person.secondaryHandleId, startTimeInSeconds, endTimeInSeconds] UTF8String];

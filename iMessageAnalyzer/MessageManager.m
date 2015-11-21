@@ -70,6 +70,22 @@ static MessageManager *messageInstance;
     return self;
 }
 
+- (int32_t) getMessageCountWithPersonOnDate:(NSDate*)date person:(Person*)person
+{
+    long startTime = [self timeAtBeginningOfDayForDate:date];
+    long endTime = [self timeAtEndOfDayForDate:date];
+    
+    return [self.databaseManager messageCountForPerson:person startTimeInSeconds:startTime endTimeInSeconds:endTime];
+}
+
+- (int32_t) getMessageCountOnDate:(NSDate*)date
+{
+    long startTime = [self timeAtBeginningOfDayForDate:date];
+    long endTime = [self timeAtEndOfDayForDate:date];
+    
+    return [self.databaseManager totalMessagesForStartTime:startTime endTimeInSeconds:endTime];
+}
+
 - (NSArray*) sortChatsByLastMessageSent:(NSMutableArray*)arrayOfPeople
 {
     return [arrayOfPeople sortedArrayUsingDescriptors:[NSArray arrayWithObject:self.lastMessageSentDescriptor]];

@@ -29,7 +29,7 @@
 - (NSMutableSet*) getHandleIDsForMessageText:(NSString*)messageText;
 - (int32_t) getHandleForChatID:(int32_t)chatID;
 
-- (int32_t) messagesSentForPerson:(Person*)person startTimeInSeconds:(long)startTimeInSeconds endTimeInSeconds:(long)endTimeInSeconds;
-- (int32_t) totalMessagesSentForStartTime:(long)startTimeInSeconds endTimeInSeconds:(long)endTimeInSeconds;
+- (int32_t) messageCountForPerson:(Person*)person startTimeInSeconds:(long)startTimeInSeconds endTimeInSeconds:(long)endTimeInSeconds;
+- (int32_t) totalMessagesForStartTime:(long)startTimeInSeconds endTimeInSeconds:(long)endTimeInSeconds;
 
 @end
