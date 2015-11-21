@@ -34,6 +34,7 @@
 		94A992551BBDC734003BA1D5 /* iMessageAnalyzerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A992541BBDC734003BA1D5 /* iMessageAnalyzerTests.m */; };
 		94A992601BBDC734003BA1D5 /* iMessageAnalyzerUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A9925F1BBDC734003BA1D5 /* iMessageAnalyzerUITests.m */; };
 		94DAC4A51BE7DAF90016ED35 /* calendar-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 94DAC4A41BE7DAF90016ED35 /* calendar-icon.png */; };
+		94E70EB41BF9C80A00653F94 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94E70EB31BF9C80A00653F94 /* QuartzCore.framework */; };
 		94F01DDD1BE852CF00B47D9D /* CalendarPopUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94F01DDB1BE852CF00B47D9D /* CalendarPopUpViewController.m */; };
 		94F01DDE1BE852CF00B47D9D /* CalendarPopUpViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94F01DDC1BE852CF00B47D9D /* CalendarPopUpViewController.xib */; };
 		94F3AC371BC1D9C600948A23 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 94F3AC351BC1D9C600948A23 /* libsqlite3.0.tbd */; };
@@ -61,6 +62,19 @@
 			remoteInfo = iMessageAnalyzer;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		94E70ED31BF9C89100653F94 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		9438FC351BD049DA00B239BE /* Contact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Contact.h; sourceTree = "<group>"; };
@@ -108,6 +122,7 @@
 		94A9925F1BBDC734003BA1D5 /* iMessageAnalyzerUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = iMessageAnalyzerUITests.m; sourceTree = "<group>"; };
 		94A992611BBDC734003BA1D5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		94DAC4A41BE7DAF90016ED35 /* calendar-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "calendar-icon.png"; sourceTree = "<group>"; };
+		94E70EB31BF9C80A00653F94 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		94F01DDA1BE852CF00B47D9D /* CalendarPopUpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalendarPopUpViewController.h; sourceTree = "<group>"; };
 		94F01DDB1BE852CF00B47D9D /* CalendarPopUpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalendarPopUpViewController.m; sourceTree = "<group>"; };
 		94F01DDC1BE852CF00B47D9D /* CalendarPopUpViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CalendarPopUpViewController.xib; sourceTree = "<group>"; };
@@ -130,6 +145,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				94E70EB41BF9C80A00653F94 /* QuartzCore.framework in Frameworks */,
 				94F3AC371BC1D9C600948A23 /* libsqlite3.0.tbd in Frameworks */,
 				94F3AC381BC1D9C600948A23 /* libsqlite3.tbd in Frameworks */,
 			);
@@ -332,6 +348,7 @@
 		94A992311BBDC733003BA1D5 = {
 			isa = PBXGroup;
 			children = (
+				94E70EB31BF9C80A00653F94 /* QuartzCore.framework */,
 				94A9923C1BBDC733003BA1D5 /* iMessageAnalyzer */,
 				94A992531BBDC734003BA1D5 /* iMessageAnalyzerTests */,
 				94A9925E1BBDC734003BA1D5 /* iMessageAnalyzerUITests */,
@@ -429,6 +446,7 @@
 				94A992361BBDC733003BA1D5 /* Sources */,
 				94A992371BBDC733003BA1D5 /* Frameworks */,
 				94A992381BBDC733003BA1D5 /* Resources */,
+				94E70ED31BF9C89100653F94 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);

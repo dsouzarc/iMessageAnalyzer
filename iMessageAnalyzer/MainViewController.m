@@ -93,7 +93,6 @@
         self.currentConversationChats = [self.messageManager getAllMessagesForPerson:self.lastChosenPerson];
         [self.messagesTableView reloadData];
         [self.contactNameTextField setStringValue:[NSString stringWithFormat:@"%@ %@", self.lastChosenPerson.personName, self.lastChosenPerson.number]];
-        NSLog(@"SIZE: %d", self.currentConversationChats.count);
     }
     
     [self.contactsTableView setDoubleAction:@selector(doubleClickedContactCell:)];

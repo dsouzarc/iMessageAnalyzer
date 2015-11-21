@@ -439,6 +439,8 @@
  *
  *****************************************************************/
 
+int tempCounter = 2;
+
 # pragma mark DATEPICKERCELL_DELEGATE
 
 - (void) datePickerCell:(NSDatePickerCell *)aDatePickerCell validateProposedDateValue:(NSDate *__autoreleasing  _Nonnull *)proposedDateValue timeInterval:(NSTimeInterval *)proposedTimeInterval
@@ -454,7 +456,9 @@
     [self dealWithWordFrequencies];
     [self.messagesTableView reloadData];
     
-    [self setTextFieldText:[NSString stringWithFormat:@"Messages on %@", [self.dateFormatter stringFromDate:self.calendarChosenDate]] forTag:1];
+    //[self setTextFieldText:[NSString stringWithFormat:@"Messages on %@", [self.dateFormatter stringFromDate:self.calendarChosenDate]] forTag:1];
+    [self setTextFieldText:[NSString stringWithFormat:@"Messages on 11/%d/15", tempCounter] forTag:1];
+    tempCounter++;
     
     if(self.messagesToDisplay.count == 0 || !self.person.secondaryStatistics) {
         [self setTextFieldLong:0 forTag:11];
