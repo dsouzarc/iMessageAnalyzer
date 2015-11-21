@@ -129,7 +129,7 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
 
 - (int32_t) getHandleForChatID:(int32_t)chatID
 {
-    char *query = [[NSString stringWithFormat:@"SELECT handle_id FROM chat_handle_join WHERE chat_id=%d", chatID] UTF8String];
+    const char *query = [[NSString stringWithFormat:@"SELECT handle_id FROM chat_handle_join WHERE chat_id=%d", chatID] UTF8String];
     sqlite3_stmt *statement;
     
     int result = -1;
@@ -145,6 +145,39 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
     return result;
 }
 
+- (int32_t) totalMessagesSentForStartTime:(long)startTimeInSeconds endTimeInSeconds:(long)endTimeInSeconds
+{
+    const char *query = [[NSString stringWithFormat:@"SELECT count(*) from message WHERE date > %ld AND date < %ld", startTimeInSeconds, endTimeInSeconds] UTF8String];
+    
+    sqlite3_stmt *statement;
+    
+    int result = 0;
+    
+    if(sqlite3_prepare_v2(_database, query, -1, &statement, NULL) == SQLITE_OK) {
+        result = sqlite3_column_int(statement, 0);
+    }
+    
+    sqlite3_finalize(statement);
+    return result;
+}
+
+- (int32_t) messagesSentForPerson:(Person*)person startTimeInSeconds:(long)startTimeInSeconds endTimeInSeconds:(long)endTimeInSeconds
+{
+    const char *query = [[NSString stringWithFormat:@"SELECT count(*) from message WHERE (handle_id=%d OR handle_id=%d) AND date > %ld AND date < %ld",
+                          person.handleID, person.secondaryHandleId, startTimeInSeconds, endTimeInSeconds] UTF8String];
+    
+    sqlite3_stmt *statement;
+    
+    int result = 0;
+    
+    if(sqlite3_prepare_v2(_database, query, -1, &statement, NULL) == SQLITE_OK) {
+        result = sqlite3_column_int(statement, 0);
+    }
+    
+    sqlite3_finalize(statement);
+    return result;
+}
+
 - (NSMutableArray*) getAllMessagesForPerson:(Person *)person startTimeInSeconds:(long)startTimeInSeconds endTimeInSeconds:(long)endTimeInSeconds
 {
     NSMutableArray *messages = [[NSMutableArray alloc] init];
@@ -156,7 +189,7 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
     Statistics *tempStats = [[Statistics alloc] init];
     person.secondaryStatistics = tempStats;
     
-    char *query = [[NSString stringWithFormat:@"SELECT ROWID, guid, text, service, account_guid, date, date_read, is_from_me, cache_has_attachments FROM message WHERE (handle_id=%d OR handle_id=%d) AND date > %ld AND date < %ld ORDER BY date", handleID, handleID2, startTimeInSeconds, endTimeInSeconds] UTF8String];
+    const char *query = [[NSString stringWithFormat:@"SELECT ROWID, guid, text, service, account_guid, date, date_read, is_from_me, cache_has_attachments FROM message WHERE (handle_id=%d OR handle_id=%d) AND date > %ld AND date < %ld ORDER BY date", handleID, handleID2, startTimeInSeconds, endTimeInSeconds] UTF8String];
     
     sqlite3_stmt *statement;
     
