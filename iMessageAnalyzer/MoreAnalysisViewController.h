@@ -8,6 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import <CorePlot/CorePlot.h>
+
 #import "MessageManager.h"
 
 #import "WordFrequencyHeapDataStructure.h"
