@@ -115,50 +115,7 @@
         [self setTextFieldLong:(totalSent + totalReceived) forTag:18];
     }
     
-    CPTXYGraph *newGraph = [[CPTXYGraph alloc] initWithFrame:NSRectToCGRect(self.mainGraphHostView.bounds)];
-    self.mainGraphHostView.hostedGraph = newGraph;
-    self.graph = newGraph;
     
-    newGraph.axisSet = nil;
-    // Remove axes
-    newGraph.axisSet = nil;
-    
-    // Background
-    CGColorRef grayColor = CGColorCreateGenericGray(0.7, 1.0);
-    newGraph.fill = [CPTFill fillWithColor:[CPTColor colorWithCGColor:grayColor]];
-    CGColorRelease(grayColor);
-    
-    // Plot area
-    grayColor                   = CGColorCreateGenericGray(0.2, 0.3);
-    newGraph.plotAreaFrame.fill = [CPTFill fillWithColor:[CPTColor colorWithCGColor:grayColor]];
-    CGColorRelease(grayColor);
-    newGraph.plotAreaFrame.masksToBorder = NO;
-    
-    // Setup plot space
-    CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)newGraph.defaultPlotSpace;
-    plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:@(-1.0) length:@11.0];
-    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:@(-1.0) length:@14.0];
-    
-    CPTMutableShadow *lineShadow = [CPTMutableShadow shadow];
-    lineShadow.shadowOffset     = CGSizeMake(3.0, -3.0);
-    lineShadow.shadowBlurRadius = 4.0;
-    lineShadow.shadowColor      = [CPTColor redColor];
-    
-    // Create a series of plots that uses the data source method
-    for ( NSUInteger i = CPTPlotSymbolTypeNone; i <= CPTPlotSymbolTypeCustom; i++ ) {
-        CPTScatterPlot *dataSourceLinePlot = [[CPTScatterPlot alloc] initWithFrame:newGraph.bounds];
-        dataSourceLinePlot.identifier = [NSString stringWithFormat:@"%lu", (unsigned long)i];
-        dataSourceLinePlot.shadow     = lineShadow;
-        
-        CPTMutableLineStyle *lineStyle = [dataSourceLinePlot.dataLineStyle mutableCopy];
-        lineStyle.lineWidth              = 1.0;
-        lineStyle.lineColor              = [CPTColor redColor];
-        dataSourceLinePlot.dataLineStyle = lineStyle;
-        
-        dataSourceLinePlot.dataSource = self;
-        
-        [newGraph addPlot:dataSourceLinePlot];
-    }
     
 }
 #pragma mark Plot Data Source Methods
