@@ -408,6 +408,50 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
     }
 }
 
+- (NSMutableDictionary*) getAllAttachmentsForPerson:(Person*)person
+{
+    [self updateHandleIDsForPerson:person];
+    
+    NSMutableDictionary *attachments = [[NSMutableDictionary alloc] init];
+    
+    NSString *queryString = [NSString stringWithFormat:@"SELECT messageT.ROWID, messageT.guid, attachmentT.ROWID, attachmentT.guid, attachmentT.filename, attachmentT.mime_type, attachmentT.start_date, attachmentT.total_bytes FROM message messageT INNER JOIN attachment attachmentT INNER JOIN message_attachment_join meAtJoinT ON attachmentT.ROWID= meAtJoinT.attachment_id WHERE meAtJoinT.message_id=messageT.ROWID AND (messageT.handle_id=%d OR messageT.handle_id=%d) GROUP BY messageT.ROWID", person.handleID, person.secondaryHandleId];
+    
+    const char *query = [queryString UTF8String];
+    sqlite3_stmt *statement;
+    
+    if(sqlite3_prepare(_database, query, -1, &statement, NULL) == SQLITE_OK) {
+        while(sqlite3_step(statement) == SQLITE_ROW) {
+            int32_t messageID = sqlite3_column_int(statement, 0);
+            NSString *messageGUID = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 1)];
+            int32_t attachmentID = sqlite3_column_int(statement, 2);
+            NSString *guid = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 3)];
+            NSString *filePath = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 4)];
+            NSString *fileType = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 5)];
+            NSDate *sentDate = [NSDate dateWithTimeIntervalSinceReferenceDate:sqlite3_column_int(statement, 6)];
+            long fileSize = sqlite3_column_int64(statement, 7);
+            
+            Attachment *attachment = [[Attachment alloc] initWithAttachmentID:attachmentID attachmentGUID:guid filePath:filePath fileType:fileType sentDate:sentDate attachmentSize:fileSize messageID:messageID];
+            
+            //If we do not have any attachments for this message
+            if(![attachments objectForKey:messageGUID]) {
+                NSMutableArray *attachmentsForMessage = [[NSMutableArray alloc] init];
+                [attachmentsForMessage addObject:attachment];
+                [attachments setObject:attachmentsForMessage forKey:messageGUID];
+            }
+            
+            //We do have attachments for this message
+            else {
+                NSMutableArray *attachmentsForMessage = [attachments objectForKey:messageGUID];
+                [attachmentsForMessage addObject:attachment];
+            }
+        }
+    }
+    
+    sqlite3_finalize(statement);
+    
+    return attachments;
+}
+
 - (NSMutableArray*) getAttachmentsForMessageID:(int32_t)messageID
 {
     NSMutableArray *attachments = [[NSMutableArray alloc] init];

@@ -34,5 +34,6 @@
 - (int32_t) totalMessagesForStartTime:(long)startTimeInSeconds endTimeInSeconds:(long)endTimeInSeconds;
 
 - (NSMutableArray*) getAttachmentsForMessageID:(int32_t)messageID;
+- (NSMutableDictionary*) getAllAttachmentsForPerson:(Person*)person;
 
 @end
