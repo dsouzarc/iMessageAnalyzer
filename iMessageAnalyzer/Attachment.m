@@ -10,18 +10,18 @@
 
 @implementation Attachment
 
-- (instancetype) initWithAttachmentId:(NSInteger)attachmentId messageId:(NSInteger)messageId guid:(NSString *)guid filePath:(NSString *)filePath fileType:(NSString *)fileType sentDate:(NSDate *)sentDate isOutgoing:(BOOL)isOutgoing
+- (instancetype) initWithAttachmentID:(int32_t)attachmentID attachmentGUID:(NSString *)guid filePath:(NSString *)filePath fileType:(NSString *)fileType sentDate:(NSDate *)sentDate attachmentSize:(long)attachmentSize messageID:(int32_t)messageID
 {
     self = [super init];
     
     if(self) {
-        self.attachmentId = attachmentId;
-        self.messageId = messageId;
+        self.attachmentId = attachmentID;
+        self.messageId = messageID;
         self.guid = guid;
         self.filePath = filePath;
         self.fileType = fileType;
         self.sentDate = sentDate;
-        self.isOutgoing = isOutgoing;
+        self.size = attachmentSize;
     }
     
     return self;

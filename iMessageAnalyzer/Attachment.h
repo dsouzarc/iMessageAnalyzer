@@ -10,7 +10,7 @@
 
 @interface Attachment : NSObject
 
-- (instancetype) initWithAttachmentId:(NSInteger)attachmentId messageId:(NSInteger)messageId guid:(NSString*)guid filePath:(NSString*)filePath fileType:(NSString*)fileType sentDate:(NSDate*)sentDate isOutgoing:(BOOL)isOutgoing;
+- (instancetype) initWithAttachmentID:(int32_t)attachmentID attachmentGUID:(NSString*)guid filePath:(NSString*)filePath fileType:(NSString*)fileType sentDate:(NSDate*)sentDate attachmentSize:(long)attachmentSize messageID:(int32_t)messageID;
 
 @property (strong, nonatomic) NSString *guid;
 @property (strong, nonatomic) NSString *filePath;
@@ -18,8 +18,8 @@
 
 @property (strong, nonatomic) NSDate *sentDate;
 
-@property NSInteger attachmentId;
-@property NSInteger messageId;
-@property BOOL isOutgoing;
+@property int32_t attachmentId;
+@property int32_t messageId;
+@property long size;
 
 @end
