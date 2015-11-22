@@ -50,8 +50,10 @@ static MessageManager *messageInstance;
         
         for(Person *person in self.allChats) {
             NSMutableArray *messagesForPerson = [self.databaseManager getAllMessagesForPerson:person];
-            [self.allChatsAndConversations setObject:messagesForPerson forKey:person.number];
             [self.allPeople setObject:person forKey:person.number];
+            
+            [self.allChatsAndConversations setObject:messagesForPerson forKey:person.number];
+            [self updateMessagesWithAttachments:messagesForPerson person:person];
             
             if(messagesForPerson.count > 0) {
                 Message *lastMessage = messagesForPerson[messagesForPerson.count - 1];
@@ -153,7 +155,32 @@ static MessageManager *messageInstance;
     NSLog(@"IN HERE: %@\t%@", [formatter stringFromDate:[[NSDate alloc] initWithTimeIntervalSinceReferenceDate:startTime]], [formatter stringFromDate:[[NSDate alloc] initWithTimeIntervalSinceReferenceDate:endTime]]);
     NSLog(@"time: %ld\t%ld\t%d", startTime, endTime, person.handleID);*/
     
-    return [self.databaseManager getAllMessagesForPerson:person startTimeInSeconds:startTime endTimeInSeconds:endTime];
+    NSMutableArray *messages = [self.databaseManager getAllMessagesForPerson:person startTimeInSeconds:startTime endTimeInSeconds:endTime];
+    [self updateMessagesWithAttachments:messages person:person];
+    
+    return messages;
+}
+
+- (void) updateMessagesWithAttachments:(NSMutableArray*)messages person:(Person*)person
+{
+    NSMutableDictionary *attachmentsForPerson = [self.databaseManager getAllAttachmentsForPerson:person];
+    
+    //For each message
+    for(Message *message in messages) {
+        NSMutableArray *attachments = [attachmentsForPerson objectForKey:message.messageGUID];
+        
+        //If the message has an attachment
+        if(attachments) {
+            message.attachments = attachments;
+            
+            [attachmentsForPerson removeObjectForKey:message.messageGUID];
+            
+            //If there aren't any more attachments, we're done here
+            if(attachmentsForPerson.count == 0) {
+                return;
+            }
+        }
+    }
 }
 
 - (long)timeAtEndOfDayForDate:(NSDate*)inputDate
@@ -192,6 +219,7 @@ static MessageManager *messageInstance;
     
     if(!messages) {
         messages = [self.databaseManager getAllMessagesForPerson:person];
+        [self updateMessagesWithAttachments:messages person:person];
         [self.allChatsAndConversations setObject:messages forKey:person.number];
     }
     
