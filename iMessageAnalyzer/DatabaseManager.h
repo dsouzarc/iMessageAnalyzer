@@ -14,6 +14,7 @@
 
 #import "Contact.h"
 #import "Message.h"
+#import "Attachment.h"
 #import "Person.h"
 #import "Statistics.h" 
 
