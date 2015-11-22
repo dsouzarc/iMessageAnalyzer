@@ -20,6 +20,7 @@
 
 #import "Contact.h"
 #import "Message.h"
+#import "Attachment.h"
 #import "Person.h"
 
 @interface MainViewController : NSViewController <NSTableViewDataSource, NSTableViewDelegate, NSSearchFieldDelegate, CalendarPopUpViewControllerDelegate, NSPopoverDelegate, SimpleAnalyticsPopUpViewControllerDelegate>

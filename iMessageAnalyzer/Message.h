@@ -15,6 +15,8 @@
 @property (strong, nonatomic) NSString *messageText;
 @property (strong, nonatomic) NSString *messageGUID;
 
+@property (strong, nonatomic) NSMutableArray *attachments;
+
 @property (strong, nonatomic) NSDate *dateSent;
 @property (strong, nonatomic) NSDate *dateRead;
 

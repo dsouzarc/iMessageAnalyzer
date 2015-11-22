@@ -408,63 +408,31 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
     }
 }
 
-- (NSMutableArray*) getAllAttachmentIDsForMessageID:(int32_t)messageID
+- (NSMutableArray*) getAttachmentsForMessageID:(int32_t)messageID
 {
-    NSMutableArray *attachmentIDs = [[NSMutableArray alloc] init];
+    NSMutableArray *attachments = [[NSMutableArray alloc] init];
     
-    const char *query = [[NSString stringWithFormat:@"SELECT attachment_id FROM message_attachment_join WHERE message_id=%d", messageID] UTF8String];
+    NSString *queryString = [NSString stringWithFormat:@"SELECT ROWID, guid, filename, mime_type, start_date, total_bytes FROM attachment t1 INNER JOIN message_attachment_join t2 ON t1.ROWID=t2.attachment_id WHERE t2.message_id=%d", messageID];
+    const char *query = [queryString UTF8String];
     sqlite3_stmt *statement;
     
     if(sqlite3_prepare(_database, query, -1, &statement, NULL) == SQLITE_OK) {
         while(sqlite3_step(statement) == SQLITE_ROW) {
             int32_t attachmentID = sqlite3_column_int(statement, 0);
-            [attachmentIDs addObject:[NSNumber numberWithInt:attachmentID]];
-        }
-    }
-    
-    sqlite3_finalize(statement);
-    
-    return attachmentIDs;
-}
-
-- (NSMutableArray*) getAttachmentsForMessageID:(int32_t)messageID
-{
-    NSMutableArray *attachmentIDs = [self getAllAttachmentIDsForMessageID:messageID];
-    NSMutableArray *attachments = [[NSMutableArray alloc] init];
-    
-    for(NSNumber *attachmentID in attachmentIDs) {
-        Attachment *attachment = [self getAttachmentForAttachmentID:[attachmentID intValue] messageID:messageID];
-        
-        if(attachment) {
+            NSString *guid = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 1)];
+            NSString *filePath = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 2)];
+            NSString *fileType = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 3)];
+            NSDate *sentDate = [NSDate dateWithTimeIntervalSinceReferenceDate:sqlite3_column_int(statement, 4)];
+            long fileSize = sqlite3_column_int64(statement, 5);
+            
+            Attachment *attachment = [[Attachment alloc] initWithAttachmentID:attachmentID attachmentGUID:guid filePath:filePath fileType:fileType sentDate:sentDate attachmentSize:fileSize messageID:messageID];
             [attachments addObject:attachment];
         }
     }
     
-    return attachments;
-}
-
-- (Attachment*) getAttachmentForAttachmentID:(int32_t)attachmentID messageID:(int32_t)messageID
-{
-    const char *query = [[NSString stringWithFormat:@"SELECT guid, filename, mime_type, start_date, total_bytes WHERE ROWID=%d", attachmentID] UTF8String];
-    sqlite3_stmt *statement;
-    
-    Attachment *attachment = nil;
-    
-    if(sqlite3_prepare(_database, query, -1, &statement, NULL) == SQLITE_OK) {
-        while(sqlite3_step(statement) == SQLITE_ROW) {
-            NSString *guid = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 0)];
-            NSString *filePath = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 1)];
-            NSString *fileType = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 2)];
-            NSDate *sentDate = [NSDate dateWithTimeIntervalSinceReferenceDate:sqlite3_column_int(statement, 3)];
-            long fileSize = sqlite3_column_int64(statement, 4);
-            
-            attachment = [[Attachment alloc] initWithAttachmentID:attachmentID attachmentGUID:guid filePath:filePath fileType:fileType sentDate:sentDate attachmentSize:fileSize messageID:messageID];
-        }
-    }
-    
     sqlite3_finalize(statement);
-    
-    return attachment;
+
+    return attachments;
 }
 
 - (NSMutableArray*) getAllNumbersForSearchText:(NSString*)text
