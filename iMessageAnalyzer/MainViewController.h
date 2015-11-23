@@ -19,11 +19,13 @@
 #import "CalendarPopUpViewController.h"
 #import "SimpleAnalyticsPopupViewController.h"
 
+#import "ViewAttachmentsViewController.h"
+
 #import "Contact.h"
 #import "Message.h"
 #import "Attachment.h"
 #import "Person.h"
 
-@interface MainViewController : NSViewController <NSTableViewDataSource, NSTableViewDelegate, NSSearchFieldDelegate, CalendarPopUpViewControllerDelegate, NSPopoverDelegate, SimpleAnalyticsPopUpViewControllerDelegate>
+@interface MainViewController : NSViewController <NSTableViewDataSource, NSTableViewDelegate, NSSearchFieldDelegate, CalendarPopUpViewControllerDelegate, NSPopoverDelegate, SimpleAnalyticsPopUpViewControllerDelegate, NSTextField_MessagesDelegate>
 
 @end

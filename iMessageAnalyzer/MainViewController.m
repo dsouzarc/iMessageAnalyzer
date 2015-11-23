@@ -29,6 +29,9 @@
 @property (strong, nonatomic) NSPopover *calendarPopover;
 @property (strong, nonatomic) CalendarPopUpViewController *calendarPopUpViewController;
 
+@property (strong, nonatomic) NSPopover *viewAttachmentsPopover;
+@property (strong, nonatomic) ViewAttachmentsViewController *viewAttachmentsViewController;
+
 @property (strong, nonatomic) NSPopover *simpleAnalyticsPopOver;
 @property (strong, nonatomic) SimpleAnalyticsPopUpViewController *simpleAnalyticsViewController;
 
@@ -283,6 +286,9 @@
         [timeField setBordered:NO];
         
         NSTextField_Messages *messageField = [[NSTextField_Messages alloc] initWithFrame:frame];
+        [messageField setTextFieldNumber:row];
+        [messageField setTag:100];
+        [messageField setDelegate:self];
         [messageField setDrawsBackground:YES];
         [messageField setWantsLayer:YES];
         
@@ -427,8 +433,25 @@
     return NO;
 }
 
-
-
+- (void) clickedOnTextField:(int32_t)textFieldNumber
+{
+    NSMutableArray *attachments = ((Message*)self.currentConversationChats[textFieldNumber]).attachments;
+    
+    if(!attachments || attachments.count == 0) {
+        return;
+    }
+    
+    NSTextField_Messages *textField = [((NSView*)[self.messagesTableView viewAtColumn:0 row:textFieldNumber makeIfNecessary:YES]) viewWithTag:100];
+    
+    self.viewAttachmentsViewController = [[ViewAttachmentsViewController alloc] initWithNibName:@"ViewAttachmentsViewController" bundle:[NSBundle mainBundle] attachments:attachments];
+    
+    self.viewAttachmentsPopover = [[NSPopover alloc] init];
+    [self.viewAttachmentsPopover setContentSize:self.viewAttachmentsViewController.view.bounds.size];
+    [self.viewAttachmentsPopover setContentViewController:self.viewAttachmentsViewController];
+    [self.viewAttachmentsPopover setAnimates:YES];
+    [self.viewAttachmentsPopover setBehavior:NSPopoverBehaviorTransient];
+    [self.viewAttachmentsPopover showRelativeToRect:[textField bounds] ofView:textField preferredEdge:NSRectEdgeMaxX];
+}
 
 - (NSCell*) tableView:(NSTableView *)tableView dataCellForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
