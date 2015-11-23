@@ -232,7 +232,7 @@
         
         if(message.attachments) {
             for(int i = 0; i < message.attachments.count; i++) {
-                text = [text stringByAppendingString:@"ATTACHMENT"];
+                text = [text stringByAppendingString:@"ATTACHMENT  "];
             }
         }
         
@@ -295,17 +295,17 @@
         
         if(row == self.lastSearchIndex || message.attachments) {
             
-            NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:message.messageText];
+            NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"  %@", message.messageText]];
             
             if(message.isFromMe) {
-                [attributedString addAttribute:NSForegroundColorAttributeName value:[NSColor whiteColor] range:NSMakeRange(0, message.messageText.length)];
+                [attributedString addAttribute:NSForegroundColorAttributeName value:[NSColor whiteColor] range:NSMakeRange(0, attributedString.length)];
             }
             else {
-                [attributedString addAttribute:NSForegroundColorAttributeName value:[NSColor blackColor] range:NSMakeRange(0, message.messageText.length)];
+                [attributedString addAttribute:NSForegroundColorAttributeName value:[NSColor blackColor] range:NSMakeRange(0, attributedString.length)];
             }
 
             if(row == self.lastSearchIndex) {
-                [attributedString addAttribute:NSBackgroundColorAttributeName value:[NSColor yellowColor] range:[message.messageText rangeOfString:self.searchField.stringValue options:NSCaseInsensitiveSearch]];
+                [attributedString addAttribute:NSBackgroundColorAttributeName value:[NSColor yellowColor] range:[attributedString.string rangeOfString:self.searchField.stringValue options:NSCaseInsensitiveSearch]];
             }
             
             if(message.attachments) {
@@ -320,7 +320,7 @@
                 }
                 
                 for(int i = 0; i < message.attachments.count; i++) {
-                    [attachmentsValue appendString:[NSString stringWithFormat:@"Attachment %d.", i]];
+                    [attachmentsValue appendString:[NSString stringWithFormat:@"Attachment %d. ", i]];
                 }
                 
                 NSMutableAttributedString* attachmentsString = [[NSMutableAttributedString alloc] initWithString:(NSString*)attachmentsValue
@@ -337,19 +337,6 @@
         NSSize goodFrame = [messageField.cell cellSizeForBounds:frame];
         [messageField setFrameSize:CGSizeMake(goodFrame.width + 10, goodFrame.height + 4)];
 
-        if(messageField.frame.size.width < 100 && message.hasAttachment && ![messageField.stringValue containsString:@"Attachment"]) {
-            [messageField setAllowsEditingTextAttributes:YES];
-            [messageField setSelectable:YES];
-            
-            NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:@"  Attachment" attributes:self.messageWithAttachmentAttributes];
-            [messageField setStringValue:@""];
-            [messageField setAttributedStringValue:attributedString];
-            goodFrame = [messageField.cell cellSizeForBounds:frame];
-            [messageField setFrameSize:CGSizeMake(goodFrame.width + 10, goodFrame.height)];
-        }
-        
-        NSLog(@"%f\t%f\t%@", messageField.frame.size.width, messageField.frame.size.height, message.messageText);
-        
         goodFrame = [timeField.cell cellSizeForBounds:self.timeStampRect];
         [timeField setFrameSize:CGSizeMake(goodFrame.width + 2, goodFrame.height)];
         

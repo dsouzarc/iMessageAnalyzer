@@ -419,8 +419,10 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
     
     NSMutableDictionary *attachments = [[NSMutableDictionary alloc] init];
     
-    NSString *queryString = [NSString stringWithFormat:@"SELECT messageT.ROWID, messageT.guid, attachmentT.ROWID, attachmentT.guid, attachmentT.filename, attachmentT.mime_type, attachmentT.start_date, attachmentT.total_bytes, attachmentT.transfer_name FROM message messageT INNER JOIN attachment attachmentT INNER JOIN message_attachment_join meAtJoinT ON attachmentT.ROWID= meAtJoinT.attachment_id WHERE meAtJoinT.message_id=messageT.ROWID AND (messageT.handle_id=%d OR messageT.handle_id=%d) GROUP BY messageT.ROWID", person.handleID, person.secondaryHandleId];
+    //NSString *queryString = [NSString stringWithFormat:@"SELECT messageT.ROWID, messageT.guid, attachmentT.ROWID, attachmentT.guid, attachmentT.filename, attachmentT.mime_type, attachmentT.start_date, attachmentT.total_bytes, attachmentT.transfer_name FROM message messageT INNER JOIN attachment attachmentT INNER JOIN message_attachment_join meAtJoinT ON attachmentT.ROWID= meAtJoinT.attachment_id WHERE meAtJoinT.message_id=messageT.ROWID AND (messageT.handle_id=%d OR messageT.handle_id=%d) GROUP BY messageT.ROWID", person.handleID, person.secondaryHandleId];
     
+    NSString *queryString = [NSString stringWithFormat:@"SELECT messageT.ROWID, messageT.guid, attachmentT.ROWID, attachmentT.guid, attachmentT.filename, attachmentT.mime_type, attachmentT.start_date, attachmentT.total_bytes, attachmentT.transfer_name FROM message messageT INNER JOIN chat_message_join chatMessageT ON messageT.ROWID=chatMessageT.message_id INNER JOIN attachment attachmentT INNER JOIN message_attachment_join meAtJoinT ON attachmentT.ROWID=meAtJoinT.attachment_id WHERE meAtJoinT.message_id=messageT.ROWID AND (chatMessageT.chat_id=%ld OR chatMessageT.chat_id=%ld)", person.chatId, person.secondaryChatId];
+
     const char *query = [queryString UTF8String];
     sqlite3_stmt *statement;
     
