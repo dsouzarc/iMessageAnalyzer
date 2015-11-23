@@ -414,7 +414,7 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
     
     NSMutableDictionary *attachments = [[NSMutableDictionary alloc] init];
     
-    NSString *queryString = [NSString stringWithFormat:@"SELECT messageT.ROWID, messageT.guid, attachmentT.ROWID, attachmentT.guid, attachmentT.filename, attachmentT.mime_type, attachmentT.start_date, attachmentT.total_bytes FROM message messageT INNER JOIN attachment attachmentT INNER JOIN message_attachment_join meAtJoinT ON attachmentT.ROWID= meAtJoinT.attachment_id WHERE meAtJoinT.message_id=messageT.ROWID AND (messageT.handle_id=%d OR messageT.handle_id=%d) GROUP BY messageT.ROWID", person.handleID, person.secondaryHandleId];
+    NSString *queryString = [NSString stringWithFormat:@"SELECT messageT.ROWID, messageT.guid, attachmentT.ROWID, attachmentT.guid, attachmentT.filename, attachmentT.mime_type, attachmentT.start_date, attachmentT.total_bytes, attachmentT.transfer_name FROM message messageT INNER JOIN attachment attachmentT INNER JOIN message_attachment_join meAtJoinT ON attachmentT.ROWID= meAtJoinT.attachment_id WHERE meAtJoinT.message_id=messageT.ROWID AND (messageT.handle_id=%d OR messageT.handle_id=%d) GROUP BY messageT.ROWID", person.handleID, person.secondaryHandleId];
     
     const char *query = [queryString UTF8String];
     sqlite3_stmt *statement;
@@ -429,8 +429,9 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
             NSString *fileType = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 5)];
             NSDate *sentDate = [NSDate dateWithTimeIntervalSinceReferenceDate:sqlite3_column_int(statement, 6)];
             long fileSize = sqlite3_column_int64(statement, 7);
+            NSString *fileName = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 8)];
             
-            Attachment *attachment = [[Attachment alloc] initWithAttachmentID:attachmentID attachmentGUID:guid filePath:filePath fileType:fileType sentDate:sentDate attachmentSize:fileSize messageID:messageID];
+            Attachment *attachment = [[Attachment alloc] initWithAttachmentID:attachmentID attachmentGUID:guid filePath:filePath fileType:fileType sentDate:sentDate attachmentSize:fileSize messageID:messageID fileName:fileName];
             
             //If we do not have any attachments for this message
             if(![attachments objectForKey:messageGUID]) {
@@ -456,7 +457,7 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
 {
     NSMutableArray *attachments = [[NSMutableArray alloc] init];
     
-    NSString *queryString = [NSString stringWithFormat:@"SELECT ROWID, guid, filename, mime_type, start_date, total_bytes FROM attachment t1 INNER JOIN message_attachment_join t2 ON t1.ROWID=t2.attachment_id WHERE t2.message_id=%d", messageID];
+    NSString *queryString = [NSString stringWithFormat:@"SELECT ROWID, guid, filename, mime_type, start_date, total_bytes, transfer_name FROM attachment t1 INNER JOIN message_attachment_join t2 ON t1.ROWID=t2.attachment_id WHERE t2.message_id=%d", messageID];
     const char *query = [queryString UTF8String];
     sqlite3_stmt *statement;
     
@@ -468,8 +469,9 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
             NSString *fileType = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 3)];
             NSDate *sentDate = [NSDate dateWithTimeIntervalSinceReferenceDate:sqlite3_column_int(statement, 4)];
             long fileSize = sqlite3_column_int64(statement, 5);
+            NSString *fileName = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 6)];
             
-            Attachment *attachment = [[Attachment alloc] initWithAttachmentID:attachmentID attachmentGUID:guid filePath:filePath fileType:fileType sentDate:sentDate attachmentSize:fileSize messageID:messageID];
+            Attachment *attachment = [[Attachment alloc] initWithAttachmentID:attachmentID attachmentGUID:guid filePath:filePath fileType:fileType sentDate:sentDate attachmentSize:fileSize messageID:messageID fileName:fileName];
             [attachments addObject:attachment];
         }
     }
