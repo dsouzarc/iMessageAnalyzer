@@ -29,6 +29,8 @@
 @property NSRect messageToMe;
 @property NSRect timeStampRect;
 
+@property (strong, nonatomic) NSDictionary *messageWithAttachmentAttributes;
+
 
 @property (strong, nonatomic) NSDateFormatter *dateFormatter;
 @property (strong, nonatomic) NSDate *calendarChosenDate;
@@ -41,6 +43,9 @@
 
 @property (strong, nonatomic) NSMutableArray *friendWords;
 @property (strong, nonatomic) NSMutableArray *friendWordFrequencies;
+
+@property (strong, nonatomic) NSPopover *viewAttachmentsPopover;
+@property (strong, nonatomic) ViewAttachmentsViewController *viewAttachmentsViewController;
 
 @property (strong, nonatomic) CPTXYGraph *graph;
 
@@ -86,6 +91,9 @@
         
         self.friendWordFrequencies = [[NSMutableArray alloc] init];
         self.friendWords = [[NSMutableArray alloc] init];
+        
+        self.messageWithAttachmentAttributes = [NSDictionary dictionaryWithObjectsAndKeys:[NSColor yellowColor], NSForegroundColorAttributeName,
+                                                [NSNumber numberWithInt:NSUnderlineStyleSingle], NSUnderlineStyleAttributeName, nil];
     }
     
     return self;
@@ -93,6 +101,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [self.messagesTableView setSelectionHighlightStyle:NSTableViewSelectionHighlightStyleNone];
     
     NSRect frame = NSMakeRect(0, 0, 400, MAXFLOAT);
     self.sizingView = [[NSTextView alloc] initWithFrame:frame];
@@ -114,9 +124,6 @@
         [self setTextFieldLong:totalReceived forTag:14];
         [self setTextFieldLong:(totalSent + totalReceived) forTag:18];
     }
-    
-    
-    
 }
 #pragma mark Plot Data Source Methods
 
@@ -230,6 +237,12 @@
             
         });
     });
+}
+
+- (void) popoverDidClose:(NSNotification *)notification
+{
+    self.viewAttachmentsViewController = nil;
+    self.viewAttachmentsPopover = nil;
 }
 
 - (void) calculateWordFrequenciesAndCounts
@@ -360,12 +373,50 @@
         [timeField setFocusRingType:NSFocusRingTypeNone];
         [timeField setBordered:NO];
         
-        NSTextField *messageField = [[NSTextField alloc] initWithFrame:frame];
-        [messageField setStringValue:[NSString stringWithFormat:@"  %@", message.messageText]];
-        
+        NSTextField_Messages *messageField = [[NSTextField_Messages alloc] initWithFrame:frame];
         [messageField setDrawsBackground:YES];
         [messageField setWantsLayer:YES];
+        [messageField setTextFieldNumber:row];
+        [messageField setTag:100];
+        [messageField setDelegate:self];
         
+        if(message.attachments) {
+            
+            NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:message.messageText];
+            
+            if(message.isFromMe) {
+                [attributedString addAttribute:NSForegroundColorAttributeName value:[NSColor whiteColor] range:NSMakeRange(0, message.messageText.length)];
+            }
+            else {
+                [attributedString addAttribute:NSForegroundColorAttributeName value:[NSColor blackColor] range:NSMakeRange(0, message.messageText.length)];
+            }
+            
+            if(message.attachments) {
+                
+                [messageField setAllowsEditingTextAttributes:YES];
+                [messageField setSelectable:YES];
+                
+                NSMutableString *attachmentsValue = [[NSMutableString alloc] init];
+                
+                if(message.messageText.length == 0) {
+                    [attachmentsValue appendString:@"  "];
+                }
+                
+                for(int i = 0; i < message.attachments.count; i++) {
+                    [attachmentsValue appendString:[NSString stringWithFormat:@"Attachment %d.", i]];
+                }
+                
+                NSMutableAttributedString* attachmentsString = [[NSMutableAttributedString alloc] initWithString:(NSString*)attachmentsValue
+                                                                                                      attributes:self.messageWithAttachmentAttributes];
+                [attributedString appendAttributedString:attachmentsString];
+            }
+            
+            [messageField setAttributedStringValue:attributedString];
+        }
+        else {
+            [messageField setStringValue:[NSString stringWithFormat:@"  %@", message.messageText]];
+        }
+
         NSSize goodFrame = [messageField.cell cellSizeForBounds:frame];
         [messageField setFrameSize:CGSizeMake(goodFrame.width + 10, goodFrame.height + 4)];
         
@@ -468,8 +519,16 @@
         if(!self.messagesToDisplay || self.messagesToDisplay.count == 0) {
             return 80.0;
         }
+
+        Message *message = self.messagesToDisplay[row];
+        NSString *text = message.messageText;
         
-        NSString *text = ((Message*) self.messagesToDisplay[row]).messageText;
+        if(message.attachments) {
+            for(int i = 0; i < message.attachments.count; i++) {
+                text = [text stringByAppendingString:@"ATTACHMENT"];
+            }
+        }
+        
         [self.sizingField setStringValue:text];
         return [self.sizingField.cell cellSizeForBounds:self.sizingField.frame].height + 30;
         
@@ -501,7 +560,33 @@
 
 - (BOOL) tableView:(NSTableView *)tableView shouldSelectRow:(NSInteger)row
 {
+    if(tableView == self.messagesTableView) {
+        if(((Message*)self.messagesToDisplay[row]).attachments) {
+            return YES;
+        }
+    }
+    
     return NO;
+}
+
+- (void) clickedOnTextField:(int32_t)textFieldNumber
+{
+    NSMutableArray *attachments = ((Message*)self.messagesToDisplay[textFieldNumber]).attachments;
+    
+    if(!attachments || attachments.count == 0) {
+        return;
+    }
+    
+    NSTextField_Messages *textField = [((NSView*)[self.messagesTableView viewAtColumn:0 row:textFieldNumber makeIfNecessary:YES]) viewWithTag:100];
+    self.viewAttachmentsViewController = [[ViewAttachmentsViewController alloc] initWithNibName:@"ViewAttachmentsViewController" bundle:[NSBundle mainBundle] attachments:attachments];
+    
+    self.viewAttachmentsPopover = [[NSPopover alloc] init];
+    [self.viewAttachmentsPopover setContentSize:self.viewAttachmentsViewController.view.bounds.size];
+    [self.viewAttachmentsPopover setContentViewController:self.viewAttachmentsViewController];
+    [self.viewAttachmentsPopover setAnimates:YES];
+    [self.viewAttachmentsPopover setBehavior:NSPopoverBehaviorTransient];
+    [self.viewAttachmentsPopover showRelativeToRect:[textField bounds] ofView:textField preferredEdge:NSRectEdgeMaxX];
+    self.viewAttachmentsPopover.delegate = self;
 }
 
 

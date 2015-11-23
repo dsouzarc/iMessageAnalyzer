@@ -10,15 +10,16 @@
 
 #import <CorePlot/CorePlot.h>
 
+#import "NSTextField+Messages.h"
 #import "MessageManager.h"
-
+#import "ViewAttachmentsViewController.h"
 #import "WordFrequencyHeapDataStructure.h"
 
 #import "Person.h"
 #import "Statistics.h"
 #import "Message.h"
 
-@interface MoreAnalysisViewController : NSViewController <NSTableViewDataSource, NSTableViewDelegate, NSDatePickerCellDelegate, CPTBarPlotDataSource, CPTBarPlotDelegate>
+@interface MoreAnalysisViewController : NSViewController <NSTableViewDataSource, NSTableViewDelegate, NSDatePickerCellDelegate, CPTBarPlotDataSource, CPTBarPlotDelegate, NSPopoverDelegate, NSTextField_MessagesDelegate>
 
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil person:(Person*)person messages:(NSMutableArray*)messages;
 

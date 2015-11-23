@@ -241,6 +241,43 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		941C04F91C030086002E2FAB /* NSTextField for Messages */ = {
+			isa = PBXGroup;
+			children = (
+				941C04F11C028B12002E2FAB /* NSTextField+Messages.h */,
+				941C04F21C028B12002E2FAB /* NSTextField+Messages.m */,
+			);
+			name = "NSTextField for Messages";
+			sourceTree = "<group>";
+		};
+		941C04FA1C030099002E2FAB /* View Attachments View Controller */ = {
+			isa = PBXGroup;
+			children = (
+				941C04F41C02C586002E2FAB /* ViewAttachmentsViewController.h */,
+				941C04F51C02C586002E2FAB /* ViewAttachmentsViewController.m */,
+				941C04F61C02C586002E2FAB /* ViewAttachmentsViewController.xib */,
+			);
+			name = "View Attachments View Controller";
+			sourceTree = "<group>";
+		};
+		941C04FB1C0300AB002E2FAB /* Message Manager */ = {
+			isa = PBXGroup;
+			children = (
+				94F3AC421BC727BE00948A23 /* MessageManager.h */,
+				94F3AC431BC727BE00948A23 /* MessageManager.m */,
+			);
+			name = "Message Manager";
+			sourceTree = "<group>";
+		};
+		941C04FC1C0300B3002E2FAB /* Database Manager */ = {
+			isa = PBXGroup;
+			children = (
+				94F3AC451BC7282A00948A23 /* DatabaseManager.h */,
+				94F3AC461BC7282A00948A23 /* DatabaseManager.m */,
+			);
+			name = "Database Manager";
+			sourceTree = "<group>";
+		};
 		9438FD021BE077E400B239BE /* Objects */ = {
 			isa = PBXGroup;
 			children = (
@@ -322,10 +359,8 @@
 		947B53D11BE1AE0D00484D66 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
-				94F3AC421BC727BE00948A23 /* MessageManager.h */,
-				94F3AC431BC727BE00948A23 /* MessageManager.m */,
-				94F3AC451BC7282A00948A23 /* DatabaseManager.h */,
-				94F3AC461BC7282A00948A23 /* DatabaseManager.m */,
+				941C04FB1C0300AB002E2FAB /* Message Manager */,
+				941C04FC1C0300B3002E2FAB /* Database Manager */,
 			);
 			name = Managers;
 			sourceTree = "<group>";
@@ -371,14 +406,9 @@
 		947B53D61BE1AE5400484D66 /* Main View Controller */ = {
 			isa = PBXGroup;
 			children = (
-				941C04F41C02C586002E2FAB /* ViewAttachmentsViewController.h */,
-				941C04F51C02C586002E2FAB /* ViewAttachmentsViewController.m */,
-				941C04F61C02C586002E2FAB /* ViewAttachmentsViewController.xib */,
 				9438FD0E1BE07D2600B239BE /* MainViewController.h */,
 				9438FD0F1BE07D2600B239BE /* MainViewController.m */,
 				9438FD101BE07D2600B239BE /* MainViewController.xib */,
-				941C04F11C028B12002E2FAB /* NSTextField+Messages.h */,
-				941C04F21C028B12002E2FAB /* NSTextField+Messages.m */,
 			);
 			name = "Main View Controller";
 			sourceTree = "<group>";
@@ -448,9 +478,11 @@
 			isa = PBXGroup;
 			children = (
 				9400C3BA1C00402A0005EB5A /* CorePlot.xcodeproj */,
+				941C04FA1C030099002E2FAB /* View Attachments View Controller */,
 				9480B16C1BF7B94B00ECDE38 /* More Analysis View Controller */,
 				947B53D61BE1AE5400484D66 /* Main View Controller */,
 				947B53D11BE1AE0D00484D66 /* Managers */,
+				941C04F91C030086002E2FAB /* NSTextField for Messages */,
 				947B53D21BE1AE1F00484D66 /* Chats Cell */,
 				947549691BF207CB006CD211 /* Calendar Popup View Controller */,
 				94E70EA91BF9BF1E00653F94 /* Data Structures */,
