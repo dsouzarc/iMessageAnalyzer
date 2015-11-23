@@ -10,9 +10,20 @@
 
 @interface ViewAttachmentsViewController ()
 
+@property (strong, nonatomic) NSMutableArray *attachments;
+
 @end
 
 @implementation ViewAttachmentsViewController
+
+- (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil attachments:(NSMutableArray *)attachments
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    
+    self.attachments = attachments;
+    
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
