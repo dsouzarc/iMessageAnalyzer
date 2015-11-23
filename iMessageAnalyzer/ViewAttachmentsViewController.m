@@ -198,7 +198,8 @@
 
 - (void) openFileClick:(NSButton*)button
 {
-    NSLog(@"Here: %@", button);
+    Attachment *attachment = self.attachments[button.tag];
+    [[NSWorkspace sharedWorkspace] openFile:attachment.filePath];
 }
 
 

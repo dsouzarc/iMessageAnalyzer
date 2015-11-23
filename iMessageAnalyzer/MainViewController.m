@@ -166,8 +166,9 @@
 
 - (void) popoverDidClose:(NSNotification *)notification
 {
-    if(((NSPopover*)notification.object) == self.calendarPopover) {
-        //Do nothing for now
+    if(((NSPopover*)notification.object) == self.viewAttachmentsPopover) {
+        self.viewAttachmentsPopover = nil;
+        self.viewAttachmentsViewController = nil;
     }
 }
 
@@ -451,6 +452,7 @@
     [self.viewAttachmentsPopover setAnimates:YES];
     [self.viewAttachmentsPopover setBehavior:NSPopoverBehaviorTransient];
     [self.viewAttachmentsPopover showRelativeToRect:[textField bounds] ofView:textField preferredEdge:NSRectEdgeMaxX];
+    self.viewAttachmentsPopover.delegate = self;
 }
 
 - (NSCell*) tableView:(NSTableView *)tableView dataCellForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
