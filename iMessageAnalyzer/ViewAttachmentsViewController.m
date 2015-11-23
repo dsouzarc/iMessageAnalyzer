@@ -38,21 +38,19 @@
     
     if(self.attachments.count == 1) {
         [self.mainTableView.enclosingScrollView setHasVerticalScroller:NO];
-    }
-    
-    NSSize defaultSize = CGSizeMake(self.view.frame.size.width, self.view.frame.size.height - 20);
-    
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+        [self.mainTableView.enclosingScrollView setHasHorizontalScroller:NO];
         
-        int counter = 0;
+        if(![self isIdentifiableMedia:((Attachment*) self.attachments[0]).fileType]) {
+            [self.view setFrameSize:CGSizeMake(self.view.bounds.size.width, 20)];
+        }
+    }
+
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         
         for(Attachment *attachment in self.attachments) {
             NSString *type = attachment.fileType;
             NSURL *filePath = [NSURL fileURLWithPath:attachment.filePath];
-            
-            NSLog(@"Here: %@\t%@", type, attachment.filePath);
-            NSError *error;
-            
+
             if([type containsString:@"image/"]) {
                 NSImage *image = [[NSImage alloc] initWithContentsOfFile:attachment.filePath];
                 [self.objectsToShow addObject:image];
@@ -100,7 +98,6 @@
             else {
                 [self.objectsToShow addObject:[[NSObject alloc] init]];
             }
-            counter++;
         }
         
         dispatch_async(dispatch_get_main_queue(), ^(void) {
@@ -108,8 +105,13 @@
         });
         
     });
-    
 }
+
+- (BOOL) isIdentifiableMedia:(NSString*)fileType
+{
+    return [fileType containsString:@"video"] || [fileType containsString:@"image"] || [fileType containsString:@"pdf"];
+}
+
 - (NSInteger) numberOfRowsInTableView:(NSTableView *)tableView
 {
     return self.objectsToShow.count;
@@ -122,7 +124,13 @@
 
 - (CGFloat) tableView:(NSTableView *)tableView heightOfRow:(NSInteger)row
 {
-    return self.defaultSize.height;
+    Attachment *attachment = self.attachments[row];
+    
+    if([self isIdentifiableMedia:attachment.fileType]) {
+        return self.defaultSize.height;
+    }
+    
+    return 20;
 }
 
 - (NSView*) tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
@@ -134,14 +142,19 @@
     [view setWantsLayer:YES];
     [view.layer setBackgroundColor:[NSColor whiteColor].CGColor];
     
+    CGFloat buttonOrigin = 0.0;
+    
     if([object isKindOfClass:[NSImage class]]) {
+        NSImage *image = (NSImage*)self.objectsToShow[row];
         NSImageView *imageView = [[NSImageView alloc] init];
         [imageView setFrameSize:self.defaultSize];
         imageView.animates = YES;
         imageView.canDrawSubviewsIntoLayer = YES;
         imageView.wantsLayer = YES;
-        [imageView setImage:(NSImage*)self.objectsToShow[row]];
+        [imageView setImage:image];
         [view addSubview:imageView];
+        
+        //buttonOrigin = imageView.frame.origin.y;
     }
     
     else if([object isKindOfClass:[PDFDocument class]]) {
@@ -161,15 +174,31 @@
         [player play];
     }
     
+    NSButton *button = [[NSButton alloc] init];
+    [button setTitle:[NSString stringWithFormat:@"Open %@", attachment.fileName]];
+    [button setTag:row];
+    [button setFrameSize:self.defaultSize];
+    [button setWantsLayer:YES];
+    [button.layer setBackgroundColor:[NSColor whiteColor].CGColor];
+    [button setBordered:NO];
+
+    if([self isIdentifiableMedia:attachment.fileType]) {
+        [button setFrame:CGRectMake(0, buttonOrigin == 0.0 ? 0 : buttonOrigin, self.defaultSize.width, 20)];
+    }
     else {
-        NSButton *button = [[NSButton alloc] init];
-        [button.cell setStringValue:[NSString stringWithFormat:@"Open %@", attachment.fileName]];
-        //[button setTag:counter];
-        [button setFrameSize:self.defaultSize];
-        [view addSubview:button];
+        [button setFrame:CGRectMake(0, 0, 0, 20)];
     }
     
+    [button setTarget:self];
+    [button setAction:@selector(openFileClick:)];
+    [view addSubview:button];
+    
     return view;
+}
+
+- (void) openFileClick:(NSButton*)button
+{
+    NSLog(@"Here: %@", button);
 }
 
 
