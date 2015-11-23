@@ -97,7 +97,7 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
 
 - (void) updateAllChatsGlobalVariable
 {
-    const char *query = "SELECT ROWID, guid, account_id, chat_identifier, service_name, group_id FROM chat";
+    const char *query = "SELECT ROWID, guid, account_id, chat_identifier, service_name, group_id, display_name FROM chat";
     sqlite3_stmt *statement;
     
     if(sqlite3_prepare_v2(_database, query, -1, &statement, NULL) == SQLITE_OK) {
@@ -109,9 +109,15 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
             NSString *number = [self cleanNumber:chatIdentifier];
             BOOL isIMessage = [self isIMessage:sqlite3_column_text(statement, 4)];
             NSString *groupID = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 5)];
+            NSString *chatName = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 6)];
             
             Contact *contact = [self.allContacts objectForKey:number];
             NSString *name = contact ? contact.getName : @"";
+            
+            if(chatName && chatName.length != 0) {
+                //name = chatName;
+            }
+            
             ABPerson *abPerson = contact ? contact.person : nil;
             
             if([self.allChats objectForKey:number]) {
@@ -359,7 +365,9 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
     int handleID = person.handleID;
     int handleID2 = person.secondaryHandleId;
     
-    char *query = [[NSString stringWithFormat:@"SELECT ROWID, guid, text, service, account_guid, date, date_read, is_from_me, cache_has_attachments FROM message WHERE handle_id=%d OR handle_id=%d ORDER BY date", handleID, handleID2] UTF8String];
+    //const char *query = [[NSString stringWithFormat:@"SELECT ROWID, guid, text, service, account_guid, date, date_read, is_from_me, cache_has_attachments FROM message WHERE handle_id=%d OR handle_id=%d ORDER BY date", handleID, handleID2] UTF8String];
+    
+    const char *query = [[NSString stringWithFormat:@"SELECT ROWID, guid, text, service, account_guid, date, date_read, is_from_me, cache_has_attachments FROM message messageT INNER JOIN chat_message_join chatMessageT ON (chatMessageT.chat_id=%d OR chatMessageT.chat_id=%d) AND messageT.ROWID=chatMessageT.message_id ORDER BY messageT.date", person.chatId, person.secondaryChatId] UTF8String];
     
     sqlite3_stmt *statement;
     
