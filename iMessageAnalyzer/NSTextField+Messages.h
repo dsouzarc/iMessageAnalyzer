@@ -8,6 +8,15 @@
 
 #import <Cocoa/Cocoa.h>
 
+@protocol NSTextField_MessagesDelegate <NSObject>
+
+- (void) clickedOnTextField:(int32_t)textFieldNumber;
+
+@end
+
 @interface NSTextField_Messages : NSTextField
+
+@property (weak, nonatomic) id<NSTextField_MessagesDelegate> delegate;
+@property int32_t textFieldNumber;
 
 @end

@@ -18,13 +18,13 @@
 
 - (void)mouseDown:(NSEvent *)theEvent;
 {
-    NSLog(@"Called");
-    [self sendAction:[self action] to:[self delegate]];
+    [self.delegate clickedOnTextField:self.textFieldNumber];
+    //[self sendAction:[self action] to:[self delegate]];
 }
 
 - (void) selectText:(id)sender
 {
-    NSLog(@"Selected...: %@", sender);
+    
 }
 
 @end
