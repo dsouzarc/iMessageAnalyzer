@@ -7,10 +7,16 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import <Quartz/Quartz.h>
+#import <AVFoundation/AVFoundation.h>
+#import <QTKit/QTKit.h>
+
 
 #import "Attachment.h"
 
-@interface ViewAttachmentsViewController : NSViewController
+
+
+@interface ViewAttachmentsViewController : NSViewController <NSTableViewDataSource, NSTableViewDelegate>
 
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil attachments:(NSMutableArray*)attachments;
 

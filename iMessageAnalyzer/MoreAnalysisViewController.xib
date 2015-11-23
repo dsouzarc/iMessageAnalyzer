@@ -223,7 +223,7 @@
                                         </textFieldCell>
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                     </tableColumn>
-                                    <tableColumn identifier="Word" editable="NO" width="40" minWidth="40" maxWidth="1000" id="S7z-Fw-cez">
+                                    <tableColumn identifier="Word" editable="NO" width="151" minWidth="40" maxWidth="1000" id="S7z-Fw-cez">
                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Word">
                                             <font key="font" metaFont="smallSystem"/>
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
