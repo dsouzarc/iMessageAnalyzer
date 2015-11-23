@@ -239,12 +239,6 @@
     });
 }
 
-- (void) popoverDidClose:(NSNotification *)notification
-{
-    self.viewAttachmentsViewController = nil;
-    self.viewAttachmentsPopover = nil;
-}
-
 - (void) calculateWordFrequenciesAndCounts
 {
     self.myWordCount = 0;
@@ -548,15 +542,6 @@
     return 80.0;
 }
 
-- (BOOL) tableView:(NSTableView *)tableView shouldEditTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
-{
-    return NO;
-}
-
-- (BOOL) tableView:(NSTableView *)tableView writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard *)pboard
-{
-    return NO;
-}
 
 - (BOOL) tableView:(NSTableView *)tableView shouldSelectRow:(NSInteger)row
 {
@@ -569,24 +554,14 @@
     return NO;
 }
 
-- (void) clickedOnTextField:(int32_t)textFieldNumber
+- (BOOL) tableView:(NSTableView *)tableView shouldEditTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
-    NSMutableArray *attachments = ((Message*)self.messagesToDisplay[textFieldNumber]).attachments;
-    
-    if(!attachments || attachments.count == 0) {
-        return;
-    }
-    
-    NSTextField_Messages *textField = [((NSView*)[self.messagesTableView viewAtColumn:0 row:textFieldNumber makeIfNecessary:YES]) viewWithTag:100];
-    self.viewAttachmentsViewController = [[ViewAttachmentsViewController alloc] initWithNibName:@"ViewAttachmentsViewController" bundle:[NSBundle mainBundle] attachments:attachments];
-    
-    self.viewAttachmentsPopover = [[NSPopover alloc] init];
-    [self.viewAttachmentsPopover setContentSize:self.viewAttachmentsViewController.view.bounds.size];
-    [self.viewAttachmentsPopover setContentViewController:self.viewAttachmentsViewController];
-    [self.viewAttachmentsPopover setAnimates:YES];
-    [self.viewAttachmentsPopover setBehavior:NSPopoverBehaviorTransient];
-    [self.viewAttachmentsPopover showRelativeToRect:[textField bounds] ofView:textField preferredEdge:NSRectEdgeMaxX];
-    self.viewAttachmentsPopover.delegate = self;
+    return NO;
+}
+
+- (BOOL) tableView:(NSTableView *)tableView writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard *)pboard
+{
+    return NO;
 }
 
 
@@ -644,6 +619,50 @@ int tempCounter = 2;
         [self setTextFieldDouble:self.friendAverageWordCountPerMessage forTag:34];
         [self setTextFieldDouble:average forTag:35];
     }
+}
+
+
+/****************************************************************
+ *
+ *              TEXTFIELD_MESSAGES DELEGATE
+ *
+ *****************************************************************/
+
+# pragma mark TEXTFIELD_MESSAGES DELEGATE
+
+- (void) clickedOnTextField:(int32_t)textFieldNumber
+{
+    NSMutableArray *attachments = ((Message*)self.messagesToDisplay[textFieldNumber]).attachments;
+    
+    if(!attachments || attachments.count == 0) {
+        return;
+    }
+    
+    NSTextField_Messages *textField = [((NSView*)[self.messagesTableView viewAtColumn:0 row:textFieldNumber makeIfNecessary:YES]) viewWithTag:100];
+    self.viewAttachmentsViewController = [[ViewAttachmentsViewController alloc] initWithNibName:@"ViewAttachmentsViewController" bundle:[NSBundle mainBundle] attachments:attachments];
+    
+    self.viewAttachmentsPopover = [[NSPopover alloc] init];
+    [self.viewAttachmentsPopover setContentSize:self.viewAttachmentsViewController.view.bounds.size];
+    [self.viewAttachmentsPopover setContentViewController:self.viewAttachmentsViewController];
+    [self.viewAttachmentsPopover setAnimates:YES];
+    [self.viewAttachmentsPopover setBehavior:NSPopoverBehaviorTransient];
+    [self.viewAttachmentsPopover showRelativeToRect:[textField bounds] ofView:textField preferredEdge:NSRectEdgeMaxX];
+    self.viewAttachmentsPopover.delegate = self;
+}
+
+
+/****************************************************************
+ *
+ *              NSPOPOVER DELEGATE
+ *
+ *****************************************************************/
+
+# pragma mark NSPOPOVER_DELEGATE
+
+- (void) popoverDidClose:(NSNotification *)notification
+{
+    self.viewAttachmentsViewController = nil;
+    self.viewAttachmentsPopover = nil;
 }
 
 

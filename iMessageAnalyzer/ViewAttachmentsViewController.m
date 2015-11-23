@@ -107,11 +107,6 @@
     });
 }
 
-- (BOOL) isIdentifiableMedia:(NSString*)fileType
-{
-    return [fileType containsString:@"video"] || [fileType containsString:@"image"] || [fileType containsString:@"pdf"];
-}
-
 - (NSInteger) numberOfRowsInTableView:(NSTableView *)tableView
 {
     return self.objectsToShow.count;
@@ -194,6 +189,11 @@
     [view addSubview:button];
     
     return view;
+}
+
+- (BOOL) isIdentifiableMedia:(NSString*)fileType
+{
+    return [fileType containsString:@"video"] || [fileType containsString:@"image"] || [fileType containsString:@"pdf"];
 }
 
 - (void) openFileClick:(NSButton*)button

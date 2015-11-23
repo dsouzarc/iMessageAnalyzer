@@ -164,14 +164,6 @@
     [self.calendarPopover showRelativeToRect:[self.calendarButton bounds] ofView:self.calendarButton preferredEdge:NSMaxXEdge];
 }
 
-- (void) popoverDidClose:(NSNotification *)notification
-{
-    if(((NSPopover*)notification.object) == self.viewAttachmentsPopover) {
-        self.viewAttachmentsPopover = nil;
-        self.viewAttachmentsViewController = nil;
-    }
-}
-
 - (void) dateChosen:(NSDate *)chosenDate
 {
     self.calendarChosenDate = chosenDate;
@@ -434,27 +426,6 @@
     return NO;
 }
 
-- (void) clickedOnTextField:(int32_t)textFieldNumber
-{
-    NSMutableArray *attachments = ((Message*)self.currentConversationChats[textFieldNumber]).attachments;
-    
-    if(!attachments || attachments.count == 0) {
-        return;
-    }
-    
-    NSTextField_Messages *textField = [((NSView*)[self.messagesTableView viewAtColumn:0 row:textFieldNumber makeIfNecessary:YES]) viewWithTag:100];
-    
-    self.viewAttachmentsViewController = [[ViewAttachmentsViewController alloc] initWithNibName:@"ViewAttachmentsViewController" bundle:[NSBundle mainBundle] attachments:attachments];
-    
-    self.viewAttachmentsPopover = [[NSPopover alloc] init];
-    [self.viewAttachmentsPopover setContentSize:self.viewAttachmentsViewController.view.bounds.size];
-    [self.viewAttachmentsPopover setContentViewController:self.viewAttachmentsViewController];
-    [self.viewAttachmentsPopover setAnimates:YES];
-    [self.viewAttachmentsPopover setBehavior:NSPopoverBehaviorTransient];
-    [self.viewAttachmentsPopover showRelativeToRect:[textField bounds] ofView:textField preferredEdge:NSRectEdgeMaxX];
-    self.viewAttachmentsPopover.delegate = self;
-}
-
 - (NSCell*) tableView:(NSTableView *)tableView dataCellForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
     if(tableView == self.contactsTableView) {
@@ -569,6 +540,53 @@
         self.currentConversationChats = [[NSMutableArray alloc] init];
         [self.contactNameTextField setStringValue:@""];
         [self.messagesTableView reloadData];
+    }
+}
+
+
+/****************************************************************
+ *
+ *              NSTEXTFIELD_MESSAGES DELEGATE
+ *
+ *****************************************************************/
+
+# pragma mark NSTEXTFIELD_MESSAGES_DELEGATE
+
+- (void) clickedOnTextField:(int32_t)textFieldNumber
+{
+    NSMutableArray *attachments = ((Message*)self.currentConversationChats[textFieldNumber]).attachments;
+    
+    if(!attachments || attachments.count == 0) {
+        return;
+    }
+    
+    NSTextField_Messages *textField = [((NSView*)[self.messagesTableView viewAtColumn:0 row:textFieldNumber makeIfNecessary:YES]) viewWithTag:100];
+    
+    self.viewAttachmentsViewController = [[ViewAttachmentsViewController alloc] initWithNibName:@"ViewAttachmentsViewController" bundle:[NSBundle mainBundle] attachments:attachments];
+    
+    self.viewAttachmentsPopover = [[NSPopover alloc] init];
+    [self.viewAttachmentsPopover setContentSize:self.viewAttachmentsViewController.view.bounds.size];
+    [self.viewAttachmentsPopover setContentViewController:self.viewAttachmentsViewController];
+    [self.viewAttachmentsPopover setAnimates:YES];
+    [self.viewAttachmentsPopover setBehavior:NSPopoverBehaviorTransient];
+    [self.viewAttachmentsPopover showRelativeToRect:[textField bounds] ofView:textField preferredEdge:NSRectEdgeMaxX];
+    self.viewAttachmentsPopover.delegate = self;
+}
+
+
+/****************************************************************
+ *
+ *              NSPOPOVER DELEGATE
+ *
+ *****************************************************************/
+
+# pragma mark NSPOPOVER_DELEGATE
+
+- (void) popoverDidClose:(NSNotification *)notification
+{
+    if(((NSPopover*)notification.object) == self.viewAttachmentsPopover) {
+        self.viewAttachmentsPopover = nil;
+        self.viewAttachmentsViewController = nil;
     }
 }
 

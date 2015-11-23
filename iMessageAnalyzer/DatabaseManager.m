@@ -60,10 +60,14 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
     return self;
 }
 
-- (NSMutableArray*) getAllChats
-{
-    return [self.allChats allValues];
-}
+
+/****************************************************************
+ *
+ *              GET_CONTACTS
+ *
+*****************************************************************/
+
+# pragma mark GET_CONTACTS
 
 - (NSMutableSet*) getHandleIDsForMessageText:(NSString*)messageText
 {
@@ -144,6 +148,100 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
     
     return result;
 }
+
+
+- (void) updateHandleIDsForPerson:(Person*)person
+{
+    //Uninitialized handleID
+    if(person.handleID < 0) {
+        int handleID = [self getHandleForChatID:person.chatId];
+        person.handleID = handleID;
+        
+        //If there is a secondary chat id, get its handle form
+        int handleID2 = person.secondaryChatId < 0 ? handleID : [self getHandleForChatID:person.secondaryChatId];
+        person.secondaryHandleId = handleID2;
+    }
+}
+
+
+- (void) getAllContacts
+{
+    ABAddressBook *addressBook = [ABAddressBook sharedAddressBook];
+    
+    for(ABPerson *person in addressBook.people) {
+        
+        NSString *firstName = [person valueForProperty:kABFirstNameProperty];
+        
+        //Add the middle name to the first name
+        if([person valueForProperty:kABMiddleNameProperty]) {
+            firstName = [NSString stringWithFormat:@"%@ %@", firstName, [person valueForProperty:kABMiddleNameProperty]];
+        }
+        
+        NSString *lastName = [person valueForProperty:kABLastNameProperty];
+        
+        //Save all the phone numbers
+        ABMultiValue *phoneValues = [person valueForProperty:kABPhoneProperty];
+        if(phoneValues) {
+            for(int i = 0; i < phoneValues.count; i++) {
+                if([phoneValues valueAtIndex:i]) {
+                    NSString *cleanNumber = [self cleanNumber:[phoneValues valueAtIndex:i]];
+                    Contact *contact = [[Contact alloc] initWithFirstName:firstName lastName:lastName number:cleanNumber person:person];
+                    [self.allContacts setObject:contact forKey:cleanNumber];
+                }
+            }
+        }
+        
+        //Save all the emails
+        ABMultiValue *emailValues = [person valueForProperty:kABEmailProperty];
+        if(emailValues) {
+            for(int i = 0; i < emailValues.count; i++) {
+                if([emailValues valueAtIndex:i]) {
+                    NSString *email = [emailValues valueAtIndex:i];
+                    //Add it to our dictionary
+                    Contact *contact = [[Contact alloc] initWithFirstName:firstName lastName:lastName number:email person:person];
+                    [self.allContacts setObject:contact forKey:email];
+                }
+            }
+        }
+    }
+}
+
+
+- (NSMutableArray*) getAllNumbersForSearchText:(NSString*)text
+{
+    NSMutableArray *numbers = [[NSMutableArray alloc] init];
+    
+    NSArray *handle_ids = [[self getHandleIDsForMessageText:text] allObjects];
+    
+    sqlite3_stmt *statement;
+    
+    for(NSNumber *number in handle_ids) {
+        const char *query = [[NSString stringWithFormat:@"SELECT id FROM handle WHERE ROWID='%d'", [number intValue]] UTF8String];
+        
+        if(sqlite3_prepare(_database, query, -1, &statement, NULL) == SQLITE_OK) {
+            while(sqlite3_step(statement) == SQLITE_ROW) {
+                NSString *number = [self cleanNumber:[NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 0)]];
+                [numbers addObject:number];
+            }
+        }
+        else {
+            NSLog(@"ERROR: %s", sqlite3_errmsg(_database));
+        }
+        
+        sqlite3_finalize(statement);
+    }
+    
+    return numbers;
+}
+
+
+/****************************************************************
+ *
+ *              GET MESSAGES
+ *
+*****************************************************************/
+
+# pragma mark GET_MESSAGES
 
 - (int32_t) totalMessagesForStartTime:(long)startTimeInSeconds endTimeInSeconds:(long)endTimeInSeconds
 {
@@ -353,60 +451,14 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
     return result;
 }
 
-- (void) updateHandleIDsForPerson:(Person*)person
-{
-    //Uninitialized handleID
-    if(person.handleID < 0) {
-        int handleID = [self getHandleForChatID:person.chatId];
-        person.handleID = handleID;
-        
-        //If there is a secondary chat id, get its handle form
-        int handleID2 = person.secondaryChatId < 0 ? handleID : [self getHandleForChatID:person.secondaryChatId];
-        person.secondaryHandleId = handleID2;
-    }
-}
 
-- (void) getAllContacts
-{
-    ABAddressBook *addressBook = [ABAddressBook sharedAddressBook];
- 
-    for(ABPerson *person in addressBook.people) {
-        
-        NSString *firstName = [person valueForProperty:kABFirstNameProperty];
-        
-        //Add the middle name to the first name
-        if([person valueForProperty:kABMiddleNameProperty]) {
-            firstName = [NSString stringWithFormat:@"%@ %@", firstName, [person valueForProperty:kABMiddleNameProperty]];
-        }
-        
-        NSString *lastName = [person valueForProperty:kABLastNameProperty];
-        
-        //Save all the phone numbers
-        ABMultiValue *phoneValues = [person valueForProperty:kABPhoneProperty];
-        if(phoneValues) {
-            for(int i = 0; i < phoneValues.count; i++) {
-                if([phoneValues valueAtIndex:i]) {
-                    NSString *cleanNumber = [self cleanNumber:[phoneValues valueAtIndex:i]];
-                    Contact *contact = [[Contact alloc] initWithFirstName:firstName lastName:lastName number:cleanNumber person:person];
-                    [self.allContacts setObject:contact forKey:cleanNumber];
-                }
-            }
-        }
-        
-        //Save all the emails
-        ABMultiValue *emailValues = [person valueForProperty:kABEmailProperty];
-        if(emailValues) {
-            for(int i = 0; i < emailValues.count; i++) {
-                if([emailValues valueAtIndex:i]) {
-                    NSString *email = [emailValues valueAtIndex:i];
-                    //Add it to our dictionary
-                    Contact *contact = [[Contact alloc] initWithFirstName:firstName lastName:lastName number:email person:person];
-                    [self.allContacts setObject:contact forKey:email];
-                }
-            }
-        }
-    }
-}
+/****************************************************************
+ *
+ *             GET ATTACHMENTS
+ *
+*****************************************************************/
+
+# pragma mark GET_ATTACHMENTS
 
 - (NSMutableDictionary*) getAllAttachmentsForPerson:(Person*)person
 {
@@ -481,32 +533,14 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
     return attachments;
 }
 
-- (NSMutableArray*) getAllNumbersForSearchText:(NSString*)text
-{
-    NSMutableArray *numbers = [[NSMutableArray alloc] init];
-    
-    NSArray *handle_ids = [[self getHandleIDsForMessageText:text] allObjects];
-    
-    sqlite3_stmt *statement;
-    
-    for(NSNumber *number in handle_ids) {
-        const char *query = [[NSString stringWithFormat:@"SELECT id FROM handle WHERE ROWID='%d'", [number intValue]] UTF8String];
-        
-        if(sqlite3_prepare(_database, query, -1, &statement, NULL) == SQLITE_OK) {
-            while(sqlite3_step(statement) == SQLITE_ROW) {
-                NSString *number = [self cleanNumber:[NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 0)]];
-                [numbers addObject:number];
-            }
-        }
-        else {
-            NSLog(@"ERROR: %s", sqlite3_errmsg(_database));
-        }
-        
-        sqlite3_finalize(statement);
-    }
-    
-    return numbers;
-}
+
+/****************************************************************
+ *
+ *              MISC_METHODS
+ *
+*****************************************************************/
+
+# pragma mark MISC_METHODS
 
 - (NSString*) cleanNumber:(NSString*)originalNumber
 {
@@ -534,6 +568,11 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
 
 - (BOOL) isIMessage:(char*)text {
     return strcmp(text, "iMessage") == 0;
+}
+
+- (NSMutableArray*) getAllChats
+{
+    return [self.allChats allValues];
 }
 
 /** Slow - gets every message_id associated with a handle_id
