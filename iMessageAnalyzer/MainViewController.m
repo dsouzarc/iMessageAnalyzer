@@ -39,6 +39,7 @@
 @property (strong, nonatomic) NSMutableArray *searchConversationChats;
 @property (strong, nonatomic) NSMutableArray *currentConversationChats;
 
+@property (strong, nonatomic) NSDictionary *messageWithAttachmentAttributes;
 
 @property (strong, nonatomic) MoreAnalysisWindowController *moreAnalysisWindowController;
 
@@ -65,6 +66,9 @@
         self.currentConversationChats = [[NSMutableArray alloc] init];
         self.dateFormatter = [[NSDateFormatter alloc] init];
         [self.dateFormatter setDateFormat:@"MM/dd/yyyy"];
+        
+        self.messageWithAttachmentAttributes = [NSDictionary dictionaryWithObjectsAndKeys:[NSColor yellowColor], NSForegroundColorAttributeName,
+                                                [NSNumber numberWithInt:NSUnderlineStyleSingle], NSUnderlineStyleAttributeName, nil];
     }
     
     return self;
@@ -95,6 +99,7 @@
         [self.contactNameTextField setStringValue:[NSString stringWithFormat:@"%@ %@", self.lastChosenPerson.personName, self.lastChosenPerson.number]];
     }
     
+    [self.messagesTableView setSelectionHighlightStyle:NSTableViewSelectionHighlightStyleNone];
     [self.contactsTableView setDoubleAction:@selector(doubleClickedContactCell:)];
 }
 
@@ -218,7 +223,15 @@
             return 80.0;
         }
         
-        NSString *text = ((Message*) self.currentConversationChats[row]).messageText;
+        Message *message = self.currentConversationChats[row];
+        NSString *text = message.messageText;
+        
+        if(message.attachments) {
+            for(int i = 0; i < message.attachments.count; i++) {
+                text = [text stringByAppendingString:@"ATTACHMENT"];
+            }
+        }
+        
         [self.sizingField setStringValue:text];
         return [self.sizingField.cell cellSizeForBounds:self.sizingField.frame].height + 30;
     
@@ -269,11 +282,50 @@
         [timeField setFocusRingType:NSFocusRingTypeNone];
         [timeField setBordered:NO];
         
-        NSTextField *messageField = [[NSTextField alloc] initWithFrame:frame];
-        [messageField setStringValue:[NSString stringWithFormat:@"  %@", message.messageText]];
-        
+        NSTextField_Messages *messageField = [[NSTextField_Messages alloc] initWithFrame:frame];
         [messageField setDrawsBackground:YES];
         [messageField setWantsLayer:YES];
+        
+        if(row == self.lastSearchIndex || message.attachments) {
+            
+            NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:message.messageText];
+            
+            if(message.isFromMe) {
+                [attributedString addAttribute:NSForegroundColorAttributeName value:[NSColor whiteColor] range:NSMakeRange(0, message.messageText.length)];
+            }
+            else {
+                [attributedString addAttribute:NSForegroundColorAttributeName value:[NSColor blackColor] range:NSMakeRange(0, message.messageText.length)];
+            }
+
+            if(row == self.lastSearchIndex) {
+                [attributedString addAttribute:NSBackgroundColorAttributeName value:[NSColor yellowColor] range:[message.messageText rangeOfString:self.searchField.stringValue options:NSCaseInsensitiveSearch]];
+            }
+            
+            if(message.attachments) {
+                
+                [messageField setAllowsEditingTextAttributes:YES];
+                [messageField setSelectable:YES];
+                
+                NSMutableString *attachmentsValue = [[NSMutableString alloc] init];
+                
+                if(message.messageText.length == 0) {
+                    [attachmentsValue appendString:@"  "];
+                }
+                
+                for(int i = 0; i < message.attachments.count; i++) {
+                    [attachmentsValue appendString:[NSString stringWithFormat:@"Attachment %d.", i]];
+                }
+                
+                NSMutableAttributedString* attachmentsString = [[NSMutableAttributedString alloc] initWithString:(NSString*)attachmentsValue
+                                                                                               attributes:self.messageWithAttachmentAttributes];
+                [attributedString appendAttributedString:attachmentsString];
+            }
+            
+            [messageField setAttributedStringValue:attributedString];
+        }
+        else {
+            [messageField setStringValue:[NSString stringWithFormat:@"  %@", message.messageText]];
+        }
         
         NSSize goodFrame = [messageField.cell cellSizeForBounds:frame];
         [messageField setFrameSize:CGSizeMake(goodFrame.width + 10, goodFrame.height + 4)];
@@ -301,11 +353,6 @@
             [timeField setFrameOrigin:CGPointMake(2, 0)];
         }
         
-        if(row == self.lastSearchIndex) {
-            NSMutableAttributedString *searchString = [[NSMutableAttributedString alloc] initWithString:message.messageText];
-            [searchString addAttribute:NSBackgroundColorAttributeName value:[NSColor yellowColor] range:[message.messageText rangeOfString:self.searchField.stringValue options:NSCaseInsensitiveSearch]];
-            [messageField setAttributedStringValue:searchString];
-        }
         
         [messageField setWantsLayer:YES];
         [messageField.layer setCornerRadius:14.0f];
@@ -370,8 +417,18 @@
         self.lastSearchIndex = -1;
         return YES;
     }
+    
+    if(tableView == self.messagesTableView) {
+        if(((Message*)self.currentConversationChats[row]).attachments) {
+            return YES;
+        }
+    }
+    
     return NO;
 }
+
+
+
 
 - (NSCell*) tableView:(NSTableView *)tableView dataCellForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {

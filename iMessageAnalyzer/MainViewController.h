@@ -14,6 +14,7 @@
 #import "TextTableCellView.h"
 
 #import "MoreAnalysisWindowController.h"
+#import "NSTextField+Messages.h"
 
 #import "CalendarPopUpViewController.h"
 #import "SimpleAnalyticsPopupViewController.h"
