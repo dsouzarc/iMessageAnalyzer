@@ -138,7 +138,6 @@
 - (void) wantsMoreAnalysis
 {
     self.moreAnalysisWindowController = [[MoreAnalysisWindowController alloc] initWithWindowNibName:@"MoreAnalysisWindowController" person:self.lastChosenPerson messages:[self.messageManager getAllMessagesForPerson:self.lastChosenPerson]];
-    
     [self.moreAnalysisWindowController showWindow:self];
 }
 
@@ -221,6 +220,15 @@
         
         Message *message = self.currentConversationChats[row];
         NSString *text = message.messageText;
+        
+        if(!text || text.length == 0) {
+            if(message.hasAttachment) {
+                text = @"ATTACHMENT";
+            }
+            else {
+                text = @"";
+            }
+        }
         
         if(message.attachments) {
             for(int i = 0; i < message.attachments.count; i++) {
@@ -325,9 +333,22 @@
         else {
             [messageField setStringValue:[NSString stringWithFormat:@"  %@", message.messageText]];
         }
-        
+
         NSSize goodFrame = [messageField.cell cellSizeForBounds:frame];
         [messageField setFrameSize:CGSizeMake(goodFrame.width + 10, goodFrame.height + 4)];
+
+        if(messageField.frame.size.width < 100 && message.hasAttachment && ![messageField.stringValue containsString:@"Attachment"]) {
+            [messageField setAllowsEditingTextAttributes:YES];
+            [messageField setSelectable:YES];
+            
+            NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:@"  Attachment" attributes:self.messageWithAttachmentAttributes];
+            [messageField setStringValue:@""];
+            [messageField setAttributedStringValue:attributedString];
+            goodFrame = [messageField.cell cellSizeForBounds:frame];
+            [messageField setFrameSize:CGSizeMake(goodFrame.width + 10, goodFrame.height)];
+        }
+        
+        NSLog(@"%f\t%f\t%@", messageField.frame.size.width, messageField.frame.size.height, message.messageText);
         
         goodFrame = [timeField.cell cellSizeForBounds:self.timeStampRect];
         [timeField setFrameSize:CGSizeMake(goodFrame.width + 2, goodFrame.height)];
@@ -351,7 +372,6 @@
             [messageField setTextColor:[NSColor blackColor]];
             [timeField setFrameOrigin:CGPointMake(2, 0)];
         }
-        
         
         [messageField setWantsLayer:YES];
         [messageField.layer setCornerRadius:14.0f];
@@ -418,7 +438,7 @@
     }
     
     if(tableView == self.messagesTableView) {
-        if(((Message*)self.currentConversationChats[row]).attachments) {
+        if(((Message*)self.currentConversationChats[row]).hasAttachment) {
             return YES;
         }
     }

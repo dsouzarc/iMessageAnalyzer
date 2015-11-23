@@ -24,7 +24,13 @@
     
     if(self) {
         self.moreAnalysisViewController = [[MoreAnalysisViewController alloc] initWithNibName:@"MoreAnalysisViewController" bundle:[NSBundle mainBundle] person:person messages:messages];
-        self.windowTitle = [NSString stringWithFormat:@"Analysis for: %@", person.personName];
+        self.windowTitle = [NSString stringWithFormat:@"Analysis for: %@", person.personName && person.personName.length != 0 ? person.personName : person.number];
+        [self.window setContentViewController:self.moreAnalysisViewController];
+        
+        //CGFloat xPos = 300;
+        //CGFloat yPos = 300;
+        //[self.window setFrame:NSMakeRect(xPos, yPos, NSWidth([self.window frame]), NSHeight([self.window frame])) display:YES];
+
     }
     
     return self;
@@ -32,9 +38,7 @@
 
 - (void)windowDidLoad {
     [super windowDidLoad];
-    
-    [self.window setContentViewController:self.moreAnalysisViewController];
-    
+
     [self.window setShowsResizeIndicator:NO];
     [self.window setTitle:self.windowTitle];
 }
