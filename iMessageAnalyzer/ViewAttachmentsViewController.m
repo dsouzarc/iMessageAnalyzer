@@ -26,7 +26,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     
     self.attachments = attachments;
-    self.views = [[NSMutableArray alloc] init];
+    self.objectsToShow = [[NSMutableArray alloc] init];
     
     return self;
 }
@@ -60,18 +60,12 @@
             
             else if([type containsString:@"/pdf"]) {
                 PDFDocument *document = [[PDFDocument alloc] initWithURL:filePath];
-                PDFView *view = [[PDFView alloc] init];
-                [view setFrameSize:defaultSize];
-                [view setDocument:document];
-                [self.views addObject:view];
+                [self.objectsToShow addObject:document];
             }
             
             else if([type containsString:@"video/"]) {
-                
-                NSView *view = [[NSView alloc] init];
-                [view setFrameSize:self.view.frame.size];
-                [view setFrameOrigin:CGPointMake(0, 0)];
-                [self.views addObject:view];
+                AVPlayer *player = [[AVPlayer alloc] initWithURL:[NSURL fileURLWithPath:attachment.filePath]];
+                [self.objectsToShow addObject:player];
                 
                 /*QTMovie *movie = [[QTMovie alloc] initWithURL:filePath error:&error];
                 
@@ -104,11 +98,7 @@
                 }*/
             }
             else {
-                NSButton *button = [[NSButton alloc] init];
-                [button.cell setStringValue:[NSString stringWithFormat:@"Open %@", attachment.fileName]];
-                [button setTag:counter];
-                [button setFrameSize:defaultSize];
-                [self.views addObject:button];
+                [self.objectsToShow addObject:[[NSObject alloc] init]];
             }
             counter++;
         }
@@ -122,7 +112,7 @@
 }
 - (NSInteger) numberOfRowsInTableView:(NSTableView *)tableView
 {
-    return self.views.count;
+    return self.objectsToShow.count;
 }
 
 - (id) tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
@@ -132,42 +122,51 @@
 
 - (CGFloat) tableView:(NSTableView *)tableView heightOfRow:(NSInteger)row
 {
-    return self.defaultSize;
+    return self.defaultSize.height;
 }
 
 - (NSView*) tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
-    NSObject *object = self.views[row];
-    NSView *view;
+    NSObject *object = self.objectsToShow[row];
+    Attachment *attachment = self.attachments[row];
     
-    if([self.objectsToShow[row] isKindOfClass:[NSImage class]]) {
-        NSImageView *imageView = [[NSImageView alloc] init];
-        [imageView setFrameSize:defaultSize];
-        imageView.animates = YES;
-        imageView.canDrawSubviewsIntoLayer = YES;
-        imageView.wantsLayer = YES;
-        [imageView setImage:image];
-        [self.views addObject:imageView];
-    }
-    
-    NSView *view = self.views[row];
-    
+    NSView *view = [[NSView alloc] init];
     [view setWantsLayer:YES];
     [view.layer setBackgroundColor:[NSColor whiteColor].CGColor];
     
-    Attachment *attachment = self.attachments[row];
+    if([object isKindOfClass:[NSImage class]]) {
+        NSImageView *imageView = [[NSImageView alloc] init];
+        [imageView setFrameSize:self.defaultSize];
+        imageView.animates = YES;
+        imageView.canDrawSubviewsIntoLayer = YES;
+        imageView.wantsLayer = YES;
+        [imageView setImage:(NSImage*)self.objectsToShow[row]];
+        [view addSubview:imageView];
+    }
     
-    if([attachment.fileType containsString:@"video/"]) {
-
-        AVPlayer *player = [[AVPlayer alloc] initWithURL:[NSURL fileURLWithPath:attachment.filePath]];
+    else if([object isKindOfClass:[PDFDocument class]]) {
+        PDFView *pdfView = [[PDFView alloc] init];
+        [pdfView setFrameSize:self.defaultSize];
+        [pdfView setDocument:(PDFDocument*)object];
+        [view addSubview:pdfView];
+    }
+    
+    else if([object isKindOfClass:[AVPlayer class]]) {
+        AVPlayer *player = (AVPlayer*) object;
         AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:player];
-        [playerLayer setFrame:view.frame];
-        [playerLayer setBackgroundColor:[NSColor whiteColor].CGColor];
-        
+        [playerLayer setFrame:CGRectMake(0, 0, self.defaultSize.width, self.defaultSize.height)];
         [playerLayer setVideoGravity:AVLayerVideoGravityResizeAspectFill];
         
-        [self.view.layer addSublayer:playerLayer];
+        [view.layer addSublayer:playerLayer];
         [player play];
+    }
+    
+    else {
+        NSButton *button = [[NSButton alloc] init];
+        [button.cell setStringValue:[NSString stringWithFormat:@"Open %@", attachment.fileName]];
+        //[button setTag:counter];
+        [button setFrameSize:self.defaultSize];
+        [view addSubview:button];
     }
     
     return view;
