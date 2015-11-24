@@ -68,8 +68,18 @@ Double clicking a contact shows quick statistics and gives the option to view mo
 
 
 ![Screenshot 8](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_8.png)
+More analysis screen (still under construction)
+- Shows all messages sent and received
+- Shows the total word count, sent and received
+- Shows the average word per message
+- Shows all words for each participant in order of freuency
+- All messages are displayed on tableview at bottom of the screen
 
 
 ![Screenshot 9](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_9.png)
-
-
+More analysis screen (still under construction)
+Clicking on a date in the calendar on the bottom left
+    - Shows above statistics but on that date
+        + Includes recalculating word frequencies, words sent and received on date, and average word/message on date ("Avg. Word/Message (D)")
+    - Shows messages sent on that day 
+    - Pressing "Clear" resets everything to the initial screen
