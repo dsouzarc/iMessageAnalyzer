@@ -32,15 +32,15 @@ Uses the user's iMessage database (chat.db) - can be configured to run using the
 
 ![Screenshot 0](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_0.png)
 View full conversations - all at once - with a person, starting from the first interaction
-Also shows delivered/read receipts for each person
+Also shows delivered/read receipts for each person  
 
 
 ![Screenshot 1](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_1.png)
-View messages sent on a certain date (no messages)
+View messages sent on a certain date (no messages)  
 
 
 ![Screenshot 2](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_2.png)
-View messages sent on a certain date (messages)
+View messages sent on a certain date (messages)  
 
 
 ![Screenshot 3](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_3.png)
