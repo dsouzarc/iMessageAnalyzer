@@ -4,12 +4,14 @@
 
 ###Analyzes a user's iMessages while providing cool functionality
 
-Analyzes a user's iMessage database (chat.db``*) to understand a user and their friends' messaging habits.
-Adds some unique functionality from Messages.app that provides a better experience, including a refined search for messages
+Analyzes a user's iMessage database (chat.db*) to understand a user and their friends' messaging habits.
+Adds some unique functionality from Messages.app that provides a better experience, including a refined search for messages.
 
-`*chat.db, where a user's messages are stored, can be found in 2 ways:
+*chat.db, where a user's messages are stored, can be found in 2 ways:
+
 1. Where Messages.app (Apple's official Messages.app - iMessage for Mac) stores its data
 2. Where the iPhone's chat.db database is stored after a backup to the computer
+
 
 ####Current Features:
 
@@ -22,7 +24,7 @@ Adds some unique functionality from Messages.app that provides a better experien
 
 #####Unique from iMessage Features
 
-- Loads all of a user's messages (as opposed to scrolling up forever to see the first few messages) 
+- **Loads all of a user's messages** (as opposed to scrolling up forever to see the first few messages) 
     + Still memory efficient and quick for large conversations 
         - Tested on conversations with > 26,000 messages
         - Tested on total messages > 60,000
@@ -30,24 +32,23 @@ Adds some unique functionality from Messages.app that provides a better experien
         - Minimal CPU usage
 
 - Searching for text shows conversations 
-    + With text that matches the conversation
+    + **With text that matches the conversation**
     + With contact names/numbers/emails that match the text
     + Still (somehow) quicker than iMessage's search for conversations with text
     + Searched text is highlighted in yellow
     + Pressing enter moves to the next occurrence of that text
 
-- View messages sent and received on a certain date for a conversation
+- View **messages sent and received on a certain date** for a conversation
     + Calendar view pops up and a date can be chosen to view all messages with that conversant on
     + Pressing "Reset to All" shows all messages with person
 
 - Double clicking on contact in Contacts Tableview on the left shows
-    + Total number of messages you sent to that person in that conversation
-    + Total number of messages you got from that person in that conversation
+    + **Total number of messages you sent and received** in that conversation
     + Option to perform More Analysis
 
 - More Analysis
     + Shows the following for All Time or on a specific date
-        - Words used organized by frequency/occurrence for each person
+        -  **Words organized by frequency/occurrence** for each person
             + Uses a Heap Data Structure I wrote
         - Total number of messages sent and received
         - Total number of words sent and received
@@ -92,21 +93,20 @@ View messages sent on a certain date (messages)
 ---
 
 ![Screenshot 3](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_3.png)
-Searching for text brings up contacts + contacts with messages that match the text
-Pressing Enter brings up the next text occurence 
+Searching for text brings up contacts + contacts with messages that match the text.
+Pressing Enter brings up the next text occurence.
 Message occurrences are highlighted in yellow and pressing enter scrolls to the next occurrence
 
 ---
 
 ![Screenshot 4](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_4.png)
-Attachments sent are shown in a message
+Attachments sent are shown in a message.
 Clicking on them opens a popup with that attachment
 
 ---
 
 ![Screenshot 5](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_5.png)
-For multiple attachments in a message, the popup allows scrolling through each attachment
-As well as the ability to open each attachment in the right application
+For multiple attachments in a message, the popup allows scrolling through each attachment as well as the ability to open each attachment in the right application
 
 ---
 
@@ -139,11 +139,7 @@ More analysis screen (still under construction)
 More analysis screen (still under construction)
 
 Clicking on a date in the calendar on the bottom left
-
     - Shows above statistics but on that date
-
         + Includes recalculating word frequencies, words sent and received on date, and average word/message on date ("Avg. Word/Message (D)")
-
     - Shows messages sent on that day 
-
     - Pressing "Clear" resets everything to the initial screen
