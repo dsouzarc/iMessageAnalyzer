@@ -5,6 +5,8 @@
 #Database files
 *.db
 
+*.swp
+
 ## Build generated
 build/
 DerivedData
