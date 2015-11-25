@@ -222,6 +222,60 @@ static NSString *otherMessagesTable = @"otherMessagesTable";
     return allMessagesForChat;
 }
 
+#pragma mark GET_COUNTS
+
+- (int) getConversationMessageCountStartTime:(int)startTime endTime:(int)endTime
+{
+    NSString *query = [NSString stringWithFormat:@"SELECT COUNT(*) FROM %@ WHERE (date > %d AND date < %d)", myMessagesTable, startTime, endTime];
+    return [self getSimpleCountFromQuery:query];
+}
+
+- (int) getOtherMessagesCountStartTime:(int)startTime endTime:(int)endTime
+{
+    NSString *query = [NSString stringWithFormat:@"SELECT COUNT(*) FROM %@ WHERE (date > %d AND date < %d)", otherMessagesTable, startTime, endTime];
+    return [self getSimpleCountFromQuery:query];
+}
+
+- (int) getMySentMessagesCountInConversationStartTime:(int)startTime endTime:(int)endTime
+{
+    NSString *query = [NSString stringWithFormat:@"SELECT COUNT(*) FROM %@ WHERE (date > %d AND date < %d) AND is_from_me=1", myMessagesTable, startTime, endTime];
+    return [self getSimpleCountFromQuery:query];
+}
+
+- (int) getMySentOtherMessagesCountStartTime:(int)startTime endTime:(int)endTime
+{
+    NSString *query = [NSString stringWithFormat:@"SELECT COUNT(*) FROM %@ WHERE (date > %d AND date < %d) AND is_from_me=1", otherMessagesTable, startTime, endTime];
+    return [self getSimpleCountFromQuery:query];
+}
+
+- (int) getReceivedMessagesCountInConversationStartTime:(int)startTime endTime:(int)endTime
+{
+    NSString *query = [NSString stringWithFormat:@"SELECT COUNT(*) FROM %@ WHERE (date > %d AND date < %d) AND is_from_me=0", myMessagesTable, startTime, endTime];
+    return [self getSimpleCountFromQuery:query];
+}
+
+- (int) getReceivedOtherMessagesCountStartTime:(int)startTime endTime:(int)endTime
+{
+    NSString *query = [NSString stringWithFormat:@"SELECT COUNT(*) FROM %@ WHERE (date > %d AND date < %d) AND is_from_me=0", otherMessagesTable, startTime, endTime];
+    return [self getSimpleCountFromQuery:query];
+}
+
+- (int) getSimpleCountFromQuery:(NSString*)queryString
+{
+    const char *query = [queryString UTF8String];
+    int result = 0;
+    sqlite3_stmt *statement;
+    
+    if(sqlite3_prepare(_database, query, -1, &statement, NULL) == SQLITE_OK) {
+        while(sqlite3_step(statement) == SQLITE_ROW) {
+            result = sqlite3_column_int(statement, 0);
+        }
+    }
+    
+    sqlite3_finalize(statement);
+    return result;
+}
+
 
 /****************************************************************
  *
