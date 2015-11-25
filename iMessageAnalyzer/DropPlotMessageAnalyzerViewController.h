@@ -15,7 +15,7 @@
 #import "Person.h"
 #import "Statistics.h"
 
-@interface DropPlotMessageAnalyzerViewController : NSViewController
+@interface DropPlotMessageAnalyzerViewController : NSViewController <CPTPlotDataSource, CPTPlotSpaceDelegate>
 
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil person:(Person*)person;
 

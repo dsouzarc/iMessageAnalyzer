@@ -6,6 +6,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="DropPlotMessageAnalyzerViewController">
             <connections>
+                <outlet property="graphHostingView" destination="cUb-kE-rZu" id="qMl-AB-7qo"/>
                 <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
             </connections>
         </customObject>
@@ -15,13 +16,9 @@
             <rect key="frame" x="0.0" y="0.0" width="1055" height="370"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="x9K-kH-Mlk">
-                    <rect key="frame" x="487" y="185" width="53" height="32"/>
-                    <buttonCell key="cell" type="push" title="Hi" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="iOk-DI-Y1r">
-                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="system"/>
-                    </buttonCell>
-                </button>
+                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cUb-kE-rZu" customClass="CPTGraphHostingView">
+                    <rect key="frame" x="20" y="20" width="909" height="330"/>
+                </customView>
             </subviews>
             <point key="canvasLocation" x="530.5" y="288"/>
         </customView>
