@@ -50,7 +50,7 @@
 @property (strong, nonatomic) DropPlotMessageAnalyzerViewController *droplotMessageAnalyzerViewController;
 
 @property (strong, nonatomic) Person *person;
-@property (strong, nonatomic) MessageManager *messageManager;
+@property (strong, nonatomic) TemporaryDatabaseManager *databaseManager;
 
 
 @property int myWordCount;
@@ -63,7 +63,7 @@
 
 @implementation MoreAnalysisViewController
 
-- (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil person:(Person *)person messages:(NSMutableArray *)messages
+- (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil person:(Person *)person messages:(NSMutableArray *)messages databaseManager:(TemporaryDatabaseManager *)databaseManager
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     
@@ -72,9 +72,8 @@
         self.messages = messages;
         
         self.messagesToDisplay = messages;
-        
-        self.messageManager = [MessageManager getInstance];
-        
+        self.databaseManager = databaseManager;
+
         self.dateFormatter = [[NSDateFormatter alloc] init];
         [self.dateFormatter setDateFormat:@"MM/dd/yyyy"];
 
@@ -523,7 +522,7 @@ int tempCounter = 2;
     
     self.calendarChosenDate = *proposedDateValue;
     
-    self.messagesToDisplay = [self.messageManager getAllMessagesForPerson:self.person onDay:self.calendarChosenDate];
+    self.messagesToDisplay = [self.databaseManager getAllMessagesForPerson:self.person onDay:self.calendarChosenDate];
     
     [self dealWithWordFrequencies];
     [self.messagesTableView reloadData];

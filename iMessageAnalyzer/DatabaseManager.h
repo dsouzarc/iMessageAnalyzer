@@ -36,4 +36,6 @@
 - (NSMutableArray*) getAttachmentsForMessageID:(int32_t)messageID;
 - (NSMutableDictionary*) getAllAttachmentsForPerson:(Person*)person;
 
+- (NSMutableArray*) getTemporaryInformationForAllConversationsExceptWith:(Person*)person;
+
 @end

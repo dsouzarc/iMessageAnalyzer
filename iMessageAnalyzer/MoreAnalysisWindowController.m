@@ -11,7 +11,7 @@
 @interface MoreAnalysisWindowController ()
 
 @property (strong, nonatomic) MoreAnalysisViewController *moreAnalysisViewController;
-
+@property (strong, nonatomic) TemporaryDatabaseManager *databaseManager;
 @property (strong, nonatomic) NSString *windowTitle;
 
 @end
@@ -23,7 +23,8 @@
     self = [super initWithWindowNibName:windowNibName];
     
     if(self) {
-        self.moreAnalysisViewController = [[MoreAnalysisViewController alloc] initWithNibName:@"MoreAnalysisViewController" bundle:[NSBundle mainBundle] person:person messages:messages];
+        self.databaseManager = [[TemporaryDatabaseManager alloc] initWithPerson:person messages:messages];
+        self.moreAnalysisViewController = [[MoreAnalysisViewController alloc] initWithNibName:@"MoreAnalysisViewController" bundle:[NSBundle mainBundle] person:person messages:messages databaseManager:self.databaseManager];
         self.windowTitle = [NSString stringWithFormat:@"Analysis for: %@", person.personName && person.personName.length != 0 ? person.personName : person.number];
         [self.window setContentViewController:self.moreAnalysisViewController];
         

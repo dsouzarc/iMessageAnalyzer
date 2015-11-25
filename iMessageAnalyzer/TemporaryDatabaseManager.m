@@ -16,24 +16,32 @@ static NSString *otherMessagesTable = @"otherMessagesTable";
 @interface TemporaryDatabaseManager ()
 
 @property (strong, nonatomic) Person *person;
-
+@property (strong, nonatomic) NSCalendar *calendar;
 @property sqlite3 *database;
 
 @end
 
 @implementation TemporaryDatabaseManager
 
-- (instancetype) initWithPerson:(Person *)person {
+- (instancetype) initWithPerson:(Person *)person messages:(NSMutableArray *)messages {
     self = [super init];
     
     if(self) {
         self.person = person;
+        
+        self.calendar = [NSCalendar currentCalendar];
+        [self.calendar setTimeZone:[NSTimeZone systemTimeZone]];
         
         if(sqlite3_open("file::memory:", &_database) == SQLITE_OK) {
             printf("OPENED TEMPORARY DATABASE\n");
             
             [self createMyMessagesTable];
             [self createOtherMessagesTable];
+            
+            [self addMessagesToDatabase:messages];
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+                [self addOtherMessagesToDatabase:[[DatabaseManager getInstance] getTemporaryInformationForAllConversationsExceptWith:person]];
+            });
         }
         else {
             printf("ERROR OPENING TEMPORARY DATABASE: %s\n", sqlite3_errmsg(_database));
@@ -51,7 +59,14 @@ static NSString *otherMessagesTable = @"otherMessagesTable";
     int isFromMe = message.isFromMe ? 1 : 0;
     int cache_has_attachments = message.hasAttachment || message.attachments ? 1 : 0;
     int wordCount = (int)[message.messageText componentsSeparatedByString:@" "].count;
-    return [NSString stringWithFormat:@"INSERT INTO %@(ROWID, guid, text, handle_id, service, date, date_read, is_from_me, cache_has_attachments, wordCount) VALUES ('%d', '%@', '%@', '%d', '%@', '%d', '%d', '%d', '%d', '%d", myMessagesTable, (int)message.messageId, message.messageGUID, message.messageText, (int) message.handleId, service, date, dateRead, isFromMe, cache_has_attachments, wordCount];
+    NSString *text = [message.messageText stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
+    return [NSString stringWithFormat:@"INSERT INTO %@(ROWID, guid, text, handle_id, service, date, date_read, is_from_me, cache_has_attachments, wordCount) VALUES ('%d', '%@', '%@', '%d', '%@', '%d', '%d', '%d', '%d', '%d')", myMessagesTable, (int)message.messageId, message.messageGUID, text, (int) message.handleId, service, date, dateRead, isFromMe, cache_has_attachments, wordCount];
+}
+
+- (void) createMyMessagesTable
+{
+    NSString *createQuery = [NSString stringWithFormat:@"CREATE TABLE %@ (ROWID INTEGER PRIMARY KEY, guid TEXT UNIQUE NOT NULL, text TEXT, handle_id INTEGER DEFAULT 0, service TEXT, date INTEGER, date_read INTEGER, is_from_me INTEGER DEFAULT 0, cache_has_attachments INTEGER DEFAULT 0, wordCount INTEGER)", myMessagesTable];
+    [self createTable:myMessagesTable createTableStatement:createQuery];
 }
 
 - (void) addMessagesToDatabase:(NSMutableArray*)messages
@@ -92,6 +107,13 @@ static NSString *otherMessagesTable = @"otherMessagesTable";
     return [NSString stringWithFormat:@"INSERT INTO %@(ROWID, date, wordCount, is_from_me, cache_has_attachments) VALUES (%d, %d, %d, %d, %d)", otherMessagesTable, rowID, date, wordCount, isFromMe, hasAttachment];
 }
 
+- (NSMutableArray*) getAllMessagesForPerson:(Person *)person onDay:(NSDate *)day
+{
+    long startTime = [self timeAtBeginningOfDayForDate:day];
+    long endTime = [self timeAtEndOfDayForDate:day];
+    return [self getAllMessagesForPerson:person startTimeInSeconds:startTime endTimeInSeconds:endTime];
+}
+
 - (BOOL) executeSQLStatement:(const char *)sqlStatement errorMessage:(char*)errorMessage
 {
     int counter = 0;
@@ -104,7 +126,12 @@ static NSString *otherMessagesTable = @"otherMessagesTable";
                 [NSThread sleepForTimeInterval:0.01];
             }
             else {
-                printf("IN EXEC, ERROR: %s\t%d\t%s\t\n", sqlite3_errmsg(_database), result, sqlStatement);
+                if(result == SQLITE_CONSTRAINT) {
+                    printf("Duplicate ROWID for insert: %s\n", sqlStatement);
+                }
+                else {
+                    printf("IN EXEC, ERROR: %s\t%d\t%s\t\n", sqlite3_errmsg(_database), result, sqlStatement);
+                }
                 return NO;
             }
         }
@@ -118,14 +145,9 @@ static NSString *otherMessagesTable = @"otherMessagesTable";
 
 - (void) createOtherMessagesTable
 {
-    NSString *createQuery = [NSString stringWithFormat:@"CREATE TABLE %@ (ROWID INTEGER PRIMARY KEY, date INTEGER PRIMARY KEY, wordCount INTEGER, is_from_me INTEGER DEFAULT 0, cache_has_attachments INTEGER", otherMessagesTable];
+    //CREATE TABLE %@ (ROWID INTEGER PRIMARY KEY, date INTEGER, wordCount INTEGER, is_from_me INTEGER DEFAULT 0, cache_has_attachments INTEGER
+    NSString *createQuery = [NSString stringWithFormat:@"CREATE TABLE %@ (ROWID INTEGER PRIMARY KEY, date INTEGER, wordCount INTEGER, is_from_me INTEGER, cache_has_attachments INTEGER)", otherMessagesTable];
     [self createTable:otherMessagesTable createTableStatement:createQuery];
-}
-
-- (void) createMyMessagesTable
-{
-    NSString *createQuery = [NSString stringWithFormat:@"CREATE TABLE %@ (ROWID INTEGER PRIMARY KEY, guid TEXT UNIQUE NOT NULL, text TEXT, handle_id INTEGER DEFAULT 0, service TEXT, date INTEGER, date_read INTEGER, is_from_me INTEGER DEFAULT 0, cache_has_attachments INTEGER DEFAULT 0, wordCount INTEGER)", myMessagesTable];
-    [self createTable:myMessagesTable createTableStatement:createQuery];
 }
 
 - (void) createTable:(NSString*)tableName createTableStatement:(NSString*)createTableStatement
@@ -148,7 +170,7 @@ static NSString *otherMessagesTable = @"otherMessagesTable";
     }
     Statistics *statistics = *statisticsPointer;
     
-    const char *query = [[NSString stringWithFormat:@"SELECT ROWID, guid, text, service, account_guid, date, date_read, is_from_me, cache_has_attachments, handle_id FROM %@ WHERE (date > %ld AND date < %ld) ORDER BY date", myMessagesTable, startTimeInSeconds, endTimeInSeconds] UTF8String];
+    const char *query = [[NSString stringWithFormat:@"SELECT ROWID, guid, text, service, date, date_read, is_from_me, cache_has_attachments, handle_id FROM %@ WHERE (date > %ld AND date < %ld) ORDER BY date", myMessagesTable, startTimeInSeconds, endTimeInSeconds] UTF8String];
     
     sqlite3_stmt *statement;
     
@@ -160,15 +182,16 @@ static NSString *otherMessagesTable = @"otherMessagesTable";
             NSString *text = @"";
             if(sqlite3_column_text(statement, 2)) {
                 text = [NSString stringWithUTF8String:sqlite3_column_text(statement, 2)];//[NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 2)];
+                text = [text stringByReplacingOccurrencesOfString:@"''" withString:@"'"];
             }
             
             BOOL isIMessage = [self isIMessage:sqlite3_column_text(statement, 3)];
-            int32_t dateInt = sqlite3_column_int(statement, 5);
-            int32_t dateReadInt = sqlite3_column_int(statement, 6);
+            int32_t dateInt = sqlite3_column_int(statement, 4);
+            int32_t dateReadInt = sqlite3_column_int(statement, 5);
             
-            BOOL isFromMe = sqlite3_column_int(statement, 7) == 1 ? YES : NO;
-            BOOL hasAttachment = sqlite3_column_int(statement, 8) == 1 ? YES: NO;
-            int32_t handleID = sqlite3_column_int(statement, 9);
+            BOOL isFromMe = sqlite3_column_int(statement, 6) == 1 ? YES : NO;
+            BOOL hasAttachment = sqlite3_column_int(statement, 7) == 1 ? YES: NO;
+            int32_t handleID = sqlite3_column_int(statement, 8);
             
             if(isFromMe) {
                 statistics.numberOfSentMessages++;
@@ -228,6 +251,37 @@ static NSString *otherMessagesTable = @"otherMessagesTable";
 
 - (BOOL) isIMessage:(char*)text {
     return strcmp(text, "iMessage") == 0;
+}
+
+
+- (long)timeAtEndOfDayForDate:(NSDate*)inputDate
+{
+    // Selectively convert the date components (year, month, day) of the input date
+    NSDateComponents *dateComps = [self.calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay fromDate:inputDate];
+    
+    // Set the time components manually
+    [dateComps setHour:23];
+    [dateComps setMinute:59];
+    [dateComps setSecond:59];
+    
+    // Convert back
+    NSDate *endOfDay = [self.calendar dateFromComponents:dateComps];
+    return [endOfDay timeIntervalSinceReferenceDate];
+}
+
+- (long)timeAtBeginningOfDayForDate:(NSDate*)inputDate
+{
+    // Selectively convert the date components (year, month, day) of the input date
+    NSDateComponents *dateComps = [self.calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay fromDate:inputDate];
+    
+    // Set the time components manually
+    [dateComps setHour:0];
+    [dateComps setMinute:0];
+    [dateComps setSecond:0];
+    
+    // Convert back
+    NSDate *beginningOfDay = [self.calendar dateFromComponents:dateComps];
+    return [beginningOfDay timeIntervalSinceReferenceDate];
 }
 
 @end

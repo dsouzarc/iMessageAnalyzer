@@ -14,6 +14,7 @@
 
 #import "NSTextField+Messages.h"
 #import "MessageManager.h"
+#import "TemporaryDatabaseManager.h"
 
 #import "Person.h"
 #import "Statistics.h"
@@ -21,6 +22,6 @@
 
 @interface MoreAnalysisViewController : NSViewController <NSTableViewDataSource, NSTableViewDelegate, NSDatePickerCellDelegate, NSPopoverDelegate, NSTextField_MessagesDelegate>
 
-- (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil person:(Person*)person messages:(NSMutableArray*)messages;
+- (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil person:(Person*)person messages:(NSMutableArray*)messages databaseManager:(TemporaryDatabaseManager*)databaseManager;
 
 @end

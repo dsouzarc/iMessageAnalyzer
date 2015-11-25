@@ -368,6 +368,36 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
     return allMessagesForChat;
 }
 
+- (NSMutableArray*) getTemporaryInformationForAllConversationsExceptWith:(Person*)person
+{
+    NSMutableArray *temporaryInformation = [[NSMutableArray alloc] init];
+    
+    NSString *queryString = [NSString stringWithFormat:@"SELECT messageT.ROWID, messageT.date, messageT.text, messageT.is_from_me, messageT.cache_has_attachments FROM message messageT INNER JOIN chat_message_join chatMessageT ON (chatMessageT.chat_id!=%d AND chatMessageT.chat_id!=%d) AND messageT.ROWID=chatMessageT.message_id ORDER BY messageT.date", (int) person.chatId, (int) person.secondaryChatId];
+    const char *query = [queryString UTF8String];
+    sqlite3_stmt *statement;
+    
+    if(sqlite3_prepare(_database, query, -1, &statement, NULL) == SQLITE_OK) {
+        while(sqlite3_step(statement) == SQLITE_ROW) {
+            int rowID = sqlite3_column_int(statement, 0);
+            int date = sqlite3_column_int(statement, 1);
+            NSString *text = @"";
+            if(sqlite3_column_text(statement, 2)) {
+                text = [NSString stringWithUTF8String:sqlite3_column_text(statement, 2)];
+            }
+            int wordCount = (int) [text componentsSeparatedByString:@" "].count;
+            int isFromMe = sqlite3_column_int(statement, 3);
+            int hasAttachments = sqlite3_column_int(statement, 4);
+            
+            NSDictionary *items = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:rowID], @"ROWID", [NSNumber numberWithInt:date], @"date", [NSNumber numberWithInt:wordCount], @"wordCount", [NSNumber numberWithInt:isFromMe], @"_is_from_me", [NSNumber numberWithInt:hasAttachments], @"cache_has_attachments", nil];
+            [temporaryInformation addObject:items];
+        }
+    }
+    
+    sqlite3_finalize(statement);
+    
+    return temporaryInformation;
+}
+
 - (NSMutableArray*) getMessagesForHandleId:(int32_t)handleId
 {
     NSMutableArray *result = [[NSMutableArray alloc] init];

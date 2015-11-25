@@ -9,6 +9,7 @@
 #import <Cocoa/Cocoa.h>
 
 #import "MoreAnalysisViewController.h"
+#import "TemporaryDatabaseManager.h"
 #import "Person.h"
 
 @interface MoreAnalysisWindowController : NSWindowController <NSWindowDelegate>

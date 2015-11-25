@@ -19,12 +19,10 @@
 
 @interface TemporaryDatabaseManager : NSObject
 
-- (instancetype) initWithPerson:(Person*)person;
-
-- (void) addMessagesToDatabase:(NSMutableArray*)messages;
-- (void) addOtherMessagesToDatabase:(NSMutableArray*)otherMessages;
+- (instancetype) initWithPerson:(Person*)person messages:(NSMutableArray*)messages;
 
 - (NSMutableArray*) getAllMessagesForPerson:(Person *)person;
 - (NSMutableArray*) getAllMessagesForPerson:(Person *)person startTimeInSeconds:(long)startTimeInSeconds endTimeInSeconds:(long)endTimeInSeconds;
+- (NSMutableArray*) getAllMessagesForPerson:(Person*)person onDay:(NSDate*)day;
 
 @end

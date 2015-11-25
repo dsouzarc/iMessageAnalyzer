@@ -31,5 +31,6 @@
 
 - (int32_t) getMessageCountWithPersonOnDate:(NSDate*)date person:(Person*)person;
 - (int32_t) getMessageCountOnDate:(NSDate*)date;
+- (void) updateMessagesWithAttachments:(NSMutableArray*)messages person:(Person*)person;
 
 @end
