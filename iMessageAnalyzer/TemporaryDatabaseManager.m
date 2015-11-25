@@ -32,6 +32,7 @@ static NSString *otherMessagesTable = @"otherMessagesTable";
         self.calendar = [NSCalendar currentCalendar];
         [self.calendar setTimeZone:[NSTimeZone systemTimeZone]];
         
+        //[self filePath]
         if(sqlite3_open("file::memory:", &_database) == SQLITE_OK) {
             printf("OPENED TEMPORARY DATABASE\n");
             
@@ -49,6 +50,13 @@ static NSString *otherMessagesTable = @"otherMessagesTable";
     }
     
     return self;
+}
+
+-(const char *) filePath
+{
+    NSArray *paths=NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentDirectory=[paths objectAtIndex:0];
+    return [[documentDirectory stringByAppendingPathComponent:@"LoginDatabase.sql"] UTF8String];
 }
 
 - (NSString*) insertMessageQuery:(Message*)message
@@ -127,7 +135,8 @@ static NSString *otherMessagesTable = @"otherMessagesTable";
             }
             else {
                 if(result == SQLITE_CONSTRAINT) {
-                    printf("Duplicate ROWID for insert: %s\n", sqlStatement);
+                    return YES;
+                    //printf("Duplicate ROWID for insert: %s\n", sqlStatement);
                 }
                 else {
                     printf("IN EXEC, ERROR: %s\t%d\t%s\t\n", sqlite3_errmsg(_database), result, sqlStatement);
