@@ -10,7 +10,7 @@
 
 @interface MoreAnalysisViewController ()
 
-@property (strong) IBOutlet CPTGraphHostingView *mainGraphHostView;
+@property (strong) IBOutlet NSView *mainViewForGraph;
 
 @property (strong) IBOutlet NSTableView *messagesTableView;
 
@@ -47,8 +47,7 @@
 @property (strong, nonatomic) NSPopover *viewAttachmentsPopover;
 @property (strong, nonatomic) ViewAttachmentsViewController *viewAttachmentsViewController;
 
-@property (strong, nonatomic) CPTXYGraph *graph;
-
+@property (strong, nonatomic) DropPlotMessageAnalyzerViewController *droplotMessageAnalyzerViewController;
 
 @property (strong, nonatomic) Person *person;
 @property (strong, nonatomic) MessageManager *messageManager;
@@ -94,6 +93,8 @@
         
         self.messageWithAttachmentAttributes = [NSDictionary dictionaryWithObjectsAndKeys:[NSColor yellowColor], NSForegroundColorAttributeName,
                                                 [NSNumber numberWithInt:NSUnderlineStyleSingle], NSUnderlineStyleAttributeName, nil];
+        
+        self.droplotMessageAnalyzerViewController = [[DropPlotMessageAnalyzerViewController alloc] initWithNibName:@"DropPlotMessageAnalyzerViewController" bundle:[NSBundle mainBundle] person:self.person];
     }
     
     return self;
@@ -124,72 +125,11 @@
         [self setTextFieldLong:totalReceived forTag:14];
         [self setTextFieldLong:(totalSent + totalReceived) forTag:18];
     }
-}
-#pragma mark Plot Data Source Methods
-
--(NSUInteger)numberOfRecordsForPlot:(CPTPlot *)plot
-{
-    return 10;
+    
+    [[self.droplotMessageAnalyzerViewController view] setFrame:self.mainViewForGraph.frame];
+    [self.view addSubview:self.droplotMessageAnalyzerViewController.view positioned:NSWindowAbove relativeTo:self.mainViewForGraph];
 }
 
--(id)numberForPlot:(CPTPlot *)plot field:(NSUInteger)fieldEnum recordIndex:(NSUInteger)index
-{
-    NSNumber *num;
-    
-    switch ( fieldEnum ) {
-        case CPTScatterPlotFieldX:
-            num = @(index);
-            break;
-            
-        case CPTScatterPlotFieldY:
-            num = @([(NSString *)plot.identifier integerValue]);
-            break;
-            
-        default:
-            num = @0;
-    }
-    return num;
-}
-
--(CPTPlotSymbol *)symbolForScatterPlot:(CPTScatterPlot *)plot recordIndex:(NSUInteger)index
-{
-    CPTGradient *gradientFill = [CPTGradient rainbowGradient];
-    
-    gradientFill.gradientType = CPTGradientTypeRadial;
-    
-    CPTMutableShadow *symbolShadow = [CPTMutableShadow shadow];
-    symbolShadow.shadowOffset     = CGSizeMake(3.0, -3.0);
-    symbolShadow.shadowBlurRadius = 3.0;
-    symbolShadow.shadowColor      = [CPTColor blackColor];
-    
-    CPTPlotSymbol *symbol = [[CPTPlotSymbol alloc] init];
-    symbol.symbolType = (CPTPlotSymbolType)[(NSString *)plot.identifier intValue];
-    symbol.fill       = [CPTFill fillWithGradient:gradientFill];
-    symbol.shadow     = symbolShadow;
-    
-    if ( index > 0 ) {
-        symbol.size = CGSizeMake(index * 4, index * 4);
-    }
-    
-    if ( symbol.symbolType == CPTPlotSymbolTypeCustom ) {
-        // Creating the custom path.
-        CGMutablePathRef path = CGPathCreateMutable();
-        CGPathMoveToPoint(path, NULL, 0., 0.);
-        
-        CGPathAddEllipseInRect( path, NULL, CGRectMake(0., 0., 10., 10.) );
-        CGPathAddEllipseInRect( path, NULL, CGRectMake(1.5, 4., 3., 3.) );
-        CGPathAddEllipseInRect( path, NULL, CGRectMake(5.5, 4., 3., 3.) );
-        CGPathMoveToPoint(path, NULL, 5., 2.);
-        CGPathAddArc(path, NULL, 5., 3.3, 2.8, 0., M_PI, TRUE);
-        CGPathCloseSubpath(path);
-        
-        symbol.customSymbolPath    = path;
-        symbol.usesEvenOddClipRule = YES;
-        CGPathRelease(path);
-    }
-    
-    return symbol;
-}
 
 - (void) viewDidAppear
 {

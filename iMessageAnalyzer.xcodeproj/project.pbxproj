@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		9400C3D51C00410D0005EB5A /* CorePlot.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9400C3C81C00402A0005EB5A /* CorePlot.framework */; };
+		940136CB1C0585A7003AF393 /* DropPlotMessageAnalyzerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 940136C91C0585A7003AF393 /* DropPlotMessageAnalyzerViewController.m */; };
+		940136CC1C0585A7003AF393 /* DropPlotMessageAnalyzerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 940136CA1C0585A7003AF393 /* DropPlotMessageAnalyzerViewController.xib */; };
 		941C04F31C028B12002E2FAB /* NSTextField+Messages.m in Sources */ = {isa = PBXBuildFile; fileRef = 941C04F21C028B12002E2FAB /* NSTextField+Messages.m */; };
 		941C04F71C02C586002E2FAB /* ViewAttachmentsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 941C04F51C02C586002E2FAB /* ViewAttachmentsViewController.m */; };
 		941C04F81C02C586002E2FAB /* ViewAttachmentsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 941C04F61C02C586002E2FAB /* ViewAttachmentsViewController.xib */; };
@@ -131,6 +133,9 @@
 
 /* Begin PBXFileReference section */
 		9400C3BA1C00402A0005EB5A /* CorePlot.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CorePlot.xcodeproj; path = "../../../Downloads/core-plot-master 2/framework/CorePlot.xcodeproj"; sourceTree = "<group>"; };
+		940136C81C0585A7003AF393 /* DropPlotMessageAnalyzerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropPlotMessageAnalyzerViewController.h; sourceTree = "<group>"; };
+		940136C91C0585A7003AF393 /* DropPlotMessageAnalyzerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DropPlotMessageAnalyzerViewController.m; sourceTree = "<group>"; };
+		940136CA1C0585A7003AF393 /* DropPlotMessageAnalyzerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DropPlotMessageAnalyzerViewController.xib; sourceTree = "<group>"; };
 		941C04F11C028B12002E2FAB /* NSTextField+Messages.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSTextField+Messages.h"; sourceTree = "<group>"; };
 		941C04F21C028B12002E2FAB /* NSTextField+Messages.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSTextField+Messages.m"; sourceTree = "<group>"; };
 		941C04F41C02C586002E2FAB /* ViewAttachmentsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewAttachmentsViewController.h; sourceTree = "<group>"; };
@@ -439,6 +444,9 @@
 				9480B1661BF7B60700ECDE38 /* MoreAnalysisViewController.h */,
 				9480B1671BF7B60700ECDE38 /* MoreAnalysisViewController.m */,
 				9480B1681BF7B60700ECDE38 /* MoreAnalysisViewController.xib */,
+				940136C81C0585A7003AF393 /* DropPlotMessageAnalyzerViewController.h */,
+				940136C91C0585A7003AF393 /* DropPlotMessageAnalyzerViewController.m */,
+				940136CA1C0585A7003AF393 /* DropPlotMessageAnalyzerViewController.xib */,
 			);
 			name = "More Analysis View Controller";
 			sourceTree = "<group>";
@@ -717,6 +725,7 @@
 				946D2A711BE5EAA700270BF0 /* TextTableCellView.xib in Resources */,
 				945037131BF59F4700F995E7 /* SimpleAnalyticsPopUpViewController.xib in Resources */,
 				94F01DDE1BE852CF00B47D9D /* CalendarPopUpViewController.xib in Resources */,
+				940136CC1C0585A7003AF393 /* DropPlotMessageAnalyzerViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -745,6 +754,7 @@
 				9438FD111BE07D2600B239BE /* MainViewController.m in Sources */,
 				94F01DDD1BE852CF00B47D9D /* CalendarPopUpViewController.m in Sources */,
 				946D2A6C1BE55BF900270BF0 /* Statistics.m in Sources */,
+				940136CB1C0585A7003AF393 /* DropPlotMessageAnalyzerViewController.m in Sources */,
 				9438FD071BE07CFF00B239BE /* MainWindowController.m in Sources */,
 				948AE96A1BF976170031D97C /* WordFrequencyHeapDataStructure.m in Sources */,
 				945037121BF59F4700F995E7 /* SimpleAnalyticsPopUpViewController.m in Sources */,
