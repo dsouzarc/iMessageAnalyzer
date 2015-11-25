@@ -52,12 +52,14 @@ static NSString *otherMessagesTable = @"otherMessagesTable";
     return self;
 }
 
--(const char *) filePath
-{
-    NSArray *paths=NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentDirectory=[paths objectAtIndex:0];
-    return [[documentDirectory stringByAppendingPathComponent:@"LoginDatabase.sql"] UTF8String];
-}
+
+/****************************************************************
+ *
+ *              INSERT MY MESSAGES
+ *
+*****************************************************************/
+
+# pragma mark INSERT_MY_MESSAGES
 
 - (NSString*) insertMessageQuery:(Message*)message
 {
@@ -69,12 +71,6 @@ static NSString *otherMessagesTable = @"otherMessagesTable";
     int wordCount = (int)[message.messageText componentsSeparatedByString:@" "].count;
     NSString *text = [message.messageText stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
     return [NSString stringWithFormat:@"INSERT INTO %@(ROWID, guid, text, handle_id, service, date, date_read, is_from_me, cache_has_attachments, wordCount) VALUES ('%d', '%@', '%@', '%d', '%@', '%d', '%d', '%d', '%d', '%d')", myMessagesTable, (int)message.messageId, message.messageGUID, text, (int) message.handleId, service, date, dateRead, isFromMe, cache_has_attachments, wordCount];
-}
-
-- (void) createMyMessagesTable
-{
-    NSString *createQuery = [NSString stringWithFormat:@"CREATE TABLE %@ (ROWID INTEGER PRIMARY KEY, guid TEXT UNIQUE NOT NULL, text TEXT, handle_id INTEGER DEFAULT 0, service TEXT, date INTEGER, date_read INTEGER, is_from_me INTEGER DEFAULT 0, cache_has_attachments INTEGER DEFAULT 0, wordCount INTEGER)", myMessagesTable];
-    [self createTable:myMessagesTable createTableStatement:createQuery];
 }
 
 - (void) addMessagesToDatabase:(NSMutableArray*)messages
@@ -90,6 +86,15 @@ static NSString *otherMessagesTable = @"otherMessagesTable";
     
     sqlite3_exec(_database, "COMMIT TRANSACTION", NULL, NULL, &errorMessage);
 }
+
+
+/****************************************************************
+ *
+ *              INSERT OTHER MESSAGES
+ *
+ *****************************************************************/
+
+# pragma mark INSERT_OTHER_MESSAGES
 
 - (void) addOtherMessagesToDatabase:(NSMutableArray*)otherMessages
 {
@@ -115,12 +120,116 @@ static NSString *otherMessagesTable = @"otherMessagesTable";
     return [NSString stringWithFormat:@"INSERT INTO %@(ROWID, date, wordCount, is_from_me, cache_has_attachments) VALUES (%d, %d, %d, %d, %d)", otherMessagesTable, rowID, date, wordCount, isFromMe, hasAttachment];
 }
 
+
+/****************************************************************
+ *
+ *              GET MY MESSAGES
+ *
+ *****************************************************************/
+
+# pragma mark GET_MY_MESSAGES
+
 - (NSMutableArray*) getAllMessagesForPerson:(Person *)person onDay:(NSDate *)day
 {
     long startTime = [self timeAtBeginningOfDayForDate:day];
     long endTime = [self timeAtEndOfDayForDate:day];
     return [self getAllMessagesForPerson:person startTimeInSeconds:startTime endTimeInSeconds:endTime];
 }
+
+- (NSMutableArray*) getAllMessagesForPerson:(Person *)person
+{
+    Statistics *statistics = [[Statistics alloc] init];
+    
+    NSMutableArray *allMessagesForChat = [self getAllMessagesForConversationFromTimeInSeconds:0 endTimeInSeconds:INT_MAX statistics:&statistics];
+    person.statistics = statistics;
+    
+    [[MessageManager getInstance] updateMessagesWithAttachments:allMessagesForChat person:person];
+    
+    return allMessagesForChat;
+}
+
+- (NSMutableArray*) getAllMessagesForPerson:(Person *)person startTimeInSeconds:(long)startTimeInSeconds endTimeInSeconds:(long)endTimeInSeconds
+{
+    Statistics *secondaryStatistics = [[Statistics alloc] init];
+    
+    NSMutableArray *messages = [self getAllMessagesForConversationFromTimeInSeconds:startTimeInSeconds endTimeInSeconds:endTimeInSeconds statistics:&secondaryStatistics];
+    person.secondaryStatistics = secondaryStatistics;
+    
+    [[MessageManager getInstance] updateMessagesWithAttachments:messages person:person];
+    
+    return messages;
+}
+
+- (NSMutableArray*) getAllMessagesForConversationFromTimeInSeconds:(long)startTimeInSeconds endTimeInSeconds:(long)endTimeInSeconds statistics:(Statistics**)statisticsPointer
+{
+    NSMutableArray *allMessagesForChat = [[NSMutableArray alloc] init];
+    
+    if(*statisticsPointer == nil) {
+        *statisticsPointer = [[Statistics alloc] init];
+    }
+    
+    Statistics *statistics = *statisticsPointer;
+    
+    const char *query = [[NSString stringWithFormat:@"SELECT ROWID, guid, text, service, date, date_read, is_from_me, cache_has_attachments, handle_id FROM %@ WHERE (date > %ld AND date < %ld) ORDER BY date", myMessagesTable, startTimeInSeconds, endTimeInSeconds] UTF8String];
+    
+    sqlite3_stmt *statement;
+    
+    if(sqlite3_prepare_v2(_database, query, -1, &statement, NULL) == SQLITE_OK) {
+        while(sqlite3_step(statement) == SQLITE_ROW) {
+            int32_t messageID = sqlite3_column_int(statement, 0);
+            NSString *guid = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 1)];
+            
+            NSString *text = @"";
+            if(sqlite3_column_text(statement, 2)) {
+                text = [NSString stringWithUTF8String:sqlite3_column_text(statement, 2)];
+                text = [text stringByReplacingOccurrencesOfString:@"''" withString:@"'"];
+            }
+            
+            BOOL isIMessage = [self isIMessage:sqlite3_column_text(statement, 3)];
+            int32_t dateInt = sqlite3_column_int(statement, 4);
+            int32_t dateReadInt = sqlite3_column_int(statement, 5);
+            
+            BOOL isFromMe = sqlite3_column_int(statement, 6) == 1 ? YES : NO;
+            BOOL hasAttachment = sqlite3_column_int(statement, 7) == 1 ? YES: NO;
+            int32_t handleID = sqlite3_column_int(statement, 8);
+            
+            if(isFromMe) {
+                statistics.numberOfSentMessages++;
+                if(hasAttachment) {
+                    statistics.numberOfSentAttachments++;
+                }
+            }
+            else {
+                statistics.numberOfReceivedMessages++;
+                if(hasAttachment) {
+                    statistics.numberOfReceivedAttachments++;
+                }
+            }
+            
+            NSDate *date = [NSDate dateWithTimeIntervalSinceReferenceDate:dateInt];
+            NSDate *dateRead = dateReadInt == 0 ? nil : [NSDate dateWithTimeIntervalSinceReferenceDate:dateReadInt];
+            
+            Message *message = [[Message alloc] initWithMessageId:messageID handleId:handleID messageGUID:guid messageText:text dateSent:date dateRead:dateRead isIMessage:isIMessage isFromMe:isFromMe hasAttachment:hasAttachment];
+            [allMessagesForChat addObject:message];
+        }
+    }
+    else {
+        NSLog(@"ERROR COMPILING ALL MESSAGES QUERY: %s", sqlite3_errmsg(_database));
+    }
+    
+    sqlite3_finalize(statement);
+    
+    return allMessagesForChat;
+}
+
+
+/****************************************************************
+ *
+ *              SQLITE_HELPERS
+ *
+*****************************************************************/
+
+# pragma mark SQLITE_HELPERS
 
 - (BOOL) executeSQLStatement:(const char *)sqlStatement errorMessage:(char*)errorMessage
 {
@@ -135,8 +244,8 @@ static NSString *otherMessagesTable = @"otherMessagesTable";
             }
             else {
                 if(result == SQLITE_CONSTRAINT) {
-                    return YES;
                     //printf("Duplicate ROWID for insert: %s\n", sqlStatement);
+                    return YES;
                 }
                 else {
                     printf("IN EXEC, ERROR: %s\t%d\t%s\t\n", sqlite3_errmsg(_database), result, sqlStatement);
@@ -159,6 +268,12 @@ static NSString *otherMessagesTable = @"otherMessagesTable";
     [self createTable:otherMessagesTable createTableStatement:createQuery];
 }
 
+- (void) createMyMessagesTable
+{
+    NSString *createQuery = [NSString stringWithFormat:@"CREATE TABLE %@ (ROWID INTEGER PRIMARY KEY, guid TEXT UNIQUE NOT NULL, text TEXT, handle_id INTEGER DEFAULT 0, service TEXT, date INTEGER, date_read INTEGER, is_from_me INTEGER DEFAULT 0, cache_has_attachments INTEGER DEFAULT 0, wordCount INTEGER)", myMessagesTable];
+    [self createTable:myMessagesTable createTableStatement:createQuery];
+}
+
 - (void) createTable:(NSString*)tableName createTableStatement:(NSString*)createTableStatement
 {
     char *errorMessage;
@@ -170,98 +285,21 @@ static NSString *otherMessagesTable = @"otherMessagesTable";
     }
 }
 
-- (NSMutableArray*) getAllMessagesForConversationFromTimeInSeconds:(long)startTimeInSeconds endTimeInSeconds:(long)endTimeInSeconds statistics:(Statistics**)statisticsPointer
+- (const char *)filePath
 {
-    NSMutableArray *allMessagesForChat = [[NSMutableArray alloc] init];
-    
-    if(*statisticsPointer == nil) {
-        *statisticsPointer = [[Statistics alloc] init];
-    }
-    Statistics *statistics = *statisticsPointer;
-    
-    const char *query = [[NSString stringWithFormat:@"SELECT ROWID, guid, text, service, date, date_read, is_from_me, cache_has_attachments, handle_id FROM %@ WHERE (date > %ld AND date < %ld) ORDER BY date", myMessagesTable, startTimeInSeconds, endTimeInSeconds] UTF8String];
-    
-    sqlite3_stmt *statement;
-    
-    if(sqlite3_prepare_v2(_database, query, -1, &statement, NULL) == SQLITE_OK) {
-        while(sqlite3_step(statement) == SQLITE_ROW) {
-            int32_t messageID = sqlite3_column_int(statement, 0);
-            NSString *guid = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 1)];
-            
-            NSString *text = @"";
-            if(sqlite3_column_text(statement, 2)) {
-                text = [NSString stringWithUTF8String:sqlite3_column_text(statement, 2)];//[NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 2)];
-                text = [text stringByReplacingOccurrencesOfString:@"''" withString:@"'"];
-            }
-            
-            BOOL isIMessage = [self isIMessage:sqlite3_column_text(statement, 3)];
-            int32_t dateInt = sqlite3_column_int(statement, 4);
-            int32_t dateReadInt = sqlite3_column_int(statement, 5);
-            
-            BOOL isFromMe = sqlite3_column_int(statement, 6) == 1 ? YES : NO;
-            BOOL hasAttachment = sqlite3_column_int(statement, 7) == 1 ? YES: NO;
-            int32_t handleID = sqlite3_column_int(statement, 8);
-            
-            if(isFromMe) {
-                statistics.numberOfSentMessages++;
-                
-                if(hasAttachment) {
-                    statistics.numberOfSentAttachments++;
-                }
-            }
-            else {
-                statistics.numberOfReceivedMessages++;
-                
-                if(hasAttachment) {
-                    statistics.numberOfReceivedAttachments++;
-                }
-            }
-            
-            NSDate *date = [NSDate dateWithTimeIntervalSinceReferenceDate:dateInt];
-            NSDate *dateRead = dateReadInt == 0 ? nil : [NSDate dateWithTimeIntervalSinceReferenceDate:dateReadInt];
-            
-            Message *message = [[Message alloc] initWithMessageId:messageID handleId:handleID messageGUID:guid messageText:text dateSent:date dateRead:dateRead isIMessage:isIMessage isFromMe:isFromMe hasAttachment:hasAttachment];
-            
-            [allMessagesForChat addObject:message];
-            
-            //printf("%s\n", [text UTF8String]);
-        }
-    }
-    else {
-        NSLog(@"ERROR COMPILING ALL MESSAGES QUERY: %s", sqlite3_errmsg(_database));
-    }
-    
-    sqlite3_finalize(statement);
-    
-    return allMessagesForChat;
+    NSArray *paths=NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentDirectory=[paths objectAtIndex:0];
+    return [[documentDirectory stringByAppendingPathComponent:@"LoginDatabase.sql"] UTF8String];
 }
 
-- (NSMutableArray*) getAllMessagesForPerson:(Person *)person startTimeInSeconds:(long)startTimeInSeconds endTimeInSeconds:(long)endTimeInSeconds
-{
-    Statistics *secondaryStatistics = [[Statistics alloc] init];
-    
-    NSMutableArray *messages = [self getAllMessagesForConversationFromTimeInSeconds:startTimeInSeconds endTimeInSeconds:endTimeInSeconds statistics:&secondaryStatistics];
-    person.secondaryStatistics = secondaryStatistics;
-    [[MessageManager getInstance] updateMessagesWithAttachments:messages person:person];
-    
-    return messages;
-}
 
-- (NSMutableArray*) getAllMessagesForPerson:(Person *)person
-{
-    Statistics *statistics = [[Statistics alloc] init];
-    
-    NSMutableArray *allMessagesForChat = [self getAllMessagesForConversationFromTimeInSeconds:0 endTimeInSeconds:INT_MAX statistics:&statistics];
-    person.statistics = statistics;
-    [[MessageManager getInstance] updateMessagesWithAttachments:allMessagesForChat person:person];
-    
-    return allMessagesForChat;
-}
+/****************************************************************
+ *
+ *              MISC METHODS
+ *
+*****************************************************************/
 
-- (BOOL) isIMessage:(char*)text {
-    return strcmp(text, "iMessage") == 0;
-}
-
+# pragma mark MISC_METHODS
 
 - (long)timeAtEndOfDayForDate:(NSDate*)inputDate
 {
@@ -292,5 +330,10 @@ static NSString *otherMessagesTable = @"otherMessagesTable";
     NSDate *beginningOfDay = [self.calendar dateFromComponents:dateComps];
     return [beginningOfDay timeIntervalSinceReferenceDate];
 }
+
+- (BOOL) isIMessage:(char*)text {
+    return strcmp(text, "iMessage") == 0;
+}
+
 
 @end
