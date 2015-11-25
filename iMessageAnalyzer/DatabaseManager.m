@@ -73,10 +73,10 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
 {
     NSMutableSet *handle_ids = [[NSMutableSet alloc] init];
     
+    messageText = [messageText stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
     NSString *query = [NSString stringWithFormat:@"SELECT handle_id from message WHERE text like '%%%@%%' GROUP BY handle_id", messageText];
     
     sqlite3_stmt *statement;
-    
     int counter = 0;
     
     if(sqlite3_prepare(_database, [query UTF8String], -1, &statement, NULL) == SQLITE_OK) {
@@ -87,7 +87,7 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
         }
     }
     else {
-        NSLog(@"PROBLEM HERE: %s", sqlite3_errmsg(_database));
+        NSLog(@"PROBLEM HERE: %s\t%@", sqlite3_errmsg(_database), query);
     }
 
     sqlite3_finalize(statement);
