@@ -1,0 +1,36 @@
+#GET ALL MESSAGES FOR A PERSON - NO JOIN TABLES, REQUIRES PHONE NUMBER
+
+SELECT * FROM chat WHERE guid LIKE '%7669%'
+
+SELECT * FROM chat_handle_join WHERE chat_id=173 OR chat_id=198
+
+SELECT * FROM message WHERE handle_id=167 OR handle_id=193 ORDER BY date
+
+SELECT text, t3.GUID FROM message t1 INNER JOIN chat_handle_join t2 ON t1.handle_id=t2.handle_id INNER JOIN chat t3 ON t2.chat_id=t3.ROWID WHERE t3.GUID LIKE '%7669%' ORDER BY date
+
+
+
+#GET ALL ATTACHMENT INFO FOR A CONVERSATION
+
+SELECT messageT.*, attachmentT.ROWID, attachmentT.guid, attachmentT.filename, attachmentT.mime_type, attachmentT.start_date, attachmentT.total_bytes FROM message messageT INNER JOIN attachment attachmentT INNER JOIN message_attachment_join meAtJoinT ON attachmentT.ROWID= meAtJoinT.attachment_id WHERE meAtJoinT.message_id=messageT.ROWID
+
+
+#GET ALL ATTACHMENT INFO GIVEN CHAT ID
+
+SELECT messageT.ROWID, messageT.guid, attachmentT.ROWID, attachmentT.guid, attachmentT.filename, attachmentT.mime_type, attachmentT.start_date, attachmentT.total_bytes, attachmentT.transfer_name FROM message messageT INNER JOIN chat_message_join chatMessageT ON messageT.ROWID=chatMessageT.message_id INNER JOIN attachment attachmentT INNER JOIN message_attachment_join meAtJoinT ON attachmentT.ROWID=meAtJoinT.attachment_id WHERE meAtJoinT.message_id=messageT.ROWID AND (chatMessageT.chat_id=173 OR chatMessageT.chat_id=198)
+
+
+#GET ALL MESSAGES GIVEN A CHAT ID
+
+SELECT  ROWID, guid, text, service, account_guid, date, date_read, is_from_me, cache_has_attachments FROM message messageT INNER JOIN chat_message_join chatMessageT ON (chatMessageT.chat_id=173 OR chatMessageT.chat_id=198) AND messageT.ROWID=chatMessageT.message_id ORDER BY messageT.date
+
+ 
+#NUM MESSAGES BETWEEN TIMES GIVEN CHAT ID
+
+SELECT count(*) FROM message messageT INNER JOIN chat_message_join chatMessageT ON (chatMessageT.chat_id=173 OR chatMessageT.chat_id=198) AND messageT.ROWID=chatMessageT.message_id AND (messageT.date > 469268088 AND messageT.date < 469568288) ORDER BY messageT.date
+
+
+#ALL MESSAGES NOT SENT BY A PERSON
+
+SELECT messageT.ROWID, messageT.date, messageT.text, messageT.is_from_me, messageT.cache_has_attachments FROM message messageT INNER JOIN chat_message_join chatMessageT ON (chatMessageT.chat_id!=173 AND chatMessageT.chat_id!=198) AND messageT.ROWID=chatMessageT.message_id ORDER BY messageT.date
+
