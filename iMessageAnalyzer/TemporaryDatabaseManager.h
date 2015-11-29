@@ -39,4 +39,6 @@
 - (int) getReceivedMessagesCountInConversationStartTime:(int)startTime endTime:(int)endTime;
 - (int) getReceivedOtherMessagesCountStartTime:(int)startTime endTime:(int)endTime;
 
+@property (nonatomic) BOOL finishedAddingEntries;
+
 @end

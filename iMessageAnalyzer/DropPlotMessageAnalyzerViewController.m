@@ -8,9 +8,17 @@
 
 #import "DropPlotMessageAnalyzerViewController.h"
 
+typedef NS_ENUM(NSInteger, Graph_Scale) {
+    Graph_Scale_Year,
+    Graph_Scale_Month,
+    Graph_Scale_Week,
+    Graph_Scale_Day,
+    Graph_Scale_Hour
+};
+
 @interface DropPlotMessageAnalyzerViewController ()
 
-@property (strong, nonatomic) MessageManager *messageManager;
+@property (strong, nonatomic) TemporaryDatabaseManager *messageManager;
 @property (strong, nonatomic) Person *person;
 
 @property (strong) IBOutlet CPTGraphHostingView *graphHostingView;
@@ -22,28 +30,38 @@
 @property (nonatomic, readwrite, assign) double maximumValueForYAxis;
 @property (nonatomic, readwrite, assign) double majorIntervalLengthForX;
 @property (nonatomic, readwrite, assign) double majorIntervalLengthForY;
+
 @property (nonatomic, readwrite, strong) NSArray<NSDictionary *> *dataPoints;
 
 @property (nonatomic, readwrite, strong) CPTPlotSpaceAnnotation *zoomAnnotation;
 @property (nonatomic, readwrite, assign) CGPoint dragStart;
 @property (nonatomic, readwrite, assign) CGPoint dragEnd;
 
+@property Graph_Scale currentScale;
+@property (strong, nonatomic) NSDate *startDate;
+@property (strong, nonatomic) NSDate *endDate;
+
+@property (strong, nonatomic) NSCalendar *calendar;
+
 @end
 
 @implementation DropPlotMessageAnalyzerViewController
 
-- (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil person:(Person *)person
+- (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil person:(Person *)person temporaryDatabase:(TemporaryDatabaseManager *)temporaryDatabase firstMessageDate:(NSDate *)firstMessage
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     
     if(self) {
+        self.messageManager = temporaryDatabase;
         self.person = person;
-        self.messageManager = [MessageManager getInstance];
         
-        self.dataPoints     = [[NSMutableArray alloc] init];
+        self.calendar = [NSCalendar currentCalendar];
+        [self.calendar setTimeZone:[NSTimeZone systemTimeZone]];
+        
+        self.dataPoints = [[NSMutableArray alloc] init];
         self.zoomAnnotation = nil;
-        self.dragStart      = CGPointZero;
-        self.dragEnd        = CGPointZero;
+        self.dragStart = CGPointZero;
+        self.dragEnd = CGPointZero;
     }
     
     return self;
@@ -76,10 +94,10 @@
     
     // Setup plot space
     CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)self.graph.defaultPlotSpace;
-    plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:@(30)
-                                                    length:@(20)];
-    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:@(30)
-                                                    length:@(20)];
+    plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:@(0)
+                                                    length:@(366)];
+    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:@(0)
+                                                    length:@(100)];
     
     // this allows the plot to respond to mouse events
     [plotSpace setDelegate:self];
@@ -89,15 +107,15 @@
     
     CPTXYAxis *x = axisSet.xAxis;
     x.minorTicksPerInterval = 9;
-    x.majorIntervalLength   = @(self.majorIntervalLengthForX);
-    x.labelOffset           = 5.0;
-    x.axisConstraints       = [CPTConstraints constraintWithLowerOffset:0.0];
+    x.majorIntervalLength = @(self.majorIntervalLengthForX);
+    x.labelOffset = 5.0;
+    x.axisConstraints = [CPTConstraints constraintWithLowerOffset:0.0];
     
     CPTXYAxis *y = axisSet.yAxis;
     y.minorTicksPerInterval = 9;
-    y.majorIntervalLength   = @(self.majorIntervalLengthForY);
-    y.labelOffset           = 5.0;
-    y.axisConstraints       = [CPTConstraints constraintWithLowerOffset:0.0];
+    y.majorIntervalLength = @(self.majorIntervalLengthForY);
+    y.labelOffset = 5.0;
+    y.axisConstraints = [CPTConstraints constraintWithLowerOffset:0.0];
     
     // Create the main plot for the delimited data
     CPTScatterPlot *dataSourceLinePlot = [[CPTScatterPlot alloc] initWithFrame:self.graph.bounds];
@@ -111,137 +129,87 @@
     dataSourceLinePlot.dataSource = self;
     [self.graph addPlot:dataSourceLinePlot];
     
-    NSError *error;
-    [self readFromData:nil ofType:@"CSVDocument" error:&error];
-    [self.graph reloadData];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+        while(!self.messageManager.finishedAddingEntries) {
+            //Do nothing
+        }
+        [self updateData];
+        
+        dispatch_async(dispatch_get_main_queue(), ^(void) {
+            [self.graph reloadData];
+            
+        });
+    });
     
 }
 
--(NSData *)dataOfType:(NSString *)typeName error:(NSError *__autoreleasing *)outError
-{
-    // Insert code here to write your document to data of the specified type. If the given outError != NULL, ensure that you set *outError when returning nil.
-    
-    // You can also choose to override -fileWrapperOfType:error:, -writeToURL:ofType:error:, or -writeToURL:ofType:forSaveOperation:originalContentsURL:error: instead.
-    
-    // For applications targeted for Panther or earlier systems, you should use the deprecated API -dataRepresentationOfType:. In this case you can also choose to override -fileWrapperRepresentationOfType: or -writeToFile:ofType: instead.
-    
-    if ( outError != NULL ) {
-        *outError = [NSError errorWithDomain:NSOSStatusErrorDomain code:unimpErr userInfo:NULL];
-    }
-    return nil;
-}
 
--(BOOL)readFromData:(NSData *)data ofType:(NSString *)typeName error:(NSError *__autoreleasing *)outError
+- (void) updateData
 {
-    if ( [typeName isEqualToString:@"CSVDocument"] || 1 == 1 ) {
-        double minX = MAXFLOAT;
-        double maxX = -MAXFLOAT;
+    double minY = MAXFLOAT;
+    double maxY = -MAXFLOAT;
+    
+    NSMutableArray<NSDictionary *> *newData = [[NSMutableArray alloc] init];
+    
+    const int endTime = (int) [[NSDate date] timeIntervalSinceReferenceDate];
+    const int timeInterval = 60 * 60 * 24;
+    
+    int startTime = (int) [[self getDateAtBeginningOfYear:[NSDate date]] timeIntervalSinceReferenceDate];
+    
+    double minX = 0;
+    double maxX = 0;
+    int counter = 0;
+    
+    while(startTime < endTime) {
+        int tempEndTime = startTime + timeInterval;
+        int messageCount = [self.messageManager getConversationMessageCountStartTime:startTime endTime:tempEndTime];
         
-        double minY = MAXFLOAT;
-        double maxY = -MAXFLOAT;
-        
-        NSMutableArray<NSDictionary *> *newData = [[NSMutableArray alloc] init];
-        
-        //NSString *fileContents = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
-        
-        // Parse CSV
-        //NSUInteger length    = fileContents.length;
-        //NSUInteger lineStart = 0, lineEnd = 0, contentsEnd = 0;
-        //NSRange currentRange;
-        
-        // Read headers from the first line of the file
-        //[fileContents getParagraphStart:&lineStart end:&lineEnd contentsEnd:&contentsEnd forRange:NSMakeRange(lineEnd, 0)];
-        //		currentRange = NSMakeRange(lineStart, contentsEnd - lineStart);
-        //		CPTStringArray columnHeaders = [[fileContents substringWithRange:currentRange] arrayByParsingCSVLine];
-        //		NSLog([columnHeaders objectAtIndex:0]);
-        
-        /*while ( lineEnd < length ) {
-            [fileContents getParagraphStart:&lineStart end:&lineEnd contentsEnd:&contentsEnd forRange:NSMakeRange(lineEnd, 0)];
-            currentRange = NSMakeRange(lineStart, contentsEnd - lineStart);
-            CPTStringArray columnValues = [self getSomeData]; //[[fileContents substringWithRange:currentRange] arrayByParsingCSVLine];
-            
-            double xValue = [columnValues[0] doubleValue];
-            double yValue = [columnValues[1] doubleValue];
-            if ( xValue < minX ) {
-                minX = xValue;
-            }
-            if ( xValue > maxX ) {
-                maxX = xValue;
-            }
-            if ( yValue < minY ) {
-                minY = yValue;
-            }
-            if ( yValue > maxY ) {
-                maxY = yValue;
-            }
-            
-        }*/
-        
-        CPTStringArray array = [self getSomeData];
-        
-        for(int i = 0; i < array.count - 1; i+=2) {
-            int xValue = [array[i] intValue];
-            int yValue = [array[i + 1] intValue];
-            
-            if ( xValue < minX ) {
-                minX = xValue;
-            }
-            if ( xValue > maxX ) {
-                maxX = xValue;
-            }
-            if ( yValue < minY ) {
-                minY = yValue;
-            }
-            if ( yValue > maxY ) {
-                maxY = yValue;
-            }
-            [newData addObject:@{ @"x": @(xValue),
-                                  @"y": @(yValue) }
-             ];
+        if(messageCount < minY) {
+            minY = messageCount;
+        }
+        if(messageCount > maxY) {
+            maxY = messageCount;
         }
         
-        self.dataPoints = newData;
+        NSLog(@"Adding: %d\t%d", (startTime + timeInterval/2), messageCount);
         
-        double intervalX = (60 - 20) / 5.0;
-        if ( intervalX > 0.0 ) {
-            intervalX = pow( 10.0, ceil( log10(intervalX) ) );
-        }
-        self.majorIntervalLengthForX = intervalX;
+        [newData addObject:@{ @"x": @(counter),
+                              @"y": @(messageCount)}];
         
-        double intervalY = (60 - 30) / 10.0;
-        if ( intervalY > 0.0 ) {
-            intervalY = pow( 10.0, ceil( log10(intervalY) ) );
-        }
-        self.majorIntervalLengthForY = intervalY;
-        
-        minX = 20; //floor(minX / intervalX) * intervalX;
-        minY = 20; //floor(minY / intervalY) * intervalY;
-        
-        self.minimumValueForXAxis = 30; //minX;
-        self.maximumValueForXAxis = 70; //maxX;
-        self.minimumValueForYAxis = 30; //minY;
-        self.maximumValueForYAxis = 70; //maxY;
+        startTime += timeInterval;
+        counter++;
     }
     
-    if ( outError != NULL ) {
-        *outError = [NSError errorWithDomain:NSOSStatusErrorDomain code:unimpErr userInfo:NULL];
-    }
+    maxX = counter + 1;
+    self.dataPoints = newData;
     
-    return YES;
-}
-
--(void)generateData
-{
-    /*if ( self.plotData == nil ) {
-        NSMutableArray<NSDictionary *> *contentArray = [NSMutableArray array];
-        for ( NSUInteger i = 0; i < 10; i++ ) {
-            NSNumber *x = @(1.0 + i * 0.05);
-            NSNumber *y = @(1.2 * arc4random() / (double)UINT32_MAX + 0.5);
-            [contentArray addObject:@{ @"x": x, @"y": y }
-             ];
-        }
-        self.plotData = contentArray;
-    }*/
+    double intervalX = (60 - 20) / 5.0;
+    if ( intervalX > 0.0 ) {
+        intervalX = pow( 10.0, ceil( log10(intervalX) ) );
+    }
+    self.majorIntervalLengthForX = intervalX;
+    
+    double intervalY = (60 - 30) / 10.0;
+    if ( intervalY > 0.0 ) {
+        intervalY = pow( 10.0, ceil( log10(intervalY) ) );
+    }
+    self.majorIntervalLengthForY = intervalY;
+    
+    minX = floor(minX / intervalX) * intervalX;
+    minY = floor(minY / intervalY) * intervalY;
+    
+    self.minimumValueForXAxis = minX;
+    self.maximumValueForXAxis = maxX;
+    self.minimumValueForYAxis = minY;
+    self.maximumValueForYAxis = maxY;
+    
+    CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)self.graph.defaultPlotSpace;
+    plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:@(0)
+                                                    length:@(maxX)];
+    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:@(0)
+                                                    length:@(maxY + 30)];
+    
+    NSLog(@"MAX: %f", maxY);
 }
 
 
@@ -277,27 +245,6 @@
     axisSet.yAxis.labelingPolicy = CPTAxisLabelingPolicyAutomatic;
 }
 
-- (CPTStringArray) getSomeData
-{
-    CPTMutableStringArray array = [NSMutableArray array];
-    
-    for(int i = 0; i < 10; i++) {
-        
-        int num = [self getRandomIntWithUpperbound:60 lowerBound:20];
-        int num2 = [self getRandomIntWithUpperbound:60 lowerBound:30];
-        
-        [array addObject:[NSString stringWithFormat:@"%d", num]];
-        [array addObject:[NSString stringWithFormat:@"%d", num2]];
-        NSLog(@"%d\t%d", num, num2);
-    }
-    
-    return array;
-}
-
-- (int) getRandomIntWithUpperbound:(int)upperbound lowerBound:(int)lowerBound
-{
-    return lowerBound + arc4random() % (upperbound - lowerBound);
-}
 
 -(IBAction)zoomOut
 {
@@ -352,11 +299,10 @@
 -(id)numberForPlot:(CPTPlot *)plot field:(NSUInteger)fieldEnum recordIndex:(NSUInteger)index
 {
     NSString *key = (fieldEnum == CPTScatterPlotFieldX ? @"x" : @"y");
-    NSLog(@"Also called");
+    NSLog(@"Also called: %@", self.dataPoints[index][key]);
     return self.dataPoints[index][key];
 }
 
-#pragma mark -
 #pragma mark Plot Space Delegate Methods
 
 
@@ -396,7 +342,6 @@
 }
 
 
-#pragma mark -
 #pragma mark Plot Space Delegate Methods
 
 -(BOOL)plotSpace:(CPTPlotSpace *)space shouldHandlePointingDeviceDraggedEvent:(id)event atPoint:(CGPoint)interactionPoint
@@ -520,4 +465,38 @@
     
     return NO;
 }
+
+- (NSDate*) getDateAtBeginningOfYear:(NSDate*)inputDate
+{
+    // Selectively convert the date components (year, month, day) of the input date
+    NSDateComponents *dateComps = [self.calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay fromDate:inputDate];
+    
+    // Set the time components manually
+    [dateComps setHour:0];
+    [dateComps setMinute:0];
+    [dateComps setSecond:0];
+    [dateComps setMonth:0];
+    [dateComps setDay:0];
+    
+    
+    // Convert back
+    NSDate *beginningOfDay = [self.calendar dateFromComponents:dateComps];
+    return beginningOfDay;
+}
+
+- (long)timeAtBeginningOfDayForDate:(NSDate*)inputDate
+{
+    // Selectively convert the date components (year, month, day) of the input date
+    NSDateComponents *dateComps = [self.calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay fromDate:inputDate];
+    
+    // Set the time components manually
+    [dateComps setHour:0];
+    [dateComps setMinute:0];
+    [dateComps setSecond:0];
+    
+    // Convert back
+    NSDate *beginningOfDay = [self.calendar dateFromComponents:dateComps];
+    return [beginningOfDay timeIntervalSinceReferenceDate];
+}
+
 @end

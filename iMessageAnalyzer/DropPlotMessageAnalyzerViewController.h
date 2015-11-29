@@ -10,13 +10,13 @@
 
 #import <CorePlot/CorePlot.h>
 
-#import "MessageManager.h"
+#import "TemporaryDatabaseManager.h"
 #import "Message.h"
 #import "Person.h"
 #import "Statistics.h"
 
 @interface DropPlotMessageAnalyzerViewController : NSViewController <CPTPlotDataSource, CPTPlotSpaceDelegate>
 
-- (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil person:(Person*)person;
+- (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil person:(Person*)person temporaryDatabase:(TemporaryDatabaseManager*)temporaryDatabase firstMessageDate:(NSDate*)firstMessage;
 
 @end

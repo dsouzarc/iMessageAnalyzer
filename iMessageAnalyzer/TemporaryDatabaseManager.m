@@ -28,6 +28,7 @@ static NSString *otherMessagesTable = @"otherMessagesTable";
     
     if(self) {
         self.person = person;
+        self.finishedAddingEntries = NO;
         
         self.calendar = [NSCalendar currentCalendar];
         [self.calendar setTimeZone:[NSTimeZone systemTimeZone]];
@@ -108,6 +109,7 @@ static NSString *otherMessagesTable = @"otherMessagesTable";
     }
     
     sqlite3_exec(_database, "COMMIT TRANSACTION", NULL, NULL, &errorMessage);
+    self.finishedAddingEntries = YES;
 }
 
 - (NSString*) insertOtherMessageQuery:(NSDictionary*)otherMessage

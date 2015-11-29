@@ -93,7 +93,7 @@
         self.messageWithAttachmentAttributes = [NSDictionary dictionaryWithObjectsAndKeys:[NSColor yellowColor], NSForegroundColorAttributeName,
                                                 [NSNumber numberWithInt:NSUnderlineStyleSingle], NSUnderlineStyleAttributeName, nil];
         
-        self.droplotMessageAnalyzerViewController = [[DropPlotMessageAnalyzerViewController alloc] initWithNibName:@"DropPlotMessageAnalyzerViewController" bundle:[NSBundle mainBundle] person:self.person];
+        self.droplotMessageAnalyzerViewController = [[DropPlotMessageAnalyzerViewController alloc] initWithNibName:@"DropPlotMessageAnalyzerViewController" bundle:[NSBundle mainBundle] person:self.person temporaryDatabase:self.databaseManager firstMessageDate:self.calendarChosenDate];
     }
     
     return self;
