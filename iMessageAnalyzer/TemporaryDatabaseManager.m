@@ -33,8 +33,9 @@ static NSString *otherMessagesTable = @"otherMessagesTable";
         self.calendar = [NSCalendar currentCalendar];
         [self.calendar setTimeZone:[NSTimeZone systemTimeZone]];
         
+        const char *filePath = [self filePath]; //"file::memory:";
         //[self filePath]
-        if(sqlite3_open("file::memory:", &_database) == SQLITE_OK) {
+        if(sqlite3_open(filePath, &_database) == SQLITE_OK) {
             printf("OPENED TEMPORARY DATABASE\n");
             
             [self createMyMessagesTable];
@@ -262,6 +263,26 @@ static NSString *otherMessagesTable = @"otherMessagesTable";
     return [self getSimpleCountFromQuery:query];
 }
 
+- (NSMutableArray*) getConversationAndOtherMessagesCountStartTime:(int)startTime endTime:(int)endTime
+{
+    NSString *query = [NSString stringWithFormat:@"SELECT COUNT(*) FROM myMessagesTable WHERE (date > %d AND date < %d) UNION ALL SELECT COUNT(*) FROM otherMessagesTable WHERE (date > %d AND date < %d)", startTime, endTime, startTime, endTime];
+    
+    NSMutableArray *counters = [[NSMutableArray alloc] init];
+
+    sqlite3_stmt *statement;
+    
+    if(sqlite3_prepare(_database, [query UTF8String], -1, &statement, NULL) == SQLITE_OK) {
+        while(sqlite3_step(statement) == SQLITE_ROW) {
+            int count = sqlite3_column_int(statement, 0);
+            [counters addObject:[NSNumber numberWithInt:count]];
+        }
+    }
+    
+    sqlite3_finalize(statement);
+    
+    return counters;
+}
+
 - (int) getSimpleCountFromQuery:(NSString*)queryString
 {
     const char *query = [queryString UTF8String];
@@ -345,7 +366,7 @@ static NSString *otherMessagesTable = @"otherMessagesTable";
 {
     NSArray *paths=NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentDirectory=[paths objectAtIndex:0];
-    return [[documentDirectory stringByAppendingPathComponent:@"LoginDatabase.sql"] UTF8String];
+    return [[documentDirectory stringByAppendingPathComponent:@"LoginDatabase.db"] UTF8String];
 }
 
 

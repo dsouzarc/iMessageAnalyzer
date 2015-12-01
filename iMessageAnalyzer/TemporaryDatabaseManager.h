@@ -30,6 +30,8 @@
 
 #pragma GET_COUNTS
 
+- (NSMutableArray*) getConversationAndOtherMessagesCountStartTime:(int)startTime endTime:(int)endTime;
+
 - (int) getConversationMessageCountStartTime:(int)startTime endTime:(int)endTime;
 - (int) getOtherMessagesCountStartTime:(int)startTime endTime:(int)endTime;
 
