@@ -31,9 +31,12 @@ typedef NS_ENUM(NSInteger, Graph_Scale) {
 @property (nonatomic, readwrite, assign) double majorIntervalLengthForX;
 @property (nonatomic, readwrite, assign) double majorIntervalLengthForY;
 
+@property (nonatomic, readwrite, assign) double totalMaximumYValue;
+
 @property (nonatomic, readwrite, strong) NSArray<NSDictionary *> *dataPoints;
 
 @property (nonatomic, readwrite, strong) CPTPlotSpaceAnnotation *zoomAnnotation;
+@property (nonatomic, readwrite, strong) CPTPlotSpace *thisConversationPlot;
 @property (nonatomic, readwrite, assign) CGPoint dragStart;
 @property (nonatomic, readwrite, assign) CGPoint dragEnd;
 
@@ -126,8 +129,27 @@ typedef NS_ENUM(NSInteger, Graph_Scale) {
     lineStyle.lineColor              = [CPTColor whiteColor];
     dataSourceLinePlot.dataLineStyle = lineStyle;
     
+    CPTMutableTextStyle *textStyle = [CPTMutableTextStyle textStyle];
+    [textStyle setFontSize:8.0f];
+    [textStyle setColor:[CPTColor colorWithCGColor:[[NSColor grayColor] CGColor]]];
+    
+    CPTXYAxis *xAxis = [axisSet xAxis];
+    xAxis.labelingPolicy = CPTAxisLabelingPolicyNone;
+    [xAxis setMajorIntervalLength:[NSNumber numberWithDouble:12.0]];
+    [xAxis setMinorTickLineStyle:nil];
+    [xAxis setLabelingPolicy:CPTAxisLabelingPolicyNone];
+    [xAxis setLabelTextStyle:textStyle];
+    [xAxis setLabelRotation:M_PI/4];
+    
+    NSArray *subjectsArray = [self getSubjectTitlesAsArray];
+    
+    [xAxis setAxisLabels:[NSSet setWithArray:subjectsArray]];
+
+    
     dataSourceLinePlot.dataSource = self;
     [self.graph addPlot:dataSourceLinePlot];
+    
+    
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         while(!self.messageManager.finishedAddingEntries) {
@@ -137,19 +159,37 @@ typedef NS_ENUM(NSInteger, Graph_Scale) {
         
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             [self.graph reloadData];
-            
+
         });
     });
-    
 }
 
+- (NSArray *)getSubjectTitlesAsArray
+{
+    NSMutableArray *labelArray = [NSMutableArray array];
+    
+    CPTMutableTextStyle *textStyle = [CPTMutableTextStyle textStyle];
+    [textStyle setFontSize:10];
+    
+    for (int i = 0; i < [self.dataPoints count]; i++)
+    {
+
+        CPTAxisLabel *axisLabel = [[CPTAxisLabel alloc] initWithText:@"HELLO" textStyle:textStyle];
+        [axisLabel setTickLocation:[NSNumber numberWithDouble:(i + 1)]];
+        [axisLabel setRotation:M_PI/4];
+        [axisLabel setOffset:0.1];
+        [labelArray addObject:axisLabel];
+    }
+    
+    return [NSArray arrayWithArray:labelArray];
+}
 
 - (void) updateData
 {
     double minY = MAXFLOAT;
     double maxY = -MAXFLOAT;
     
-    NSMutableArray<NSDictionary *> *newData = [[NSMutableArray alloc] init];
+    NSMutableArray<NSDictionary*> *newData = [[NSMutableArray alloc] init];
     
     const int endTime = (int) [[NSDate date] timeIntervalSinceReferenceDate];
     const int timeInterval = 60 * 60 * 24;
@@ -170,8 +210,6 @@ typedef NS_ENUM(NSInteger, Graph_Scale) {
         if(messageCount > maxY) {
             maxY = messageCount;
         }
-        
-        NSLog(@"Adding: %d\t%d", (startTime + timeInterval/2), messageCount);
         
         [newData addObject:@{ @"x": @(counter),
                               @"y": @(messageCount)}];
@@ -207,7 +245,9 @@ typedef NS_ENUM(NSInteger, Graph_Scale) {
     plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:@(0)
                                                     length:@(maxX)];
     plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:@(0)
-                                                    length:@(maxY + 30)];
+                                                    length:@((maxY * 11) / 10)];
+    
+    self.totalMaximumYValue = maxY;
     
     NSLog(@"MAX: %f", maxY);
 }
@@ -241,31 +281,18 @@ typedef NS_ENUM(NSInteger, Graph_Scale) {
                                                     length:@(self.maximumValueForYAxis - self.minimumValueForYAxis)];
     
     CPTXYAxisSet *axisSet = (CPTXYAxisSet *)self.graph.axisSet;
-    axisSet.xAxis.labelingPolicy = CPTAxisLabelingPolicyAutomatic;
+    //axisSet.xAxis.labelingPolicy = CPTAxisLabelingPolicyAutomatic;
     axisSet.yAxis.labelingPolicy = CPTAxisLabelingPolicyAutomatic;
 }
 
 
 -(IBAction)zoomOut
 {
-    double minX = MAXFLOAT;
-    double maxX = -MAXFLOAT;
+    double minX = 0;
+    double maxX = 366;
     
-    double minY = MAXFLOAT;
-    double maxY = -MAXFLOAT;
-    
-    // get the ful range min and max values
-    for ( NSDictionary<NSString *, NSNumber *> *xyValues in self.dataPoints ) {
-        double xVal = [xyValues[@"x"] doubleValue];
-        
-        minX = fmin(xVal, minX);
-        maxX = fmax(xVal, maxX);
-        
-        double yVal = [xyValues[@"y"] doubleValue];
-        
-        minY = fmin(yVal, minY);
-        maxY = fmax(yVal, maxY);
-    }
+    double minY = 0;
+    double maxY = self.totalMaximumYValue;
     
     double intervalX = self.majorIntervalLengthForX;
     double intervalY = self.majorIntervalLengthForY;
@@ -292,14 +319,13 @@ typedef NS_ENUM(NSInteger, Graph_Scale) {
 
 -(NSUInteger)numberOfRecordsForPlot:(CPTPlot *)plot
 {
-    NSLog(@"CALLED: %ld", self.dataPoints.count);
     return self.dataPoints.count;
 }
 
 -(id)numberForPlot:(CPTPlot *)plot field:(NSUInteger)fieldEnum recordIndex:(NSUInteger)index
 {
     NSString *key = (fieldEnum == CPTScatterPlotFieldX ? @"x" : @"y");
-    NSLog(@"Also called: %@", self.dataPoints[index][key]);
+    //NSLog(@"Also called: %@", self.dataPoints[index][key]);
     return self.dataPoints[index][key];
 }
 
@@ -341,6 +367,10 @@ typedef NS_ENUM(NSInteger, Graph_Scale) {
     }
 }
 
+- (void) plotSpace:(CPTPlotSpace *)space didChangePlotRangeForCoordinate:(CPTCoordinate)coordinate
+{
+    NSLog(@"CHANGED!!");
+}
 
 #pragma mark Plot Space Delegate Methods
 
