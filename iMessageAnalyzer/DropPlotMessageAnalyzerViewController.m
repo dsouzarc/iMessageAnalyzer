@@ -163,10 +163,12 @@ typedef NS_ENUM(NSInteger, Graph_Scale) {
         while(!self.messageManager.finishedAddingEntries) {
             //Do nothing
         }
+        //[self getData];
         [self updateData];
         
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             [self.graph reloadData];
+            
 
         });
     });
@@ -202,6 +204,75 @@ typedef NS_ENUM(NSInteger, Graph_Scale) {
     return [NSArray arrayWithArray:labelArray];
 }
 
+- (void) getData
+{
+    NSDate *methodStart = [NSDate date];
+    
+    NSMutableArray *allMessages = [self.messageManager getAllMessagesForPerson:self.person];
+    
+    NSMutableArray<NSDictionary*> *newData = [[NSMutableArray alloc] init];
+    
+    const int endTime = (int) [[self getDateAtEndOfYear:[NSDate date]] timeIntervalSinceReferenceDate]; //(int) [[NSDate date] timeIntervalSinceReferenceDate];
+    const int timeInterval = 60 * 60;
+    
+    int startTime = (int) [[self getDateAtBeginningOfYear:[NSDate date]] timeIntervalSinceReferenceDate];
+    
+    double minX = 0;
+    double maxX = 60 * 60 * 365;
+    
+    double minY = 0;
+    double maxY = 0;
+    
+    int counter = 0;
+    int hour = 0;
+    
+    while(startTime < endTime && counter < allMessages.count) {
+        Message *message = allMessages[counter];
+        
+        //Message occurs after time interval
+        if([message.dateSent timeIntervalSinceReferenceDate] > (startTime + timeInterval)) {
+            [newData addObject:@{@"x": @(hour), @"y": @(0)}];
+        }
+        else {
+            int numMessages = 0;
+            while([message.dateSent timeIntervalSinceReferenceDate] <= (startTime + timeInterval) && counter+1 < allMessages.count) {
+                numMessages++;
+                counter++;
+                message = allMessages[counter];
+            }
+            
+            [newData addObject:@{@"x": @(hour), @"y": @(numMessages)}];
+            
+            if(numMessages > maxY) {
+                maxY = numMessages;
+            }
+        }
+        
+        hour++;
+        startTime += timeInterval;
+        
+    }
+    
+    NSDate *methodFinish = [NSDate date];
+    NSTimeInterval executionTime = [methodFinish timeIntervalSinceDate:methodStart];
+    NSLog(@"executionTime = %f", executionTime);
+    
+    self.dataPoints = newData;
+    
+    self.minimumValueForXAxis = minX;
+    self.maximumValueForXAxis = maxX;
+    self.minimumValueForYAxis = minY;
+    self.maximumValueForYAxis = maxY;
+    
+    CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)self.graph.defaultPlotSpace;
+    plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:@(0)
+                                                    length:@(maxX)];
+    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:@(0)
+                                                    length:@((maxY * 11) / 10)];
+    
+    self.totalMaximumYValue = maxY;
+}
+
 - (void) updateData
 {
     double minY = MAXFLOAT;
@@ -217,7 +288,6 @@ typedef NS_ENUM(NSInteger, Graph_Scale) {
     double minX = 0;
     double maxX = 0;
     int counter = 0;
-    
     while(startTime < endTime) {
         int tempEndTime = startTime + timeInterval;
         int messageCount = [self.messageManager getConversationMessageCountStartTime:startTime endTime:tempEndTime];
@@ -225,6 +295,7 @@ typedef NS_ENUM(NSInteger, Graph_Scale) {
         if(messageCount < minY) {
             minY = messageCount;
         }
+        
         if(messageCount > maxY) {
             maxY = messageCount;
         }
@@ -340,7 +411,7 @@ typedef NS_ENUM(NSInteger, Graph_Scale) {
 {
     NSString *key = (fieldEnum == CPTScatterPlotFieldX ? @"x" : @"y");
     
-    NSLog(@"%d\t%@\t%@", index, self.dataPoints[index][@"x"], self.dataPoints[index][@"y"]);
+    //NSLog(@"%d\t%@\t%@", index, self.dataPoints[index][@"x"], self.dataPoints[index][@"y"]);
     
     //NSLog(@"Also called: %@", self.dataPoints[index][key]);
     return self.dataPoints[index][key];
