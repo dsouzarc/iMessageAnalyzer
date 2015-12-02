@@ -66,14 +66,13 @@ static NSString *otherMessagesTable = @"otherMessagesTable";
 - (NSString*) insertMessageQuery:(Message*)message
 {
     int date = [message.dateSent timeIntervalSinceReferenceDate];
-    int unix = [message.dateSent timeIntervalSince1970];
     int dateRead = message.dateRead ? [message.dateRead timeIntervalSinceReferenceDate] : 0;
     NSString *service = message.isIMessage ? @"iMessage" : @"SMS";
     int isFromMe = message.isFromMe ? 1 : 0;
     int cache_has_attachments = message.hasAttachment || message.attachments ? 1 : 0;
     int wordCount = (int)[message.messageText componentsSeparatedByString:@" "].count;
     NSString *text = [message.messageText stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
-    return [NSString stringWithFormat:@"INSERT INTO %@(ROWID, guid, text, handle_id, service, date, date_read, is_from_me, cache_has_attachments, wordCount, unix) VALUES ('%d', '%@', '%@', '%d', '%@', '%d', '%d', '%d', '%d', '%d', '%d')", myMessagesTable, (int)message.messageId, message.messageGUID, text, (int) message.handleId, service, date, dateRead, isFromMe, cache_has_attachments, wordCount, unix];
+    return [NSString stringWithFormat:@"INSERT INTO %@(ROWID, guid, text, handle_id, service, date, date_read, is_from_me, cache_has_attachments, wordCount) VALUES ('%d', '%@', '%@', '%d', '%@', '%d', '%d', '%d', '%d', '%d')", myMessagesTable, (int)message.messageId, message.messageGUID, text, (int) message.handleId, service, date, dateRead, isFromMe, cache_has_attachments, wordCount];
 }
 
 - (void) addMessagesToDatabase:(NSMutableArray*)messages
@@ -118,11 +117,10 @@ static NSString *otherMessagesTable = @"otherMessagesTable";
 {
     int rowID = [otherMessage[@"ROWID"] intValue];
     int date = [otherMessage[@"date"] intValue];
-    int unix = date + 978307200;
     int wordCount = [otherMessage[@"wordCount"] intValue];
     int isFromMe = [otherMessage[@"is_from_me"] intValue];
     int hasAttachment = [otherMessage[@"cache_has_attachments"] intValue];
-    return [NSString stringWithFormat:@"INSERT INTO %@(ROWID, date, wordCount, is_from_me, cache_has_attachments, unix) VALUES (%d, %d, %d, %d, %d, '%d')", otherMessagesTable, rowID, date, wordCount, isFromMe, hasAttachment, unix];
+    return [NSString stringWithFormat:@"INSERT INTO %@(ROWID, date, wordCount, is_from_me, cache_has_attachments) VALUES (%d, %d, %d, %d, %d)", otherMessagesTable, rowID, date, wordCount, isFromMe, hasAttachment];
 }
 
 
@@ -369,13 +367,13 @@ static NSString *otherMessagesTable = @"otherMessagesTable";
 - (void) createOtherMessagesTable
 {
     //CREATE TABLE %@ (ROWID INTEGER PRIMARY KEY, date INTEGER, wordCount INTEGER, is_from_me INTEGER DEFAULT 0, cache_has_attachments INTEGER
-    NSString *createQuery = [NSString stringWithFormat:@"CREATE TABLE %@ (ROWID INTEGER PRIMARY KEY, date INTEGER, wordCount INTEGER, is_from_me INTEGER, cache_has_attachments INTEGER, unix INTEGER)", otherMessagesTable];
+    NSString *createQuery = [NSString stringWithFormat:@"CREATE TABLE %@ (ROWID INTEGER PRIMARY KEY, date INTEGER, wordCount INTEGER, is_from_me INTEGER, cache_has_attachments INTEGER)", otherMessagesTable];
     [self createTable:otherMessagesTable createTableStatement:createQuery];
 }
 
 - (void) createMyMessagesTable
 {
-    NSString *createQuery = [NSString stringWithFormat:@"CREATE TABLE %@ (ROWID INTEGER PRIMARY KEY, guid TEXT UNIQUE NOT NULL, text TEXT, handle_id INTEGER DEFAULT 0, service TEXT, date INTEGER, date_read INTEGER, is_from_me, unix INTEGER INTEGER DEFAULT 0, cache_has_attachments INTEGER DEFAULT 0, wordCount INTEGER)", myMessagesTable];
+    NSString *createQuery = [NSString stringWithFormat:@"CREATE TABLE %@ (ROWID INTEGER PRIMARY KEY, guid TEXT UNIQUE NOT NULL, text TEXT, handle_id INTEGER DEFAULT 0, service TEXT, date INTEGER, date_read INTEGER, is_from_me, cache_has_attachments INTEGER DEFAULT 0, wordCount INTEGER)", myMessagesTable];
     [self createTable:myMessagesTable createTableStatement:createQuery];
 }
 
