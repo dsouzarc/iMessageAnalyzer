@@ -135,20 +135,28 @@ typedef NS_ENUM(NSInteger, Graph_Scale) {
     
     CPTXYAxis *xAxis = [axisSet xAxis];
     xAxis.labelingPolicy = CPTAxisLabelingPolicyNone;
-    [xAxis setMajorIntervalLength:[NSNumber numberWithDouble:12.0]];
+    [xAxis setMajorIntervalLength:[NSNumber numberWithDouble:30.0]];
     [xAxis setMinorTickLineStyle:nil];
     [xAxis setLabelingPolicy:CPTAxisLabelingPolicyNone];
     [xAxis setLabelTextStyle:textStyle];
     [xAxis setLabelRotation:M_PI/4];
     
-    NSArray *subjectsArray = [self getSubjectTitlesAsArray];
+    NSMutableArray *tickLocations = [[NSMutableArray alloc] init];
+    NSMutableArray *tickLabels = [[NSMutableArray alloc] init];
+    for(int i = 0; i < 12; i++) {
+        [tickLocations addObject:[NSNumber numberWithInt:30 * i]];
+        CPTAxisLabel *label = [[CPTAxisLabel alloc] initWithText:[self MonthNameString:i] textStyle:xAxis.labelTextStyle];
+        label.tickLocation = [NSNumber numberWithInt:30 * i + 15];
+        label.offset = 3.0f;
+        label.rotation = M_PI/3.5f;
+        [tickLabels addObject:label];
+    }
     
-    [xAxis setAxisLabels:[NSSet setWithArray:subjectsArray]];
-
+    xAxis.axisLabels = [NSSet setWithArray:tickLabels];
+    xAxis.majorTickLocations = [NSSet setWithArray:tickLocations];
     
     dataSourceLinePlot.dataSource = self;
     [self.graph addPlot:dataSourceLinePlot];
-    
     
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
@@ -164,6 +172,17 @@ typedef NS_ENUM(NSInteger, Graph_Scale) {
     });
 }
 
+-(NSString*)MonthNameString:(int)monthNumber
+{
+    NSDateFormatter *formate = [NSDateFormatter new];
+    
+    NSArray *monthNames = [formate standaloneMonthSymbols];
+    
+    NSString *monthName = [monthNames objectAtIndex:monthNumber];
+    
+    return monthName;
+}
+
 - (NSArray *)getSubjectTitlesAsArray
 {
     NSMutableArray *labelArray = [NSMutableArray array];
@@ -171,9 +190,8 @@ typedef NS_ENUM(NSInteger, Graph_Scale) {
     CPTMutableTextStyle *textStyle = [CPTMutableTextStyle textStyle];
     [textStyle setFontSize:10];
     
-    for (int i = 0; i < [self.dataPoints count]; i++)
+    for (int i = 0; i < 12; i++)
     {
-
         CPTAxisLabel *axisLabel = [[CPTAxisLabel alloc] initWithText:@"HELLO" textStyle:textStyle];
         [axisLabel setTickLocation:[NSNumber numberWithDouble:(i + 1)]];
         [axisLabel setRotation:M_PI/4];
@@ -292,7 +310,6 @@ typedef NS_ENUM(NSInteger, Graph_Scale) {
     double maxX = 366;
     
     double minY = 0;
-    double maxY = self.totalMaximumYValue;
     
     double intervalX = self.majorIntervalLengthForX;
     double intervalY = self.majorIntervalLengthForY;
@@ -303,7 +320,7 @@ typedef NS_ENUM(NSInteger, Graph_Scale) {
     self.minimumValueForXAxis = minX;
     self.maximumValueForXAxis = maxX;
     self.minimumValueForYAxis = minY;
-    self.maximumValueForYAxis = maxY;
+    self.maximumValueForYAxis = (self.totalMaximumYValue * 11) / 10;
     
     // now adjust the plot range and axes
     CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)self.graph.defaultPlotSpace;
@@ -311,7 +328,7 @@ typedef NS_ENUM(NSInteger, Graph_Scale) {
     plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:@(minX)
                                                     length:@(ceil( (maxX - minX) / intervalX ) * intervalX)];
     plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:@(minY)
-                                                    length:@(ceil( (maxY - minY) / intervalY ) * intervalY)];
+                                                    length:@((self.totalMaximumYValue * 11) / 10)];
     CPTXYAxisSet *axisSet = (CPTXYAxisSet *)self.graph.axisSet;
     axisSet.xAxis.labelingPolicy = CPTAxisLabelingPolicyFixedInterval;
     axisSet.yAxis.labelingPolicy = CPTAxisLabelingPolicyFixedInterval;
