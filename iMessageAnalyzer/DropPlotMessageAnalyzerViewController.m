@@ -328,14 +328,6 @@ typedef NS_ENUM(NSInteger, Graph_Scale) {
     NSLog(@"MAX: %f", maxY);
 }
 
-
-- (NSString*) good:(NSDate*)date
-{
-    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-    [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-    return [dateFormat stringFromDate:date];
-}
-
 -(IBAction)zoomIn
 {
     NSLog(@"ZOOMED IN");

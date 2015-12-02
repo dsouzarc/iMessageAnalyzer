@@ -34,3 +34,46 @@ SELECT count(*) FROM message messageT INNER JOIN chat_message_join chatMessageT 
 
 SELECT messageT.ROWID, messageT.date, messageT.text, messageT.is_from_me, messageT.cache_has_attachments FROM message messageT INNER JOIN chat_message_join chatMessageT ON (chatMessageT.chat_id!=173 AND chatMessageT.chat_id!=198) AND messageT.ROWID=chatMessageT.message_id ORDER BY messageT.date
 
+
+ WITH RECURSIVE dates(x) AS ( 
+            SELECT '2015-01-01 00:00:01' 
+                UNION ALL 
+            SELECT DATETIME(x, '+1 HOUR') FROM dates WHERE x<'2016-01-01 00:00:01' 
+        ) 
+        SELECT * FROM dates;
+
+
+WITH RECURSIVE dates(x, y) AS ( 
+            SELECT '2015-01-01 00:00:01', 1420088401
+                UNION ALL 
+            SELECT DATETIME(x, '+1 HOUR'), strftime('%s', x) FROM dates WHERE x<'2016-01-01 00:00:01' 
+        ) 
+        SELECT * FROM dates;
+
+WITH RECURSIVE dates(x, y) AS ( 
+            SELECT '2015-09-17 00:00:01', 1420088401
+                UNION ALL 
+            SELECT DATETIME(x, '+1 HOUR'), strftime('%s', x) FROM dates WHERE x<'2015-09-22 00:00:01' 
+        ) 
+        SELECT * FROM dates INNER JOIN myMessagesTable temp ON temp.unix < dates.y
+
+
+
+
+WITH RECURSIVE dates(x, y) AS ( 
+            SELECT '2015-09-17 00:00:01', 1420088401
+                UNION ALL 
+            SELECT DATETIME(x, '+1 HOUR'), strftime('%s', x) FROM dates WHERE x<'2015-09-22 00:00:01' 
+        ) 
+        SELECT * FROM dates INNER JOIN myMessagesTable temp ON temp.unix > dates.y AND temp.unix < dates.y + 3600
+
+
+WITH RECURSIVE dates(x, y) AS ( 
+            SELECT '2015-09-17 00:00:01', 1420088401 INNER JOIN myMessagesTable temp HERE temp.unix > dates.y AND temp.unix < dates.y + 3600
+                UNION ALL 
+            SELECT DATETIME(x, '+1 HOUR'), strftime('%s', x) FROM dates WHERE x<'2015-09-22 00:00:01' 
+        ) 
+        SELECT dates.x, dates.y FROM dates
+
+
+
