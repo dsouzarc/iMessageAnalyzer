@@ -147,7 +147,7 @@ typedef NS_ENUM(NSInteger, Graph_Scale) {
         [tickLocations addObject:[NSNumber numberWithInt:30 * i]];
         CPTAxisLabel *label = [[CPTAxisLabel alloc] initWithText:[self MonthNameString:i] textStyle:xAxis.labelTextStyle];
         label.tickLocation = [NSNumber numberWithInt:30 * i + 15];
-        label.offset = 3.0f;
+        label.offset = 1.0f;
         label.rotation = M_PI/3.5f;
         [tickLabels addObject:label];
     }
@@ -209,7 +209,7 @@ typedef NS_ENUM(NSInteger, Graph_Scale) {
     
     NSMutableArray<NSDictionary*> *newData = [[NSMutableArray alloc] init];
     
-    const int endTime = (int) [[NSDate date] timeIntervalSinceReferenceDate];
+    const int endTime = (int) [[self getDateAtEndOfYear:[NSDate date]] timeIntervalSinceReferenceDate]; //(int) [[NSDate date] timeIntervalSinceReferenceDate];
     const int timeInterval = 60 * 60 * 24;
     
     int startTime = (int) [[self getDateAtBeginningOfYear:[NSDate date]] timeIntervalSinceReferenceDate];
@@ -232,27 +232,14 @@ typedef NS_ENUM(NSInteger, Graph_Scale) {
         [newData addObject:@{ @"x": @(counter),
                               @"y": @(messageCount)}];
         
+        //NSLog(@"GOT INFO FOR: %@", [self good:[NSDate dateWithTimeIntervalSinceReferenceDate:tempEndTime]]);
+        
         startTime += timeInterval;
         counter++;
     }
     
     maxX = counter + 1;
     self.dataPoints = newData;
-    
-    double intervalX = (60 - 20) / 5.0;
-    if ( intervalX > 0.0 ) {
-        intervalX = pow( 10.0, ceil( log10(intervalX) ) );
-    }
-    self.majorIntervalLengthForX = intervalX;
-    
-    double intervalY = (60 - 30) / 10.0;
-    if ( intervalY > 0.0 ) {
-        intervalY = pow( 10.0, ceil( log10(intervalY) ) );
-    }
-    self.majorIntervalLengthForY = intervalY;
-    
-    minX = floor(minX / intervalX) * intervalX;
-    minY = floor(minY / intervalY) * intervalY;
     
     self.minimumValueForXAxis = minX;
     self.maximumValueForXAxis = maxX;
@@ -271,8 +258,16 @@ typedef NS_ENUM(NSInteger, Graph_Scale) {
 }
 
 
+- (NSString*) good:(NSDate*)date
+{
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    return [dateFormat stringFromDate:date];
+}
+
 -(IBAction)zoomIn
 {
+    NSLog(@"ZOOMED IN");
     CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)self.graph.defaultPlotSpace;
     CPTPlotArea *plotArea     = self.graph.plotAreaFrame.plotArea;
     
@@ -306,6 +301,7 @@ typedef NS_ENUM(NSInteger, Graph_Scale) {
 
 -(IBAction)zoomOut
 {
+    NSLog(@"ZOOMED OUT");
     double minX = 0;
     double maxX = 366;
     
@@ -325,9 +321,9 @@ typedef NS_ENUM(NSInteger, Graph_Scale) {
     // now adjust the plot range and axes
     CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)self.graph.defaultPlotSpace;
     
-    plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:@(minX)
-                                                    length:@(ceil( (maxX - minX) / intervalX ) * intervalX)];
-    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:@(minY)
+    plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:@(0)
+                                                    length:@(maxX)];
+    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:@(0)
                                                     length:@((self.totalMaximumYValue * 11) / 10)];
     CPTXYAxisSet *axisSet = (CPTXYAxisSet *)self.graph.axisSet;
     axisSet.xAxis.labelingPolicy = CPTAxisLabelingPolicyFixedInterval;
@@ -336,12 +332,16 @@ typedef NS_ENUM(NSInteger, Graph_Scale) {
 
 -(NSUInteger)numberOfRecordsForPlot:(CPTPlot *)plot
 {
+    NSLog(@"SIZE: %d", self.dataPoints.count);
     return self.dataPoints.count;
 }
 
 -(id)numberForPlot:(CPTPlot *)plot field:(NSUInteger)fieldEnum recordIndex:(NSUInteger)index
 {
     NSString *key = (fieldEnum == CPTScatterPlotFieldX ? @"x" : @"y");
+    
+    NSLog(@"%d\t%@\t%@", index, self.dataPoints[index][@"x"], self.dataPoints[index][@"y"]);
+    
     //NSLog(@"Also called: %@", self.dataPoints[index][key]);
     return self.dataPoints[index][key];
 }
@@ -513,18 +513,33 @@ typedef NS_ENUM(NSInteger, Graph_Scale) {
     return NO;
 }
 
+- (NSDate*) getDateAtEndOfYear:(NSDate*)inputDate
+{
+    // Selectively convert the date components (year, month, day) of the input date
+    NSDateComponents *dateComps = [self.calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay fromDate:inputDate];
+    
+    [dateComps setHour:23];
+    [dateComps setMinute:59];
+    [dateComps setSecond:59];
+    [dateComps setMonth:12];
+    [dateComps setDay:31];
+    
+    // Convert back
+    NSDate *beginningOfDay = [self.calendar dateFromComponents:dateComps];
+    return beginningOfDay;
+}
+
+
 - (NSDate*) getDateAtBeginningOfYear:(NSDate*)inputDate
 {
     // Selectively convert the date components (year, month, day) of the input date
     NSDateComponents *dateComps = [self.calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay fromDate:inputDate];
     
-    // Set the time components manually
     [dateComps setHour:0];
     [dateComps setMinute:0];
-    [dateComps setSecond:0];
-    [dateComps setMonth:0];
-    [dateComps setDay:0];
-    
+    [dateComps setSecond:1];
+    [dateComps setMonth:1];
+    [dateComps setDay:1];
     
     // Convert back
     NSDate *beginningOfDay = [self.calendar dateFromComponents:dateComps];
@@ -539,7 +554,7 @@ typedef NS_ENUM(NSInteger, Graph_Scale) {
     // Set the time components manually
     [dateComps setHour:0];
     [dateComps setMinute:0];
-    [dateComps setSecond:0];
+    [dateComps setSecond:1];
     
     // Convert back
     NSDate *beginningOfDay = [self.calendar dateFromComponents:dateComps];
