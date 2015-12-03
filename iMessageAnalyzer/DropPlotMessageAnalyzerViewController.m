@@ -142,7 +142,7 @@
     plotSymbol.fill = [CPTFill fillWithColor:[CPTColor whiteColor]];
     plotSymbol.size = CGSizeMake(5.0, 5.0);
     dataSourceLinePlot.plotSymbol = plotSymbol;
-
+    
     dataSourceLinePlot.dataSource = self;
     [self.graph addPlot:dataSourceLinePlot];
     
@@ -152,7 +152,7 @@
         }
         //yAxis.preferredNumberOfMajorTicks = [self getNumberOfTicks:self.maximumValueForYAxis];
         //yAxis.labelingPolicy = CPTAxisLabelingPolicyAutomatic; //CPTAxisLabelingPolicyEqualDivisions;
-
+        
         [self updateData];
         
         dispatch_async(dispatch_get_main_queue(), ^(void) {
@@ -169,13 +169,13 @@
              
              [self.graph reloadData];*/
             
-             //yAxis.preferredNumberOfMajorTicks = [self getNumberOfTicks:self.maximumValueForYAxis];
-             //yAxis.labelingPolicy = CPTAxisLabelingPolicyAutomatic; //CPTAxisLabelingPolicyEqualDivisions;
+            //yAxis.preferredNumberOfMajorTicks = [self getNumberOfTicks:self.maximumValueForYAxis];
+            //yAxis.labelingPolicy = CPTAxisLabelingPolicyAutomatic; //CPTAxisLabelingPolicyEqualDivisions;
             
-      
+            
             
             [self zoomOut];
-             
+            
         });
     });
 }
@@ -201,7 +201,7 @@
  *
  *              CPTPLOTDATASOURCE DELEGATE
  *
-*****************************************************************/
+ *****************************************************************/
 
 # pragma mark CPTPLOTDATASOURCE_DELEGATE
 
@@ -272,7 +272,7 @@
  *
  *              CPTPLOT DELEGATE
  *
-*****************************************************************/
+ *****************************************************************/
 
 # pragma mark CPTPLOT_DELEGATE
 - (BOOL)plotSpace:(CPTPlotSpace *)space shouldHandlePointingDeviceDownEvent:(id)event atPoint:(CGPoint)interactionPoint
@@ -367,7 +367,7 @@
  *
  *              ZOOM METHODS
  *
-*****************************************************************/
+ *****************************************************************/
 
 # pragma mark ZOOM_METHODS
 
@@ -617,7 +617,7 @@
  *
  *              EXPORTING METHODS
  *
-*****************************************************************/
+ *****************************************************************/
 
 # pragma mark EXPORT_METHODS
 
