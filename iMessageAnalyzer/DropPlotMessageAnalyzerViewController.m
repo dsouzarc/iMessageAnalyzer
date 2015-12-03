@@ -108,17 +108,11 @@ typedef NS_ENUM(NSInteger, Graph_Scale) {
     
     CPTXYAxisSet *axisSet = (CPTXYAxisSet *)self.graph.axisSet;
     
-    CPTXYAxis *x = axisSet.xAxis;
-    x.minorTicksPerInterval = 9;
-    x.majorIntervalLength = @(self.majorIntervalLengthForX);
-    x.labelOffset = 5.0;
-    x.axisConstraints = [CPTConstraints constraintWithLowerOffset:0.0];
-    
-    CPTXYAxis *y = axisSet.yAxis;
-    y.minorTicksPerInterval = 9;
-    y.majorIntervalLength = @(self.majorIntervalLengthForY);
-    y.labelOffset = 5.0;
-    y.axisConstraints = [CPTConstraints constraintWithLowerOffset:0.0];
+    CPTXYAxis *yAxis = axisSet.yAxis;
+    yAxis.minorTicksPerInterval = 9;
+    yAxis.majorIntervalLength = @(self.majorIntervalLengthForY);
+    yAxis.labelOffset = 5.0;
+    yAxis.axisConstraints = [CPTConstraints constraintWithLowerOffset:0.0];
     
     // Create the main plot for the delimited data
     CPTScatterPlot *dataSourceLinePlot = [[CPTScatterPlot alloc] initWithFrame:self.graph.bounds];
@@ -139,7 +133,7 @@ typedef NS_ENUM(NSInteger, Graph_Scale) {
     [xAxis setMinorTickLineStyle:nil];
     [xAxis setLabelingPolicy:CPTAxisLabelingPolicyNone];
     [xAxis setLabelTextStyle:textStyle];
-    [xAxis setLabelRotation:M_PI/4];
+    [xAxis setLabelRotation:M_PI/6];
     
     NSMutableArray<NSSet*> *tickInformation = [self getTickLocationsAndLabelsForMonths];
     NSSet *tickLocations = tickInformation[0];
@@ -150,15 +144,19 @@ typedef NS_ENUM(NSInteger, Graph_Scale) {
     dataSourceLinePlot.dataSource = self;
     [self.graph addPlot:dataSourceLinePlot];
     
+    
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         while(!self.messageManager.finishedAddingEntries) {
             //Do nothing
         }
-        //[self getData];
+        
         [self updateData];
         
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             [self.graph reloadData];
+            self.majorIntervalLengthForY = 100;
+            yAxis.majorIntervalLength = @(self.majorIntervalLengthForY);
             
 
         });
@@ -176,90 +174,19 @@ typedef NS_ENUM(NSInteger, Graph_Scale) {
         CPTAxisLabel *label = [[CPTAxisLabel alloc] initWithText:[self MonthNameString:i] textStyle:xAxis.labelTextStyle];
         label.tickLocation = [NSNumber numberWithInt:30 * i + 15];
         label.offset = 1.0f;
-        label.rotation = M_PI/3.5f;
+        label.rotation = 0;
         [tickLabels addObject:label];
     }
     return [NSMutableArray arrayWithObjects:[NSSet setWithArray:tickLocations], [NSSet setWithArray:tickLabels], nil];
 }
 
--(NSString*)MonthNameString:(int)monthNumber
+- (NSString*)MonthNameString:(int)monthNumber
 {
     NSDateFormatter *formate = [NSDateFormatter new];
-    
     NSArray *monthNames = [formate standaloneMonthSymbols];
-    
     NSString *monthName = [monthNames objectAtIndex:monthNumber];
     
     return monthName;
-}
-
-- (void) getData
-{
-    NSDate *methodStart = [NSDate date];
-    
-    NSMutableArray *allMessages = [self.messageManager getAllMessagesForPerson:self.person];
-    
-    NSMutableArray<NSDictionary*> *newData = [[NSMutableArray alloc] init];
-    
-    const int endTime = (int) [[self getDateAtEndOfYear:[NSDate date]] timeIntervalSinceReferenceDate]; //(int) [[NSDate date] timeIntervalSinceReferenceDate];
-    const int timeInterval = 60 * 60;
-    
-    int startTime = (int) [[self getDateAtBeginningOfYear:[NSDate date]] timeIntervalSinceReferenceDate];
-    
-    double minX = 0;
-    double maxX = 60 * 60 * 365;
-    
-    double minY = 0;
-    double maxY = 0;
-    
-    int counter = 0;
-    int hour = 0;
-    
-    while(startTime < endTime && counter < allMessages.count) {
-        Message *message = allMessages[counter];
-        
-        //Message occurs after time interval
-        if([message.dateSent timeIntervalSinceReferenceDate] > (startTime + timeInterval)) {
-            [newData addObject:@{@"x": @(hour), @"y": @(0)}];
-        }
-        else {
-            int numMessages = 0;
-            while([message.dateSent timeIntervalSinceReferenceDate] <= (startTime + timeInterval) && counter+1 < allMessages.count) {
-                numMessages++;
-                counter++;
-                message = allMessages[counter];
-            }
-            
-            [newData addObject:@{@"x": @(hour), @"y": @(numMessages)}];
-            
-            if(numMessages > maxY) {
-                maxY = numMessages;
-            }
-        }
-        
-        hour++;
-        startTime += timeInterval;
-        
-    }
-    
-    NSDate *methodFinish = [NSDate date];
-    NSTimeInterval executionTime = [methodFinish timeIntervalSinceDate:methodStart];
-    NSLog(@"executionTime = %f", executionTime);
-    
-    self.dataPoints = newData;
-    
-    self.minimumValueForXAxis = minX;
-    self.maximumValueForXAxis = maxX;
-    self.minimumValueForYAxis = minY;
-    self.maximumValueForYAxis = maxY;
-    
-    CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)self.graph.defaultPlotSpace;
-    plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:@(0)
-                                                    length:@(maxX)];
-    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:@(0)
-                                                    length:@((maxY * 11) / 10)];
-    
-    self.totalMaximumYValue = maxY;
 }
 
 - (void) updateData
@@ -319,7 +246,6 @@ typedef NS_ENUM(NSInteger, Graph_Scale) {
 
 -(IBAction)zoomIn
 {
-    NSLog(@"ZOOMED IN");
     CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)self.graph.defaultPlotSpace;
     CPTPlotArea *plotArea     = self.graph.plotAreaFrame.plotArea;
     
@@ -351,15 +277,12 @@ typedef NS_ENUM(NSInteger, Graph_Scale) {
     int startDay = (int) self.minimumValueForXAxis;
     int endDay = (int) self.maximumValueForXAxis;
     
-    NSLog(@"START: %@\t%d", [self stringForDateAfterStart:startDay], startDay);
     NSMutableArray<NSSet*> *tickInformation = [self getLabelsAndLocationsForStartDay:startDay endDay:endDay];
     NSSet *tickLocations = tickInformation[0];
     NSSet *tickLabels = tickInformation[1];
     axisSet.xAxis.labelingPolicy = CPTAxisLabelingPolicyNone;
     axisSet.xAxis.majorTickLocations = tickLocations;
     axisSet.xAxis.axisLabels = tickLabels;
-    
-    NSLog(@"%f\t%f\t%f\t%f\t%@", self.minimumValueForXAxis, self.maximumValueForXAxis, self.minimumValueForYAxis, self.maximumValueForYAxis, plotSpace.xRange.location);
 }
 
 - (NSString*) stringForDateAfterStart:(int)startDay
@@ -390,14 +313,13 @@ typedef NS_ENUM(NSInteger, Graph_Scale) {
     
     const int difference = endDay - startDay;
     
-    for(int i = 0; i < difference; i++) {
+    for(int i = 0; i < difference + 1; i++) {
         [tickLocations addObject:[NSNumber numberWithInt:i + startDay]];
         CPTAxisLabel *label = [[CPTAxisLabel alloc] initWithText:[self stringForDateAfterStart:(startDay + i)] textStyle:xAxis.labelTextStyle];
         label.tickLocation = [NSNumber numberWithInt:i + startDay];
         label.offset = 1.0f;
         label.rotation = M_PI/3.5f;
         [tickLabels addObject:label];
-        NSLog(@"SUP: %d\t%d\t%d", endDay, startDay, i);
     }
 
     return [NSMutableArray arrayWithObjects:[NSSet setWithArray:tickLocations], [NSSet setWithArray:tickLabels], nil];
@@ -406,7 +328,6 @@ typedef NS_ENUM(NSInteger, Graph_Scale) {
 
 -(IBAction)zoomOut
 {
-    NSLog(@"ZOOMED OUT");
     double minX = 0;
     double maxX = 366;
     
@@ -414,7 +335,7 @@ typedef NS_ENUM(NSInteger, Graph_Scale) {
     
     double intervalX = self.majorIntervalLengthForX;
     double intervalY = self.majorIntervalLengthForY;
-    
+
     minX = floor(minX / intervalX) * intervalX;
     minY = floor(minY / intervalY) * intervalY;
     
@@ -438,6 +359,9 @@ typedef NS_ENUM(NSInteger, Graph_Scale) {
     axisSet.xAxis.majorTickLocations = tickLocations;
     axisSet.xAxis.axisLabels = tickLabels;
     axisSet.xAxis.labelingPolicy = CPTAxisLabelingPolicyNone;
+    
+    axisSet.yAxis.majorIntervalLength = @(self.majorIntervalLengthForY);
+    axisSet.yAxis.labelingPolicy = CPTAxisLabelingPolicyFixedInterval;
 }
 
 -(NSUInteger)numberOfRecordsForPlot:(CPTPlot *)plot
@@ -492,15 +416,13 @@ typedef NS_ENUM(NSInteger, Graph_Scale) {
 
 - (void) plotSpace:(CPTPlotSpace *)space didChangePlotRangeForCoordinate:(CPTCoordinate)coordinate
 {
-    NSLog(@"CHANGED!!");
+    //NSLog(@"CHANGED!!");
 }
 
 #pragma mark Plot Space Delegate Methods
 
 -(BOOL)plotSpace:(CPTPlotSpace *)space shouldHandlePointingDeviceDraggedEvent:(id)event atPoint:(CGPoint)interactionPoint
 {
-    
-    NSLog(@"Yo here 4");
     CPTPlotSpaceAnnotation *annotation = self.zoomAnnotation;
     
     if ( annotation ) {
@@ -528,8 +450,6 @@ typedef NS_ENUM(NSInteger, Graph_Scale) {
 
 -(BOOL)plotSpace:(CPTPlotSpace *)space shouldHandlePointingDeviceDownEvent:(id)event atPoint:(CGPoint)interactionPoint
 {
-    
-    NSLog(@"Yo here 3");
     if ( !self.zoomAnnotation ) {
         self.dragStart = interactionPoint;
         
@@ -571,7 +491,6 @@ typedef NS_ENUM(NSInteger, Graph_Scale) {
 
 -(BOOL)plotSpace:(CPTPlotSpace *)space shouldHandlePointingDeviceUpEvent:(id)event atPoint:(CGPoint)interactionPoint
 {
-    NSLog(@"Yo here 1");
     CPTPlotSpaceAnnotation *annotation = self.zoomAnnotation;
     
     if ( annotation ) {
@@ -604,8 +523,6 @@ typedef NS_ENUM(NSInteger, Graph_Scale) {
 
 -(BOOL)plotSpace:(CPTPlotSpace *)space shouldHandlePointingDeviceCancelledEvent:(id)event atPoint:(CGPoint)interactionPoint
 {
-    
-    NSLog(@"Yo here 2");
     CPTPlotSpaceAnnotation *annotation = self.zoomAnnotation;
     
     if ( annotation ) {
