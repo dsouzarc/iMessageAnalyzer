@@ -139,6 +139,12 @@
 {
     self.moreAnalysisWindowController = [[MoreAnalysisWindowController alloc] initWithWindowNibName:@"MoreAnalysisWindowController" person:self.lastChosenPerson messages:[self.messageManager getAllMessagesForPerson:self.lastChosenPerson]];
     [self.moreAnalysisWindowController showWindow:self];
+    self.moreAnalysisWindowController.delegate = self;
+}
+
+- (void) moreAnalysisWindowControllerDidClose
+{
+    self.moreAnalysisWindowController = nil;
 }
 
 - (IBAction)calendarButtonClick:(id)sender {

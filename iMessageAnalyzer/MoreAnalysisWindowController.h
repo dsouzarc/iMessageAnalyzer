@@ -12,8 +12,16 @@
 #import "TemporaryDatabaseManager.h"
 #import "Person.h"
 
+@protocol MoreAnalysisWindowControllerDelegate <NSObject>
+
+- (void) moreAnalysisWindowControllerDidClose;
+
+@end
+
 @interface MoreAnalysisWindowController : NSWindowController <NSWindowDelegate>
 
 - (instancetype) initWithWindowNibName:(NSString *)windowNibName person:(Person*)person messages:(NSMutableArray*)messages;
+
+@property (weak, nonatomic) id<MoreAnalysisWindowControllerDelegate> delegate;
 
 @end

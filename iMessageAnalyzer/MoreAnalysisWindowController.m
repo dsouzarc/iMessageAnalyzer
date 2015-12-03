@@ -23,7 +23,7 @@
     self = [super initWithWindowNibName:windowNibName];
     
     if(self) {
-        self.databaseManager = [[TemporaryDatabaseManager alloc] initWithPerson:person messages:messages];
+        self.databaseManager = [TemporaryDatabaseManager getInstanceWithperson:person messages:messages];
         self.moreAnalysisViewController = [[MoreAnalysisViewController alloc] initWithNibName:@"MoreAnalysisViewController" bundle:[NSBundle mainBundle] person:person messages:messages databaseManager:self.databaseManager];
         self.windowTitle = [NSString stringWithFormat:@"Analysis for: %@", person.personName && person.personName.length != 0 ? person.personName : person.number];
         [self.window setContentViewController:self.moreAnalysisViewController];
@@ -35,6 +35,13 @@
     }
     
     return self;
+}
+
+- (void) windowWillClose:(NSNotification *)notification
+{
+    [TemporaryDatabaseManager closeDatabase];
+    self.databaseManager = nil;
+    [self.delegate moreAnalysisWindowControllerDidClose];
 }
 
 - (void)windowDidLoad {
