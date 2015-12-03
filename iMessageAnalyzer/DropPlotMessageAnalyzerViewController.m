@@ -141,23 +141,14 @@ typedef NS_ENUM(NSInteger, Graph_Scale) {
     [xAxis setLabelTextStyle:textStyle];
     [xAxis setLabelRotation:M_PI/4];
     
-    NSMutableArray *tickLocations = [[NSMutableArray alloc] init];
-    NSMutableArray *tickLabels = [[NSMutableArray alloc] init];
-    for(int i = 0; i < 12; i++) {
-        [tickLocations addObject:[NSNumber numberWithInt:30 * i]];
-        CPTAxisLabel *label = [[CPTAxisLabel alloc] initWithText:[self MonthNameString:i] textStyle:xAxis.labelTextStyle];
-        label.tickLocation = [NSNumber numberWithInt:30 * i + 15];
-        label.offset = 1.0f;
-        label.rotation = M_PI/3.5f;
-        [tickLabels addObject:label];
-    }
-    
-    xAxis.axisLabels = [NSSet setWithArray:tickLabels];
-    xAxis.majorTickLocations = [NSSet setWithArray:tickLocations];
+    NSMutableArray<NSSet*> *tickInformation = [self getTickLocationsAndLabelsForMonths];
+    NSSet *tickLocations = tickInformation[0];
+    NSSet *tickLabels = tickInformation[1];
+    xAxis.majorTickLocations = tickLocations;
+    xAxis.axisLabels = tickLabels;
     
     dataSourceLinePlot.dataSource = self;
     [self.graph addPlot:dataSourceLinePlot];
-    
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         while(!self.messageManager.finishedAddingEntries) {
@@ -174,6 +165,23 @@ typedef NS_ENUM(NSInteger, Graph_Scale) {
     });
 }
 
+- (NSMutableArray<NSSet*>*) getTickLocationsAndLabelsForMonths
+{
+    CPTXYAxis *xAxis = [((CPTXYAxisSet *)self.graph.axisSet) xAxis];
+    
+    NSMutableArray *tickLocations = [[NSMutableArray alloc] init];
+    NSMutableArray *tickLabels = [[NSMutableArray alloc] init];
+    for(int i = 0; i < 12; i++) {
+        [tickLocations addObject:[NSNumber numberWithInt:30 * i]];
+        CPTAxisLabel *label = [[CPTAxisLabel alloc] initWithText:[self MonthNameString:i] textStyle:xAxis.labelTextStyle];
+        label.tickLocation = [NSNumber numberWithInt:30 * i + 15];
+        label.offset = 1.0f;
+        label.rotation = M_PI/3.5f;
+        [tickLabels addObject:label];
+    }
+    return [NSMutableArray arrayWithObjects:[NSSet setWithArray:tickLocations], [NSSet setWithArray:tickLabels], nil];
+}
+
 -(NSString*)MonthNameString:(int)monthNumber
 {
     NSDateFormatter *formate = [NSDateFormatter new];
@@ -183,25 +191,6 @@ typedef NS_ENUM(NSInteger, Graph_Scale) {
     NSString *monthName = [monthNames objectAtIndex:monthNumber];
     
     return monthName;
-}
-
-- (NSArray *)getSubjectTitlesAsArray
-{
-    NSMutableArray *labelArray = [NSMutableArray array];
-    
-    CPTMutableTextStyle *textStyle = [CPTMutableTextStyle textStyle];
-    [textStyle setFontSize:10];
-    
-    for (int i = 0; i < 12; i++)
-    {
-        CPTAxisLabel *axisLabel = [[CPTAxisLabel alloc] initWithText:@"HELLO" textStyle:textStyle];
-        [axisLabel setTickLocation:[NSNumber numberWithDouble:(i + 1)]];
-        [axisLabel setRotation:M_PI/4];
-        [axisLabel setOffset:0.1];
-        [labelArray addObject:axisLabel];
-    }
-    
-    return [NSArray arrayWithArray:labelArray];
 }
 
 - (void) getData
@@ -357,8 +346,61 @@ typedef NS_ENUM(NSInteger, Graph_Scale) {
                                                     length:@(self.maximumValueForYAxis - self.minimumValueForYAxis)];
     
     CPTXYAxisSet *axisSet = (CPTXYAxisSet *)self.graph.axisSet;
-    //axisSet.xAxis.labelingPolicy = CPTAxisLabelingPolicyAutomatic;
     axisSet.yAxis.labelingPolicy = CPTAxisLabelingPolicyAutomatic;
+    
+    int startDay = (int) self.minimumValueForXAxis;
+    int endDay = (int) self.maximumValueForXAxis;
+    
+    NSLog(@"START: %@\t%d", [self stringForDateAfterStart:startDay], startDay);
+    NSMutableArray<NSSet*> *tickInformation = [self getLabelsAndLocationsForStartDay:startDay endDay:endDay];
+    NSSet *tickLocations = tickInformation[0];
+    NSSet *tickLabels = tickInformation[1];
+    axisSet.xAxis.labelingPolicy = CPTAxisLabelingPolicyNone;
+    axisSet.xAxis.majorTickLocations = tickLocations;
+    axisSet.xAxis.axisLabels = tickLabels;
+    
+    NSLog(@"%f\t%f\t%f\t%f\t%@", self.minimumValueForXAxis, self.maximumValueForXAxis, self.minimumValueForYAxis, self.maximumValueForYAxis, plotSpace.xRange.location);
+}
+
+- (NSString*) stringForDateAfterStart:(int)startDay
+{
+    // Selectively convert the date components (year, month, day) of the input date
+    NSDateComponents *dateComps = [self.calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay fromDate:[NSDate date]];
+    
+    [dateComps setHour:0];
+    [dateComps setMinute:0];
+    [dateComps setSecond:1];
+    [dateComps setMonth:1];
+    [dateComps setDay:startDay];
+    NSDate *beginningOfYear = [self.calendar dateFromComponents:dateComps];
+
+    NSDate *start = [beginningOfYear dateByAddingTimeInterval:60 * 60 * 24 * startDay];
+    NSDateFormatter *format = [[NSDateFormatter alloc] init];
+    [format setDateFormat:@"MM/dd/yy"];
+    
+    return [format stringFromDate:beginningOfYear];
+}
+
+- (NSMutableArray<NSSet*>*) getLabelsAndLocationsForStartDay:(int)startDay endDay:(int)endDay
+{
+    CPTXYAxis *xAxis = [((CPTXYAxisSet *)self.graph.axisSet) xAxis];
+    
+    NSMutableArray *tickLocations = [[NSMutableArray alloc] init];
+    NSMutableArray *tickLabels = [[NSMutableArray alloc] init];
+    
+    const int difference = endDay - startDay;
+    
+    for(int i = 0; i < difference; i++) {
+        [tickLocations addObject:[NSNumber numberWithInt:i + startDay]];
+        CPTAxisLabel *label = [[CPTAxisLabel alloc] initWithText:[self stringForDateAfterStart:(startDay + i)] textStyle:xAxis.labelTextStyle];
+        label.tickLocation = [NSNumber numberWithInt:i + startDay];
+        label.offset = 1.0f;
+        label.rotation = M_PI/3.5f;
+        [tickLabels addObject:label];
+        NSLog(@"SUP: %d\t%d\t%d", endDay, startDay, i);
+    }
+
+    return [NSMutableArray arrayWithObjects:[NSSet setWithArray:tickLocations], [NSSet setWithArray:tickLabels], nil];
 }
 
 
@@ -388,9 +430,14 @@ typedef NS_ENUM(NSInteger, Graph_Scale) {
                                                     length:@(maxX)];
     plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:@(0)
                                                     length:@((self.totalMaximumYValue * 11) / 10)];
+    
     CPTXYAxisSet *axisSet = (CPTXYAxisSet *)self.graph.axisSet;
-    axisSet.xAxis.labelingPolicy = CPTAxisLabelingPolicyFixedInterval;
-    axisSet.yAxis.labelingPolicy = CPTAxisLabelingPolicyFixedInterval;
+    NSMutableArray<NSSet*> *tickInformation = [self getTickLocationsAndLabelsForMonths];
+    NSSet *tickLocations = tickInformation[0];
+    NSSet *tickLabels = tickInformation[1];
+    axisSet.xAxis.majorTickLocations = tickLocations;
+    axisSet.xAxis.axisLabels = tickLabels;
+    axisSet.xAxis.labelingPolicy = CPTAxisLabelingPolicyNone;
 }
 
 -(NSUInteger)numberOfRecordsForPlot:(CPTPlot *)plot
@@ -402,10 +449,6 @@ typedef NS_ENUM(NSInteger, Graph_Scale) {
 -(id)numberForPlot:(CPTPlot *)plot field:(NSUInteger)fieldEnum recordIndex:(NSUInteger)index
 {
     NSString *key = (fieldEnum == CPTScatterPlotFieldX ? @"x" : @"y");
-    
-    //NSLog(@"%d\t%@\t%@", index, self.dataPoints[index][@"x"], self.dataPoints[index][@"y"]);
-    
-    //NSLog(@"Also called: %@", self.dataPoints[index][key]);
     return self.dataPoints[index][key];
 }
 
