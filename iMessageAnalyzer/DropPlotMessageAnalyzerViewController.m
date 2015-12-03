@@ -24,6 +24,7 @@
 @property (nonatomic, readwrite, assign) double majorIntervalLengthForY;
 
 @property (nonatomic, readwrite, assign) double totalMaximumYValue;
+@property BOOL isZoomedOut;
 
 @property (nonatomic, readwrite, strong) NSArray<NSDictionary *> *dataPoints;
 
@@ -55,6 +56,7 @@
         
         self.monthDateYearFormatter = [[NSDateFormatter alloc] init];
         [self.monthDateYearFormatter setDateFormat:@"MM/dd/yy"];
+        self.isZoomedOut = YES;
         
         self.dataPoints = [[NSMutableArray alloc] init];
         self.zoomAnnotation = nil;
@@ -111,6 +113,7 @@
     // Create the main plot for the delimited data
     CPTScatterPlot *dataSourceLinePlot = [[CPTScatterPlot alloc] initWithFrame:self.graph.bounds];
     dataSourceLinePlot.identifier = @"Data Source Plot";
+    dataSourceLinePlot.delegate = self;
     
     CPTMutableLineStyle *lineStyle = [dataSourceLinePlot.dataLineStyle mutableCopy];
     lineStyle.lineWidth = 1.0;
@@ -135,6 +138,11 @@
     xAxis.majorTickLocations = tickLocations;
     xAxis.axisLabels = tickLabels;
     
+    CPTPlotSymbol *plotSymbol = [CPTPlotSymbol ellipsePlotSymbol];
+    plotSymbol.fill = [CPTFill fillWithColor:[CPTColor whiteColor]];
+    plotSymbol.size = CGSizeMake(5.0, 5.0);
+    dataSourceLinePlot.plotSymbol = plotSymbol;
+
     dataSourceLinePlot.dataSource = self;
     [self.graph addPlot:dataSourceLinePlot];
     
@@ -147,12 +155,41 @@
         
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             [self.graph reloadData];
-            self.majorIntervalLengthForY = 100;
-            yAxis.majorIntervalLength = @(self.majorIntervalLengthForY);
+            [self zoomOut];
+            
+            //self.majorIntervalLengthForY = 100;
+            //yAxis.majorIntervalLength = @(self.majorIntervalLengthForY);
+            
+            /*plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:@(0)
+                                                            length:@(366)];
+            plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:@(0)
+                                                            length:@((self.totalMaximumYValue * 11) / 10)];
+
+
+            yAxis.preferredNumberOfMajorTicks = [self getNumberOfTicks:self.maximumValueForYAxis];
+            yAxis.labelingPolicy = CPTAxisLabelingPolicyAutomatic; //CPTAxisLabelingPolicyEqualDivisions;
+
+            [self.graph reloadData];*/
         });
     });
 }
 
+- (int)getNumberOfTicks:(int)height
+{
+    const int maxTicks = 15;
+    
+    if(height < maxTicks) {
+        return height;
+    }
+    
+    int tickCounter = 2;
+    
+    while(height / tickCounter > maxTicks) {
+        tickCounter++;
+    }
+    NSLog(@"TICK COUNTER: %d", height / tickCounter);
+    return height / tickCounter;
+}
 
 /****************************************************************
  *
@@ -206,6 +243,24 @@
     //NSLog(@"CHANGED!!");
 }
 
+- (CPTLayer*) dataLabelForPlot:(CPTPlot *)plot recordIndex:(NSUInteger)idx
+{
+    if(self.isZoomedOut) {
+        return nil;
+    }
+    
+    NSDictionary *valueDict = self.dataPoints[(int)idx];
+    CPTTextLayer *label = [[CPTTextLayer alloc] initWithText:[NSString stringWithFormat:@"%d", [valueDict[@"y"] intValue]]];
+    CPTMutableTextStyle *textStyle = [label.textStyle mutableCopy];
+    textStyle.color = [CPTColor yellowColor];
+    label.textStyle = textStyle;
+    return label;
+}
+
+- (void) scatterPlot:(CPTScatterPlot *)plot plotSymbolWasSelectedAtRecordIndex:(NSUInteger)idx
+{
+    NSLog(@"CLICKED HERE");
+}
 
 /****************************************************************
  *
@@ -312,6 +367,8 @@
 
 -(IBAction)zoomIn
 {
+    self.isZoomedOut = NO;
+    
     CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)self.graph.defaultPlotSpace;
     CPTPlotArea *plotArea     = self.graph.plotAreaFrame.plotArea;
     
@@ -353,6 +410,8 @@
 
 - (IBAction)zoomOut
 {
+    self.isZoomedOut = YES;
+    
     double minX = 0;
     double maxX = 366;
     
@@ -385,8 +444,10 @@
     axisSet.xAxis.axisLabels = tickLabels;
     axisSet.xAxis.labelingPolicy = CPTAxisLabelingPolicyNone;
     
-    axisSet.yAxis.majorIntervalLength = @(self.majorIntervalLengthForY);
-    axisSet.yAxis.labelingPolicy = CPTAxisLabelingPolicyFixedInterval;
+    //axisSet.yAxis.majorIntervalLength = @(self.majorIntervalLengthForY);
+    //axisSet.yAxis.labelingPolicy = CPTAxisLabelingPolicyFixedInterval;
+    axisSet.yAxis.preferredNumberOfMajorTicks = 0;
+    axisSet.yAxis.labelingPolicy = CPTAxisLabelingPolicyAutomatic;
 }
 
 
@@ -441,15 +502,13 @@
     self.maximumValueForXAxis = maxX;
     self.minimumValueForYAxis = minY;
     self.maximumValueForYAxis = maxY;
+    self.totalMaximumYValue = maxY;
     
     CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)self.graph.defaultPlotSpace;
     plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:@(0)
                                                     length:@(maxX)];
     plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:@(0)
                                                     length:@((maxY * 11) / 10)];
-    
-    self.totalMaximumYValue = maxY;
-    
     NSLog(@"MAX: %f", maxY);
 }
 

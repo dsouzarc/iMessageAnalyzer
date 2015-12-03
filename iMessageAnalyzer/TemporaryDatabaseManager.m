@@ -33,11 +33,12 @@ static NSString *otherMessagesTable = @"otherMessagesTable";
         self.calendar = [NSCalendar currentCalendar];
         [self.calendar setTimeZone:[NSTimeZone systemTimeZone]];
         
-        const char *filePath = [self filePath]; //"file::memory:";
-        //[self filePath]
+        const char *filePath = "file::memory:";
+        //const char *filePath = [self filePath];
+        
         if(sqlite3_open(filePath, &_database) == SQLITE_OK) {
             printf("OPENED TEMPORARY DATABASE\n");
-            
+
             [self createMyMessagesTable];
             [self createOtherMessagesTable];
             
