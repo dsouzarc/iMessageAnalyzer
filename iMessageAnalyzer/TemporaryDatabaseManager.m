@@ -13,6 +13,8 @@
 static NSString *myMessagesTable = @"myMessagesTable";
 static NSString *otherMessagesTable = @"otherMessagesTable";
 
+static TemporaryDatabaseManager *databaseManager;
+
 @interface TemporaryDatabaseManager ()
 
 @property (strong, nonatomic) Person *person;
@@ -22,6 +24,27 @@ static NSString *otherMessagesTable = @"otherMessagesTable";
 @end
 
 @implementation TemporaryDatabaseManager
+
++ (instancetype) getInstanceWithperson:(Person *)person messages:(NSMutableArray *)messages
+{
+    @synchronized(self) {
+        if(!databaseManager || databaseManager.person != person) {
+            databaseManager = [[self alloc] initWithPerson:person messages:messages];
+        }
+        return databaseManager;
+    }
+}
+
++ (instancetype) getInstance
+{
+    @synchronized(self) {
+        if(!databaseManager) {
+            [NSException raise:@"NO PERSON FOUND FOR" format:@"TEMPORARY DATABASE MANAGER"];
+        }
+        
+        return databaseManager;
+    }
+}
 
 - (instancetype) initWithPerson:(Person *)person messages:(NSMutableArray *)messages {
     self = [super init];
@@ -53,6 +76,16 @@ static NSString *otherMessagesTable = @"otherMessagesTable";
     }
     
     return self;
+}
+
++ (void) closeDatabase
+{
+    if(databaseManager) {
+        databaseManager.person = nil;
+        sqlite3_close(databaseManager.database);
+    }
+    
+    databaseManager = nil;
 }
 
 

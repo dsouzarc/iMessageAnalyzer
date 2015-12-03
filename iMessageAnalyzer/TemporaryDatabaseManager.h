@@ -18,7 +18,9 @@
 
 @interface TemporaryDatabaseManager : NSObject
 
-- (instancetype) initWithPerson:(Person*)person messages:(NSMutableArray*)messages;
++ (instancetype) getInstance;
++ (instancetype) getInstanceWithperson:(Person*)person messages:(NSMutableArray*)messages;
++ (void) closeDatabase;
 
 
 #pragma GET_MESSAGES
