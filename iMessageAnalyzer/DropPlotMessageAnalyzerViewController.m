@@ -172,8 +172,7 @@
             //yAxis.preferredNumberOfMajorTicks = [self getNumberOfTicks:self.maximumValueForYAxis];
             //yAxis.labelingPolicy = CPTAxisLabelingPolicyAutomatic; //CPTAxisLabelingPolicyEqualDivisions;
             
-            
-            
+
             [self zoomOut];
             
         });
@@ -243,6 +242,63 @@
     NSString *key = (fieldEnum == CPTScatterPlotFieldX ? @"x" : @"y");
     return self.dataPoints[index][key];
 }
+
+/*- (NSArray*) numbersForPlot:(CPTPlot *)plot field:(NSUInteger)fieldEnum recordIndexRange:(NSRange)indexRange
+{
+    NSMutableArray *results = [[NSMutableArray alloc] init];
+    double minY = MAXFLOAT;
+    double maxY = -MAXFLOAT;
+    
+    //NSMutableArray<NSDictionary*> *newData = [[NSMutableArray alloc] init];
+    
+    const int endTime = (int) [[self getDateAtEndOfYear:[NSDate date]] timeIntervalSinceReferenceDate]; //(int) [[NSDate date] timeIntervalSinceReferenceDate];
+    const int timeInterval = 60 * 60 * 24;
+    
+    int startTime = (int) [[self getDateAtBeginningOfYear:[NSDate date]] timeIntervalSinceReferenceDate];
+    
+    double minX = 0;
+    double maxX = 0;
+    int counter = 0;
+    while(startTime < endTime) {
+        int tempEndTime = startTime + timeInterval;
+        int messageCount = [self.messageManager getConversationMessageCountStartTime:startTime endTime:tempEndTime];
+        
+        if(messageCount < minY) {
+            minY = messageCount;
+        }
+        
+        if(messageCount > maxY) {
+            maxY = messageCount;
+        }
+        
+        //[newData addObject:@{ @"x": @(counter),  @"y": @(messageCount)}];
+        
+        [results addObject:[NSDecimalNumber decimalNumberWithString:[NSString stringWithFormat:@"%d", messageCount]]];
+        
+        //NSLog(@"GOT INFO FOR: %@", [self good:[NSDate dateWithTimeIntervalSinceReferenceDate:tempEndTime]]);
+        
+        startTime += timeInterval;
+        counter++;
+    }
+    
+    maxX = counter + 1;
+    //self.dataPoints = newData;
+    
+    self.minimumValueForXAxis = minX;
+    self.maximumValueForXAxis = maxX;
+    self.minimumValueForYAxis = minY;
+    self.maximumValueForYAxis = maxY;
+    self.totalMaximumYValue = maxY;
+    
+    CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)self.graph.defaultPlotSpace;
+    plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:@(0)
+                                                    length:@(maxX)];
+    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:@(0)
+                                                    length:@((maxY * 11) / 10)];
+    NSLog(@"MAX: %f", maxY);
+
+    return [[NSArray alloc] initWithArray:results];
+}*/
 
 - (void) plotSpace:(CPTPlotSpace *)space didChangePlotRangeForCoordinate:(CPTCoordinate)coordinate
 {
@@ -467,6 +523,77 @@
 
 - (void) updateData
 {
+    NSDate *methodStart = [NSDate date];
+    
+    NSMutableArray *allMessages = [self.messageManager getAllMessagesForPerson:self.person];
+    
+    NSMutableArray<NSDictionary*> *newData = [[NSMutableArray alloc] init];
+    
+    const int endTime = (int) [[self getDateAtEndOfYear:[NSDate date]] timeIntervalSinceReferenceDate]; //(int) [[NSDate date] timeIntervalSinceReferenceDate];
+    const int timeInterval = 60 * 60 * 24;
+    
+    int startTime = (int) [[self getDateAtBeginningOfYear:[NSDate date]] timeIntervalSinceReferenceDate];
+    
+    double minX = 0;
+    double maxX = 60 * 60 * 365;
+    
+    double minY = 0;
+    double maxY = 0;
+    
+    int counter = 0;
+    int hour = 0;
+    
+    while(startTime < endTime && counter < allMessages.count) {
+        Message *message = allMessages[counter];
+        
+        //Message occurs after time interval
+        if([message.dateSent timeIntervalSinceReferenceDate] > (startTime + timeInterval)) {
+            [newData addObject:@{@"x": @(hour), @"y": @(0)}];
+        }
+        else {
+            int numMessages = 0;
+            while([message.dateSent timeIntervalSinceReferenceDate] <= (startTime + timeInterval) && counter+1 < allMessages.count) {
+                numMessages++;
+                counter++;
+                message = allMessages[counter];
+            }
+            
+            [newData addObject:@{@"x": @(hour), @"y": @(numMessages)}];
+            
+            if(numMessages > maxY) {
+                maxY = numMessages;
+            }
+        }
+        
+        hour++;
+        startTime += timeInterval;
+        
+    }
+    
+    NSDate *methodFinish = [NSDate date];
+    NSTimeInterval executionTime = [methodFinish timeIntervalSinceDate:methodStart];
+    NSLog(@"executionTime = %f", executionTime);
+    
+    self.dataPoints = newData;
+    
+    self.minimumValueForXAxis = minX;
+    self.maximumValueForXAxis = maxX;
+    self.minimumValueForYAxis = minY;
+    self.maximumValueForYAxis = maxY;
+    
+    CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)self.graph.defaultPlotSpace;
+    plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:@(0)
+                                                    length:@(maxX)];
+    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:@(0)
+                                                    length:@((maxY * 11) / 10)];
+    
+    self.totalMaximumYValue = maxY;
+}
+
+- (void) updateDataOld
+{
+     NSDate *methodStart = [NSDate date];
+
     double minY = MAXFLOAT;
     double maxY = -MAXFLOAT;
     
@@ -516,6 +643,10 @@
     plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:@(0)
                                                     length:@((maxY * 11) / 10)];
     NSLog(@"MAX: %f", maxY);
+    
+    NSDate *methodFinish = [NSDate date];
+    NSTimeInterval executionTime = [methodFinish timeIntervalSinceDate:methodStart];
+    NSLog(@"executionTime OLD = %f", executionTime);
 }
 
 - (NSMutableArray<NSSet*>*) getTickLocationsAndLabelsForMonths
