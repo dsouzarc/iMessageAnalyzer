@@ -157,24 +157,13 @@
         
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             [self.graph reloadData];
-            //[self zoomOut];
             
-            //self.majorIntervalLengthForY = 100;
-            //yAxis.majorIntervalLength = @(self.majorIntervalLengthForY);
-            
-            /*plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:@(0)
-             length:@(366)];
-             plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:@(0)
-             length:@((self.totalMaximumYValue * 11) / 10)];
-             
-             [self.graph reloadData];*/
-            
-            //yAxis.preferredNumberOfMajorTicks = [self getNumberOfTicks:self.maximumValueForYAxis];
-            //yAxis.labelingPolicy = CPTAxisLabelingPolicyAutomatic; //CPTAxisLabelingPolicyEqualDivisions;
-            
-
             [self zoomOut];
-            
+    
+            if(self.maximumValueForYAxis > 200) {
+                [self zoomIn];
+                [self zoomOut];
+            }
         });
     });
 }
