@@ -113,7 +113,7 @@
     // Create the main plot for the delimited data
     CPTScatterPlot *dataSourceLinePlot = [[CPTScatterPlot alloc] initWithFrame:self.graph.bounds];
     dataSourceLinePlot.identifier = @"Data Source Plot";
-    dataSourceLinePlot.delegate = self;
+    //dataSourceLinePlot.delegate = self;
     
     CPTMutableLineStyle *lineStyle = [dataSourceLinePlot.dataLineStyle mutableCopy];
     lineStyle.lineWidth = 1.0;
@@ -135,8 +135,8 @@
     NSMutableArray<NSSet*> *tickInformation = [self getTickLocationsAndLabelsForMonths];
     NSSet *tickLocations = tickInformation[0];
     NSSet *tickLabels = tickInformation[1];
-    xAxis.majorTickLocations = tickLocations;
-    xAxis.axisLabels = tickLabels;
+    //xAxis.majorTickLocations = tickLocations;
+    //xAxis.axisLabels = tickLabels;
     
     CPTPlotSymbol *plotSymbol = [CPTPlotSymbol ellipsePlotSymbol];
     plotSymbol.fill = [CPTFill fillWithColor:[CPTColor whiteColor]];
@@ -150,26 +150,32 @@
         while(!self.messageManager.finishedAddingEntries) {
             //Do nothing
         }
-        
+        //yAxis.preferredNumberOfMajorTicks = [self getNumberOfTicks:self.maximumValueForYAxis];
+        //yAxis.labelingPolicy = CPTAxisLabelingPolicyAutomatic; //CPTAxisLabelingPolicyEqualDivisions;
+
         [self updateData];
         
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             [self.graph reloadData];
-            [self zoomOut];
+            //[self zoomOut];
             
             //self.majorIntervalLengthForY = 100;
             //yAxis.majorIntervalLength = @(self.majorIntervalLengthForY);
             
             /*plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:@(0)
-                                                            length:@(366)];
-            plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:@(0)
-                                                            length:@((self.totalMaximumYValue * 11) / 10)];
-
-
-            yAxis.preferredNumberOfMajorTicks = [self getNumberOfTicks:self.maximumValueForYAxis];
-            yAxis.labelingPolicy = CPTAxisLabelingPolicyAutomatic; //CPTAxisLabelingPolicyEqualDivisions;
-
-            [self.graph reloadData];*/
+             length:@(366)];
+             plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:@(0)
+             length:@((self.totalMaximumYValue * 11) / 10)];
+             
+             [self.graph reloadData];*/
+            
+             //yAxis.preferredNumberOfMajorTicks = [self getNumberOfTicks:self.maximumValueForYAxis];
+             //yAxis.labelingPolicy = CPTAxisLabelingPolicyAutomatic; //CPTAxisLabelingPolicyEqualDivisions;
+            
+      
+            
+            [self zoomOut];
+             
         });
     });
 }
