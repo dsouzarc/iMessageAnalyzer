@@ -37,6 +37,8 @@
 @property (strong, nonatomic) NSDate *endDate;
 @property (strong, nonatomic) NSDateFormatter *monthDateYearFormatter;
 
+@property (strong, nonatomic) CPTPlotSpaceAnnotation *yValueAnnotation;
+
 @property (strong, nonatomic) NSCalendar *calendar;
 
 @end
@@ -113,7 +115,7 @@
     // Create the main plot for the delimited data
     CPTScatterPlot *dataSourceLinePlot = [[CPTScatterPlot alloc] initWithFrame:self.graph.bounds];
     dataSourceLinePlot.identifier = @"Data Source Plot";
-    //dataSourceLinePlot.delegate = self;
+    dataSourceLinePlot.delegate = self;
     
     CPTMutableLineStyle *lineStyle = [dataSourceLinePlot.dataLineStyle mutableCopy];
     lineStyle.lineWidth = 1.0;
@@ -159,7 +161,7 @@
             [self.graph reloadData];
             
             [self zoomOut];
-    
+            
             if(self.maximumValueForYAxis > 200) {
                 [self zoomIn];
                 [self zoomOut];
@@ -232,62 +234,6 @@
     return self.dataPoints[index][key];
 }
 
-/*- (NSArray*) numbersForPlot:(CPTPlot *)plot field:(NSUInteger)fieldEnum recordIndexRange:(NSRange)indexRange
-{
-    NSMutableArray *results = [[NSMutableArray alloc] init];
-    double minY = MAXFLOAT;
-    double maxY = -MAXFLOAT;
-    
-    //NSMutableArray<NSDictionary*> *newData = [[NSMutableArray alloc] init];
-    
-    const int endTime = (int) [[self getDateAtEndOfYear:[NSDate date]] timeIntervalSinceReferenceDate]; //(int) [[NSDate date] timeIntervalSinceReferenceDate];
-    const int timeInterval = 60 * 60 * 24;
-    
-    int startTime = (int) [[self getDateAtBeginningOfYear:[NSDate date]] timeIntervalSinceReferenceDate];
-    
-    double minX = 0;
-    double maxX = 0;
-    int counter = 0;
-    while(startTime < endTime) {
-        int tempEndTime = startTime + timeInterval;
-        int messageCount = [self.messageManager getConversationMessageCountStartTime:startTime endTime:tempEndTime];
-        
-        if(messageCount < minY) {
-            minY = messageCount;
-        }
-        
-        if(messageCount > maxY) {
-            maxY = messageCount;
-        }
-        
-        //[newData addObject:@{ @"x": @(counter),  @"y": @(messageCount)}];
-        
-        [results addObject:[NSDecimalNumber decimalNumberWithString:[NSString stringWithFormat:@"%d", messageCount]]];
-        
-        //NSLog(@"GOT INFO FOR: %@", [self good:[NSDate dateWithTimeIntervalSinceReferenceDate:tempEndTime]]);
-        
-        startTime += timeInterval;
-        counter++;
-    }
-    
-    maxX = counter + 1;
-    //self.dataPoints = newData;
-    
-    self.minimumValueForXAxis = minX;
-    self.maximumValueForXAxis = maxX;
-    self.minimumValueForYAxis = minY;
-    self.maximumValueForYAxis = maxY;
-    self.totalMaximumYValue = maxY;
-    
-    CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)self.graph.defaultPlotSpace;
-    plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:@(0)
-                                                    length:@(maxX)];
-    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:@(0)
-                                                    length:@((maxY * 11) / 10)];
-    NSLog(@"MAX: %f", maxY);
-
-    return [[NSArray alloc] initWithArray:results];
-}*/
 
 - (void) plotSpace:(CPTPlotSpace *)space didChangePlotRangeForCoordinate:(CPTCoordinate)coordinate
 {
@@ -310,7 +256,28 @@
 
 - (void) scatterPlot:(CPTScatterPlot *)plot plotSymbolWasSelectedAtRecordIndex:(NSUInteger)idx
 {
-    NSLog(@"CLICKED HERE");
+    if(self.yValueAnnotation) {
+        [self.graph.plotAreaFrame.plotArea removeAnnotation:self.yValueAnnotation];
+        self.yValueAnnotation = nil;
+    }
+    
+    CPTMutableTextStyle *hitAnnotationTextStyle = [CPTMutableTextStyle textStyle];
+    hitAnnotationTextStyle.color = [CPTColor yellowColor];
+    hitAnnotationTextStyle.fontSize = 16.0f;
+    hitAnnotationTextStyle.fontName = @"Helvetica-Bold";
+    
+    NSString *yValue = [self.dataPoints[idx][@"y"] stringValue];
+    NSNumber *x = [NSNumber numberWithInt:(int) idx];
+    NSNumber *y = self.dataPoints[idx][@"y"];
+    NSArray *anchorPoint = [NSArray arrayWithObjects:x, y, nil];
+    
+    CPTTextLayer *textLayer = [[CPTTextLayer alloc] initWithText:yValue style:hitAnnotationTextStyle];
+    self.yValueAnnotation = [[CPTPlotSpaceAnnotation alloc] initWithPlotSpace:(CPTXYPlotSpace *)self.graph.defaultPlotSpace  anchorPlotPoint:anchorPoint];
+    self.yValueAnnotation.contentLayer = textLayer;
+    self.yValueAnnotation.displacement = CGPointMake(0.0f, 10.0f);
+    [self.graph.plotAreaFrame.plotArea addAnnotation:self.yValueAnnotation];
+    
+    NSLog(@"CLICKED: %@\t%@", self.dataPoints[idx][@"x"], self.dataPoints[idx][@"y"]);
 }
 
 /****************************************************************
@@ -462,6 +429,10 @@
 - (IBAction)zoomOut
 {
     self.isZoomedOut = YES;
+    if(self.yValueAnnotation) {
+        [self.graph.plotAreaFrame.plotArea removeAnnotation:self.yValueAnnotation];
+        self.yValueAnnotation = nil;
+    }
     
     double minX = 0;
     double maxX = 366;
@@ -497,8 +468,12 @@
     
     //axisSet.yAxis.majorIntervalLength = @(self.majorIntervalLengthForY);
     //axisSet.yAxis.labelingPolicy = CPTAxisLabelingPolicyFixedInterval;
-    axisSet.yAxis.preferredNumberOfMajorTicks = 0;
+    axisSet.yAxis.preferredNumberOfMajorTicks = 10;
     axisSet.yAxis.labelingPolicy = CPTAxisLabelingPolicyAutomatic;
+    
+    //axisSet.yAxis.majorIntervalLength = [NSNumber numberWithDouble:[self getNumberOfTicks:self.maximumValueForYAxis]];
+    //axisSet.yAxis.labelingPolicy = CPTAxisLabelingPolicyFixedInterval;
+    
 }
 
 
@@ -581,8 +556,8 @@
 
 - (void) updateDataOld
 {
-     NSDate *methodStart = [NSDate date];
-
+    NSDate *methodStart = [NSDate date];
+    
     double minY = MAXFLOAT;
     double maxY = -MAXFLOAT;
     
@@ -666,7 +641,7 @@
     
     for(int i = 0; i < difference + 1; i++) {
         [tickLocations addObject:[NSNumber numberWithInt:i + startDay]];
-        CPTAxisLabel *label = [[CPTAxisLabel alloc] initWithText:[self stringForDateAfterStart:(startDay + i)] textStyle:xAxis.labelTextStyle];
+        CPTAxisLabel *label = [[CPTAxisLabel alloc] initWithText:[self stringForDateAfterStart:(startDay + i + 1)] textStyle:xAxis.labelTextStyle];
         label.tickLocation = [NSNumber numberWithInt:i + startDay];
         label.offset = 1.0f;
         label.rotation = M_PI/3.5f;
