@@ -552,6 +552,7 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
 }
 
 - (BOOL) isIMessage:(char*)text {
+    return [[NSString stringWithFormat:@"%s", text] isEqualToString:@"iMessage"];
     return strcmp(text, "iMessage") == 0;
 }
 
