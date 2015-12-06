@@ -143,3 +143,33 @@ Clicking on a date in the calendar on the bottom left
         + Includes recalculating word frequencies, words sent and received on date, and average word/message on date ("Avg. Word/Message (D)")
     - Shows messages sent on that day 
     - Pressing "Clear" resets everything to the initial screen
+
+---
+
+
+![Screenshot 10](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_10.png)
+
+---
+
+
+![Screenshot 11](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_11.pn
+
+---
+
+
+![Screenshot 12](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_12.pn
+
+---
+
+
+![Screenshot 13](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_13.pn
+
+---
+
+
+![Screenshot 14](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_14.pn
+
+---
+
+
+![Screenshot 15](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_15.png)
