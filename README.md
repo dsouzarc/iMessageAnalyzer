@@ -146,30 +146,33 @@ Clicking on a date in the calendar on the bottom left
 
 ---
 
-
 ![Screenshot 10](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_10.png)
+A graph of all messages with a person over the course of a year.
+This person seems like a good friend
 
 ---
 
-
-![Screenshot 11](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_11.pn
-
----
-
-
-![Screenshot 12](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_12.pn
+![Screenshot 11](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_11.png)
+Zooming in on that graph
 
 ---
 
-
-![Screenshot 13](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_13.pn
-
----
-
-
-![Screenshot 14](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_14.pn
+![Screenshot 12](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_12.png)
+Zooming in even more on the graph
 
 ---
 
+![Screenshot 13](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_13.png)
+Clicking on a point shows the y-value above it.
+Clicking on another point removes the prior label and places a new one on the clicked point
+
+---
+
+![Screenshot 14](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_14.png)
+Graphing message frequency with another one.
+This seems like a broken-off friendship
+
+---
 
 ![Screenshot 15](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_15.png)
+Graphing a brief summer friendship
