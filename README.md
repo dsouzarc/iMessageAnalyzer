@@ -75,6 +75,7 @@ Adds some unique functionality from Messages.app that provides a better experien
 ---
 
 ##Screenshots
+- Scroll to the bottom to see the graphs
 
 ![Screenshot 0](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_0.png)
 View full conversations - all at once - with a person, starting from the first interaction
@@ -176,3 +177,8 @@ This seems like a broken-off friendship
 
 ![Screenshot 15](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_15.png)
 Graphing a brief summer friendship
+
+---
+
+![Screenshot 16](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_16.png)
+End of senior year heartbreak
