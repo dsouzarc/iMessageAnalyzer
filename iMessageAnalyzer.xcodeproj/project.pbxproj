@@ -23,6 +23,8 @@
 		944E19581BE540E9005132E1 /* blank_profile_outline.png in Resources */ = {isa = PBXBuildFile; fileRef = 944E19571BE540E9005132E1 /* blank_profile_outline.png */; };
 		945037121BF59F4700F995E7 /* SimpleAnalyticsPopUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 945037101BF59F4700F995E7 /* SimpleAnalyticsPopUpViewController.m */; };
 		945037131BF59F4700F995E7 /* SimpleAnalyticsPopUpViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 945037111BF59F4700F995E7 /* SimpleAnalyticsPopUpViewController.xib */; };
+		9465900D1C17ED70007D363A /* GraphViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9465900B1C17ED70007D363A /* GraphViewController.m */; };
+		9465900E1C17ED70007D363A /* GraphViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9465900C1C17ED70007D363A /* GraphViewController.xib */; };
 		946D2A6C1BE55BF900270BF0 /* Statistics.m in Sources */ = {isa = PBXBuildFile; fileRef = 946D2A6B1BE55BF900270BF0 /* Statistics.m */; };
 		946D2A6F1BE5DBC800270BF0 /* TextTableCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 946D2A6E1BE5DBC800270BF0 /* TextTableCellView.m */; };
 		946D2A711BE5EAA700270BF0 /* TextTableCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 946D2A701BE5EAA700270BF0 /* TextTableCellView.xib */; };
@@ -157,6 +159,9 @@
 		9450370F1BF59F4700F995E7 /* SimpleAnalyticsPopUpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleAnalyticsPopUpViewController.h; sourceTree = "<group>"; };
 		945037101BF59F4700F995E7 /* SimpleAnalyticsPopUpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimpleAnalyticsPopUpViewController.m; sourceTree = "<group>"; };
 		945037111BF59F4700F995E7 /* SimpleAnalyticsPopUpViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SimpleAnalyticsPopUpViewController.xib; sourceTree = "<group>"; };
+		9465900A1C17ED70007D363A /* GraphViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GraphViewController.h; sourceTree = "<group>"; };
+		9465900B1C17ED70007D363A /* GraphViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GraphViewController.m; sourceTree = "<group>"; };
+		9465900C1C17ED70007D363A /* GraphViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GraphViewController.xib; sourceTree = "<group>"; };
 		946D2A6A1BE55BF900270BF0 /* Statistics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Statistics.h; sourceTree = "<group>"; };
 		946D2A6B1BE55BF900270BF0 /* Statistics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Statistics.m; sourceTree = "<group>"; };
 		946D2A6D1BE5DBC800270BF0 /* TextTableCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextTableCellView.h; sourceTree = "<group>"; };
@@ -452,6 +457,9 @@
 				940136C81C0585A7003AF393 /* DropPlotMessageAnalyzerViewController.h */,
 				940136C91C0585A7003AF393 /* DropPlotMessageAnalyzerViewController.m */,
 				940136CA1C0585A7003AF393 /* DropPlotMessageAnalyzerViewController.xib */,
+				9465900A1C17ED70007D363A /* GraphViewController.h */,
+				9465900B1C17ED70007D363A /* GraphViewController.m */,
+				9465900C1C17ED70007D363A /* GraphViewController.xib */,
 			);
 			name = "More Analysis View Controller";
 			sourceTree = "<group>";
@@ -725,6 +733,7 @@
 				941C04F81C02C586002E2FAB /* ViewAttachmentsViewController.xib in Resources */,
 				9480B16A1BF7B60700ECDE38 /* MoreAnalysisViewController.xib in Resources */,
 				94A9924A1BBDC734003BA1D5 /* Main.storyboard in Resources */,
+				9465900E1C17ED70007D363A /* GraphViewController.xib in Resources */,
 				9480B1601BF7B48900ECDE38 /* more_icon.png in Resources */,
 				9438FD121BE07D2600B239BE /* MainViewController.xib in Resources */,
 				946D2A711BE5EAA700270BF0 /* TextTableCellView.xib in Resources */,
@@ -772,6 +781,7 @@
 				941C04F31C028B12002E2FAB /* NSTextField+Messages.m in Sources */,
 				94F3AC471BC7282A00948A23 /* DatabaseManager.m in Sources */,
 				946D2A6F1BE5DBC800270BF0 /* TextTableCellView.m in Sources */,
+				9465900D1C17ED70007D363A /* GraphViewController.m in Sources */,
 				94F3AC3B1BC32BD500948A23 /* Person.m in Sources */,
 				9480B1641BF7B5F300ECDE38 /* MoreAnalysisWindowController.m in Sources */,
 				94A9923F1BBDC733003BA1D5 /* AppDelegate.m in Sources */,
