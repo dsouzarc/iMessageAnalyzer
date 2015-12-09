@@ -47,7 +47,7 @@
 @property (strong, nonatomic) NSPopover *viewAttachmentsPopover;
 @property (strong, nonatomic) ViewAttachmentsViewController *viewAttachmentsViewController;
 
-@property (strong, nonatomic) DropPlotMessageAnalyzerViewController *droplotMessageAnalyzerViewController;
+@property (strong, nonatomic) GraphViewController *graphViewController;
 
 @property (strong, nonatomic) Person *person;
 @property (strong, nonatomic) TemporaryDatabaseManager *databaseManager;
@@ -92,8 +92,6 @@
         
         self.messageWithAttachmentAttributes = [NSDictionary dictionaryWithObjectsAndKeys:[NSColor yellowColor], NSForegroundColorAttributeName,
                                                 [NSNumber numberWithInt:NSUnderlineStyleSingle], NSUnderlineStyleAttributeName, nil];
-        
-        self.droplotMessageAnalyzerViewController = [[DropPlotMessageAnalyzerViewController alloc] initWithNibName:@"DropPlotMessageAnalyzerViewController" bundle:[NSBundle mainBundle] person:self.person temporaryDatabase:self.databaseManager firstMessageDate:self.calendarChosenDate];
     }
     
     return self;
@@ -125,8 +123,10 @@
         [self setTextFieldLong:(totalSent + totalReceived) forTag:18];
     }
     
-    [[self.droplotMessageAnalyzerViewController view] setFrame:self.mainViewForGraph.frame];
-    [self.view addSubview:self.droplotMessageAnalyzerViewController.view positioned:NSWindowAbove relativeTo:self.mainViewForGraph];
+    self.graphViewController = [[GraphViewController alloc] initWithNibName:@"GraphViewController" bundle:[NSBundle mainBundle] person:self.person temporaryDatabase:self.databaseManager firstMessageDate:self.calendarChosenDate graphView:self.mainViewForGraph];
+    
+    [[self.graphViewController view] setFrame:self.mainViewForGraph.frame];
+    [self.view addSubview:self.graphViewController.view positioned:NSWindowAbove relativeTo:self.mainViewForGraph];
 }
 
 

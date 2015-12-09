@@ -10,7 +10,7 @@
 
 #import "ViewAttachmentsViewController.h"
 #import "WordFrequencyHeapDataStructure.h"
-#import "DropPlotMessageAnalyzerViewController.h"
+#import "GraphViewController.h"
 
 #import "NSTextField+Messages.h"
 #import "MessageManager.h"

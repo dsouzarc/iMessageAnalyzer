@@ -8,6 +8,15 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import <CorePlot/CorePlot.h>
+
+#import "TemporaryDatabaseManager.h"
+#import "Message.h"
+#import "Person.h"
+#import "Statistics.h"
+
 @interface GraphViewController : NSViewController
+
+- (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil person:(Person*)person temporaryDatabase:(TemporaryDatabaseManager*)temporaryDatabase firstMessageDate:(NSDate*)firstMessage graphView:(NSView*)graphView;
 
 @end
