@@ -16,6 +16,8 @@
 
 @property (strong, nonatomic) NSView *graphView;
 
+@property (strong, nonatomic) DropPlotMessageAnalyzerViewController *dropPlotViewController;
+
 @end
 
 @implementation GraphViewController
@@ -29,6 +31,8 @@
         self.database = temporaryDatabase;
         self.firstMessage = firstMessage;
         self.graphView = graphView;
+        
+        self.dropPlotViewController = [[DropPlotMessageAnalyzerViewController alloc] initWithNibName:@"DropPlotMessageAnalyzerViewController" bundle:nibBundleOrNil person:self.person temporaryDatabase:self.database firstMessageDate:self.firstMessage];
     }
     
     return self;
@@ -36,7 +40,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do view setup here.
+    
+    [[self.dropPlotViewController view] setFrame:self.view.frame];
+    [self.view addSubview:self.dropPlotViewController.view];
+    //[self.view addSubview:self.dropPlotViewController.view positioned:NSWindowAbove relativeTo:self.view];
 }
 
 @end
