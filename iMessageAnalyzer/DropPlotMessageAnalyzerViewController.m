@@ -483,29 +483,18 @@
  *
  *****************************************************************/
 
-# pragma mark MISC_METHODS
-
-- (void) updateData
+- (double) getMaxYAndUpdateDictionary:(NSMutableArray<NSDictionary*>**)data allMessages:(NSMutableArray*)allMessages startTime:(int)startTime endTime:(int)endTime
 {
     NSDate *methodStart = [NSDate date];
     
-    NSMutableArray *allMessages = [self.messageManager getAllMessagesForPerson:self.person];
-    
-    NSMutableArray<NSDictionary*> *newData = [[NSMutableArray alloc] init];
-    
-    const int endTime = (int) [[self getDateAtEndOfYear:[NSDate date]] timeIntervalSinceReferenceDate]; //(int) [[NSDate date] timeIntervalSinceReferenceDate];
     const int timeInterval = 60 * 60 * 24;
-    
-    int startTime = (int) [[self getDateAtBeginningOfYear:[NSDate date]] timeIntervalSinceReferenceDate];
-    
-    double minX = 0;
-    double maxX = 60 * 60 * 365;
-    
-    double minY = 0;
-    double maxY = 0;
     
     int counter = 0;
     int hour = 0;
+    
+    double maxY = 0;
+    
+    NSMutableArray<NSDictionary*> *newData = *data;
     
     while(startTime < endTime && counter < allMessages.count) {
         Message *message = allMessages[counter];
@@ -531,13 +520,35 @@
         
         hour++;
         startTime += timeInterval;
-        
     }
     
     NSDate *methodFinish = [NSDate date];
     NSTimeInterval executionTime = [methodFinish timeIntervalSinceDate:methodStart];
     NSLog(@"executionTime = %f", executionTime);
     
+    return maxY;
+}
+
+# pragma mark MISC_METHODS
+
+- (void) updateData
+{
+    
+    NSMutableArray *allMessages = [self.messageManager getAllMessagesForPerson:self.person];
+    
+    NSMutableArray<NSDictionary*> *newData = [[NSMutableArray alloc] init];
+    
+    const int endTime = (int) [[self getDateAtEndOfYear:[NSDate date]] timeIntervalSinceReferenceDate]; //(int) [[NSDate date] timeIntervalSinceReferenceDate];
+    const int timeInterval = 60 * 60 * 24;
+    
+    int startTime = (int) [[self getDateAtBeginningOfYear:[NSDate date]] timeIntervalSinceReferenceDate];
+    
+    double minX = 0;
+    double maxX = 60 * 60 * 365;
+    
+    double minY = 0;
+    double maxY = [self getMaxYAndUpdateDictionary:&newData allMessages:allMessages startTime:startTime endTime:endTime];
+
     self.dataPoints = newData;
     
     self.minimumValueForXAxis = minX;
