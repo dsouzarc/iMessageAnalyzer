@@ -554,65 +554,6 @@
     self.totalMaximumYValue = maxY;
 }
 
-- (void) updateDataOld
-{
-    NSDate *methodStart = [NSDate date];
-    
-    double minY = MAXFLOAT;
-    double maxY = -MAXFLOAT;
-    
-    NSMutableArray<NSDictionary*> *newData = [[NSMutableArray alloc] init];
-    
-    const int endTime = (int) [[self getDateAtEndOfYear:[NSDate date]] timeIntervalSinceReferenceDate]; //(int) [[NSDate date] timeIntervalSinceReferenceDate];
-    const int timeInterval = 60 * 60 * 24;
-    
-    int startTime = (int) [[self getDateAtBeginningOfYear:[NSDate date]] timeIntervalSinceReferenceDate];
-    
-    double minX = 0;
-    double maxX = 0;
-    int counter = 0;
-    while(startTime < endTime) {
-        int tempEndTime = startTime + timeInterval;
-        int messageCount = [self.messageManager getConversationMessageCountStartTime:startTime endTime:tempEndTime];
-        
-        if(messageCount < minY) {
-            minY = messageCount;
-        }
-        
-        if(messageCount > maxY) {
-            maxY = messageCount;
-        }
-        
-        [newData addObject:@{ @"x": @(counter),
-                              @"y": @(messageCount)}];
-        
-        //NSLog(@"GOT INFO FOR: %@", [self good:[NSDate dateWithTimeIntervalSinceReferenceDate:tempEndTime]]);
-        
-        startTime += timeInterval;
-        counter++;
-    }
-    
-    maxX = counter + 1;
-    self.dataPoints = newData;
-    
-    self.minimumValueForXAxis = minX;
-    self.maximumValueForXAxis = maxX;
-    self.minimumValueForYAxis = minY;
-    self.maximumValueForYAxis = maxY;
-    self.totalMaximumYValue = maxY;
-    
-    CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)self.graph.defaultPlotSpace;
-    plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:@(0)
-                                                    length:@(maxX)];
-    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:@(0)
-                                                    length:@((maxY * 11) / 10)];
-    NSLog(@"MAX: %f", maxY);
-    
-    NSDate *methodFinish = [NSDate date];
-    NSTimeInterval executionTime = [methodFinish timeIntervalSinceDate:methodStart];
-    NSLog(@"executionTime OLD = %f", executionTime);
-}
-
 - (NSMutableArray<NSSet*>*) getTickLocationsAndLabelsForMonths
 {
     CPTXYAxis *xAxis = [((CPTXYAxisSet *)self.graph.axisSet) xAxis];
@@ -722,7 +663,7 @@
     
     [pdfSavingDialog setAllowedFileTypes:@[@"pdf"]];
     
-    if ( [pdfSavingDialog runModal] == NSOKButton ) {
+    if (pdfSavingDialog.runModal == NSModalResponseOK ) {
         NSData *dataForPDF = [self.graph dataForPDFRepresentationOfLayer];
         
         NSURL *url = [pdfSavingDialog URL];
@@ -737,7 +678,7 @@
     NSSavePanel *pngSavingDialog = [NSSavePanel savePanel];
     [pngSavingDialog setAllowedFileTypes:@[@"png"]];
     
-    if ([pngSavingDialog runModal] == NSModalResponseOK) {
+    if (pngSavingDialog.modalPanel == NSModalResponseOK) {
         NSImage *image = [self.graph imageOfLayer];
         NSData *tiffData = [image TIFFRepresentation];
         NSBitmapImageRep *tiffRep = [NSBitmapImageRep imageRepWithData:tiffData];
