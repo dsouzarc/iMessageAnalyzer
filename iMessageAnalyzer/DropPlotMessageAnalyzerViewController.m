@@ -26,10 +26,10 @@
 @property (nonatomic, readwrite, assign) double totalMaximumYValue;
 @property BOOL isZoomedOut;
 
-@property (nonatomic, readwrite, strong) NSArray<NSDictionary *> *dataPoints;
+@property (nonatomic, readwrite, strong) NSArray<NSDictionary *> *mainDataPoints;
 
 @property (nonatomic, readwrite, strong) CPTPlotSpaceAnnotation *zoomAnnotation;
-@property (nonatomic, readwrite, strong) CPTPlotSpace *thisConversationPlot;
+@property (nonatomic, readwrite, strong) CPTPlotSpace *mainPlot;
 @property (nonatomic, readwrite, assign) CGPoint dragStart;
 @property (nonatomic, readwrite, assign) CGPoint dragEnd;
 
@@ -60,7 +60,7 @@
         [self.monthDateYearFormatter setDateFormat:@"MM/dd/yy"];
         self.isZoomedOut = YES;
         
-        self.dataPoints = [[NSMutableArray alloc] init];
+        self.mainDataPoints = [[NSMutableArray alloc] init];
         self.zoomAnnotation = nil;
         self.dragStart = CGPointZero;
         self.dragEnd = CGPointZero;
@@ -155,7 +155,7 @@
         //yAxis.preferredNumberOfMajorTicks = [self getNumberOfTicks:self.maximumValueForYAxis];
         //yAxis.labelingPolicy = CPTAxisLabelingPolicyAutomatic; //CPTAxisLabelingPolicyEqualDivisions;
         
-        [self updateData];
+        [self updateDataWithThisConversationMessages];
         
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             [self.graph reloadData];
@@ -224,14 +224,14 @@
 
 -(NSUInteger)numberOfRecordsForPlot:(CPTPlot *)plot
 {
-    NSLog(@"SIZE: %ld", self.dataPoints.count);
-    return self.dataPoints.count;
+    NSLog(@"SIZE: %ld", self.mainDataPoints.count);
+    return self.mainDataPoints.count;
 }
 
 -(id)numberForPlot:(CPTPlot *)plot field:(NSUInteger)fieldEnum recordIndex:(NSUInteger)index
 {
     NSString *key = (fieldEnum == CPTScatterPlotFieldX ? @"x" : @"y");
-    return self.dataPoints[index][key];
+    return self.mainDataPoints[index][key];
 }
 
 
@@ -246,7 +246,7 @@
         return nil;
     }
     
-    NSDictionary *valueDict = self.dataPoints[(int)idx];
+    NSDictionary *valueDict = self.mainDataPoints[(int)idx];
     CPTTextLayer *label = [[CPTTextLayer alloc] initWithText:[NSString stringWithFormat:@"%d", [valueDict[@"y"] intValue]]];
     CPTMutableTextStyle *textStyle = [label.textStyle mutableCopy];
     textStyle.color = [CPTColor yellowColor];
@@ -266,9 +266,9 @@
     hitAnnotationTextStyle.fontSize = 16.0f;
     hitAnnotationTextStyle.fontName = @"Helvetica-Bold";
     
-    NSString *yValue = [self.dataPoints[idx][@"y"] stringValue];
+    NSString *yValue = [self.mainDataPoints[idx][@"y"] stringValue];
     NSNumber *x = [NSNumber numberWithInt:(int) idx];
-    NSNumber *y = self.dataPoints[idx][@"y"];
+    NSNumber *y = self.mainDataPoints[idx][@"y"];
     NSArray *anchorPoint = [NSArray arrayWithObjects:x, y, nil];
     
     CPTTextLayer *textLayer = [[CPTTextLayer alloc] initWithText:yValue style:hitAnnotationTextStyle];
@@ -277,7 +277,7 @@
     self.yValueAnnotation.displacement = CGPointMake(0.0f, 10.0f);
     [self.graph.plotAreaFrame.plotArea addAnnotation:self.yValueAnnotation];
     
-    NSLog(@"CLICKED: %@\t%@", self.dataPoints[idx][@"x"], self.dataPoints[idx][@"y"]);
+    NSLog(@"CLICKED: %@\t%@", self.mainDataPoints[idx][@"x"], self.mainDataPoints[idx][@"y"]);
 }
 
 /****************************************************************
@@ -396,7 +396,7 @@
     
     double start[2], end[2];
     
-    // obtain the datapoints for the drag start and end
+    // obtain the mainDataPoints for the drag start and end
     [plotSpace doublePrecisionPlotPoint:start numberOfCoordinates:2 forPlotAreaViewPoint:dragStartInPlotArea];
     [plotSpace doublePrecisionPlotPoint:end numberOfCoordinates:2 forPlotAreaViewPoint:dragEndInPlotArea];
     
@@ -531,7 +531,7 @@
 
 # pragma mark MISC_METHODS
 
-- (void) updateData
+- (void) updateDataWithThisConversationMessages
 {
     
     NSMutableArray *allMessages = [self.messageManager getAllMessagesForPerson:self.person];
@@ -549,7 +549,7 @@
     double minY = 0;
     double maxY = [self getMaxYAndUpdateDictionary:&newData allMessages:allMessages startTime:startTime endTime:endTime];
 
-    self.dataPoints = newData;
+    self.mainDataPoints = newData;
     
     self.minimumValueForXAxis = minX;
     self.maximumValueForXAxis = maxX;
