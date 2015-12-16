@@ -153,8 +153,6 @@
         while(!self.messageManager.finishedAddingEntries) {
             //Do nothing
         }
-        //yAxis.preferredNumberOfMajorTicks = [self getNumberOfTicks:self.maximumValueForYAxis];
-        //yAxis.labelingPolicy = CPTAxisLabelingPolicyAutomatic; //CPTAxisLabelingPolicyEqualDivisions;
         
         [self updateDataWithThisConversationMessages];
         
@@ -598,6 +596,7 @@
 - (NSMutableArray<NSSet*>*) getTickLocationsAndLabelsForYAxis
 {
     CPTXYAxis *yAxis = [((CPTXYAxisSet*) self.graph.axisSet) yAxis];
+    CPTXYAxis *xAxis = [((CPTXYAxisSet*) self.graph.axisSet) xAxis];
     
     NSMutableArray *tickLocations = [[NSMutableArray alloc] init];
     NSMutableArray *tickLabels = [[NSMutableArray alloc] init];
@@ -607,7 +606,7 @@
     for(int i = 0, interval = 0; i <= 11; i++, interval += scale) {
         [tickLocations addObject:@(interval)];
         
-        CPTAxisLabel *label = [[CPTAxisLabel alloc] initWithText:[NSString stringWithFormat:@"%d", interval] textStyle:yAxis.labelTextStyle];
+        CPTAxisLabel *label = [[CPTAxisLabel alloc] initWithText:[NSString stringWithFormat:@"%d", interval] textStyle:xAxis.labelTextStyle];
         label.tickLocation = @(interval);
         [tickLabels addObject:label];
     }
