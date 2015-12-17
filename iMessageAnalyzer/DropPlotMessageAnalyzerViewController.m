@@ -138,8 +138,8 @@
     NSMutableArray<NSSet*> *tickInformation = [self getTickLocationsAndLabelsForMonths];
     NSSet *tickLocations = tickInformation[0];
     NSSet *tickLabels = tickInformation[1];
-    //xAxis.majorTickLocations = tickLocations;
-    //xAxis.axisLabels = tickLabels;
+    xAxis.majorTickLocations = tickLocations;
+    xAxis.axisLabels = tickLabels;
     
     CPTPlotSymbol *plotSymbol = [CPTPlotSymbol ellipsePlotSymbol];
     plotSymbol.fill = [CPTFill fillWithColor:[CPTColor whiteColor]];
@@ -158,6 +158,13 @@
         
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             [self.graph reloadData];
+            
+            /*NSMutableArray<NSSet*> *tickInformation = [self getTickLocationsAndLabelsForYAxis];
+            NSSet *tickLocations = tickInformation[0];
+            NSSet *tickLabels = tickInformation[1];
+            
+            yAxis.majorTickLocations = tickLocations;
+            yAxis.axisLabels = tickLabels;*/
             
             [self zoomOut];
             
@@ -596,19 +603,25 @@
 - (NSMutableArray<NSSet*>*) getTickLocationsAndLabelsForYAxis
 {
     CPTXYAxis *yAxis = [((CPTXYAxisSet*) self.graph.axisSet) yAxis];
-    CPTXYAxis *xAxis = [((CPTXYAxisSet*) self.graph.axisSet) xAxis];
     
     NSMutableArray *tickLocations = [[NSMutableArray alloc] init];
     NSMutableArray *tickLabels = [[NSMutableArray alloc] init];
     
     int scale = [self getScale:(int)self.maximumValueForYAxis];
     
-    for(int i = 0, interval = 0; i <= 11; i++, interval += scale) {
-        [tickLocations addObject:@(interval)];
+    double height = ((CPTXYPlotSpace*)self.graph.defaultPlotSpace).yRange.maxLimitDouble;
+    const int scaleY = height / 9.5;
+    
+    NSLog(@"%@\t%@\t%@", @(scale), @(height), @(scaleY));
+    
+    for(int i = 0, interval = 0, location = 0; i < 11; i++, interval += scale, location += scaleY) {
+        [tickLocations addObject:@(i * scaleY)];
         
-        CPTAxisLabel *label = [[CPTAxisLabel alloc] initWithText:[NSString stringWithFormat:@"%d", interval] textStyle:xAxis.labelTextStyle];
-        label.tickLocation = @(interval);
+        CPTAxisLabel *label = [[CPTAxisLabel alloc] initWithText:[NSString stringWithFormat:@"%d", interval] textStyle:yAxis.labelTextStyle];
+        label.tickLocation = @(i * scaleY);
         [tickLabels addObject:label];
+        
+        NSLog(@"#: %@\tLocation: %@", @(interval), @(i * scaleY));
     }
     
     return [NSMutableArray arrayWithObjects:[NSSet setWithArray:tickLocations], [NSSet setWithArray:tickLabels], nil];
