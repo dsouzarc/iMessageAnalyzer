@@ -107,6 +107,7 @@
     CPTXYAxisSet *axisSet = (CPTXYAxisSet *)self.graph.axisSet;
     
     CPTXYAxis *yAxis = axisSet.yAxis;
+    yAxis.labelingPolicy = CPTAxisLabelingPolicyNone;
     yAxis.minorTicksPerInterval = 9;
     yAxis.majorIntervalLength = @(self.majorIntervalLengthForY);
     yAxis.labelOffset = 5.0;
@@ -468,8 +469,14 @@
     
     //axisSet.yAxis.majorIntervalLength = @(self.majorIntervalLengthForY);
     //axisSet.yAxis.labelingPolicy = CPTAxisLabelingPolicyFixedInterval;
+    
+    NSMutableArray<NSSet*> *yAxisTickInfo = [self getTickLocationsAndLabelsForYAxis];
+    NSSet *tickLocationsYAxis = yAxisTickInfo[0];
+    NSSet *tickLabelsYAxis = yAxisTickInfo[1];
     axisSet.yAxis.preferredNumberOfMajorTicks = 10;
-    axisSet.yAxis.labelingPolicy = CPTAxisLabelingPolicyAutomatic;
+    axisSet.yAxis.labelingPolicy = CPTAxisLabelingPolicyNone;
+    axisSet.yAxis.axisLabels = tickLabelsYAxis;
+    axisSet.yAxis.majorTickLocations = tickLocationsYAxis;
     
     //axisSet.yAxis.majorIntervalLength = [NSNumber numberWithDouble:[self getNumberOfTicks:self.maximumValueForYAxis]];
     //axisSet.yAxis.labelingPolicy = CPTAxisLabelingPolicyFixedInterval;
@@ -482,6 +489,8 @@
  *              MISC METHODS
  *
  *****************************************************************/
+
+# pragma mark MISC_METHODS
 
 - (double) getMaxYAndUpdateDictionary:(NSMutableArray<NSDictionary*>**)data allMessages:(NSMutableArray*)allMessages startTime:(int)startTime endTime:(int)endTime
 {
@@ -529,7 +538,30 @@
     return maxY;
 }
 
-# pragma mark MISC_METHODS
+- (int) getScale:(int)maxY
+{
+    
+    int maxBigTicks = 10;
+    
+    int numMessagesRounded = maxY;
+    
+    //Round up to the nearest 10
+    if(maxY < 200) {
+        numMessagesRounded = (10 * floor(maxY / 10 + 1));
+    }
+    
+    //To the nearest 50
+    else if(maxY < 1000) {
+        numMessagesRounded = (50 * floor(maxY / 50 + 1));
+    }
+    
+    //To the nearest 100
+    else {
+        numMessagesRounded = (100 * floor(maxY / 100 + 1));
+    }
+    
+    return numMessagesRounded / maxBigTicks;
+}
 
 - (void) updateDataWithThisConversationMessages
 {
@@ -539,8 +571,6 @@
     NSMutableArray<NSDictionary*> *newData = [[NSMutableArray alloc] init];
     
     const int endTime = (int) [[self getDateAtEndOfYear:[NSDate date]] timeIntervalSinceReferenceDate]; //(int) [[NSDate date] timeIntervalSinceReferenceDate];
-    const int timeInterval = 60 * 60 * 24;
-    
     int startTime = (int) [[self getDateAtBeginningOfYear:[NSDate date]] timeIntervalSinceReferenceDate];
     
     double minX = 0;
@@ -563,6 +593,26 @@
                                                     length:@((maxY * 11) / 10)];
     
     self.totalMaximumYValue = maxY;
+}
+
+- (NSMutableArray<NSSet*>*) getTickLocationsAndLabelsForYAxis
+{
+    CPTXYAxis *yAxis = [((CPTXYAxisSet*) self.graph.axisSet) yAxis];
+    
+    NSMutableArray *tickLocations = [[NSMutableArray alloc] init];
+    NSMutableArray *tickLabels = [[NSMutableArray alloc] init];
+    
+    int scale = [self getScale:(int)self.maximumValueForYAxis];
+    
+    for(int i = 0, interval = 0; i <= 11; i++, interval += scale) {
+        [tickLocations addObject:@(interval)];
+        
+        CPTAxisLabel *label = [[CPTAxisLabel alloc] initWithText:[NSString stringWithFormat:@"%d", interval] textStyle:yAxis.labelTextStyle];
+        label.tickLocation = @(interval);
+        [tickLabels addObject:label];
+    }
+    
+    return [NSMutableArray arrayWithObjects:[NSSet setWithArray:tickLocations], [NSSet setWithArray:tickLabels], nil];
 }
 
 - (NSMutableArray<NSSet*>*) getTickLocationsAndLabelsForMonths
