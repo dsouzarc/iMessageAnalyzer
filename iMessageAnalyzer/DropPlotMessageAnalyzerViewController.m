@@ -104,15 +104,6 @@
     [plotSpace setDelegate:self];
     [plotSpace setAllowsUserInteraction:YES];
     
-    CPTXYAxisSet *axisSet = (CPTXYAxisSet *)self.graph.axisSet;
-    
-    CPTXYAxis *yAxis = axisSet.yAxis;
-    yAxis.labelingPolicy = CPTAxisLabelingPolicyNone;
-    yAxis.minorTicksPerInterval = 9;
-    yAxis.majorIntervalLength = @(self.majorIntervalLengthForY);
-    yAxis.labelOffset = 5.0;
-    yAxis.axisConstraints = [CPTConstraints constraintWithLowerOffset:0.0];
-    
     // Create the main plot for the delimited data
     CPTScatterPlot *dataSourceLinePlot = [[CPTScatterPlot alloc] initWithFrame:self.graph.bounds];
     dataSourceLinePlot.identifier = @"Data Source Plot";
@@ -127,6 +118,17 @@
     [textStyle setFontSize:8.0f];
     [textStyle setColor:[CPTColor colorWithCGColor:[[NSColor grayColor] CGColor]]];
     
+    CPTXYAxisSet *axisSet = (CPTXYAxisSet *)self.graph.axisSet;
+    
+    //Y AXIS
+    CPTXYAxis *yAxis = axisSet.yAxis;
+    yAxis.labelingPolicy = CPTAxisLabelingPolicyNone;
+    yAxis.minorTicksPerInterval = 9;
+    yAxis.majorIntervalLength = @(self.majorIntervalLengthForY);
+    yAxis.labelOffset = 5.0;
+    yAxis.axisConstraints = [CPTConstraints constraintWithLowerOffset:0.0];
+    
+    //X AXIS
     CPTXYAxis *xAxis = [axisSet xAxis];
     xAxis.labelingPolicy = CPTAxisLabelingPolicyNone;
     [xAxis setMajorIntervalLength:[NSNumber numberWithDouble:30.0]];
@@ -168,29 +170,12 @@
             
             [self zoomOut];
             
-            if(self.maximumValueForYAxis > 200) {
+            if(self.maximumValueForYAxis > 0) {
                 [self zoomIn];
                 [self zoomOut];
             }
         });
     });
-}
-
-- (int)getNumberOfTicks:(int)height
-{
-    const int maxTicks = 15;
-    
-    if(height < maxTicks) {
-        return height;
-    }
-    
-    int tickCounter = 2;
-    
-    while(height / tickCounter > maxTicks) {
-        tickCounter++;
-    }
-    NSLog(@"TICK COUNTER: %d", height / tickCounter);
-    return height / tickCounter;
 }
 
 /****************************************************************
@@ -207,7 +192,7 @@
     
     if (annotation) {
         CPTPlotArea *plotArea = self.graph.plotAreaFrame.plotArea;
-        CGRect plotBounds     = plotArea.bounds;
+        CGRect plotBounds = plotArea.bounds;
         
         // convert the dragStart and dragEnd values to plot coordinates
         CGPoint dragStartInPlotArea = [self.graph convertPoint:self.dragStart toLayer:plotArea];
@@ -239,7 +224,6 @@
     NSString *key = (fieldEnum == CPTScatterPlotFieldX ? @"x" : @"y");
     return self.mainDataPoints[index][key];
 }
-
 
 - (void) plotSpace:(CPTPlotSpace *)space didChangePlotRangeForCoordinate:(CPTCoordinate)coordinate
 {
@@ -286,6 +270,7 @@
     NSLog(@"CLICKED: %@\t%@", self.mainDataPoints[idx][@"x"], self.mainDataPoints[idx][@"y"]);
 }
 
+
 /****************************************************************
  *
  *              CPTPLOT DELEGATE
@@ -293,6 +278,7 @@
  *****************************************************************/
 
 # pragma mark CPTPLOT_DELEGATE
+
 - (BOOL)plotSpace:(CPTPlotSpace *)space shouldHandlePointingDeviceDownEvent:(id)event atPoint:(CGPoint)interactionPoint
 {
     if (!self.zoomAnnotation) {
@@ -324,7 +310,7 @@
             if (defaultSpace) {
                 CPTPlotSpaceAnnotation *annotation = [[CPTPlotSpaceAnnotation alloc] initWithPlotSpace:defaultSpace anchorPlotPoint:anchorPoint];
                 annotation.contentLayer = zoomRectangleLayer;
-                self.zoomAnnotation     = annotation;
+                self.zoomAnnotation = annotation;
                 
                 [self.graph.plotAreaFrame.plotArea addAnnotation:annotation];
             }
@@ -360,7 +346,7 @@
         self.zoomAnnotation = nil;
         
         self.dragStart = CGPointZero;
-        self.dragEnd   = CGPointZero;
+        self.dragEnd = CGPointZero;
     }
     
     return NO;
@@ -374,7 +360,7 @@
         [self.graph.plotAreaFrame.plotArea removeAnnotation:annotation];
         self.zoomAnnotation = nil;
         self.dragStart = CGPointZero;
-        self.dragEnd   = CGPointZero;
+        self.dragEnd = CGPointZero;
     }
     
     return NO;
@@ -398,7 +384,7 @@
     
     // convert the dragStart and dragEnd values to plot coordinates
     CGPoint dragStartInPlotArea = [self.graph convertPoint:self.dragStart toLayer:plotArea];
-    CGPoint dragEndInPlotArea   = [self.graph convertPoint:self.dragEnd toLayer:plotArea];
+    CGPoint dragEndInPlotArea = [self.graph convertPoint:self.dragEnd toLayer:plotArea];
     
     double start[2], end[2];
     
@@ -472,20 +458,18 @@
     axisSet.xAxis.axisLabels = tickLabels;
     axisSet.xAxis.labelingPolicy = CPTAxisLabelingPolicyNone;
     
-    //axisSet.yAxis.majorIntervalLength = @(self.majorIntervalLengthForY);
+    axisSet.yAxis.majorIntervalLength = @([self getScale:self.maximumValueForYAxis]); //@(self.majorIntervalLengthForY);
     //axisSet.yAxis.labelingPolicy = CPTAxisLabelingPolicyFixedInterval;
     
     NSMutableArray<NSSet*> *yAxisTickInfo = [self getTickLocationsAndLabelsForYAxis];
     NSSet *tickLocationsYAxis = yAxisTickInfo[0];
     NSSet *tickLabelsYAxis = yAxisTickInfo[1];
-    axisSet.yAxis.preferredNumberOfMajorTicks = 10;
+    axisSet.yAxis.preferredNumberOfMajorTicks = 11;
     axisSet.yAxis.labelingPolicy = CPTAxisLabelingPolicyNone;
     axisSet.yAxis.axisLabels = tickLabelsYAxis;
     axisSet.yAxis.majorTickLocations = tickLocationsYAxis;
     
-    //axisSet.yAxis.majorIntervalLength = [NSNumber numberWithDouble:[self getNumberOfTicks:self.maximumValueForYAxis]];
     //axisSet.yAxis.labelingPolicy = CPTAxisLabelingPolicyFixedInterval;
-    
 }
 
 
@@ -545,12 +529,17 @@
 
 - (int) getScale:(int)maxY
 {
-    
     int maxBigTicks = 10;
     
     int numMessagesRounded = maxY;
     
     //Round up to the nearest 10
+    if(maxY <= 10) {
+        return 1;
+    }
+    else if(maxY <= 20) {
+        return 2;
+    }
     if(maxY < 200) {
         numMessagesRounded = (10 * floor(maxY / 10 + 1));
     }
@@ -609,10 +598,10 @@
     
     int scale = [self getScale:(int)self.maximumValueForYAxis];
     
-    double height = ((CPTXYPlotSpace*)self.graph.defaultPlotSpace).yRange.maxLimitDouble;
+    double height = ((CPTXYPlotSpace*) self.graph.defaultPlotSpace).yRange.maxLimitDouble;
     const int scaleY = height / 9.5;
     
-    NSLog(@"%@\t%@\t%@", @(scale), @(height), @(scaleY));
+    NSLog(@"Scale: %@\tGraph Height: %@\tY-Axis Scale: %@", @(scale), @(height), @(scaleY));
     
     for(int i = 0, interval = 0, location = 0; i < 11; i++, interval += scale, location += scaleY) {
         [tickLocations addObject:@(i * scaleY)];
