@@ -124,8 +124,8 @@
     CPTXYAxis *yAxis = axisSet.yAxis;
     yAxis.labelingPolicy = CPTAxisLabelingPolicyNone;
     yAxis.minorTicksPerInterval = 9;
-    yAxis.majorIntervalLength = @(self.majorIntervalLengthForY);
-    yAxis.labelOffset = 5.0;
+    yAxis.majorIntervalLength = @(10); //@(self.majorIntervalLengthForY);
+    //yAxis.labelOffset = 5.0;
     yAxis.axisConstraints = [CPTConstraints constraintWithLowerOffset:0.0];
     
     //X AXIS
@@ -458,16 +458,17 @@
     axisSet.xAxis.axisLabels = tickLabels;
     axisSet.xAxis.labelingPolicy = CPTAxisLabelingPolicyNone;
     
-    axisSet.yAxis.majorIntervalLength = @([self getScale:self.maximumValueForYAxis]); //@(self.majorIntervalLengthForY);
+    //axisSet.yAxis.majorIntervalLength = @([self getScale:self.maximumValueForYAxis]); //@(self.majorIntervalLengthForY);
     //axisSet.yAxis.labelingPolicy = CPTAxisLabelingPolicyFixedInterval;
     
-    NSMutableArray<NSSet*> *yAxisTickInfo = [self getTickLocationsAndLabelsForYAxis];
+    /*NSMutableArray<NSSet*> *yAxisTickInfo = [self getTickLocationsAndLabelsForYAxis];
     NSSet *tickLocationsYAxis = yAxisTickInfo[0];
     NSSet *tickLabelsYAxis = yAxisTickInfo[1];
     axisSet.yAxis.preferredNumberOfMajorTicks = 11;
     axisSet.yAxis.labelingPolicy = CPTAxisLabelingPolicyNone;
     axisSet.yAxis.axisLabels = tickLabelsYAxis;
     axisSet.yAxis.majorTickLocations = tickLocationsYAxis;
+    axisSet.yAxis.majorIntervalLength = @([self getScale:self.maximumValueForYAxis]);*/
     
     //axisSet.yAxis.labelingPolicy = CPTAxisLabelingPolicyFixedInterval;
 }
