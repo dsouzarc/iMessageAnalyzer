@@ -418,6 +418,10 @@
 {
     if(tableView == self.contactsTableView) {
         
+        if(self.lastChosenPersonIndex == row) {
+            return YES;
+        }
+        
         self.lastChosenPersonIndex = row;
         self.lastChosenPerson = self.searchConversationChats[row];
         self.currentConversationChats = [self.messageManager getAllMessagesForPerson:self.lastChosenPerson];
