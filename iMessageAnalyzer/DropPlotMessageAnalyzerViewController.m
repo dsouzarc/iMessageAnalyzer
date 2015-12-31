@@ -72,6 +72,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [self updateDataWithThisConversationMessages];
+    
+    
     CPTXYGraph *graph = [[CPTXYGraph alloc] initWithFrame:self.graphHostingView.frame];
     [graph applyTheme:[CPTTheme themeNamed:kCPTDarkGradientTheme]];
     self.graph = graph;
@@ -98,7 +101,8 @@
     plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:@(0)
                                                     length:@(366)];
     plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:@(0)
-                                                    length:@(100)];
+                                                    length:@(self.totalMaximumYValue)];
+    NSLog(@"Max y: %f", self.maximumValueForYAxis);
     
     // this allows the plot to respond to mouse events
     [plotSpace setDelegate:self];
@@ -122,8 +126,8 @@
     
     //Y AXIS
     CPTXYAxis *yAxis = axisSet.yAxis;
-    yAxis.labelingPolicy = CPTAxisLabelingPolicyNone;
-    yAxis.minorTicksPerInterval = 9;
+    yAxis.labelingPolicy = CPTAxisLabelingPolicyAutomatic; //CPTAxisLabelingPolicyNone;
+    //yAxis.minorTicksPerInterval = 9;
     yAxis.majorIntervalLength = @(10); //@(self.majorIntervalLengthForY);
     //yAxis.labelOffset = 5.0;
     yAxis.axisConstraints = [CPTConstraints constraintWithLowerOffset:0.0];
@@ -156,10 +160,13 @@
             //Do nothing
         }
         
-        [self updateDataWithThisConversationMessages];
+        //[self updateDataWithThisConversationMessages];
         
         dispatch_async(dispatch_get_main_queue(), ^(void) {
-            [self.graph reloadData];
+            
+            //plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:@(0) length:@(self.maximumValueForYAxis)];
+            
+            //[self.graph reloadData];
             
             /*NSMutableArray<NSSet*> *tickInformation = [self getTickLocationsAndLabelsForYAxis];
             NSSet *tickLocations = tickInformation[0];
@@ -168,12 +175,12 @@
             yAxis.majorTickLocations = tickLocations;
             yAxis.axisLabels = tickLabels;*/
             
-            [self zoomOut];
+            /*[self zoomOut];
             
             if(self.maximumValueForYAxis > 0) {
                 [self zoomIn];
                 [self zoomOut];
-            }
+            }*/
         });
     });
 }
@@ -507,6 +514,7 @@
             while([message.dateSent timeIntervalSinceReferenceDate] <= (startTime + timeInterval) && counter+1 < allMessages.count) {
                 numMessages++;
                 counter++;
+                NSLog(@"%@", message.messageText);
                 message = allMessages[counter];
             }
             
@@ -524,6 +532,8 @@
     NSDate *methodFinish = [NSDate date];
     NSTimeInterval executionTime = [methodFinish timeIntervalSinceDate:methodStart];
     NSLog(@"executionTime = %f", executionTime);
+    
+    NSLog(@"MAX OF: %d\t%d", maxY, allMessages.count);
     
     return maxY;
 }
@@ -587,7 +597,7 @@
     plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:@(0)
                                                     length:@((maxY * 11) / 10)];
     
-    self.totalMaximumYValue = maxY;
+    //self.totalMaximumYValue = maxY;
 }
 
 - (NSMutableArray<NSSet*>*) getTickLocationsAndLabelsForYAxis
@@ -687,6 +697,10 @@
     [dateComps setSecond:59];
     [dateComps setMonth:12];
     [dateComps setDay:31];
+    
+    //TODO: CHANGE
+    [dateComps setYear:2015];
+    
     return [self.calendar dateFromComponents:dateComps];
 }
 
@@ -699,6 +713,10 @@
     [dateComps setSecond:1];
     [dateComps setMonth:1];
     [dateComps setDay:1];
+    
+    //TODO: CHANGE
+    [dateComps setYear:2015];
+    
     return [self.calendar dateFromComponents:dateComps];
 }
 
