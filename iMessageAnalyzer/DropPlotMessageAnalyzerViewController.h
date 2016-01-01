@@ -10,6 +10,7 @@
 
 #import <CorePlot/CorePlot.h>
 
+#import "Constants.h"
 #import "TemporaryDatabaseManager.h"
 #import "Message.h"
 #import "Person.h"

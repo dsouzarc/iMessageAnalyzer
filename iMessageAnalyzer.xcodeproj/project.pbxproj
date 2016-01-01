@@ -14,6 +14,7 @@
 		941C04F31C028B12002E2FAB /* NSTextField+Messages.m in Sources */ = {isa = PBXBuildFile; fileRef = 941C04F21C028B12002E2FAB /* NSTextField+Messages.m */; };
 		941C04F71C02C586002E2FAB /* ViewAttachmentsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 941C04F51C02C586002E2FAB /* ViewAttachmentsViewController.m */; };
 		941C04F81C02C586002E2FAB /* ViewAttachmentsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 941C04F61C02C586002E2FAB /* ViewAttachmentsViewController.xib */; };
+		942A0B471C37069A00C89982 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 942A0B461C37069A00C89982 /* Constants.m */; };
 		9438FC371BD049DA00B239BE /* Contact.m in Sources */ = {isa = PBXBuildFile; fileRef = 9438FC361BD049DA00B239BE /* Contact.m */; };
 		9438FD071BE07CFF00B239BE /* MainWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9438FD051BE07CFF00B239BE /* MainWindowController.m */; };
 		9438FD081BE07CFF00B239BE /* MainWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9438FD061BE07CFF00B239BE /* MainWindowController.xib */; };
@@ -146,6 +147,8 @@
 		941C04F41C02C586002E2FAB /* ViewAttachmentsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewAttachmentsViewController.h; sourceTree = "<group>"; };
 		941C04F51C02C586002E2FAB /* ViewAttachmentsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewAttachmentsViewController.m; sourceTree = "<group>"; };
 		941C04F61C02C586002E2FAB /* ViewAttachmentsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ViewAttachmentsViewController.xib; sourceTree = "<group>"; };
+		942A0B451C37069A00C89982 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
+		942A0B461C37069A00C89982 /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Constants.m; sourceTree = "<group>"; };
 		9438FC351BD049DA00B239BE /* Contact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Contact.h; sourceTree = "<group>"; };
 		9438FC361BD049DA00B239BE /* Contact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Contact.m; sourceTree = "<group>"; };
 		9438FD041BE07CFF00B239BE /* MainWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainWindowController.h; sourceTree = "<group>"; };
@@ -269,6 +272,8 @@
 				941C04F41C02C586002E2FAB /* ViewAttachmentsViewController.h */,
 				941C04F51C02C586002E2FAB /* ViewAttachmentsViewController.m */,
 				941C04F61C02C586002E2FAB /* ViewAttachmentsViewController.xib */,
+				942A0B451C37069A00C89982 /* Constants.h */,
+				942A0B461C37069A00C89982 /* Constants.m */,
 			);
 			name = "View Attachments View Controller";
 			sourceTree = "<group>";
@@ -769,6 +774,7 @@
 				9438FD111BE07D2600B239BE /* MainViewController.m in Sources */,
 				94F01DDD1BE852CF00B47D9D /* CalendarPopUpViewController.m in Sources */,
 				946D2A6C1BE55BF900270BF0 /* Statistics.m in Sources */,
+				942A0B471C37069A00C89982 /* Constants.m in Sources */,
 				940136CB1C0585A7003AF393 /* DropPlotMessageAnalyzerViewController.m in Sources */,
 				9438FD071BE07CFF00B239BE /* MainWindowController.m in Sources */,
 				948AE96A1BF976170031D97C /* WordFrequencyHeapDataStructure.m in Sources */,

@@ -74,16 +74,16 @@ static MessageManager *messageInstance;
 
 - (int32_t) getMessageCountWithPersonOnDate:(NSDate*)date person:(Person*)person
 {
-    long startTime = [self timeAtBeginningOfDayForDate:date];
-    long endTime = [self timeAtEndOfDayForDate:date];
+    long startTime = [[Constants instance] timeAtBeginningOfDayForDate:date];
+    long endTime = [[Constants instance] timeAtEndOfDayForDate:date];
     
     return [self.databaseManager messageCountForPerson:person startTimeInSeconds:startTime endTimeInSeconds:endTime];
 }
 
 - (int32_t) getMessageCountOnDate:(NSDate*)date
 {
-    long startTime = [self timeAtBeginningOfDayForDate:date];
-    long endTime = [self timeAtEndOfDayForDate:date];
+    long startTime = [[Constants instance] timeAtBeginningOfDayForDate:date];
+    long endTime = [[Constants instance] timeAtEndOfDayForDate:date];
     
     return [self.databaseManager totalMessagesForStartTime:startTime endTimeInSeconds:endTime];
 }
@@ -147,8 +147,8 @@ static MessageManager *messageInstance;
 
 - (NSMutableArray*) getAllMessagesForPerson:(Person *)person onDay:(NSDate *)day
 {
-    long startTime = [self timeAtBeginningOfDayForDate:day];
-    long endTime = [self timeAtEndOfDayForDate:day];
+    long startTime = [[Constants instance] timeAtBeginningOfDayForDate:day];
+    long endTime = [[Constants instance] timeAtEndOfDayForDate:day];
     
     /*NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"MM/dd/yyyy HH:mm"];
@@ -183,36 +183,6 @@ static MessageManager *messageInstance;
     }
 }
 
-- (long)timeAtEndOfDayForDate:(NSDate*)inputDate
-{
-    // Selectively convert the date components (year, month, day) of the input date
-    NSDateComponents *dateComps = [self.calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay fromDate:inputDate];
-    
-    // Set the time components manually
-    [dateComps setHour:23];
-    [dateComps setMinute:59];
-    [dateComps setSecond:59];
-    
-    // Convert back
-    NSDate *endOfDay = [self.calendar dateFromComponents:dateComps];
-    return [endOfDay timeIntervalSinceReferenceDate];
-}
-
-- (long)timeAtBeginningOfDayForDate:(NSDate*)inputDate
-{
-    // Selectively convert the date components (year, month, day) of the input date
-    NSDateComponents *dateComps = [self.calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay fromDate:inputDate];
-    
-    // Set the time components manually
-    [dateComps setHour:0];
-    [dateComps setMinute:0];
-    [dateComps setSecond:0];
-    
-    // Convert back
-    NSDate *beginningOfDay = [self.calendar dateFromComponents:dateComps];
-    return [beginningOfDay timeIntervalSinceReferenceDate];
-}
-
 - (NSMutableArray*) getAllMessagesForPerson:(Person *)person
 {
     NSMutableArray *messages = [self.allChatsAndConversations objectForKey:person.number];
@@ -235,6 +205,5 @@ static MessageManager *messageInstance;
 {
     return self.allChatsAndConversations;
 }
-
 
 @end

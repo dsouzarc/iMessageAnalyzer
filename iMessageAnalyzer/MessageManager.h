@@ -10,6 +10,7 @@
 
 #import "DatabaseManager.h"
 
+#import "Constants.h"
 #import "Person.h"
 #import "Attachment.h"
 #import "Message.h"

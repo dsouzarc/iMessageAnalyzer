@@ -573,8 +573,8 @@
     
     NSMutableArray<NSDictionary*> *newData = [[NSMutableArray alloc] init];
     
-    const int endTime = (int) [[self getDateAtEndOfYear:[NSDate date]] timeIntervalSinceReferenceDate]; //(int) [[NSDate date] timeIntervalSinceReferenceDate];
-    int startTime = (int) [[self getDateAtBeginningOfYear:[NSDate date]] timeIntervalSinceReferenceDate];
+    const int endTime = (int) [[[Constants instance] getDateAtEndOfYear:[NSDate date]] timeIntervalSinceReferenceDate]; //(int) [[NSDate date] timeIntervalSinceReferenceDate];
+    int startTime = (int) [[[Constants instance] getDateAtBeginningOfYear:[NSDate date]] timeIntervalSinceReferenceDate];
     
     double minX = 0;
     double maxX = 60 * 60 * 365;
@@ -635,7 +635,7 @@
     NSMutableArray *tickLabels = [[NSMutableArray alloc] init];
     for(int i = 0; i < 12; i++) {
         [tickLocations addObject:[NSNumber numberWithInt:30 * i]];
-        CPTAxisLabel *label = [[CPTAxisLabel alloc] initWithText:[self MonthNameString:i] textStyle:xAxis.labelTextStyle];
+        CPTAxisLabel *label = [[CPTAxisLabel alloc] initWithText:[[Constants instance] MonthNameString:i] textStyle:xAxis.labelTextStyle];
         label.tickLocation = [NSNumber numberWithInt:30 * i + 15];
         label.offset = 1.0f;
         label.rotation = 0;
@@ -655,7 +655,7 @@
     
     for(int i = 0; i < difference + 1; i++) {
         [tickLocations addObject:[NSNumber numberWithInt:i + startDay]];
-        CPTAxisLabel *label = [[CPTAxisLabel alloc] initWithText:[self stringForDateAfterStart:(startDay + i + 1)] textStyle:xAxis.labelTextStyle];
+        CPTAxisLabel *label = [[CPTAxisLabel alloc] initWithText:[[Constants instance] stringForDateAfterStart:(startDay + i + 1)] textStyle:xAxis.labelTextStyle];
         label.tickLocation = [NSNumber numberWithInt:i + startDay];
         label.offset = 1.0f;
         label.rotation = M_PI/3.5f;
@@ -663,70 +663,6 @@
     }
     
     return [NSMutableArray arrayWithObjects:[NSSet setWithArray:tickLocations], [NSSet setWithArray:tickLabels], nil];
-}
-
-- (NSString*) stringForDateAfterStart:(int)startDay
-{
-    // Selectively convert the date components (year, month, day) of the input date
-    NSDateComponents *dateComps = [self.calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay fromDate:[NSDate date]];
-    
-    [dateComps setHour:0];
-    [dateComps setMinute:0];
-    [dateComps setSecond:1];
-    [dateComps setMonth:1];
-    [dateComps setDay:startDay];
-    NSDate *beginningOfYear = [self.calendar dateFromComponents:dateComps];
-    
-    return [self.monthDateYearFormatter stringFromDate:beginningOfYear];
-}
-
-- (NSString*)MonthNameString:(int)monthNumber
-{
-    NSDateFormatter *formate = [NSDateFormatter new];
-    NSArray *monthNames = [formate standaloneMonthSymbols];
-    NSString *monthName = [monthNames objectAtIndex:monthNumber];
-    
-    return monthName;
-}
-
-- (NSDate*) getDateAtEndOfYear:(NSDate*)inputDate
-{
-    NSDateComponents *dateComps = [self.calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay fromDate:inputDate];
-    [dateComps setHour:23];
-    [dateComps setMinute:59];
-    [dateComps setSecond:59];
-    [dateComps setMonth:12];
-    [dateComps setDay:31];
-    
-    //TODO: CHANGE
-    [dateComps setYear:2015];
-    
-    return [self.calendar dateFromComponents:dateComps];
-}
-
-
-- (NSDate*) getDateAtBeginningOfYear:(NSDate*)inputDate
-{
-    NSDateComponents *dateComps = [self.calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay fromDate:inputDate];
-    [dateComps setHour:0];
-    [dateComps setMinute:0];
-    [dateComps setSecond:1];
-    [dateComps setMonth:1];
-    [dateComps setDay:1];
-    
-    //TODO: CHANGE
-    [dateComps setYear:2015];
-    
-    return [self.calendar dateFromComponents:dateComps];
-}
-
-- (long)timeAtBeginningOfDayForDate:(NSDate*)inputDate
-{
-    NSDateComponents *dateComps = [self.calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay fromDate:inputDate];
-    [dateComps setHour:0];
-    [dateComps setMinute:0];
-    [dateComps setSecond:1];
-    return [[self.calendar dateFromComponents:dateComps] timeIntervalSinceReferenceDate];
 }
 
 
