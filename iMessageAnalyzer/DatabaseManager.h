@@ -13,6 +13,7 @@
 #include <string.h>
 
 #import "Contact.h"
+#import "Constants.h"
 #import "Message.h"
 #import "Attachment.h"
 #import "Person.h"

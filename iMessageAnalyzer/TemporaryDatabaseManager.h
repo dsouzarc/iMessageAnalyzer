@@ -11,7 +11,7 @@
 #import <sqlite3.h>
 
 #import "MessageManager.h"
-
+#import "Constants.h"
 #import "Message.h"
 #import "Person.h"
 #import "Statistics.h"

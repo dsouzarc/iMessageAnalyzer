@@ -122,4 +122,9 @@ static Constants *constants;
     return [endOfDay timeIntervalSinceReferenceDate];
 }
 
+- (BOOL) isIMessage:(char*)text
+{
+    return strcmp(text, "iMessage") == 0;
+}
+
 @end

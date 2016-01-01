@@ -168,8 +168,8 @@ static TemporaryDatabaseManager *databaseManager;
 
 - (NSMutableArray*) getAllMessagesForPerson:(Person *)person onDay:(NSDate *)day
 {
-    long startTime = [self timeAtBeginningOfDayForDate:day];
-    long endTime = [self timeAtEndOfDayForDate:day];
+    long startTime = [[Constants instance] timeAtBeginningOfDayForDate:day];
+    long endTime = [[Constants instance] timeAtEndOfDayForDate:day];
     return [self getAllMessagesForPerson:person startTimeInSeconds:startTime endTimeInSeconds:endTime];
 }
 
@@ -222,7 +222,7 @@ static TemporaryDatabaseManager *databaseManager;
                 text = [text stringByReplacingOccurrencesOfString:@"''" withString:@"'"];
             }
             
-            BOOL isIMessage = [self isIMessage:sqlite3_column_text(statement, 3)];
+            BOOL isIMessage = [[Constants instance] isIMessage:sqlite3_column_text(statement, 3)];
             int32_t dateInt = sqlite3_column_int(statement, 4);
             int32_t dateReadInt = sqlite3_column_int(statement, 5);
             
@@ -428,49 +428,5 @@ static TemporaryDatabaseManager *databaseManager;
     NSString *documentDirectory=[paths objectAtIndex:0];
     return [[documentDirectory stringByAppendingPathComponent:@"LoginDatabase.db"] UTF8String];
 }
-
-
-/****************************************************************
- *
- *              MISC METHODS
- *
-*****************************************************************/
-
-# pragma mark MISC_METHODS
-
-- (long)timeAtEndOfDayForDate:(NSDate*)inputDate
-{
-    // Selectively convert the date components (year, month, day) of the input date
-    NSDateComponents *dateComps = [self.calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay fromDate:inputDate];
-    
-    // Set the time components manually
-    [dateComps setHour:23];
-    [dateComps setMinute:59];
-    [dateComps setSecond:59];
-    
-    // Convert back
-    NSDate *endOfDay = [self.calendar dateFromComponents:dateComps];
-    return [endOfDay timeIntervalSinceReferenceDate];
-}
-
-- (long)timeAtBeginningOfDayForDate:(NSDate*)inputDate
-{
-    // Selectively convert the date components (year, month, day) of the input date
-    NSDateComponents *dateComps = [self.calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay fromDate:inputDate];
-    
-    // Set the time components manually
-    [dateComps setHour:0];
-    [dateComps setMinute:0];
-    [dateComps setSecond:0];
-    
-    // Convert back
-    NSDate *beginningOfDay = [self.calendar dateFromComponents:dateComps];
-    return [beginningOfDay timeIntervalSinceReferenceDate];
-}
-
-- (BOOL) isIMessage:(char*)text {
-    return strcmp(text, "iMessage") == 0;
-}
-
 
 @end

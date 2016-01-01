@@ -19,4 +19,5 @@
 - (NSString*) stringForDateAfterStart:(int)startDay;
 
 - (long)timeAtEndOfDayForDate:(NSDate*)inputDate;
+- (BOOL) isIMessage:(char*)text;
 @end
