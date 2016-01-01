@@ -101,7 +101,7 @@
     plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:@(0)
                                                     length:@(366)];
     plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:@(0)
-                                                    length:@(self.totalMaximumYValue)];
+                                                    length:@(self.maximumValueForYAxis)];
     NSLog(@"Max y: %f", self.maximumValueForYAxis);
     
     // this allows the plot to respond to mouse events
@@ -533,8 +533,6 @@
     NSTimeInterval executionTime = [methodFinish timeIntervalSinceDate:methodStart];
     NSLog(@"executionTime = %f", executionTime);
     
-    NSLog(@"MAX OF: %d\t%d", maxY, allMessages.count);
-    
     return maxY;
 }
 
@@ -590,6 +588,8 @@
     self.maximumValueForXAxis = maxX;
     self.minimumValueForYAxis = minY;
     self.maximumValueForYAxis = maxY;
+    
+    self.maximumValueForYAxis = (self.maximumValueForYAxis * 11) / 10;
     
     CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)self.graph.defaultPlotSpace;
     plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:@(0)
