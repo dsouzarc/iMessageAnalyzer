@@ -127,8 +127,10 @@
     //Y AXIS
     CPTXYAxis *yAxis = axisSet.yAxis;
     yAxis.labelingPolicy = CPTAxisLabelingPolicyAutomatic; //CPTAxisLabelingPolicyNone;
-    //yAxis.minorTicksPerInterval = 9;
+    yAxis.labelingPolicy = CPTAxisLabelingPolicyFixedInterval;
     yAxis.majorIntervalLength = @(10); //@(self.majorIntervalLengthForY);
+    
+    //yAxis.minorTicksPerInterval = 9;
     //yAxis.labelOffset = 5.0;
     yAxis.axisConstraints = [CPTConstraints constraintWithLowerOffset:0.0];
     
@@ -446,8 +448,8 @@
     
     self.minimumValueForXAxis = minX;
     self.maximumValueForXAxis = maxX;
-    self.minimumValueForYAxis = minY;
-    self.maximumValueForYAxis = (self.totalMaximumYValue * 11) / 10;
+    self.minimumValueForYAxis = 0;
+    self.maximumValueForYAxis = (self.maximumValueForYAxis * 11) / 10;
     
     // now adjust the plot range and axes
     CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)self.graph.defaultPlotSpace;
@@ -455,7 +457,7 @@
     plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:@(0)
                                                     length:@(maxX)];
     plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:@(0)
-                                                    length:@((self.totalMaximumYValue * 11) / 10)];
+                                                    length:@(self.maximumValueForYAxis)];
     
     CPTXYAxisSet *axisSet = (CPTXYAxisSet *)self.graph.axisSet;
     NSMutableArray<NSSet*> *tickInformation = [self getTickLocationsAndLabelsForMonths];
