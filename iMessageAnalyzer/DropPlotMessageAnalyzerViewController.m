@@ -74,7 +74,6 @@
     
     [self updateDataWithThisConversationMessages];
     
-    
     CPTXYGraph *graph = [[CPTXYGraph alloc] initWithFrame:self.graphHostingView.frame];
     [graph applyTheme:[CPTTheme themeNamed:kCPTDarkGradientTheme]];
     self.graph = graph;
@@ -103,8 +102,6 @@
     plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:@(0)
                                                     length:@(self.totalMaximumYValue)];
     
-    NSLog(@"INITIAL VAL: %f", self.totalMaximumYValue);
-    
     [plotSpace setDelegate:self];
     [plotSpace setAllowsUserInteraction:YES];
     
@@ -130,6 +127,7 @@
     yAxis.labelingPolicy = CPTAxisLabelingPolicyFixedInterval;
     //yAxis.minorTicksPerInterval = 9;
     yAxis.axisConstraints = [CPTConstraints constraintWithLowerOffset:0.0];
+    yAxis.majorIntervalLength = @([self getScale:(self.totalMaximumYValue)]);
     
     //X AXIS
     CPTXYAxis *xAxis = [axisSet xAxis];
@@ -152,9 +150,6 @@
     dataSourceLinePlot.plotSymbol = plotSymbol;
     
     dataSourceLinePlot.dataSource = self;
-    
-    yAxis.majorIntervalLength = @([self getScale:(self.totalMaximumYValue)]);
-    
     [self.graph addPlot:dataSourceLinePlot];
 }
 
@@ -420,7 +415,6 @@
     self.minimumValueForXAxis = minX;
     self.maximumValueForXAxis = maxX;
     self.minimumValueForYAxis = 0;
-    //self.maximumValueForYAxis = (self.maximumValueForYAxis * 11) / 10;
     
     // now adjust the plot range and axes
     CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)self.graph.defaultPlotSpace;
@@ -442,9 +436,6 @@
     axisSet.yAxis.labelingPolicy = CPTAxisLabelingPolicyFixedInterval;
     axisSet.yAxis.axisConstraints = [CPTConstraints constraintWithLowerOffset:0.0];
     axisSet.yAxis.majorIntervalLength = @([self getScale:self.totalMaximumYValue]);
-    
-    NSLog(@"ZOOM OUT VALUE: %f", self.maximumValueForYAxis);
-    
 }
 
 
@@ -504,6 +495,8 @@
 
 - (int) getScale:(int)maxY
 {
+    maxY = maxY * (11.0 / 10);
+    
     int maxBigTicks = 10;
     
     int numMessagesRounded = maxY;
@@ -534,7 +527,6 @@
 
 - (void) updateDataWithThisConversationMessages
 {
-    
     NSMutableArray *allMessages = [self.messageManager getAllMessagesForPerson:self.person];
     
     NSMutableArray<NSDictionary*> *newData = [[NSMutableArray alloc] init];
@@ -546,25 +538,21 @@
     double maxX = 60 * 60 * 365;
     
     double minY = 0;
-    double maxY = [self getMaxYAndUpdateDictionary:&newData allMessages:allMessages startTime:startTime endTime:endTime];
-    maxY *= 11/10;
-    
-    NSLog(@"MAX Y CALCULATED: %f", maxY);
+    const double maxY = [self getMaxYAndUpdateDictionary:&newData allMessages:allMessages startTime:startTime endTime:endTime];
+    self.totalMaximumYValue = maxY * (11.0 /10);
 
     self.mainDataPoints = newData;
     
     self.minimumValueForXAxis = minX;
     self.maximumValueForXAxis = maxX;
     self.minimumValueForYAxis = minY;
-    self.maximumValueForYAxis = maxY;
+    self.maximumValueForYAxis = self.totalMaximumYValue;
     
     CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)self.graph.defaultPlotSpace;
     plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:@(0)
                                                     length:@(maxX)];
     plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:@(0)
-                                                    length:@(maxY)];
-    
-    self.totalMaximumYValue = maxY;
+                                                    length:@(self.totalMaximumYValue)];
 }
 
 - (NSMutableArray<NSSet*>*) getTickLocationsAndLabelsForMonths
@@ -622,9 +610,8 @@
     
     if (pdfSavingDialog.runModal == NSModalResponseOK ) {
         NSData *dataForPDF = [self.graph dataForPDFRepresentationOfLayer];
-        
         NSURL *url = [pdfSavingDialog URL];
-        if ( url ) {
+        if (url) {
             [dataForPDF writeToURL:url atomically:NO];
         }
     }
