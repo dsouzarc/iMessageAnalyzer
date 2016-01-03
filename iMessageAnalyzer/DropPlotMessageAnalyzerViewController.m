@@ -101,10 +101,10 @@
     plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:@(0)
                                                     length:@(366)];
     plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:@(0)
-                                                    length:@(self.maximumValueForYAxis)];
-    NSLog(@"Max y: %f", self.maximumValueForYAxis);
+                                                    length:@(self.totalMaximumYValue)];
     
-    // this allows the plot to respond to mouse events
+    NSLog(@"INITIAL VAL: %f", self.totalMaximumYValue);
+    
     [plotSpace setDelegate:self];
     [plotSpace setAllowsUserInteraction:YES];
     
@@ -128,10 +128,7 @@
     CPTXYAxis *yAxis = axisSet.yAxis;
     yAxis.labelingPolicy = CPTAxisLabelingPolicyAutomatic; //CPTAxisLabelingPolicyNone;
     yAxis.labelingPolicy = CPTAxisLabelingPolicyFixedInterval;
-    yAxis.majorIntervalLength = @(10); //@(self.majorIntervalLengthForY);
-    
     //yAxis.minorTicksPerInterval = 9;
-    //yAxis.labelOffset = 5.0;
     yAxis.axisConstraints = [CPTConstraints constraintWithLowerOffset:0.0];
     
     //X AXIS
@@ -155,36 +152,10 @@
     dataSourceLinePlot.plotSymbol = plotSymbol;
     
     dataSourceLinePlot.dataSource = self;
-    [self.graph addPlot:dataSourceLinePlot];
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-        while(!self.messageManager.finishedAddingEntries) {
-            //Do nothing
-        }
-        
-        //[self updateDataWithThisConversationMessages];
-        
-        dispatch_async(dispatch_get_main_queue(), ^(void) {
-            
-            //plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:@(0) length:@(self.maximumValueForYAxis)];
-            
-            //[self.graph reloadData];
-            
-            /*NSMutableArray<NSSet*> *tickInformation = [self getTickLocationsAndLabelsForYAxis];
-            NSSet *tickLocations = tickInformation[0];
-            NSSet *tickLabels = tickInformation[1];
-            
-            yAxis.majorTickLocations = tickLocations;
-            yAxis.axisLabels = tickLabels;*/
-            
-            /*[self zoomOut];
-            
-            if(self.maximumValueForYAxis > 0) {
-                [self zoomIn];
-                [self zoomOut];
-            }*/
-        });
-    });
+    yAxis.majorIntervalLength = @([self getScale:(self.totalMaximumYValue)]);
+    
+    [self.graph addPlot:dataSourceLinePlot];
 }
 
 /****************************************************************
@@ -449,7 +420,7 @@
     self.minimumValueForXAxis = minX;
     self.maximumValueForXAxis = maxX;
     self.minimumValueForYAxis = 0;
-    self.maximumValueForYAxis = (self.maximumValueForYAxis * 11) / 10;
+    //self.maximumValueForYAxis = (self.maximumValueForYAxis * 11) / 10;
     
     // now adjust the plot range and axes
     CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)self.graph.defaultPlotSpace;
@@ -457,7 +428,7 @@
     plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:@(0)
                                                     length:@(maxX)];
     plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:@(0)
-                                                    length:@(self.maximumValueForYAxis)];
+                                                    length:@(self.totalMaximumYValue)];
     
     CPTXYAxisSet *axisSet = (CPTXYAxisSet *)self.graph.axisSet;
     NSMutableArray<NSSet*> *tickInformation = [self getTickLocationsAndLabelsForMonths];
@@ -467,19 +438,13 @@
     axisSet.xAxis.axisLabels = tickLabels;
     axisSet.xAxis.labelingPolicy = CPTAxisLabelingPolicyNone;
     
-    //axisSet.yAxis.majorIntervalLength = @([self getScale:self.maximumValueForYAxis]); //@(self.majorIntervalLengthForY);
-    //axisSet.yAxis.labelingPolicy = CPTAxisLabelingPolicyFixedInterval;
+    axisSet.yAxis.labelingPolicy = CPTAxisLabelingPolicyAutomatic; //CPTAxisLabelingPolicyNone;
+    axisSet.yAxis.labelingPolicy = CPTAxisLabelingPolicyFixedInterval;
+    axisSet.yAxis.axisConstraints = [CPTConstraints constraintWithLowerOffset:0.0];
+    axisSet.yAxis.majorIntervalLength = @([self getScale:self.totalMaximumYValue]);
     
-    /*NSMutableArray<NSSet*> *yAxisTickInfo = [self getTickLocationsAndLabelsForYAxis];
-    NSSet *tickLocationsYAxis = yAxisTickInfo[0];
-    NSSet *tickLabelsYAxis = yAxisTickInfo[1];
-    axisSet.yAxis.preferredNumberOfMajorTicks = 11;
-    axisSet.yAxis.labelingPolicy = CPTAxisLabelingPolicyNone;
-    axisSet.yAxis.axisLabels = tickLabelsYAxis;
-    axisSet.yAxis.majorTickLocations = tickLocationsYAxis;
-    axisSet.yAxis.majorIntervalLength = @([self getScale:self.maximumValueForYAxis]);*/
+    NSLog(@"ZOOM OUT VALUE: %f", self.maximumValueForYAxis);
     
-    //axisSet.yAxis.labelingPolicy = CPTAxisLabelingPolicyFixedInterval;
 }
 
 
@@ -516,7 +481,6 @@
             while([message.dateSent timeIntervalSinceReferenceDate] <= (startTime + timeInterval) && counter+1 < allMessages.count) {
                 numMessages++;
                 counter++;
-                NSLog(@"%@", message.messageText);
                 message = allMessages[counter];
             }
             
@@ -583,6 +547,9 @@
     
     double minY = 0;
     double maxY = [self getMaxYAndUpdateDictionary:&newData allMessages:allMessages startTime:startTime endTime:endTime];
+    maxY *= 11/10;
+    
+    NSLog(@"MAX Y CALCULATED: %f", maxY);
 
     self.mainDataPoints = newData;
     
@@ -591,42 +558,13 @@
     self.minimumValueForYAxis = minY;
     self.maximumValueForYAxis = maxY;
     
-    self.maximumValueForYAxis = (self.maximumValueForYAxis * 11) / 10;
-    
     CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)self.graph.defaultPlotSpace;
     plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:@(0)
                                                     length:@(maxX)];
     plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:@(0)
-                                                    length:@((maxY * 11) / 10)];
+                                                    length:@(maxY)];
     
-    //self.totalMaximumYValue = maxY;
-}
-
-- (NSMutableArray<NSSet*>*) getTickLocationsAndLabelsForYAxis
-{
-    CPTXYAxis *yAxis = [((CPTXYAxisSet*) self.graph.axisSet) yAxis];
-    
-    NSMutableArray *tickLocations = [[NSMutableArray alloc] init];
-    NSMutableArray *tickLabels = [[NSMutableArray alloc] init];
-    
-    int scale = [self getScale:(int)self.maximumValueForYAxis];
-    
-    double height = ((CPTXYPlotSpace*) self.graph.defaultPlotSpace).yRange.maxLimitDouble;
-    const int scaleY = height / 9.5;
-    
-    NSLog(@"Scale: %@\tGraph Height: %@\tY-Axis Scale: %@", @(scale), @(height), @(scaleY));
-    
-    for(int i = 0, interval = 0, location = 0; i < 11; i++, interval += scale, location += scaleY) {
-        [tickLocations addObject:@(i * scaleY)];
-        
-        CPTAxisLabel *label = [[CPTAxisLabel alloc] initWithText:[NSString stringWithFormat:@"%d", interval] textStyle:yAxis.labelTextStyle];
-        label.tickLocation = @(i * scaleY);
-        [tickLabels addObject:label];
-        
-        NSLog(@"#: %@\tLocation: %@", @(interval), @(i * scaleY));
-    }
-    
-    return [NSMutableArray arrayWithObjects:[NSSet setWithArray:tickLocations], [NSSet setWithArray:tickLabels], nil];
+    self.totalMaximumYValue = maxY;
 }
 
 - (NSMutableArray<NSSet*>*) getTickLocationsAndLabelsForMonths
