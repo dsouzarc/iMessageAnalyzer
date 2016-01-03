@@ -138,11 +138,9 @@
     [xAxis setLabelTextStyle:textStyle];
     [xAxis setLabelRotation:M_PI/6];
     
-    NSMutableArray<NSSet*> *tickInformation = [self getTickLocationsAndLabelsForMonths];
-    NSSet *tickLocations = tickInformation[0];
-    NSSet *tickLabels = tickInformation[1];
-    xAxis.majorTickLocations = tickLocations;
-    xAxis.axisLabels = tickLabels;
+    NSDictionary *results = [self getTickLocationsAndLabelsForMonths];
+    xAxis.majorTickLocations = results[@"tickLocations"];
+    xAxis.axisLabels = results[@"tickLabels"];
     
     CPTPlotSymbol *plotSymbol = [CPTPlotSymbol ellipsePlotSymbol];
     plotSymbol.fill = [CPTFill fillWithColor:[CPTColor whiteColor]];
@@ -385,12 +383,10 @@
     int startDay = (int) self.minimumValueForXAxis;
     int endDay = (int) self.maximumValueForXAxis;
     
-    NSMutableArray<NSSet*> *tickInformation = [self getLabelsAndLocationsForStartDay:startDay endDay:endDay];
-    NSSet *tickLocations = tickInformation[0];
-    NSSet *tickLabels = tickInformation[1];
+    NSDictionary *results = [self getLabelsAndLocationsForStartDay:startDay endDay:endDay];
+    axisSet.xAxis.majorTickLocations = results[@"tickLocations"];
+    axisSet.xAxis.axisLabels = results[@"tickLabels"];
     axisSet.xAxis.labelingPolicy = CPTAxisLabelingPolicyNone;
-    axisSet.xAxis.majorTickLocations = tickLocations;
-    axisSet.xAxis.axisLabels = tickLabels;
 }
 
 - (IBAction)zoomOut
@@ -425,11 +421,9 @@
                                                     length:@(self.totalMaximumYValue)];
     
     CPTXYAxisSet *axisSet = (CPTXYAxisSet *)self.graph.axisSet;
-    NSMutableArray<NSSet*> *tickInformation = [self getTickLocationsAndLabelsForMonths];
-    NSSet *tickLocations = tickInformation[0];
-    NSSet *tickLabels = tickInformation[1];
-    axisSet.xAxis.majorTickLocations = tickLocations;
-    axisSet.xAxis.axisLabels = tickLabels;
+    NSDictionary *results = [self getTickLocationsAndLabelsForMonths];
+    axisSet.xAxis.majorTickLocations = results[@"tickLocations"];
+    axisSet.xAxis.axisLabels = results[@"tickLabels"];
     axisSet.xAxis.labelingPolicy = CPTAxisLabelingPolicyNone;
     
     axisSet.yAxis.labelingPolicy = CPTAxisLabelingPolicyAutomatic; //CPTAxisLabelingPolicyNone;
@@ -555,7 +549,7 @@
                                                     length:@(self.totalMaximumYValue)];
 }
 
-- (NSMutableArray<NSSet*>*) getTickLocationsAndLabelsForMonths
+- (NSDictionary*) getTickLocationsAndLabelsForMonths
 {
     CPTXYAxis *xAxis = [((CPTXYAxisSet *)self.graph.axisSet) xAxis];
     
@@ -569,10 +563,11 @@
         label.rotation = 0;
         [tickLabels addObject:label];
     }
-    return [NSMutableArray arrayWithObjects:[NSSet setWithArray:tickLocations], [NSSet setWithArray:tickLabels], nil];
+    
+    return [NSDictionary dictionaryWithObjectsAndKeys:tickLocations, @"tickLocations", tickLabels, @"tickLabels", nil];
 }
 
-- (NSMutableArray<NSSet*>*) getLabelsAndLocationsForStartDay:(int)startDay endDay:(int)endDay
+- (NSDictionary*) getLabelsAndLocationsForStartDay:(int)startDay endDay:(int)endDay
 {
     CPTXYAxis *xAxis = [((CPTXYAxisSet *)self.graph.axisSet) xAxis];
     
@@ -590,7 +585,7 @@
         [tickLabels addObject:label];
     }
     
-    return [NSMutableArray arrayWithObjects:[NSSet setWithArray:tickLocations], [NSSet setWithArray:tickLabels], nil];
+    return [NSDictionary dictionaryWithObjectsAndKeys:tickLocations, @"tickLocations", tickLabels, @"tickLabels", nil];
 }
 
 
