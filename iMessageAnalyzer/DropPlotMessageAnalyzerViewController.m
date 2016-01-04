@@ -576,12 +576,33 @@
     
     const int difference = endDay - startDay;
     
-    for(int i = 0; i < difference + 1; i++) {
+    int incrementAmount = 1;
+    CGFloat rotation = 0; //M_PI / 3.5f;
+    
+    CPTMutableTextStyle *textStyle = [CPTMutableTextStyle textStyle];
+    [textStyle setFontSize:8.0f];
+    [textStyle setColor:[CPTColor colorWithCGColor:[[NSColor grayColor] CGColor]]];
+    
+    //If the range is a few days, can be normal
+    if(difference <= 14) {
+        incrementAmount = 1;
+        rotation = 0;
+    }
+    else if(difference <= 30) {
+        incrementAmount = 2;
+        //rotation = M_PI / 12.0;
+    }
+    else {
+        incrementAmount = difference / 12.0;
+        //rotation = M_PI / 12.0;
+    }
+    
+    for(int i = 0; i < difference + 1; i += incrementAmount) {
         [tickLocations addObject:[NSNumber numberWithInt:i + startDay]];
-        CPTAxisLabel *label = [[CPTAxisLabel alloc] initWithText:[[Constants instance] stringForDateAfterStart:(startDay + i + 1)] textStyle:xAxis.labelTextStyle];
+        CPTAxisLabel *label = [[CPTAxisLabel alloc] initWithText:[[Constants instance] stringForDateAfterStart:(startDay + i)] textStyle:xAxis.labelTextStyle];
         label.tickLocation = [NSNumber numberWithInt:i + startDay];
         label.offset = 1.0f;
-        label.rotation = M_PI/3.5f;
+        label.rotation = rotation;
         [tickLabels addObject:label];
     }
     
