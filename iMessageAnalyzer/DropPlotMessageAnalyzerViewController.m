@@ -339,6 +339,31 @@
     return NO;
 }
 
+- (CPTPlotRange*) plotSpace:(CPTPlotSpace *)space willChangePlotRangeTo:(CPTPlotRange *)newRange forCoordinate:(CPTCoordinate)coordinate
+{
+    
+    CPTPlotRange *updatedRange = nil;
+    
+    switch (coordinate) {
+        case CPTCoordinateX:
+            if (newRange.locationDouble < 0.0F) {
+                CPTMutablePlotRange *mutableRange = [newRange mutableCopy];
+                mutableRange.location = @(0.0f);
+                updatedRange = mutableRange;
+            }
+            else {
+                updatedRange = newRange;
+            }
+            break;
+        case CPTCoordinateY:
+            updatedRange = [CPTPlotRange plotRangeWithLocation:@(0) length:newRange.maxLimit];
+            break;
+        default:
+            break;
+    }
+    return updatedRange;
+}
+
 
 /****************************************************************
  *
@@ -577,29 +602,23 @@
     const int difference = endDay - startDay;
     
     int incrementAmount = 1;
-    CGFloat rotation = 0; //M_PI / 3.5f;
+    CGFloat rotation = M_PI / 7.5;
     
     CPTMutableTextStyle *textStyle = [CPTMutableTextStyle textStyle];
-    [textStyle setFontSize:8.0f];
+    [textStyle setFontSize:14.0f];
     [textStyle setColor:[CPTColor colorWithCGColor:[[NSColor grayColor] CGColor]]];
     
     //If the range is a few days, can be normal
     if(difference <= 14) {
         incrementAmount = 1;
-        rotation = 0;
-    }
-    else if(difference <= 30) {
-        incrementAmount = 2;
-        //rotation = M_PI / 12.0;
     }
     else {
         incrementAmount = difference / 12.0;
-        //rotation = M_PI / 12.0;
     }
     
     for(int i = 0; i < difference + 1; i += incrementAmount) {
         [tickLocations addObject:[NSNumber numberWithInt:i + startDay]];
-        CPTAxisLabel *label = [[CPTAxisLabel alloc] initWithText:[[Constants instance] stringForDateAfterStart:(startDay + i)] textStyle:xAxis.labelTextStyle];
+        CPTAxisLabel *label = [[CPTAxisLabel alloc] initWithText:[[Constants instance] stringForDateAfterStart:(startDay + i + 2)] textStyle:textStyle]; //xAxis.labelTextStyle];
         label.tickLocation = [NSNumber numberWithInt:i + startDay];
         label.offset = 1.0f;
         label.rotation = rotation;
