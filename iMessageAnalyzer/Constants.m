@@ -44,10 +44,16 @@ static Constants *constants;
     return constants;
 }
 
+- (int) monthsBetweenDates:(NSDate*)startDate endDate:(NSDate*)endDate
+{
+    NSDateComponents *components = [self.calendar components:NSCalendarUnitMonth fromDate:startDate toDate:endDate options:0];
+    return (int)[components month];
+}
+
 - (NSString*) stringForDateAfterStart:(int)startDay
 {
     // Selectively convert the date components (year, month, day) of the input date
-    NSDateComponents *dateComps = [self.calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay fromDate:[NSDate date]];
+    NSDateComponents *dateComps = [self dateComponentsForDay:[NSDate date]];
     
     [dateComps setHour:0];
     [dateComps setMinute:0];
@@ -59,7 +65,33 @@ static Constants *constants;
     return [self.monthDateYearFormatter stringFromDate:beginningOfYear];
 }
 
-- (NSString*)MonthNameString:(int)monthNumber
+- (NSDate*) dateAtEndOfMonth:(NSDate*)date
+{
+    NSDateComponents *components = [self dateComponentsForDay:date];
+    [components setMonth:[components month] + 1];
+    [components setDay:0];
+    
+    return [self.calendar dateFromComponents:components];
+}
+
+- (NSDate*) dateAtBeginningOfMonth:(NSDate*)date
+{
+    NSDateComponents *components = [self dateComponentsForDay:date];
+    [components setDay:1];
+    return [self.calendar dateFromComponents:components];
+}
+
+- (NSDateComponents*) dateComponentsForDay:(NSDate*)date
+{
+    return [self.calendar components:NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay fromDate:date];
+}
+
+- (NSString*) dayMonthYearString:(NSDate*)date
+{
+    return [self.monthDateYearFormatter stringFromDate:date];
+}
+
+- (NSString*) MonthNameString:(int)monthNumber
 {
     NSDateFormatter *formate = [NSDateFormatter new];
     NSArray *monthNames = [formate standaloneMonthSymbols];
@@ -70,7 +102,7 @@ static Constants *constants;
 
 - (NSDate*) getDateAtEndOfYear:(NSDate*)inputDate
 {
-    NSDateComponents *dateComps = [self.calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay fromDate:inputDate];
+    NSDateComponents *dateComps = [self dateComponentsForDay:inputDate];
     [dateComps setHour:23];
     [dateComps setMinute:59];
     [dateComps setSecond:59];
@@ -85,7 +117,7 @@ static Constants *constants;
 
 - (NSDate*) getDateAtBeginningOfYear:(NSDate*)inputDate
 {
-    NSDateComponents *dateComps = [self.calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay fromDate:inputDate];
+    NSDateComponents *dateComps = [self dateComponentsForDay:inputDate];
     [dateComps setHour:0];
     [dateComps setMinute:0];
     [dateComps setSecond:1];
@@ -100,7 +132,7 @@ static Constants *constants;
 
 - (long)timeAtBeginningOfDayForDate:(NSDate*)inputDate
 {
-    NSDateComponents *dateComps = [self.calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay fromDate:inputDate];
+    NSDateComponents *dateComps = [self dateComponentsForDay:inputDate];
     [dateComps setHour:0];
     [dateComps setMinute:0];
     [dateComps setSecond:0]; //Or should it be 1?
@@ -110,7 +142,7 @@ static Constants *constants;
 - (long)timeAtEndOfDayForDate:(NSDate*)inputDate
 {
     // Selectively convert the date components (year, month, day) of the input date
-    NSDateComponents *dateComps = [self.calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay fromDate:inputDate];
+    NSDateComponents *dateComps = [self dateComponentsForDay:inputDate];
     
     // Set the time components manually
     [dateComps setHour:23];

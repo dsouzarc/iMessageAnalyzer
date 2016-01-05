@@ -41,6 +41,8 @@
 
 @property (strong, nonatomic) NSCalendar *calendar;
 
+@property (strong, nonatomic) Constants *constants;
+
 @end
 
 @implementation DropPlotMessageAnalyzerViewController
@@ -55,6 +57,7 @@
         
         self.calendar = [NSCalendar currentCalendar];
         [self.calendar setTimeZone:[NSTimeZone systemTimeZone]];
+        self.constants = [Constants instance];
         
         self.monthDateYearFormatter = [[NSDateFormatter alloc] init];
         [self.monthDateYearFormatter setDateFormat:@"MM/dd/yy"];
@@ -64,6 +67,9 @@
         self.zoomAnnotation = nil;
         self.dragStart = CGPointZero;
         self.dragEnd = CGPointZero;
+        
+        self.startDate = firstMessage;
+        self.endDate = [NSDate date];
     }
     
     return self;
@@ -73,6 +79,12 @@
     [super viewDidLoad];
     
     [self updateDataWithThisConversationMessages];
+    
+    NSDate *tempStart = [self.constants dateAtBeginningOfMonth:self.startDate];
+    NSDate *endDate = [self.constants dateAtEndOfMonth:self.endDate];
+        NSLog(@"START: %@\tEND: %@\t%@\t%@", [self.constants dayMonthYearString:tempStart], [self.constants dayMonthYearString:endDate], [self.constants dayMonthYearString:self.startDate], [self.constants dayMonthYearString:self.endDate]);
+    NSLog(@"MONTHS: %d", [self.constants monthsBetweenDates:tempStart endDate:endDate]);
+
     
     CPTXYGraph *graph = [[CPTXYGraph alloc] initWithFrame:self.graphHostingView.frame];
     [graph applyTheme:[CPTTheme themeNamed:kCPTDarkGradientTheme]];
@@ -550,8 +562,8 @@
     
     NSMutableArray<NSDictionary*> *newData = [[NSMutableArray alloc] init];
     
-    const int endTime = (int) [[[Constants instance] getDateAtEndOfYear:[NSDate date]] timeIntervalSinceReferenceDate]; //(int) [[NSDate date] timeIntervalSinceReferenceDate];
-    int startTime = (int) [[[Constants instance] getDateAtBeginningOfYear:[NSDate date]] timeIntervalSinceReferenceDate];
+    const int endTime = (int) [[self.constants getDateAtEndOfYear:[NSDate date]] timeIntervalSinceReferenceDate]; //(int) [[NSDate date] timeIntervalSinceReferenceDate];
+    int startTime = (int) [[self.constants getDateAtBeginningOfYear:[NSDate date]] timeIntervalSinceReferenceDate];
     
     double minX = 0;
     double maxX = 60 * 60 * 365;
@@ -582,7 +594,7 @@
     NSMutableArray *tickLabels = [[NSMutableArray alloc] init];
     for(int i = 0; i < 12; i++) {
         [tickLocations addObject:[NSNumber numberWithInt:30 * i]];
-        CPTAxisLabel *label = [[CPTAxisLabel alloc] initWithText:[[Constants instance] MonthNameString:i] textStyle:xAxis.labelTextStyle];
+        CPTAxisLabel *label = [[CPTAxisLabel alloc] initWithText:[self.constants MonthNameString:i] textStyle:xAxis.labelTextStyle];
         label.tickLocation = [NSNumber numberWithInt:30 * i + 15];
         label.offset = 1.0f;
         label.rotation = 0;
@@ -618,7 +630,7 @@
     
     for(int i = 0; i < difference + 1; i += incrementAmount) {
         [tickLocations addObject:[NSNumber numberWithInt:i + startDay]];
-        CPTAxisLabel *label = [[CPTAxisLabel alloc] initWithText:[[Constants instance] stringForDateAfterStart:(startDay + i + 2)] textStyle:textStyle]; //xAxis.labelTextStyle];
+        CPTAxisLabel *label = [[CPTAxisLabel alloc] initWithText:[self.constants stringForDateAfterStart:(startDay + i + 2)] textStyle:textStyle]; //xAxis.labelTextStyle];
         label.tickLocation = [NSNumber numberWithInt:i + startDay];
         label.offset = 1.0f;
         label.rotation = rotation;

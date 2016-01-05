@@ -12,6 +12,8 @@
 
 + (instancetype) instance;
 
+@property (readonly) Constants *instance;
+
 - (long)timeAtBeginningOfDayForDate:(NSDate*)inputDate;
 - (NSDate*) getDateAtBeginningOfYear:(NSDate*)inputDate;
 - (NSDate*) getDateAtEndOfYear:(NSDate*)inputDate;
@@ -20,4 +22,12 @@
 
 - (long)timeAtEndOfDayForDate:(NSDate*)inputDate;
 - (BOOL) isIMessage:(char*)text;
+
+- (int) monthsBetweenDates:(NSDate*)startDate endDate:(NSDate*)endDate;
+
+- (NSString*) dayMonthYearString:(NSDate*)date;
+
+- (NSDate*) dateAtEndOfMonth:(NSDate*)date;
+- (NSDate*) dateAtBeginningOfMonth:(NSDate*)date;
+
 @end
