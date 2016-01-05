@@ -15,6 +15,7 @@ static Constants *constants;
 
 @property (strong, nonatomic) NSCalendar *calendar;
 @property (strong, nonatomic) NSDateFormatter *monthDateYearFormatter;
+@property (strong, nonatomic) NSDateFormatter *shortMonthYearFormatter;
 
 @end
 
@@ -29,6 +30,9 @@ static Constants *constants;
         
         self.monthDateYearFormatter = [[NSDateFormatter alloc] init];
         [self.monthDateYearFormatter setDateFormat:@"MM/dd/yy"];
+        
+        self.shortMonthYearFormatter = [[NSDateFormatter alloc] init];
+        [self.shortMonthYearFormatter setDateFormat:@"MMM yy"];
     }
     
     return self;
@@ -89,12 +93,44 @@ static Constants *constants;
     return [self.calendar dateFromComponents:components];
 }
 
+- (NSDate*) dateByAddingDays:(NSDate*)date days:(int)days
+{
+    static NSDateComponents *dateComponent;
+    
+    if(!dateComponent) {
+        dateComponent = [[NSDateComponents alloc] init];
+    }
+    dateComponent.day = days;
+    
+    return [self.calendar dateByAddingComponents:dateComponent toDate:date options:0];
+}
+
 - (NSDate*) dateBySubtractingMonths:(NSDate*)date months:(int)months
 {
     NSDateComponents *components = [self dateComponentsForDay:date];
     [components setDay:1];
     [components setMonth:[components month] - months];
     return [self.calendar dateFromComponents:components];
+}
+
+- (int) daysInMonthForDate:(NSDate *)date
+{
+    NSRange range = [self.calendar rangeOfUnit:NSCalendarUnitDay inUnit:NSCalendarUnitMonth forDate:date];
+    return (int) range.length;
+}
+
+- (NSDate*) dateByAddingMonths:(NSDate *)date months:(int)months
+{
+    return [self dateBySubtractingMonths:date months:(months * -1)];
+}
+
+- (BOOL) isBeginningOfMonth:(NSDate *)date
+{
+    NSDateComponents *components = [self dateComponentsForDay:date];
+    
+    int day = (int) [components day];
+    
+    return  day <= 7;
 }
 
 - (int) daysBetweenDates:(NSDate*)startDate endDate:(NSDate*)endDate
@@ -111,6 +147,12 @@ static Constants *constants;
 - (NSString*) dayMonthYearString:(NSDate*)date
 {
     return [self.monthDateYearFormatter stringFromDate:date];
+}
+
+- (NSString*) monthYearToString:(NSDate *)date
+{
+    NSString *result = [self.shortMonthYearFormatter stringFromDate:date];
+    return [result stringByReplacingOccurrencesOfString:@" " withString:@" '"];
 }
 
 - (NSString*) MonthNameString:(int)monthNumber
@@ -130,10 +172,7 @@ static Constants *constants;
     [dateComps setSecond:59];
     [dateComps setMonth:12];
     [dateComps setDay:31];
-    
-    //TODO: CHANGE
-    [dateComps setYear:2015];
-    
+
     return [self.calendar dateFromComponents:dateComps];
 }
 
@@ -145,10 +184,7 @@ static Constants *constants;
     [dateComps setSecond:1];
     [dateComps setMonth:1];
     [dateComps setDay:1];
-    
-    //TODO: CHANGE
-    [dateComps setYear:2015];
-    
+
     return [self.calendar dateFromComponents:dateComps];
 }
 

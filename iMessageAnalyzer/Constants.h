@@ -22,15 +22,22 @@
 
 - (long)timeAtEndOfDayForDate:(NSDate*)inputDate;
 - (BOOL) isIMessage:(char*)text;
+- (BOOL) isBeginningOfMonth:(NSDate*)date;
 
 - (int) monthsBetweenDates:(NSDate*)startDate endDate:(NSDate*)endDate;
-
+- (NSDate*) dateByAddingDays:(NSDate*)date days:(int)days;
 - (NSString*) dayMonthYearString:(NSDate*)date;
 
 - (NSDate*) dateAtEndOfMonth:(NSDate*)date;
 - (NSDate*) dateAtBeginningOfMonth:(NSDate*)date;
 - (NSDate*) dateAtBeginningOfNextMonth:(NSDate*)date;
-- (NSDate*) dateBySubtractingMonths:(NSDate*)date months:(int)months;
+
 - (int) daysBetweenDates:(NSDate*)startDate endDate:(NSDate*)endDate;
+- (int) daysInMonthForDate:(NSDate*)date;
+
+- (NSString*) monthYearToString:(NSDate*)date;
+
+- (NSDate*) dateBySubtractingMonths:(NSDate*)date months:(int)months;
+- (NSDate*) dateByAddingMonths:(NSDate*)date months:(int)months;
 
 @end
