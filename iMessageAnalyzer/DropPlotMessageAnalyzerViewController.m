@@ -487,7 +487,7 @@
 
 # pragma mark MISC_METHODS
 
-- (double) getMaxYAndUpdateDictionary:(NSMutableArray<NSDictionary*>**)data allMessages:(NSMutableArray*)allMessages startTime:(int)startTime endTime:(int)endTime
+- (NSDictionary*) getMaxYAndPointsWithMessages:(NSMutableArray*)allMessages startTime:(int)startTime endTime:(int)endTime
 {
     const CFTimeInterval methodStartTime = CACurrentMediaTime();
     
@@ -498,7 +498,7 @@
     
     double maxY = 0;
     
-    NSMutableArray<NSDictionary*> *newData = *data;
+    NSMutableArray<NSDictionary*> *newData = [[NSMutableArray alloc] init];
     
     while(startTime < endTime && counter < allMessages.count) {
         Message *message = allMessages[counter];
@@ -528,7 +528,9 @@
     
     NSLog(@"executionTime = %f", (CACurrentMediaTime() - methodStartTime));
     
-    return maxY;
+    NSDictionary *results = [NSDictionary dictionaryWithObjectsAndKeys:newData, @"points",
+                             [NSNumber numberWithDouble:maxY], @"maxY", nil];
+    return results;
 }
 
 - (int) getScale:(int)maxY
@@ -567,18 +569,18 @@
 {
     NSMutableArray *allMessages = [self.messageManager getAllMessagesForPerson:self.person];
     
-    NSMutableArray<NSDictionary*> *newData = [[NSMutableArray alloc] init];
-    
     const int endTime = (int)[self.endDate timeIntervalSinceReferenceDate];
-    //[[self.constants getDateAtEndOfYear:[NSDate date]] timeIntervalSinceReferenceDate]; //(int) [[NSDate date] timeIntervalSinceReferenceDate];
     int startTime = (int) [self.startDate timeIntervalSinceReferenceDate];
-    //[[self.constants getDateAtBeginningOfYear:[NSDate date]] timeIntervalSinceReferenceDate];
     
     double minX = 0;
     double maxX = [self.constants daysBetweenDates:self.startDate endDate:self.endDate] * 60 * 60; //60 * 60 * 365;
     
     double minY = 0;
-    const double maxY = [self getMaxYAndUpdateDictionary:&newData allMessages:allMessages startTime:startTime endTime:endTime];
+    
+    NSDictionary *data = [self getMaxYAndPointsWithMessages:allMessages startTime:startTime endTime:endTime];
+    NSMutableArray<NSDictionary*> *newData = [data objectForKey:@"points"];
+    const double maxY = [[data objectForKey:@"maxY"] doubleValue];
+    
     self.totalMaximumYValue = maxY * (11.0 /10);
 
     self.mainDataPoints = newData;
