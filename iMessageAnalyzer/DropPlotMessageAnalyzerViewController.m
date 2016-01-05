@@ -33,15 +33,11 @@
 @property (nonatomic, readwrite, assign) CGPoint dragStart;
 @property (nonatomic, readwrite, assign) CGPoint dragEnd;
 
+@property (strong, nonatomic) Constants *constants;
 @property (strong, nonatomic) NSDate *startDate;
 @property (strong, nonatomic) NSDate *endDate;
-@property (strong, nonatomic) NSDateFormatter *monthDateYearFormatter;
 
 @property (strong, nonatomic) CPTPlotSpaceAnnotation *yValueAnnotation;
-
-@property (strong, nonatomic) NSCalendar *calendar;
-
-@property (strong, nonatomic) Constants *constants;
 
 @end
 
@@ -54,13 +50,9 @@
     if(self) {
         self.messageManager = temporaryDatabase;
         self.person = person;
-        
-        self.calendar = [NSCalendar currentCalendar];
-        [self.calendar setTimeZone:[NSTimeZone systemTimeZone]];
+
         self.constants = [Constants instance];
-        
-        self.monthDateYearFormatter = [[NSDateFormatter alloc] init];
-        [self.monthDateYearFormatter setDateFormat:@"MM/dd/yy"];
+
         self.isZoomedOut = YES;
         
         self.mainDataPoints = [[NSMutableArray alloc] init];
@@ -78,13 +70,30 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self updateDataWithThisConversationMessages];
+    NSDate *conversationStart = self.startDate;
+    if([self.constants isBeginningOfMonth:conversationStart]) {
+        conversationStart = [self.constants dateBySubtractingMonths:conversationStart months:1];
+    }
     
-    NSDate *tempStart = [self.constants dateAtBeginningOfMonth:self.startDate];
-    NSDate *endDate = [self.constants dateAtEndOfMonth:self.endDate];
-        NSLog(@"START: %@\tEND: %@\t%@\t%@", [self.constants dayMonthYearString:tempStart], [self.constants dayMonthYearString:endDate], [self.constants dayMonthYearString:self.startDate], [self.constants dayMonthYearString:self.endDate]);
-    NSLog(@"MONTHS: %d", [self.constants monthsBetweenDates:tempStart endDate:endDate]);
-
+    conversationStart = [self.constants dateAtBeginningOfMonth:self.startDate];
+    NSDate *conversationEnd = [self.constants dateAtBeginningOfNextMonth:self.endDate];
+    
+    const int numMonths = [self.constants monthsBetweenDates:conversationStart endDate:conversationEnd];
+    
+    if(numMonths < 12) {
+        int spacingMonths = 12 - numMonths;
+        conversationStart = [self.constants dateBySubtractingMonths:conversationStart months:spacingMonths];
+    }
+    
+    self.startDate = conversationStart;
+    self.endDate = conversationEnd;
+    
+    const int numDays = [self.constants daysBetweenDates:self.startDate endDate:self.endDate];
+    
+    NSLog(@"MONTHS: %d\tDAYS: %d", [self.constants monthsBetweenDates:self.startDate endDate:self.endDate], [self.constants daysBetweenDates:self.startDate endDate:self.endDate]);
+    //NSLog(@"%@\t%@", [self.constants dayMonthYearString:self.startDate], [self.constants dayMonthYearString:self.endDate]);
+    
+    [self updateDataWithThisConversationMessages];
     
     CPTXYGraph *graph = [[CPTXYGraph alloc] initWithFrame:self.graphHostingView.frame];
     [graph applyTheme:[CPTTheme themeNamed:kCPTDarkGradientTheme]];
@@ -110,7 +119,7 @@
     
     CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)self.graph.defaultPlotSpace;
     plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:@(0)
-                                                    length:@(366)];
+                                                    length:@(numDays)];
     plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:@(0)
                                                     length:@(self.totalMaximumYValue)];
     
@@ -435,7 +444,7 @@
     }
     
     double minX = 0;
-    double maxX = 366;
+    double maxX = [self.constants daysBetweenDates:self.startDate endDate:self.endDate];
     
     double minY = 0;
     
@@ -480,7 +489,7 @@
 
 - (double) getMaxYAndUpdateDictionary:(NSMutableArray<NSDictionary*>**)data allMessages:(NSMutableArray*)allMessages startTime:(int)startTime endTime:(int)endTime
 {
-    NSDate *methodStart = [NSDate date];
+    const CFTimeInterval methodStartTime = CACurrentMediaTime();
     
     const int timeInterval = 60 * 60 * 24;
     
@@ -517,9 +526,7 @@
         startTime += timeInterval;
     }
     
-    NSDate *methodFinish = [NSDate date];
-    NSTimeInterval executionTime = [methodFinish timeIntervalSinceDate:methodStart];
-    NSLog(@"executionTime = %f", executionTime);
+    NSLog(@"executionTime = %f", (CACurrentMediaTime() - methodStartTime));
     
     return maxY;
 }
@@ -562,11 +569,13 @@
     
     NSMutableArray<NSDictionary*> *newData = [[NSMutableArray alloc] init];
     
-    const int endTime = (int) [[self.constants getDateAtEndOfYear:[NSDate date]] timeIntervalSinceReferenceDate]; //(int) [[NSDate date] timeIntervalSinceReferenceDate];
-    int startTime = (int) [[self.constants getDateAtBeginningOfYear:[NSDate date]] timeIntervalSinceReferenceDate];
+    const int endTime = (int)[self.endDate timeIntervalSinceReferenceDate];
+    //[[self.constants getDateAtEndOfYear:[NSDate date]] timeIntervalSinceReferenceDate]; //(int) [[NSDate date] timeIntervalSinceReferenceDate];
+    int startTime = (int) [self.startDate timeIntervalSinceReferenceDate];
+    //[[self.constants getDateAtBeginningOfYear:[NSDate date]] timeIntervalSinceReferenceDate];
     
     double minX = 0;
-    double maxX = 60 * 60 * 365;
+    double maxX = [self.constants daysBetweenDates:self.startDate endDate:self.endDate] * 60 * 60; //60 * 60 * 365;
     
     double minY = 0;
     const double maxY = [self getMaxYAndUpdateDictionary:&newData allMessages:allMessages startTime:startTime endTime:endTime];
@@ -592,13 +601,30 @@
     
     NSMutableArray *tickLocations = [[NSMutableArray alloc] init];
     NSMutableArray *tickLabels = [[NSMutableArray alloc] init];
-    for(int i = 0; i < 12; i++) {
-        [tickLocations addObject:[NSNumber numberWithInt:30 * i]];
-        CPTAxisLabel *label = [[CPTAxisLabel alloc] initWithText:[self.constants MonthNameString:i] textStyle:xAxis.labelTextStyle];
-        label.tickLocation = [NSNumber numberWithInt:30 * i + 15];
+    
+    NSDate *date = [self.startDate copy];
+    
+    int months = [self.constants monthsBetweenDates:self.startDate endDate:self.endDate];
+    
+    double tickLocation = 0;
+    double labelLocation = 0;
+
+    for(int i = 0; i < months; i++) {
+        
+        //TODO: MORE SPECIFIC THAN 30
+        int num = [self.constants daysInMonthForDate:date]; //3
+        labelLocation += (num / 2.0);
+        
+        //NSLog(@"NUM %d FOR: %@", num, [self.constants dayMonthYearString:date]);
+        [tickLocations addObject:@(tickLocation)]; //[NSNumber numberWithInt:num * i]];
+        tickLocation += num;
+        CPTAxisLabel *label = [[CPTAxisLabel alloc] initWithText:[self.constants monthYearToString:date] textStyle:xAxis.labelTextStyle];
+        label.tickLocation = @(labelLocation); //[NSNumber numberWithInt:num * i + (num / 2.0)];
+        labelLocation += (num / 2.0);
         label.offset = 1.0f;
         label.rotation = 0;
         [tickLabels addObject:label];
+        date = [self.constants dateByAddingMonths:date months:1];
     }
     
     return [NSDictionary dictionaryWithObjectsAndKeys:tickLocations, @"tickLocations", tickLabels, @"tickLabels", nil];
@@ -606,8 +632,6 @@
 
 - (NSDictionary*) getLabelsAndLocationsForStartDay:(int)startDay endDay:(int)endDay
 {
-    CPTXYAxis *xAxis = [((CPTXYAxisSet *)self.graph.axisSet) xAxis];
-    
     NSMutableArray *tickLocations = [[NSMutableArray alloc] init];
     NSMutableArray *tickLabels = [[NSMutableArray alloc] init];
     
@@ -627,10 +651,14 @@
     else {
         incrementAmount = difference / 12.0;
     }
-    
-    for(int i = 0; i < difference + 1; i += incrementAmount) {
+
+    for(int i = 0, dateCounter = startDay; i < difference + 1; i += incrementAmount, dateCounter += incrementAmount) {
+        
+        NSDate *newDate = [self.constants dateByAddingDays:self.startDate days:dateCounter];
+        
         [tickLocations addObject:[NSNumber numberWithInt:i + startDay]];
-        CPTAxisLabel *label = [[CPTAxisLabel alloc] initWithText:[self.constants stringForDateAfterStart:(startDay + i + 2)] textStyle:textStyle]; //xAxis.labelTextStyle];
+        
+        CPTAxisLabel *label = [[CPTAxisLabel alloc] initWithText:[self.constants dayMonthYearString:newDate] textStyle:textStyle];
         label.tickLocation = [NSNumber numberWithInt:i + startDay];
         label.offset = 1.0f;
         label.rotation = rotation;
