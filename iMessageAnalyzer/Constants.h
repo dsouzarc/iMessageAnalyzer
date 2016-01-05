@@ -29,5 +29,8 @@
 
 - (NSDate*) dateAtEndOfMonth:(NSDate*)date;
 - (NSDate*) dateAtBeginningOfMonth:(NSDate*)date;
+- (NSDate*) dateAtBeginningOfNextMonth:(NSDate*)date;
+- (NSDate*) dateBySubtractingMonths:(NSDate*)date months:(int)months;
+- (int) daysBetweenDates:(NSDate*)startDate endDate:(NSDate*)endDate;
 
 @end

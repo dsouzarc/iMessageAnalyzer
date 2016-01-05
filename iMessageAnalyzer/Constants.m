@@ -81,6 +81,28 @@ static Constants *constants;
     return [self.calendar dateFromComponents:components];
 }
 
+- (NSDate*) dateAtBeginningOfNextMonth:(NSDate *)date
+{
+    NSDateComponents *components = [self dateComponentsForDay:date];
+    [components setMonth:[components month] + 1];
+    [components setDay:1];
+    return [self.calendar dateFromComponents:components];
+}
+
+- (NSDate*) dateBySubtractingMonths:(NSDate*)date months:(int)months
+{
+    NSDateComponents *components = [self dateComponentsForDay:date];
+    [components setDay:1];
+    [components setMonth:[components month] - months];
+    return [self.calendar dateFromComponents:components];
+}
+
+- (int) daysBetweenDates:(NSDate*)startDate endDate:(NSDate*)endDate
+{
+    NSDateComponents *components = [self.calendar components:NSCalendarUnitDay fromDate:startDate toDate:endDate options:0];
+    return (int)[components day];
+}
+
 - (NSDateComponents*) dateComponentsForDay:(NSDate*)date
 {
     return [self.calendar components:NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay fromDate:date];
