@@ -144,8 +144,11 @@ static NSString *secondPlotId = @"secondPlot";
     CPTMutableLineStyle *lineStyle = [mainPlot.dataLineStyle mutableCopy];
     lineStyle.lineWidth = 1.0;
     lineStyle.lineColor = [CPTColor whiteColor];
-    
     mainPlot.dataLineStyle = lineStyle;
+    
+    lineStyle = [secondPlot.dataLineStyle mutableCopy];
+    lineStyle.lineWidth = 1.0;
+    lineStyle.lineColor = [CPTColor greenColor];
     secondPlot.dataLineStyle = lineStyle;
     
     CPTMutableTextStyle *textStyle = [CPTMutableTextStyle textStyle];
@@ -176,9 +179,14 @@ static NSString *secondPlotId = @"secondPlot";
     xAxis.axisLabels = results[@"tickLabels"];
     
     CPTPlotSymbol *plotSymbol = [CPTPlotSymbol ellipsePlotSymbol];
-    plotSymbol.fill = [CPTFill fillWithColor:[CPTColor whiteColor]];
+    plotSymbol.fill = [CPTFill fillWithColor:mainPlot.dataLineStyle.lineColor];
     plotSymbol.size = CGSizeMake(5.0, 5.0);
     mainPlot.plotSymbol = plotSymbol;
+    
+    plotSymbol = [CPTPlotSymbol ellipsePlotSymbol];
+    plotSymbol.fill = [CPTFill fillWithColor:secondPlot.dataLineStyle.lineColor];
+    plotSymbol.size = CGSizeMake(5.0, 5.0);
+    //secondPlot.plotSymbol = plotSymbol;
     
     [self.graph addPlot:mainPlot toPlotSpace:plotSpace];
     [self.graph addPlot:secondPlot toPlotSpace:plotSpace];
@@ -268,6 +276,7 @@ static NSString *secondPlotId = @"secondPlot";
             return self.mainDataPoints[index][key];
             break;
         case secondPlot:
+            //return [NSNumber numberWithInt:[self.secondDataPoints[index][key] intValue] + [self.mainDataPoints[index][key] intValue]];
             return self.secondDataPoints[index][key];
         default:
             NSLog(@"NUMBER FOR PLOT IS NIL");
@@ -451,7 +460,6 @@ static NSString *secondPlotId = @"secondPlot";
 
 - (CPTPlotRange*) plotSpace:(CPTPlotSpace *)space willChangePlotRangeTo:(CPTPlotRange *)newRange forCoordinate:(CPTCoordinate)coordinate
 {
-    
     CPTPlotRange *updatedRange = nil;
     
     switch (coordinate) {
@@ -619,9 +627,10 @@ static NSString *secondPlotId = @"secondPlot";
                 if([allMessages[counter] class] == [Message class]) {
                     dateSent = ((Message*)allMessages[counter]).dateSent;
                 }
-                else if([allMessages[counter] class] == [NSDictionary class]) {
+                else if([allMessages[counter] class] == [NSMutableDictionary class] || [[NSString stringWithFormat:@"%@", [allMessages[counter] class]] isEqualToString:@"__NSDictionaryM"]) {
                     NSDictionary *message = allMessages[counter];
                     dateSent = [NSDate dateWithTimeIntervalSinceReferenceDate:[[message objectForKey:@"date"] intValue]];
+                    
                 }
             }
             
@@ -641,58 +650,6 @@ static NSString *secondPlotId = @"secondPlot";
                              [NSNumber numberWithDouble:maxY], @"maxY", nil];
     return results;
 }
-
-- (NSDictionary*) getMaxYAndPointsWithDictionary:(NSMutableArray<NSDictionary*>*)allMessages startTime:(int)startTime endTime:(int)endTime
-{
-    const CFTimeInterval methodStartTime = CACurrentMediaTime();
-    
-    const int timeInterval = 60 * 60 * 24;
-    
-    int counter = 0;
-    int hour = 0;
-    
-    double maxY = 0;
-    
-    NSMutableArray<NSDictionary*> *newData = [[NSMutableArray alloc] init];
-    
-    while(startTime < endTime && counter < allMessages.count) {
-        
-        NSDictionary *message = allMessages[counter];
-        int timeSent = [[message objectForKey:@"date"] intValue];
-
-        //Message occurs after time interval
-        if(timeSent > (startTime + timeInterval)) {
-            [newData addObject:@{@"x": @(hour), @"y": @(0)}];
-        }
-        else {
-            int numMessages = 0;
-            while(timeSent <= (startTime + timeInterval) && counter+1 < allMessages.count) {
-                numMessages++;
-                counter++;
-
-                NSDictionary *message = allMessages[counter];
-                timeSent = [[message objectForKey:@"date"] intValue];
-            }
-            
-            [newData addObject:@{@"x": @(hour), @"y": @(numMessages)}];
-            
-            if(numMessages > maxY) {
-                maxY = numMessages;
-            }
-        }
-        
-        hour++;
-        startTime += timeInterval;
-    }
-    
-    NSLog(@"MAX Y: %f", maxY);
-    
-    NSLog(@"executionTime = %f", (CACurrentMediaTime() - methodStartTime));
-    NSDictionary *results = [NSDictionary dictionaryWithObjectsAndKeys:newData, @"points",
-                             [NSNumber numberWithDouble:maxY], @"maxY", nil];
-    return results;
-}
-
 
 - (int) getScale:(int)maxY
 {
@@ -843,11 +800,8 @@ static NSString *secondPlotId = @"secondPlot";
         }
         
         NSMutableArray *otherMessages = [self.messageManager getAllOtherMessagesFromStartTime:(int)[self.startDate timeIntervalSinceReferenceDate] endTime:(int)[self.endDate timeIntervalSinceReferenceDate]];
-        
-        NSLog(@"TIMES: %@\t%@", [self.constants dayMonthYearString:self.startDate], [self.constants dayMonthYearString:self.endDate]);
-        
-        //NSDictionary *results = [self getMaxYAndPointsWithMessages:otherMessages startTime:(int) [self.startDate timeIntervalSinceReferenceDate] endTime:(int) [self.endDate timeIntervalSinceReferenceDate]];
-        NSDictionary *results = [self getMaxYAndPointsWithDictionary:otherMessages startTime:(int)[self.startDate timeIntervalSinceReferenceDate] endTime:(int)[self.endDate timeIntervalSinceReferenceDate]];
+
+        NSDictionary *results = [self getMaxYAndPointsWithMessages:otherMessages startTime:(int) [self.startDate timeIntervalSinceReferenceDate] endTime:(int) [self.endDate timeIntervalSinceReferenceDate]];
         
         NSMutableArray<NSDictionary*> *points = [results objectForKey:@"points"];
         
@@ -857,9 +811,7 @@ static NSString *secondPlotId = @"secondPlot";
             self.totalMaximumYValue = maxY * (11.0 / 10);
         }
         self.secondDataPoints = points;
-        
-        NSLog(@"MAX Y: %f\t%f", maxY, self.totalMaximumYValue);
-        
+
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *) self.graph.defaultPlotSpace;
             plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:@(0)
@@ -867,9 +819,6 @@ static NSString *secondPlotId = @"secondPlot";
             
             CPTXYAxisSet *axisSet = (CPTXYAxisSet *)self.graph.axisSet;
             axisSet.yAxis.majorIntervalLength = @([self getScale:self.totalMaximumYValue]);
-            
-            
-            //[self.graph addPlotSpace:self.secondPlot];
             [self.graph reloadData];
         });
     });
