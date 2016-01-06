@@ -56,18 +56,21 @@ static TemporaryDatabaseManager *databaseManager;
         self.calendar = [NSCalendar currentCalendar];
         [self.calendar setTimeZone:[NSTimeZone systemTimeZone]];
         
-        const char *filePath = "file::memory:"; //[self filePath]; //
+        const char *filePath = ":memory:"; //[self filePath]; //
         
         if(sqlite3_open(filePath, &_database) == SQLITE_OK) {
             printf("OPENED TEMPORARY DATABASE\n");
 
             [self createMyMessagesTable];
             [self createOtherMessagesTable];
+            [self addPragmas];
             
             [self addMessagesToDatabase:messages];
+            
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
                 [self addOtherMessagesToDatabase:[[DatabaseManager getInstance] getTemporaryInformationForAllConversationsExceptWith:person]];
             });
+            
         }
         else {
             printf("ERROR OPENING TEMPORARY DATABASE: %s\n", sqlite3_errmsg(_database));
@@ -473,6 +476,13 @@ static TemporaryDatabaseManager *databaseManager;
     else {
         printf("ERROR CREATING TABLE: %s\t%s\n", [tableName UTF8String], sqlite3_errmsg(_database));
     }
+}
+
+- (void) addPragmas
+{
+    char *errorMessage;
+    [self executeSQLStatement:"PRAGMA journal_mode = MEMORY" errorMessage:errorMessage];
+    [self executeSQLStatement:"PRAGMA synchronous = OFF" errorMessage:errorMessage];
 }
 
 - (const char *)filePath
