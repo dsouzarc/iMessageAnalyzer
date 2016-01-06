@@ -121,12 +121,6 @@ static NSString *secondPlotId = @"secondPlot";
     self.graph.plotAreaFrame.cornerRadius = 0.0;
     self.graph.plotAreaFrame.masksToBorder = NO;
     
-    self.mainPlot = [[CPTXYGraph alloc] init];
-    self.secondPlot = [[CPTXYGraph alloc] init];
-    
-    [self.mainPlot setIdentifier:mainPlotId];
-    [self.secondPlot setIdentifier:secondPlotId];
-    
     CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *) self.graph.defaultPlotSpace;
     
     [plotSpace setXRange:[CPTPlotRange plotRangeWithLocation:@(0)
@@ -134,21 +128,25 @@ static NSString *secondPlotId = @"secondPlot";
     [plotSpace setYRange:[CPTPlotRange plotRangeWithLocation:@(0)
                                                           length:@(self.totalMaximumYValue)]];
     [plotSpace setAllowsUserInteraction:YES];
-    
-    [self.mainPlot setDelegate:self];
-    [self.secondPlot setDelegate:self];
-    
-    [self.graph]
+    plotSpace.delegate = self;
 
     // Create the main plot for the delimited data
-    CPTScatterPlot *dataSourceLinePlot = [[CPTScatterPlot alloc] initWithFrame:self.graph.bounds];
-    dataSourceLinePlot.identifier = @"Data Source Plot";
-    dataSourceLinePlot.delegate = self;
+    CPTScatterPlot *mainPlot = [[CPTScatterPlot alloc] initWithFrame:self.graph.bounds];
+    mainPlot.identifier = mainPlotId;
+    mainPlot.delegate = self;
+    mainPlot.dataSource = self;
     
-    CPTMutableLineStyle *lineStyle = [dataSourceLinePlot.dataLineStyle mutableCopy];
+    CPTScatterPlot *secondPlot = [[CPTScatterPlot alloc] initWithFrame:self.graph.bounds];
+    secondPlot.identifier = secondPlotId;
+    secondPlot.delegate = self;
+    secondPlot.dataSource = self;
+    
+    CPTMutableLineStyle *lineStyle = [mainPlot.dataLineStyle mutableCopy];
     lineStyle.lineWidth = 1.0;
     lineStyle.lineColor = [CPTColor whiteColor];
-    dataSourceLinePlot.dataLineStyle = lineStyle;
+    
+    mainPlot.dataLineStyle = lineStyle;
+    secondPlot.dataLineStyle = lineStyle;
     
     CPTMutableTextStyle *textStyle = [CPTMutableTextStyle textStyle];
     [textStyle setFontSize:8.0f];
@@ -180,10 +178,12 @@ static NSString *secondPlotId = @"secondPlot";
     CPTPlotSymbol *plotSymbol = [CPTPlotSymbol ellipsePlotSymbol];
     plotSymbol.fill = [CPTFill fillWithColor:[CPTColor whiteColor]];
     plotSymbol.size = CGSizeMake(5.0, 5.0);
-    dataSourceLinePlot.plotSymbol = plotSymbol;
+    mainPlot.plotSymbol = plotSymbol;
     
-    dataSourceLinePlot.dataSource = self;
-    [self.graph addPlot:dataSourceLinePlot];
+    [self.graph addPlot:mainPlot toPlotSpace:plotSpace];
+    [self.graph addPlot:secondPlot toPlotSpace:plotSpace];
+    
+    [plotSpace scaleToFitPlots:[NSArray arrayWithObjects:mainPlot, secondPlot, nil]];
     
     [self addAllMessagesGraph];
     [self.graph reloadData];
@@ -226,6 +226,13 @@ static NSString *secondPlotId = @"secondPlot";
 {
     NSString *plotType = (NSString*) plot.plotSpace.identifier;
     
+    if([plot.identifier isEqual:mainPlotId]) {
+        return mainPlot;
+    }
+    else if([plot.identifier isEqual:secondPlotId]) {
+        return secondPlot;
+    }
+
     if([plotType isEqualToString:mainPlotId]) {
         return mainPlot;
     }
@@ -854,9 +861,7 @@ static NSString *secondPlotId = @"secondPlot";
         NSLog(@"MAX Y: %f\t%f", maxY, self.totalMaximumYValue);
         
         dispatch_async(dispatch_get_main_queue(), ^(void) {
-            CPTXYPlotSpace *plotSpace = self.secondPlot;
-            plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:@(0)
-                                                            length:@(self.maximumValueForXAxis)];
+            CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *) self.graph.defaultPlotSpace;
             plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:@(0)
                                                             length:@(self.totalMaximumYValue)];
             
@@ -864,7 +869,7 @@ static NSString *secondPlotId = @"secondPlot";
             axisSet.yAxis.majorIntervalLength = @([self getScale:self.totalMaximumYValue]);
             
             
-            [self.graph addPlotSpace:self.secondPlot];
+            //[self.graph addPlotSpace:self.secondPlot];
             [self.graph reloadData];
         });
     });
