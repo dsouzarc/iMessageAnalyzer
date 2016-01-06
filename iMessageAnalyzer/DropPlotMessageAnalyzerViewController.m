@@ -8,6 +8,9 @@
 
 #import "DropPlotMessageAnalyzerViewController.h"
 
+static NSString *mainPlotId = @"mainPlot";
+static NSString *secondPlotId = @"secondPlot";
+
 @interface DropPlotMessageAnalyzerViewController ()
 
 @property (strong, nonatomic) TemporaryDatabaseManager *messageManager;
@@ -26,10 +29,9 @@
 @property (nonatomic, readwrite, assign) double totalMaximumYValue;
 @property BOOL isZoomedOut;
 
-@property (nonatomic, readwrite, strong) NSArray<NSDictionary *> *mainDataPoints;
+@property (nonatomic, readwrite, strong) NSArray<NSDictionary*> *mainDataPoints;
 
 @property (nonatomic, readwrite, strong) CPTPlotSpaceAnnotation *zoomAnnotation;
-@property (nonatomic, readwrite, strong) CPTPlotSpace *mainPlot;
 @property (nonatomic, readwrite, assign) CGPoint dragStart;
 @property (nonatomic, readwrite, assign) CGPoint dragEnd;
 
@@ -38,6 +40,11 @@
 @property (strong, nonatomic) NSDate *endDate;
 
 @property (strong, nonatomic) CPTPlotSpaceAnnotation *yValueAnnotation;
+
+@property (nonatomic, readwrite, strong) CPTXYPlotSpace *mainPlot;
+@property (strong, nonatomic) CPTXYPlotSpace *secondPlot;
+@property (strong, nonatomic) NSArray<NSDictionary*> *secondDataPoints;
+
 
 @end
 
@@ -67,7 +74,7 @@
     return self;
 }
 
-- (void)viewDidLoad {
+- (void) viewDidLoad {
     [super viewDidLoad];
     
     NSDate *conversationStart = self.startDate;
@@ -90,15 +97,14 @@
     
     const int numDays = [self.constants daysBetweenDates:self.startDate endDate:self.endDate];
     
-    NSLog(@"MONTHS: %d\tDAYS: %d", [self.constants monthsBetweenDates:self.startDate endDate:self.endDate], [self.constants daysBetweenDates:self.startDate endDate:self.endDate]);
+    //NSLog(@"MONTHS: %d\tDAYS: %d", [self.constants monthsBetweenDates:self.startDate endDate:self.endDate], [self.constants daysBetweenDates:self.startDate endDate:self.endDate]);
     //NSLog(@"%@\t%@", [self.constants dayMonthYearString:self.startDate], [self.constants dayMonthYearString:self.endDate]);
     
     [self updateDataWithThisConversationMessages];
     
-    CPTXYGraph *graph = [[CPTXYGraph alloc] initWithFrame:self.graphHostingView.frame];
-    [graph applyTheme:[CPTTheme themeNamed:kCPTDarkGradientTheme]];
-    self.graph = graph;
-    self.graphHostingView.hostedGraph = self.graph;
+    self.graph = [[CPTXYGraph alloc] initWithFrame:self.graphHostingView.frame];
+    [self.graph applyTheme:[CPTTheme themeNamed:kCPTDarkGradientTheme]];
+    [self.graphHostingView setHostedGraph:self.graph];
     
     self.graph.paddingLeft = 0.0;
     self.graph.paddingTop = 0.0;
@@ -117,14 +123,25 @@
     self.graph.plotAreaFrame.cornerRadius = 0.0;
     self.graph.plotAreaFrame.masksToBorder = NO;
     
-    CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)self.graph.defaultPlotSpace;
-    plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:@(0)
-                                                    length:@(numDays)];
-    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:@(0)
-                                                    length:@(self.totalMaximumYValue)];
+    self.mainPlot = (CPTXYPlotSpace *)self.graph.defaultPlotSpace;
+    self.secondPlot = [[CPTXYPlotSpace alloc] init];
     
-    [plotSpace setDelegate:self];
-    [plotSpace setAllowsUserInteraction:YES];
+    [self.mainPlot setIdentifier:mainPlotId];
+    [self.secondPlot setIdentifier:secondPlotId];
+    
+    [self.mainPlot setXRange:[CPTPlotRange plotRangeWithLocation:@(0)
+                                                          length:@(numDays)]];
+    [self.secondPlot setXRange:self.mainPlot.xRange];
+    
+    [self.mainPlot setYRange:[CPTPlotRange plotRangeWithLocation:@(0)
+                                                          length:@(self.totalMaximumYValue)]];
+    [self.secondPlot setYRange:self.mainPlot.yRange];
+    
+    [self.mainPlot setAllowsUserInteraction:YES];
+    [self.secondPlot setAllowsUserInteraction:YES];
+    
+    [self.mainPlot setDelegate:self];
+    [self.secondPlot setDelegate:self];
     
     // Create the main plot for the delimited data
     CPTScatterPlot *dataSourceLinePlot = [[CPTScatterPlot alloc] initWithFrame:self.graph.bounds];
@@ -180,7 +197,7 @@
 
 # pragma mark CPTPLOTDATASOURCE_DELEGATE
 
--(BOOL)plotSpace:(CPTPlotSpace *)space shouldHandlePointingDeviceDraggedEvent:(id)event atPoint:(CGPoint)interactionPoint
+-(BOOL) plotSpace:(CPTPlotSpace *)space shouldHandlePointingDeviceDraggedEvent:(id)event atPoint:(CGPoint)interactionPoint
 {
     CPTPlotSpaceAnnotation *annotation = self.zoomAnnotation;
     
@@ -188,14 +205,12 @@
         CPTPlotArea *plotArea = self.graph.plotAreaFrame.plotArea;
         CGRect plotBounds = plotArea.bounds;
         
-        // convert the dragStart and dragEnd values to plot coordinates
         CGPoint dragStartInPlotArea = [self.graph convertPoint:self.dragStart toLayer:plotArea];
         CGPoint dragEndInPlotArea   = [self.graph convertPoint:interactionPoint toLayer:plotArea];
         
-        // create the dragrect from dragStart to the current location
         CGFloat endX = MAX(MIN(dragEndInPlotArea.x, CGRectGetMaxX(plotBounds)), CGRectGetMinX(plotBounds));
         CGFloat endY = MAX(MIN(dragEndInPlotArea.y, CGRectGetMaxY(plotBounds)), CGRectGetMinY(plotBounds));
-        CGRect borderRect = CGRectMake( dragStartInPlotArea.x, dragStartInPlotArea.y,
+        CGRect borderRect = CGRectMake(dragStartInPlotArea.x, dragStartInPlotArea.y,
                                        (endX - dragStartInPlotArea.x),
                                        (endY - dragStartInPlotArea.y) );
         
@@ -207,17 +222,52 @@
     return NO;
 }
 
--(NSUInteger)numberOfRecordsForPlot:(CPTPlot *)plot
+- (PlotType) getPlotType:(CPTPlot*)plot
 {
-    NSLog(@"SIZE: %ld", self.mainDataPoints.count);
-    return self.mainDataPoints.count;
+    NSString *plotType = plot.plotSpace.identifier;
+    
+    if([plotType isEqualToString:mainPlotId]) {
+        return mainPlot;
+    }
+    else if([plotType isEqualToString:secondPlotId]) {
+        return secondPlot;
+    }
+    
+    return noPlot;
 }
 
--(id)numberForPlot:(CPTPlot *)plot field:(NSUInteger)fieldEnum recordIndex:(NSUInteger)index
+- (NSUInteger) numberOfRecordsForPlot:(CPTPlot *)plot
+{
+    switch ([self getPlotType:plot]) {
+        case mainPlot:
+            NSLog(@"SIZE FOR FIRST: %ld", self.mainDataPoints.count);
+            return self.mainDataPoints.count;
+            break;
+        case secondPlot:
+            NSLog(@"SIZE FOR SECOND: %ld", self.secondDataPoints.count);
+            return self.secondDataPoints.count;
+        default:
+            return 0;
+    }
+}
+
+- (id) numberForPlot:(CPTPlot *)plot field:(NSUInteger)fieldEnum recordIndex:(NSUInteger)index
 {
     NSString *key = (fieldEnum == CPTScatterPlotFieldX ? @"x" : @"y");
-    return self.mainDataPoints[index][key];
+    
+    switch ([self getPlotType:plot]) {
+        case mainPlot:
+            return self.mainDataPoints[index][key];
+            break;
+        case secondPlot:
+            return self.secondDataPoints[index][key];
+        default:
+            return 0;
+            break;
+    }
 }
+
+
 
 - (void) plotSpace:(CPTPlotSpace *)space didChangePlotRangeForCoordinate:(CPTCoordinate)coordinate
 {
@@ -230,7 +280,20 @@
         return nil;
     }
     
-    NSDictionary *valueDict = self.mainDataPoints[(int)idx];
+    NSDictionary *valueDict = nil;
+    
+    switch ([self getPlotType:plot]) {
+        case mainPlot:
+            valueDict = self.mainDataPoints[(int)idx];
+            break;
+        case secondPlot:
+            valueDict = self.secondDataPoints[(int)idx];
+            break;
+        default:
+            return nil;
+            break;
+    }
+    
     CPTTextLayer *label = [[CPTTextLayer alloc] initWithText:[NSString stringWithFormat:@"%d", [valueDict[@"y"] intValue]]];
     CPTMutableTextStyle *textStyle = [label.textStyle mutableCopy];
     textStyle.color = [CPTColor yellowColor];
@@ -250,9 +313,29 @@
     hitAnnotationTextStyle.fontSize = 16.0f;
     hitAnnotationTextStyle.fontName = @"Helvetica-Bold";
     
-    NSString *yValue = [self.mainDataPoints[idx][@"y"] stringValue];
+    //TODO: Show both values if they exist?
+    NSString *yValue = nil;
+    NSNumber *y = nil;
+    
+    switch ([self getPlotType:plot]) {
+        case mainPlot:
+            yValue = [self.mainDataPoints[idx][@"y"] stringValue];
+            y = self.mainDataPoints[idx][@"y"];
+            NSLog(@"CLICKED FIRST: %@\t%@", self.mainDataPoints[idx][@"x"], self.mainDataPoints[idx][@"y"]);
+            break;
+        case secondPlot:
+            yValue = [self.secondDataPoints[idx][@"y"] stringValue];
+            y = self.secondDataPoints[idx][@"y"];
+            NSLog(@"CLICKED SECOND: %@\t%@", self.secondDataPoints[idx][@"x"], self.secondDataPoints[idx][@"y"]);
+            break;
+        default:
+            NSLog(@"NIL IN plotSymbolWasSelectedAtRecordIndex");
+            return;
+            break;
+    }
+
+    
     NSNumber *x = [NSNumber numberWithInt:(int) idx];
-    NSNumber *y = self.mainDataPoints[idx][@"y"];
     NSArray *anchorPoint = [NSArray arrayWithObjects:x, y, nil];
     
     CPTTextLayer *textLayer = [[CPTTextLayer alloc] initWithText:yValue style:hitAnnotationTextStyle];
@@ -260,8 +343,6 @@
     self.yValueAnnotation.contentLayer = textLayer;
     self.yValueAnnotation.displacement = CGPointMake(0.0f, 10.0f);
     [self.graph.plotAreaFrame.plotArea addAnnotation:self.yValueAnnotation];
-    
-    NSLog(@"CLICKED: %@\t%@", self.mainDataPoints[idx][@"x"], self.mainDataPoints[idx][@"y"]);
 }
 
 
@@ -399,7 +480,8 @@
     self.isZoomedOut = NO;
     
     CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)self.graph.defaultPlotSpace;
-    CPTPlotArea *plotArea     = self.graph.plotAreaFrame.plotArea;
+    
+    CPTPlotArea *plotArea = self.graph.plotAreaFrame.plotArea;
     
     // convert the dragStart and dragEnd values to plot coordinates
     CGPoint dragStartInPlotArea = [self.graph convertPoint:self.dragStart toLayer:plotArea];
