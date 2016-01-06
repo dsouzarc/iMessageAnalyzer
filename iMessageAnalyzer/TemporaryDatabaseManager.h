@@ -28,6 +28,7 @@
 - (NSMutableArray*) getAllMessagesForPerson:(Person *)person;
 - (NSMutableArray*) getAllMessagesForPerson:(Person *)person startTimeInSeconds:(long)startTimeInSeconds endTimeInSeconds:(long)endTimeInSeconds;
 - (NSMutableArray*) getAllMessagesForPerson:(Person*)person onDay:(NSDate*)day;
+- (NSMutableArray*) getAllOtherMessagesFromStartTime:(int)startTime endTime:(int)endTime;
 
 - (NSMutableArray*) getAllMessageTimingsInConversation;
 - (NSMutableArray*) getAllMessageTimingsForAll;

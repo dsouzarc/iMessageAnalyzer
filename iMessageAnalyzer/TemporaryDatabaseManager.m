@@ -56,8 +56,7 @@ static TemporaryDatabaseManager *databaseManager;
         self.calendar = [NSCalendar currentCalendar];
         [self.calendar setTimeZone:[NSTimeZone systemTimeZone]];
         
-        const char *filePath = "file::memory:";
-        //const char *filePath = [self filePath];
+        const char *filePath = "file::memory:"; //[self filePath]; //
         
         if(sqlite3_open(filePath, &_database) == SQLITE_OK) {
             printf("OPENED TEMPORARY DATABASE\n");
@@ -136,6 +135,8 @@ static TemporaryDatabaseManager *databaseManager;
 {
     char *errorMessage;
     
+    CFTimeInterval startTime = CACurrentMediaTime();
+    
     sqlite3_exec(_database, "BEGIN TRANSACTION", NULL, NULL, &errorMessage);
     
     for(NSDictionary *otherMessage in otherMessages) {
@@ -144,6 +145,9 @@ static TemporaryDatabaseManager *databaseManager;
     }
     
     sqlite3_exec(_database, "COMMIT TRANSACTION", NULL, NULL, &errorMessage);
+    
+    NSLog(@"FINISHED ADDING ALL OTHER MESSAGES TO DB: %f", (CACurrentMediaTime() - startTime));
+    
     self.finishedAddingEntries = YES;
 }
 
@@ -257,6 +261,42 @@ static TemporaryDatabaseManager *databaseManager;
     sqlite3_finalize(statement);
     
     return allMessagesForChat;
+}
+
+- (NSMutableArray*) getAllOtherMessagesFromStartTime:(int)startTime endTime:(int)endTime
+{
+    NSMutableArray *allOtherMessages = [[NSMutableArray alloc] init];
+    
+    const char *query = [[NSString stringWithFormat:@"SELECT ROWID, date, wordCount, is_from_me, cache_has_attachments FROM %@ WHERE (date > %d AND date < %d) ORDER BY date", otherMessagesTable, startTime, endTime] UTF8String];
+
+    sqlite3_stmt *statement;
+    
+    if(sqlite3_prepare_v2(_database, query, -1, &statement, NULL) == SQLITE_OK) {
+        while(sqlite3_step(statement) == SQLITE_ROW) {
+            
+            int ROW_ID = sqlite3_column_int(statement, 0);
+            int dateInt = sqlite3_column_int(statement, 1);
+            int wordCount = sqlite3_column_int(statement, 2);
+            BOOL isFromMe = sqlite3_column_int(statement, 3) == 1;
+            BOOL hasAttachment = sqlite3_column_int(statement, 4) == 1;
+            
+            NSMutableDictionary *message = [[NSMutableDictionary alloc] init];
+            [message setObject:[NSNumber numberWithInt:ROW_ID] forKey:@"ROW_ID"];
+            [message setObject:[NSNumber numberWithInt:dateInt] forKey:@"date"];
+            [message setObject:[NSNumber numberWithInt:wordCount] forKey:@"wordCount"];
+            [message setObject:[NSNumber numberWithBool:isFromMe] forKey:@"isFromMe"];
+            [message setObject:[NSNumber numberWithBool:hasAttachment] forKey:@"hasAttachment"];
+
+            [allOtherMessages addObject:message];
+        }
+    }
+    else {
+        NSLog(@"ERROR COMPILING ALL MESSAGES QUERY: %s", sqlite3_errmsg(_database));
+    }
+
+    sqlite3_finalize(statement);
+    
+    return allOtherMessages;
 }
 
 #pragma mark GET_COUNTS
