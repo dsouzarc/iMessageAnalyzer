@@ -122,7 +122,7 @@ Double clicking a contact shows quick statistics and gives the option to view mo
 ---
 
 ![Screenshot 8](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_8.png)
-More analysis screen (still under construction)
+More analysis screen
 
 - Shows all messages sent and received
 
@@ -137,7 +137,7 @@ More analysis screen (still under construction)
 ---
 
 ![Screenshot 9](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_9.png)
-More analysis screen (still under construction)
+More analysis screen
 
 Clicking on a date in the calendar on the bottom left
     - Shows above statistics but on that date
@@ -180,5 +180,10 @@ Graphing a brief summer friendship
 
 ---
 
-![Screenshot 16](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_16.png)
-End of senior year heartbreak
+![Screenshot 17](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_17.png)
+Overlaying the messages with a friend (white) with all other messages on that day (green)
+
+---
+
+![Screenshot 18](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_18.png)
+Zooming in on that overlay
