@@ -255,11 +255,8 @@ static NSString *secondPlotId = @"secondPlot";
 {
     switch ([self getPlotType:plot]) {
         case mainPlot:
-            NSLog(@"SIZE FOR FIRST: %ld", self.mainDataPoints.count);
             return self.mainDataPoints.count;
-            break;
         case secondPlot:
-            NSLog(@"SIZE FOR SECOND: %ld", self.secondDataPoints.count);
             return self.secondDataPoints.count;
         default:
             NSLog(@"NUMBER OF RECORDS IS NIL");
@@ -350,7 +347,6 @@ static NSString *secondPlotId = @"secondPlot";
             return;
             break;
     }
-
     
     NSNumber *x = [NSNumber numberWithInt:(int) idx];
     NSArray *anchorPoint = [NSArray arrayWithObjects:x, y, nil];
@@ -645,7 +641,7 @@ static NSString *secondPlotId = @"secondPlot";
         startTime += timeInterval;
     }
     
-    NSLog(@"executionTime = %f", (CACurrentMediaTime() - methodStartTime));
+    NSLog(@"executionTime for max values = %f", (CACurrentMediaTime() - methodStartTime));
     NSDictionary *results = [NSDictionary dictionaryWithObjectsAndKeys:newData, @"points",
                              [NSNumber numberWithDouble:maxY], @"maxY", nil];
     return results;

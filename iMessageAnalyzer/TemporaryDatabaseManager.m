@@ -139,15 +139,29 @@ static TemporaryDatabaseManager *databaseManager;
     
     sqlite3_exec(_database, "BEGIN TRANSACTION", NULL, NULL, &errorMessage);
     
+    char buffer[] = "INSERT INTO otherMessagesTable VALUES (?1, ?2, ?3, ?4, ?5)";
+    sqlite3_stmt* stmt;
+    sqlite3_prepare_v2(_database, buffer, (int)strlen(buffer), &stmt, NULL);
+    
     for(NSDictionary *otherMessage in otherMessages) {
-        NSString *query = [self insertOtherMessageQuery:otherMessage];
-        [self executeSQLStatement:[query UTF8String] errorMessage:errorMessage];
+        //NSString *query = [self insertOtherMessageQuery:otherMessage];
+        //[self executeSQLStatement:[query UTF8String] errorMessage:errorMessage];
+        
+        sqlite3_bind_int(stmt, 1, [otherMessage[@"ROWID"] intValue]);
+        sqlite3_bind_int(stmt, 2, [otherMessage[@"date"] intValue]);
+        sqlite3_bind_int(stmt, 3, [otherMessage[@"wordCount"] intValue]);
+        sqlite3_bind_int(stmt, 4, [otherMessage[@"is_from_me"] intValue]);
+        sqlite3_bind_int(stmt, 5, [otherMessage[@"cache_has_attachments"] intValue]);
+        if (sqlite3_step(stmt) != SQLITE_DONE) {
+            //Left Blank
+        }
+        sqlite3_reset(stmt);
     }
     
     sqlite3_exec(_database, "COMMIT TRANSACTION", NULL, NULL, &errorMessage);
+    sqlite3_finalize(stmt);
     
     NSLog(@"FINISHED ADDING ALL OTHER MESSAGES TO DB: %f", (CACurrentMediaTime() - startTime));
-    
     self.finishedAddingEntries = YES;
 }
 
@@ -160,7 +174,6 @@ static TemporaryDatabaseManager *databaseManager;
     int hasAttachment = [otherMessage[@"cache_has_attachments"] intValue];
     return [NSString stringWithFormat:@"INSERT INTO %@(ROWID, date, wordCount, is_from_me, cache_has_attachments) VALUES (%d, %d, %d, %d, %d)", otherMessagesTable, rowID, date, wordCount, isFromMe, hasAttachment];
 }
-
 
 /****************************************************************
  *
