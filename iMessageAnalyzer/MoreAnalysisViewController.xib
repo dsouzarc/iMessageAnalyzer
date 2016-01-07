@@ -330,7 +330,7 @@
                     </connections>
                 </button>
                 <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QS6-9i-QEV">
-                    <rect key="frame" x="20" y="330" width="1055" height="370"/>
+                    <rect key="frame" x="20" y="330" width="1096" height="370"/>
                 </customView>
                 <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pm3-ly-H0F">
                     <rect key="frame" x="835" y="163" width="240" height="135"/>
