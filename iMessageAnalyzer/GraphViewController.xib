@@ -12,8 +12,95 @@
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView id="Hz6-mo-xeY">
-            <rect key="frame" x="0.0" y="0.0" width="1055" height="370"/>
+            <rect key="frame" x="0.0" y="0.0" width="1096" height="370"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <box horizontalHuggingPriority="750" fixedFrame="YES" title="Box" boxType="separator" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="cp2-Fl-ZtY">
+                    <rect key="frame" x="911" y="0.0" width="5" height="370"/>
+                    <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
+                    <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <font key="titleFont" metaFont="system"/>
+                </box>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NRM-rX-web">
+                    <rect key="frame" x="920" y="346" width="158" height="17"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Line Graph" id="Nwb-JD-sKn">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uo4-az-g0P">
+                    <rect key="frame" x="933" y="300" width="157" height="18"/>
+                    <buttonCell key="cell" type="radio" title="All Time" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="Zgl-nW-O6O">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                </button>
+                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XVr-iI-FkL">
+                    <rect key="frame" x="933" y="227" width="85" height="18"/>
+                    <buttonCell key="cell" type="radio" title="Messages" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="bvM-SP-4WW">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                </button>
+                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nc2-NJ-qca">
+                    <rect key="frame" x="933" y="199" width="110" height="18"/>
+                    <buttonCell key="cell" type="radio" title="Words" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="Wgn-oV-1Mr">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                </button>
+                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KUR-0p-cdk">
+                    <rect key="frame" x="933" y="276" width="110" height="18"/>
+                    <buttonCell key="cell" type="radio" title="Course of Day" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="90T-1S-44w">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                </button>
+                <box verticalHuggingPriority="750" fixedFrame="YES" title="Box" boxType="separator" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="fnC-rq-Fec">
+                    <rect key="frame" x="913" y="368" width="183" height="5"/>
+                    <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
+                    <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <font key="titleFont" metaFont="system"/>
+                </box>
+                <box verticalHuggingPriority="750" fixedFrame="YES" title="Box" boxType="separator" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="DYF-hP-oxX">
+                    <rect key="frame" x="934" y="269" width="162" height="5"/>
+                    <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
+                    <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <font key="titleFont" metaFont="system"/>
+                </box>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wRs-cV-P7q">
+                    <rect key="frame" x="934" y="325" width="162" height="17"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Relationship over time" id="Shh-y8-OtQ">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Bqa-2S-L4B">
+                    <rect key="frame" x="930" y="252" width="160" height="17"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Sent and Received" id="Xec-fQ-PdW">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eLF-hX-Iig">
+                    <rect key="frame" x="932" y="171" width="140" height="18"/>
+                    <buttonCell key="cell" type="check" title="Compare to Others" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="v28-uE-rZ7">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                </button>
+                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UII-NS-NI9">
+                    <rect key="frame" x="1011" y="210" width="79" height="18"/>
+                    <buttonCell key="cell" type="check" title="Day View" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="O4O-qv-I3e">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                </button>
+            </subviews>
+            <point key="canvasLocation" x="21" y="276"/>
         </customView>
     </objects>
 </document>
