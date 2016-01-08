@@ -927,6 +927,10 @@ static NSString *secondPlotId = @"secondPlot";
         self.secondDataPoints = points;
 
         dispatch_async(dispatch_get_main_queue(), ^(void) {
+            
+            CPTScatterPlot *secondPlot = (CPTScatterPlot*) [self.graph plotWithIdentifier:secondPlotId];
+            secondPlot.plotSymbol = nil;
+            
             [self resetGraphAxis];
         });
     });
@@ -955,6 +959,12 @@ static NSString *secondPlotId = @"secondPlot";
     
     self.mainDataPoints = myPoints;
     self.secondDataPoints = otherPoints;
+    
+    CPTScatterPlot *secondPlot = (CPTScatterPlot*) [self.graph plotWithIdentifier:secondPlotId];
+    CPTPlotSymbol *plotSymbol = [CPTPlotSymbol ellipsePlotSymbol];
+    plotSymbol.fill = [CPTFill fillWithColor:secondPlot.dataLineStyle.lineColor];
+    plotSymbol.size = CGSizeMake(5.0, 5.0);
+    secondPlot.plotSymbol = plotSymbol;
     
     [self resetGraphAxis];
 }
