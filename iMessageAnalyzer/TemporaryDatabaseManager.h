@@ -54,6 +54,14 @@
 - (int) getMySentOtherMessagesWordCount:(int)startTime endTime:(int)endTime;
 - (int) getMyReceivedOtherMessagesWordCount:(int)startTime endTime:(int)endTime;
 
+- (NSMutableArray*) getMySentWordsInConversationOverHoursInDay:(int)startTime endTime:(int)endTime;
+- (NSMutableArray*) getReceivedWordsInConversationOverHoursInDay:(int)startTime endTime:(int)endTime;
+
+- (NSMutableArray*) getMySentMessagesInConversationOverHoursInDay:(int)startTime endTime:(int)endTime;
+- (NSMutableArray*) getReceivedMessagesInConversationOverHoursInDay:(int)startTime endTime:(int)endTime;
+
+- (NSMutableArray*) getThisConversationMessagesOverHoursInDay:(int)startTime endTime:(int)endTime;
+- (NSMutableArray*) getOtherMessagesOverHoursInDay:(int)startTime endTime:(int)endTime;
 
 @property (nonatomic) BOOL finishedAddingEntries;
 

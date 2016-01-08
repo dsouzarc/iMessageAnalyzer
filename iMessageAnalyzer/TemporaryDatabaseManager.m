@@ -374,6 +374,88 @@ static TemporaryDatabaseManager *databaseManager;
     return counters;
 }
 
+- (NSMutableArray*) getMySentWordsInConversationOverHoursInDay:(int)startTime endTime:(int)endTime
+{
+    NSString *query = [NSString stringWithFormat:@"SELECT date, wordCount FROM myMessages WHERE (date > %d AND date < %d) AND is_from_me='1'", startTime, endTime];
+    return [self getSumsOrganizedByHours:query];
+}
+
+- (NSMutableArray*) getReceivedWordsInConversationOverHoursInDay:(int)startTime endTime:(int)endTime
+{
+    NSString *query = [NSString stringWithFormat:@"SELECT date, wordCount FROM myMessages WHERE (date > %d AND date < %d) AND is_from_me='0'", startTime, endTime];
+    return [self getSumsOrganizedByHours:query];
+}
+
+- (NSMutableArray*) getMySentMessagesInConversationOverHoursInDay:(int)startTime endTime:(int)endTime
+{
+    NSString *query = [NSString stringWithFormat:@"SELECT date FROM myMessages WHERE (date > %d AND date < %d) AND is_from_me='1'", startTime, endTime];
+    return [self getCountsOrganizedByHours:query];
+}
+
+- (NSMutableArray*) getReceivedMessagesInConversationOverHoursInDay:(int)startTime endTime:(int)endTime
+{
+    NSString *query = [NSString stringWithFormat:@"SELECT date FROM myMessages WHERE (date > %d AND date < %d) AND is_from_me='1'", startTime, endTime];
+    return [self getCountsOrganizedByHours:query];
+}
+
+- (NSMutableArray*) getThisConversationMessagesOverHoursInDay:(int)startTime endTime:(int)endTime
+{
+    NSString *query = [NSString stringWithFormat:@"SELECT date FROM myMessages WHERE (date > %d AND date < %d)", startTime, endTime];
+    return [self getCountsOrganizedByHours:query];
+}
+
+- (NSMutableArray*) getOtherMessagesOverHoursInDay:(int)startTime endTime:(int)endTime
+{
+    NSString *query = [NSString stringWithFormat:@"SELECT date FROM myMessages WHERE (date > %d AND date < %d)", startTime, endTime];
+    return [self getCountsOrganizedByHours:query];
+}
+
+- (NSMutableArray*) getSumsOrganizedByHours:(NSString*)query
+{
+    NSMutableArray *mySentMessages = [[NSMutableArray alloc] init];
+    
+    for(int i = 0; i < 24; i++) {
+        [mySentMessages addObject:@(0)];
+    }
+    
+    sqlite3_stmt *statement;
+    if(sqlite3_prepare(_database, [query UTF8String], -1, &statement, NULL) == SQLITE_OK) {
+        while(sqlite3_step(statement) == SQLITE_ROW) {
+            int dateInSeconds = sqlite3_column_int(statement, 0);
+            int hour = [[Constants instance] getDateHourFromDateInSeconds:dateInSeconds];
+            
+            int wordCount = sqlite3_column_int(statement, 1);
+            int newValue = [mySentMessages[hour] intValue] + wordCount;
+            mySentMessages[hour] = @(newValue);
+        }
+    }
+    
+    sqlite3_finalize(statement);
+    return mySentMessages;
+}
+
+- (NSMutableArray*) getCountsOrganizedByHours:(NSString*)query
+{
+    NSMutableArray *mySentMessages = [[NSMutableArray alloc] init];
+    
+    for(int i = 0; i < 24; i++) {
+        [mySentMessages addObject:@(0)];
+    }
+    
+    sqlite3_stmt *statement;
+    if(sqlite3_prepare(_database, [query UTF8String], -1, &statement, NULL) == SQLITE_OK) {
+        while(sqlite3_step(statement) == SQLITE_ROW) {
+            int dateInSeconds = sqlite3_column_int(statement, 0);
+            int hour = [[Constants instance] getDateHourFromDateInSeconds:dateInSeconds];
+            int newValue = [mySentMessages[hour] intValue] + 1;
+            mySentMessages[hour] = @(newValue);
+        }
+    }
+    
+    sqlite3_finalize(statement);
+    return mySentMessages;
+}
+
 - (int) getMySentMessagesWordCountInConversation:(int)startTime endTime:(int)endTime
 {
     NSString *query = [NSString stringWithFormat:@"SELECT SUM(wordCount) FROM myMessagesTable WHERE (date > %d AND date < %d) AND is_from_me='1'", startTime, endTime];
