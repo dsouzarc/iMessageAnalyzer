@@ -22,6 +22,11 @@ typedef enum {
     totalMessages
 } BarPlotType;
 
+typedef enum {
+    mainPlot,
+    secondPlot
+} BarPlotIdentifier;
+
 @interface BarPlotViewController : NSViewController <CPTBarPlotDataSource, CPTBarPlotDelegate>
 
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil person:(Person *)person temporaryDatabase:(TemporaryDatabaseManager *)temporaryDatabase;
