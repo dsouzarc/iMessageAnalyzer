@@ -27,6 +27,7 @@ static NSString *secondPlotId = @"secondPlot";
 @property (nonatomic, readwrite, assign) double majorIntervalLengthForY;
 @property (nonatomic, readwrite, assign) double maximumYValueForFirstData;
 @property (nonatomic, readwrite, assign) double totalMaximumYValue;
+
 @property BOOL isZoomedOut;
 
 @property (nonatomic, readwrite, strong) NSArray<NSDictionary*> *mainDataPoints;
@@ -43,6 +44,9 @@ static NSString *secondPlotId = @"secondPlot";
 
 @property (strong, nonatomic) NSArray<NSDictionary*> *secondDataPoints;
 
+//All messages sorted into days --> myMessagesInDays[0] has all messages sent that day
+@property (strong, nonatomic) NSMutableArray<NSMutableArray*> *myMessagesInDays;
+@property (strong, nonatomic) NSMutableArray<NSMutableArray*> *otherMessagesInDays;
 
 @end
 
@@ -581,7 +585,7 @@ static NSString *secondPlotId = @"secondPlot";
 
 # pragma mark MISC_METHODS
 
-- (NSDictionary*) getMaxYAndPointsWithMessages:(NSMutableArray*)allMessages startTime:(int)startTime endTime:(int)endTime
+- (NSMutableArray<NSMutableArray*>*) sortIntoDays:(NSMutableArray*)allMessages startTime:(int)startTime endTime:(int)endTime
 {
     const CFTimeInterval methodStartTime = CACurrentMediaTime();
     
@@ -590,11 +594,10 @@ static NSString *secondPlotId = @"secondPlot";
     int counter = 0;
     int hour = 0;
     
-    double maxY = 0;
-    
-    NSMutableArray<NSDictionary*> *newData = [[NSMutableArray alloc] init];
+    NSMutableArray<NSMutableArray*> *daysMessages = [[NSMutableArray alloc] init];
     
     while(startTime < endTime && counter < allMessages.count) {
+        NSMutableArray *day = [[NSMutableArray alloc] init];
         NSDate *dateSent = nil;
         
         if([allMessages[counter] class] == [Message class]) {
@@ -612,12 +615,11 @@ static NSString *secondPlotId = @"secondPlot";
         
         //Message occurs after time interval
         if([dateSent timeIntervalSinceReferenceDate] > (startTime + timeInterval)) {
-            [newData addObject:@{@"x": @(hour), @"y": @(0)}];
+            [daysMessages addObject:day];
         }
         else {
-            int numMessages = 0;
             while([dateSent timeIntervalSinceReferenceDate] <= (startTime + timeInterval) && counter+1 < allMessages.count) {
-                numMessages++;
+                [day addObject:allMessages[counter]];
                 counter++;
                 
                 if([allMessages[counter] class] == [Message class]) {
@@ -626,15 +628,9 @@ static NSString *secondPlotId = @"secondPlot";
                 else if([allMessages[counter] class] == [NSMutableDictionary class] || [[NSString stringWithFormat:@"%@", [allMessages[counter] class]] isEqualToString:@"__NSDictionaryM"]) {
                     NSDictionary *message = allMessages[counter];
                     dateSent = [NSDate dateWithTimeIntervalSinceReferenceDate:[[message objectForKey:@"date"] intValue]];
-                    
                 }
             }
-            
-            [newData addObject:@{@"x": @(hour), @"y": @(numMessages)}];
-            
-            if(numMessages > maxY) {
-                maxY = numMessages;
-            }
+            [daysMessages addObject:day];
         }
         
         hour++;
@@ -642,7 +638,32 @@ static NSString *secondPlotId = @"secondPlot";
     }
     
     NSLog(@"executionTime for max values = %f", (CACurrentMediaTime() - methodStartTime));
-    NSDictionary *results = [NSDictionary dictionaryWithObjectsAndKeys:newData, @"points",
+
+    return daysMessages;
+}
+
+- (NSDictionary*) getMaxYAndPointsForMessages:(NSMutableArray<NSMutableArray*>*)daysMessages
+{
+    const CFTimeInterval methodStartTime = CACurrentMediaTime();
+    
+    NSMutableArray<NSDictionary*> *points = [[NSMutableArray alloc] init];
+    
+    int counter = 0;
+    double maxY = 0.0;
+    
+    for(NSMutableArray *dayMessages in daysMessages) {
+        double numMessagesOnDay = (int) dayMessages.count;
+        
+        if(numMessagesOnDay > maxY) {
+            maxY = numMessagesOnDay;
+        }
+        
+        [points addObject:@{@"x": @(counter), @"y": @(numMessagesOnDay)}];
+        counter++;
+    }
+    
+    NSLog(@"executionTime for max values = %f", (CACurrentMediaTime() - methodStartTime));
+    NSDictionary *results = [NSDictionary dictionaryWithObjectsAndKeys:points, @"points",
                              [NSNumber numberWithDouble:maxY], @"maxY", nil];
     return results;
 }
@@ -686,13 +707,14 @@ static NSString *secondPlotId = @"secondPlot";
     const int endTime = (int)[self.endDate timeIntervalSinceReferenceDate];
     int startTime = (int) [self.startDate timeIntervalSinceReferenceDate];
     
-    double minX = 0;
-    double maxX = [self.constants daysBetweenDates:self.startDate endDate:self.endDate] * 60 * 60; //60 * 60 * 365;
+    self.myMessagesInDays = [self sortIntoDays:allMessages startTime:startTime endTime:endTime];
     
-    double minY = 0;
-    
-    NSDictionary *data = [self getMaxYAndPointsWithMessages:allMessages startTime:startTime endTime:endTime];
+    NSDictionary *data = [self getMaxYAndPointsForMessages:self.myMessagesInDays];
     NSMutableArray<NSDictionary*> *newData = [data objectForKey:@"points"];
+    
+    const double minX = 0;
+    const double maxX = [self.constants daysBetweenDates:self.startDate endDate:self.endDate] * 60 * 60; //60 * 60 * 365;
+    const double minY = 0;
     const double maxY = [[data objectForKey:@"maxY"] doubleValue];
     
     self.totalMaximumYValue = maxY * (11.0 /10);
@@ -727,8 +749,6 @@ static NSString *secondPlotId = @"secondPlot";
     double labelLocation = 0;
 
     for(int i = 0; i < months; i++) {
-        
-        //TODO: MORE SPECIFIC THAN 30
         int num = [self.constants daysInMonthForDate:date]; //3
         labelLocation += (num / 2.0);
         
@@ -809,9 +829,12 @@ static NSString *secondPlotId = @"secondPlot";
             
         }
         
-        NSMutableArray *otherMessages = [self.messageManager getAllOtherMessagesFromStartTime:(int)[self.startDate timeIntervalSinceReferenceDate] endTime:(int)[self.endDate timeIntervalSinceReferenceDate]];
+        if(!self.otherMessagesInDays) {
+            NSMutableArray *otherMessages = [self.messageManager getAllOtherMessagesFromStartTime:(int)[self.startDate timeIntervalSinceReferenceDate] endTime:(int)[self.endDate timeIntervalSinceReferenceDate]];
+            self.otherMessagesInDays = [self sortIntoDays:otherMessages startTime:(int)[self.startDate timeIntervalSinceReferenceDate] endTime:(int)[self.endDate timeIntervalSinceReferenceDate]];
+        }
 
-        NSDictionary *results = [self getMaxYAndPointsWithMessages:otherMessages startTime:(int) [self.startDate timeIntervalSinceReferenceDate] endTime:(int) [self.endDate timeIntervalSinceReferenceDate]];
+        NSDictionary *results = [self getMaxYAndPointsForMessages:self.otherMessagesInDays];
         
         NSMutableArray<NSDictionary*> *points = [results objectForKey:@"points"];
         
