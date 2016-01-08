@@ -59,30 +59,63 @@
     [[self.pieChartViewController view] setFrame:self.view.frame];
     
     [self.view addSubview:self.dropPlotViewController.view];
+    [self.view addSubview:self.pieChartViewController.view];
+    
+    [self.pieChartViewController.view setHidden:YES];
     //[self.view addSubview:self.dropPlotViewController.view positioned:NSWindowAbove relativeTo:self.view];
 }
 
-- (IBAction)buttonClick:(id)sender {
+- (void) showPieChart
+{
+    [self.pieChartViewController.view setHidden:NO];
+    [self.dropPlotViewController.view setHidden:YES];
+}
 
+- (void) showDropPlot
+{
+    [self.pieChartViewController.view setHidden:YES];
+    [self.dropPlotViewController.view setHidden:NO];
+}
+
+- (void) disableAllCheckMarks
+{
+    [self.lineGraphDayViewButton setEnabled:NO];
+    [self.lineGraphCompareToOthersButton setEnabled:NO];
+}
+
+- (IBAction)buttonClick:(id)sender {
+    
+    [self disableAllCheckMarks];
+    
     if(sender == self.lineGraphAllTimeButton) {
-        [self.lineGraphDayViewButton setEnabled:NO];
+        [self showDropPlot];
+        [self.lineGraphCompareToOthersButton setEnabled:YES];
     }
+    
     else if(sender == self.lineGraphCourseOfDayButton) {
-        [self.lineGraphDayViewButton setEnabled:NO];
+        [self showDropPlot];
+        [self.lineGraphCompareToOthersButton setEnabled:YES];
     }
+    
     else if(sender == self.lineGraphMessagesButton) {
+        [self showDropPlot];
         [self.lineGraphDayViewButton setEnabled:YES];
         [self.dropPlotViewController showThisConversationSentAndReceivedMessages];
     }
+    
     else if(sender == self.lineGraphWordsButton) {
+        [self showDropPlot];
         [self.lineGraphDayViewButton setEnabled:YES];
         [self.dropPlotViewController showThisConversationSentAndReceivedWords];
     }
+    
     else if(sender == self.lineGraphDayViewButton) {
-        
+        [self showDropPlot];
     }
     
     else if(sender == self.lineGraphCompareToOthersButton) {
+        [self showDropPlot];
+        [self.lineGraphCompareToOthersButton setEnabled:YES];
         
         if(self.lineGraphCompareToOthersButton.state == NSOnState) {
             if(self.lineGraphAllTimeButton.state == NSOnState) {
@@ -95,8 +128,20 @@
     }
     
     else if(sender == self.pieChartSentAndReceivedMessages) {
-        [self.view addSubview:self.pieChartViewController.view];
+        [self showPieChart];
+        [self.pieChartViewController showSentAndReceivedMessages];
     }
+    
+    else if(sender == self.pieChartSentAndReceivedWords) {
+        [self showPieChart];
+        [self.pieChartViewController showSentAndReceivedWords];
+    }
+    
+    else if(sender == self.pieChartSentAndReceivedTotalMessages) {
+        [self showPieChart];
+        [self.pieChartViewController showTotalMessages];
+    }
+    
 }
 
 
