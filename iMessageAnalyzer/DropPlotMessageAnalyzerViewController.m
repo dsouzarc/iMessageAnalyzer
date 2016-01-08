@@ -8,8 +8,8 @@
 
 #import "DropPlotMessageAnalyzerViewController.h"
 
-static NSString *mainPlotId = @"mainPlot";
-static NSString *secondPlotId = @"secondPlot";
+static NSString *mainPlotId = @"Your Messages";
+static NSString *secondPlotId = @"Other Messages";
 
 @interface DropPlotMessageAnalyzerViewController ()
 
@@ -90,7 +90,7 @@ static NSString *secondPlotId = @"secondPlot";
     const int numMonths = [self.constants monthsBetweenDates:conversationStart endDate:conversationEnd];
     
     if(numMonths < 12) {
-        int spacingMonths = 12 - numMonths;
+        int spacingMonths = 2; //12 - numMonths;
         conversationStart = [self.constants dateBySubtractingMonths:conversationStart months:spacingMonths];
     }
     
@@ -202,10 +202,12 @@ static NSString *secondPlotId = @"secondPlot";
     self.graph.legend = theLegend;
     self.graph.legendAnchor = CPTRectAnchorTopRight;
     self.graph.legendDisplacement = CGPointMake(0.0, 0.0);
+    theLegend.delegate = self;
     
     [self.graph reloadData];
     [self zoomOut];
 }
+
 
 /****************************************************************
  *
