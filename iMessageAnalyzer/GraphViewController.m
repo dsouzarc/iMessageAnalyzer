@@ -105,7 +105,6 @@
         [self.dropPlotViewController showThisConversationSentAndReceivedWords];
     }
 
-    
     else if(sender == self.lineGraphCompareToOthersButton) {
         [self showDropPlot];
         [self.lineGraphCompareToOthersButton setEnabled:YES];
