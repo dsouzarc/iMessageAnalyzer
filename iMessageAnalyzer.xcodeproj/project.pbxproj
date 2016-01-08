@@ -10,6 +10,8 @@
 		940136CB1C0585A7003AF393 /* DropPlotMessageAnalyzerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 940136C91C0585A7003AF393 /* DropPlotMessageAnalyzerViewController.m */; };
 		940136CC1C0585A7003AF393 /* DropPlotMessageAnalyzerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 940136CA1C0585A7003AF393 /* DropPlotMessageAnalyzerViewController.xib */; };
 		940136D81C05C7CF003AF393 /* TemporaryDatabaseManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 940136D71C05C7CF003AF393 /* TemporaryDatabaseManager.m */; };
+		940878FA1C40158D006F6C87 /* PieChartViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 940878F81C40158D006F6C87 /* PieChartViewController.m */; };
+		940878FB1C40158D006F6C87 /* PieChartViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 940878F91C40158D006F6C87 /* PieChartViewController.xib */; };
 		941C04F31C028B12002E2FAB /* NSTextField+Messages.m in Sources */ = {isa = PBXBuildFile; fileRef = 941C04F21C028B12002E2FAB /* NSTextField+Messages.m */; };
 		941C04F71C02C586002E2FAB /* ViewAttachmentsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 941C04F51C02C586002E2FAB /* ViewAttachmentsViewController.m */; };
 		941C04F81C02C586002E2FAB /* ViewAttachmentsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 941C04F61C02C586002E2FAB /* ViewAttachmentsViewController.xib */; };
@@ -134,6 +136,9 @@
 		940136CA1C0585A7003AF393 /* DropPlotMessageAnalyzerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DropPlotMessageAnalyzerViewController.xib; sourceTree = "<group>"; };
 		940136D61C05C7CF003AF393 /* TemporaryDatabaseManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TemporaryDatabaseManager.h; sourceTree = "<group>"; };
 		940136D71C05C7CF003AF393 /* TemporaryDatabaseManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TemporaryDatabaseManager.m; sourceTree = "<group>"; };
+		940878F71C40158D006F6C87 /* PieChartViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PieChartViewController.h; sourceTree = "<group>"; };
+		940878F81C40158D006F6C87 /* PieChartViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PieChartViewController.m; sourceTree = "<group>"; };
+		940878F91C40158D006F6C87 /* PieChartViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PieChartViewController.xib; sourceTree = "<group>"; };
 		941C04F11C028B12002E2FAB /* NSTextField+Messages.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSTextField+Messages.h"; sourceTree = "<group>"; };
 		941C04F21C028B12002E2FAB /* NSTextField+Messages.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSTextField+Messages.m"; sourceTree = "<group>"; };
 		941C04F41C02C586002E2FAB /* ViewAttachmentsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewAttachmentsViewController.h; sourceTree = "<group>"; };
@@ -235,6 +240,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		940879061C401591006F6C87 /* PieChartViewController */ = {
+			isa = PBXGroup;
+			children = (
+				940878F71C40158D006F6C87 /* PieChartViewController.h */,
+				940878F81C40158D006F6C87 /* PieChartViewController.m */,
+				940878F91C40158D006F6C87 /* PieChartViewController.xib */,
+			);
+			name = PieChartViewController;
+			sourceTree = "<group>";
+		};
 		941C04F91C030086002E2FAB /* NSTextField for Messages */ = {
 			isa = PBXGroup;
 			children = (
@@ -495,6 +510,7 @@
 			isa = PBXGroup;
 			children = (
 				94F8CDB31C3B39F500E58BB3 /* Constants */,
+				940879061C401591006F6C87 /* PieChartViewController */,
 				942A0B531C38920000C89982 /* DropPlot View Controller */,
 				942A0B521C3891E100C89982 /* Graph View Controller */,
 				9480B16C1BF7B94B00ECDE38 /* More Analysis View Controller */,
@@ -744,6 +760,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9480B1651BF7B5F300ECDE38 /* MoreAnalysisWindowController.xib in Resources */,
+				940878FB1C40158D006F6C87 /* PieChartViewController.xib in Resources */,
 				94A992471BBDC733003BA1D5 /* Assets.xcassets in Resources */,
 				944E19581BE540E9005132E1 /* blank_profile_outline.png in Resources */,
 				9438FD081BE07CFF00B239BE /* MainWindowController.xib in Resources */,
@@ -791,6 +808,7 @@
 				942A0B471C37069A00C89982 /* Constants.m in Sources */,
 				940136CB1C0585A7003AF393 /* DropPlotMessageAnalyzerViewController.m in Sources */,
 				9438FD071BE07CFF00B239BE /* MainWindowController.m in Sources */,
+				940878FA1C40158D006F6C87 /* PieChartViewController.m in Sources */,
 				948AE96A1BF976170031D97C /* WordFrequencyHeapDataStructure.m in Sources */,
 				945037121BF59F4700F995E7 /* SimpleAnalyticsPopUpViewController.m in Sources */,
 				94A992451BBDC733003BA1D5 /* ViewController.m in Sources */,
