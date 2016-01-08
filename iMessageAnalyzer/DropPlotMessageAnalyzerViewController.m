@@ -589,62 +589,6 @@ static NSString *secondPlotId = @"Other Messages";
 
 # pragma mark MISC_METHODS
 
-- (NSMutableArray<NSMutableArray*>*) sortIntoDays:(NSMutableArray*)allMessages startTime:(int)startTime endTime:(int)endTime
-{
-    const CFTimeInterval methodStartTime = CACurrentMediaTime();
-    
-    const int timeInterval = 60 * 60 * 24;
-    
-    int counter = 0;
-    int hour = 0;
-    
-    NSMutableArray<NSMutableArray*> *daysMessages = [[NSMutableArray alloc] init];
-    
-    while(startTime < endTime && counter < allMessages.count) {
-        NSMutableArray *day = [[NSMutableArray alloc] init];
-        NSDate *dateSent = nil;
-        
-        if([allMessages[counter] class] == [Message class]) {
-            dateSent = ((Message*)allMessages[counter]).dateSent;
-        }
-        else if([allMessages[counter] class] == [NSMutableDictionary class] || [[NSString stringWithFormat:@"%@", [allMessages[counter] class]] isEqualToString:@"__NSDictionaryM"]) {
-            NSDictionary *message = allMessages[counter];
-            dateSent = [NSDate dateWithTimeIntervalSinceReferenceDate:[[message objectForKey:@"date"] intValue]];
-        }
-        
-        if(!dateSent) {
-            NSLog(@"ERROR HERE\t%@", [allMessages[counter] class]);
-            break;
-        }
-        
-        //Message occurs after time interval
-        if([dateSent timeIntervalSinceReferenceDate] > (startTime + timeInterval)) {
-            [daysMessages addObject:day];
-        }
-        else {
-            while([dateSent timeIntervalSinceReferenceDate] <= (startTime + timeInterval) && counter+1 < allMessages.count) {
-                [day addObject:allMessages[counter]];
-                counter++;
-                
-                if([allMessages[counter] class] == [Message class]) {
-                    dateSent = ((Message*)allMessages[counter]).dateSent;
-                }
-                else if([allMessages[counter] class] == [NSMutableDictionary class] || [[NSString stringWithFormat:@"%@", [allMessages[counter] class]] isEqualToString:@"__NSDictionaryM"]) {
-                    NSDictionary *message = allMessages[counter];
-                    dateSent = [NSDate dateWithTimeIntervalSinceReferenceDate:[[message objectForKey:@"date"] intValue]];
-                }
-            }
-            [daysMessages addObject:day];
-        }
-        
-        hour++;
-        startTime += timeInterval;
-    }
-    
-    NSLog(@"executionTime for max values = %f", (CACurrentMediaTime() - methodStartTime));
-
-    return daysMessages;
-}
 
 - (NSDictionary*) getMaxYAndPointsForMessages:(NSMutableArray<NSMutableArray*>*)daysMessages countWords:(BOOL)countWords
 {
@@ -790,7 +734,7 @@ static NSString *secondPlotId = @"Other Messages";
     const int endTime = (int)[self.endDate timeIntervalSinceReferenceDate];
     int startTime = (int) [self.startDate timeIntervalSinceReferenceDate];
     
-    self.myMessagesInDays = [self sortIntoDays:allMessages startTime:startTime endTime:endTime];
+    self.myMessagesInDays = [self.messageManager sortIntoDays:allMessages startTime:startTime endTime:endTime];
     
     NSDictionary *data = [self getMaxYAndPointsForMessages:self.myMessagesInDays];
     NSMutableArray<NSDictionary*> *newData = [data objectForKey:@"points"];
@@ -914,7 +858,7 @@ static NSString *secondPlotId = @"Other Messages";
         
         if(!self.otherMessagesInDays) {
             NSMutableArray *otherMessages = [self.messageManager getAllOtherMessagesFromStartTime:(int)[self.startDate timeIntervalSinceReferenceDate] endTime:(int)[self.endDate timeIntervalSinceReferenceDate]];
-            self.otherMessagesInDays = [self sortIntoDays:otherMessages startTime:(int)[self.startDate timeIntervalSinceReferenceDate] endTime:(int)[self.endDate timeIntervalSinceReferenceDate]];
+            self.otherMessagesInDays = [self.messageManager sortIntoDays:otherMessages startTime:(int)[self.startDate timeIntervalSinceReferenceDate] endTime:(int)[self.endDate timeIntervalSinceReferenceDate]];
         }
 
         NSDictionary *results = [self getMaxYAndPointsForMessages:self.otherMessagesInDays];

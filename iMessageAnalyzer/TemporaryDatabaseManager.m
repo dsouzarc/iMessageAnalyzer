@@ -19,6 +19,7 @@ static TemporaryDatabaseManager *databaseManager;
 
 @property (strong, nonatomic) Person *person;
 @property (strong, nonatomic) NSCalendar *calendar;
+
 @property sqlite3 *database;
 
 @end
@@ -415,6 +416,62 @@ static TemporaryDatabaseManager *databaseManager;
     return results;
 }
 
+- (NSMutableArray<NSMutableArray*>*) sortIntoDays:(NSMutableArray*)allMessages startTime:(int)startTime endTime:(int)endTime
+{
+    const CFTimeInterval methodStartTime = CACurrentMediaTime();
+    
+    const int timeInterval = 60 * 60 * 24;
+    
+    int counter = 0;
+    int hour = 0;
+    
+    NSMutableArray<NSMutableArray*> *daysMessages = [[NSMutableArray alloc] init];
+    
+    while(startTime < endTime && counter < allMessages.count) {
+        NSMutableArray *day = [[NSMutableArray alloc] init];
+        NSDate *dateSent = nil;
+        
+        if([allMessages[counter] class] == [Message class]) {
+            dateSent = ((Message*)allMessages[counter]).dateSent;
+        }
+        else if([allMessages[counter] class] == [NSMutableDictionary class] || [[NSString stringWithFormat:@"%@", [allMessages[counter] class]] isEqualToString:@"__NSDictionaryM"]) {
+            NSDictionary *message = allMessages[counter];
+            dateSent = [NSDate dateWithTimeIntervalSinceReferenceDate:[[message objectForKey:@"date"] intValue]];
+        }
+        
+        if(!dateSent) {
+            NSLog(@"ERROR HERE\t%@", [allMessages[counter] class]);
+            break;
+        }
+        
+        //Message occurs after time interval
+        if([dateSent timeIntervalSinceReferenceDate] > (startTime + timeInterval)) {
+            [daysMessages addObject:day];
+        }
+        else {
+            while([dateSent timeIntervalSinceReferenceDate] <= (startTime + timeInterval) && counter+1 < allMessages.count) {
+                [day addObject:allMessages[counter]];
+                counter++;
+                
+                if([allMessages[counter] class] == [Message class]) {
+                    dateSent = ((Message*)allMessages[counter]).dateSent;
+                }
+                else if([allMessages[counter] class] == [NSMutableDictionary class] || [[NSString stringWithFormat:@"%@", [allMessages[counter] class]] isEqualToString:@"__NSDictionaryM"]) {
+                    NSDictionary *message = allMessages[counter];
+                    dateSent = [NSDate dateWithTimeIntervalSinceReferenceDate:[[message objectForKey:@"date"] intValue]];
+                }
+            }
+            [daysMessages addObject:day];
+        }
+        
+        hour++;
+        startTime += timeInterval;
+    }
+    
+    NSLog(@"executionTime for max values = %f", (CACurrentMediaTime() - methodStartTime));
+    
+    return daysMessages;
+}
 
 /****************************************************************
  *

@@ -33,6 +33,8 @@
 - (NSMutableArray*) getAllMessageTimingsInConversation;
 - (NSMutableArray*) getAllMessageTimingsForAll;
 
+- (NSMutableArray<NSMutableArray*>*) sortIntoDays:(NSMutableArray*)allMessages startTime:(int)startTime endTime:(int)endTime;
+
 #pragma GET_COUNTS
 
 - (NSMutableArray*) getConversationAndOtherMessagesCountStartTime:(int)startTime endTime:(int)endTime;
