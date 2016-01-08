@@ -87,7 +87,7 @@
                 </textField>
                 <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UII-NS-NI9">
                     <rect key="frame" x="1011" y="210" width="79" height="18"/>
-                    <buttonCell key="cell" type="check" title="Day View" bezelStyle="regularSquare" imagePosition="left" inset="2" id="O4O-qv-I3e">
+                    <buttonCell key="cell" type="check" title="Day View" bezelStyle="regularSquare" imagePosition="left" enabled="NO" inset="2" id="O4O-qv-I3e">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
