@@ -6,6 +6,12 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="GraphViewController">
             <connections>
+                <outlet property="lineGraphAllTimeButton" destination="uo4-az-g0P" id="EFa-oB-Yzl"/>
+                <outlet property="lineGraphCompareToOthersButton" destination="eLF-hX-Iig" id="Jj6-pK-AXu"/>
+                <outlet property="lineGraphCourseOfDayButton" destination="KUR-0p-cdk" id="hVq-a1-PDv"/>
+                <outlet property="lineGraphDayViewButton" destination="UII-NS-NI9" id="e2O-tM-5H0"/>
+                <outlet property="lineGraphMessagesButton" destination="XVr-iI-FkL" id="dfC-CE-upc"/>
+                <outlet property="lineGraphWordsButton" destination="nc2-NJ-qca" id="hzQ-lz-or2"/>
                 <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
             </connections>
         </customObject>
@@ -31,10 +37,13 @@
                 </textField>
                 <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uo4-az-g0P">
                     <rect key="frame" x="933" y="300" width="157" height="18"/>
-                    <buttonCell key="cell" type="radio" title="All Time" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="Zgl-nW-O6O">
+                    <buttonCell key="cell" type="radio" title="All Time" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="Zgl-nW-O6O">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
+                    <connections>
+                        <action selector="buttonClick:" target="-2" id="kXH-A0-xPB"/>
+                    </connections>
                 </button>
                 <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XVr-iI-FkL">
                     <rect key="frame" x="933" y="227" width="85" height="18"/>
@@ -42,6 +51,9 @@
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
+                    <connections>
+                        <action selector="buttonClick:" target="-2" id="zX4-vn-hXF"/>
+                    </connections>
                 </button>
                 <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nc2-NJ-qca">
                     <rect key="frame" x="933" y="199" width="110" height="18"/>
@@ -49,13 +61,9 @@
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
-                </button>
-                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KUR-0p-cdk">
-                    <rect key="frame" x="933" y="276" width="110" height="18"/>
-                    <buttonCell key="cell" type="radio" title="Course of Day" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="90T-1S-44w">
-                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                        <font key="font" metaFont="system"/>
-                    </buttonCell>
+                    <connections>
+                        <action selector="buttonClick:" target="-2" id="cvz-TB-Oip"/>
+                    </connections>
                 </button>
                 <box verticalHuggingPriority="750" fixedFrame="YES" title="Box" boxType="separator" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="fnC-rq-Fec">
                     <rect key="frame" x="913" y="368" width="183" height="5"/>
@@ -77,6 +85,16 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
+                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UII-NS-NI9">
+                    <rect key="frame" x="1011" y="210" width="79" height="18"/>
+                    <buttonCell key="cell" type="check" title="Day View" bezelStyle="regularSquare" imagePosition="left" inset="2" id="O4O-qv-I3e">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="buttonClick:" target="-2" id="PEg-U2-Wfz"/>
+                    </connections>
+                </button>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Bqa-2S-L4B">
                     <rect key="frame" x="930" y="252" width="160" height="17"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Sent and Received" id="Xec-fQ-PdW">
@@ -87,17 +105,23 @@
                 </textField>
                 <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eLF-hX-Iig">
                     <rect key="frame" x="932" y="171" width="140" height="18"/>
-                    <buttonCell key="cell" type="check" title="Compare to Others" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="v28-uE-rZ7">
+                    <buttonCell key="cell" type="check" title="Compare to Others" bezelStyle="regularSquare" imagePosition="left" inset="2" id="v28-uE-rZ7">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
+                    <connections>
+                        <action selector="buttonClick:" target="-2" id="vuo-wK-Uuw"/>
+                    </connections>
                 </button>
-                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UII-NS-NI9">
-                    <rect key="frame" x="1011" y="210" width="79" height="18"/>
-                    <buttonCell key="cell" type="check" title="Day View" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="O4O-qv-I3e">
+                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KUR-0p-cdk">
+                    <rect key="frame" x="933" y="276" width="110" height="18"/>
+                    <buttonCell key="cell" type="radio" title="Course of Day" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="90T-1S-44w">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
+                    <connections>
+                        <action selector="buttonClick:" target="-2" id="EQI-gW-Tgo"/>
+                    </connections>
                 </button>
             </subviews>
             <point key="canvasLocation" x="21" y="276"/>

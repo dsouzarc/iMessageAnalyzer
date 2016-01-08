@@ -18,6 +18,14 @@
 
 @property (strong, nonatomic) DropPlotMessageAnalyzerViewController *dropPlotViewController;
 
+@property (strong) IBOutlet NSButton *lineGraphAllTimeButton;
+@property (strong) IBOutlet NSButton *lineGraphCourseOfDayButton;
+@property (strong) IBOutlet NSButton *lineGraphMessagesButton;
+@property (strong) IBOutlet NSButton *lineGraphWordsButton;
+@property (strong) IBOutlet NSButton *lineGraphDayViewButton;
+@property (strong) IBOutlet NSButton *lineGraphCompareToOthersButton;
+
+
 @end
 
 @implementation GraphViewController
@@ -45,5 +53,28 @@
     [self.view addSubview:self.dropPlotViewController.view];
     //[self.view addSubview:self.dropPlotViewController.view positioned:NSWindowAbove relativeTo:self.view];
 }
+
+- (IBAction)buttonClick:(id)sender {
+    if(sender == self.lineGraphAllTimeButton) {
+        [self.lineGraphDayViewButton setEnabled:NO];
+    }
+    else if(sender == self.lineGraphCourseOfDayButton) {
+        [self.lineGraphDayViewButton setEnabled:NO];
+    }
+    else if(sender == self.lineGraphMessagesButton) {
+        [self.lineGraphDayViewButton setEnabled:YES];
+    }
+    else if(sender == self.lineGraphWordsButton) {
+        [self.lineGraphDayViewButton setEnabled:YES];
+    }
+    else if(sender == self.lineGraphDayViewButton) {
+        
+    }
+    else if(sender == self.lineGraphCompareToOthersButton) {
+        
+    }
+}
+
+
 
 @end
