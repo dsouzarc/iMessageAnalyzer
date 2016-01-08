@@ -18,6 +18,7 @@
 
 @property (strong, nonatomic) DropPlotMessageAnalyzerViewController *dropPlotViewController;
 @property (strong, nonatomic) PieChartViewController *pieChartViewController;
+@property (strong, nonatomic) BarPlotViewController *barPlotViewController;
 
 @property (strong) IBOutlet NSButton *lineGraphAllTimeButton;
 @property (strong) IBOutlet NSButton *lineGraphCourseOfDayButton;
@@ -28,6 +29,11 @@
 @property (strong) IBOutlet NSButton *pieChartSentAndReceivedMessages;
 @property (strong) IBOutlet NSButton *pieChartSentAndReceivedWords;
 @property (strong) IBOutlet NSButton *pieChartSentAndReceivedTotalMessages;
+
+@property (strong) IBOutlet NSButton *barChartSentAndReceivedMessages;
+@property (strong) IBOutlet NSButton *barChartSentAndReceivedWords;
+@property (strong) IBOutlet NSButton *barChartTotalMessages;
+
 
 @end
 
@@ -46,6 +52,8 @@
         self.dropPlotViewController = [[DropPlotMessageAnalyzerViewController alloc] initWithNibName:@"DropPlotMessageAnalyzerViewController" bundle:nibBundleOrNil person:self.person temporaryDatabase:self.database firstMessageDate:self.firstMessage];
         
         self.pieChartViewController = [[PieChartViewController alloc] initWithNibName:@"PieChartViewController" bundle:[NSBundle mainBundle] person:self.person temporaryDatabase:self.database];
+        
+        self.barPlotViewController = [[BarPlotViewController alloc] initWithNibName:@"BarPlotViewController" bundle:[NSBundle mainBundle] person:self.person temporaryDatabase:self.database];
     }
     
     return self;
@@ -56,24 +64,34 @@
     
     [[self.dropPlotViewController view] setFrame:self.view.frame];
     [[self.pieChartViewController view] setFrame:self.view.frame];
+    [[self.barPlotViewController view] setFrame:self.view.frame];
     
     [self.view addSubview:self.dropPlotViewController.view];
     [self.view addSubview:self.pieChartViewController.view];
+    [self.view addSubview:self.barPlotViewController.view];
     
-    [self.pieChartViewController.view setHidden:YES];
-    //[self.view addSubview:self.dropPlotViewController.view positioned:NSWindowAbove relativeTo:self.view];
+    [self showDropPlot];
 }
 
 - (void) showPieChart
 {
     [self.pieChartViewController.view setHidden:NO];
     [self.dropPlotViewController.view setHidden:YES];
+    [self.barPlotViewController.view setHidden:YES];
 }
 
 - (void) showDropPlot
 {
-    [self.pieChartViewController.view setHidden:YES];
     [self.dropPlotViewController.view setHidden:NO];
+    [self.pieChartViewController.view setHidden:YES];
+    [self.barPlotViewController.view setHidden:YES];
+}
+
+- (void) showBarPlot
+{
+    [self.barPlotViewController.view setHidden:NO];
+    [self.dropPlotViewController.view setHidden:YES];
+    [self.pieChartViewController.view setHidden:YES];
 }
 
 - (void) disableAllCheckMarks
@@ -132,6 +150,21 @@
     else if(sender == self.pieChartSentAndReceivedTotalMessages) {
         [self showPieChart];
         [self.pieChartViewController showTotalMessages];
+    }
+    
+    else if(sender == self.barChartSentAndReceivedMessages) {
+        [self showBarPlot];
+        [self.barPlotViewController showSentAndReceivedMessages];
+    }
+    
+    else if(sender == self.barChartSentAndReceivedWords) {
+        [self showBarPlot];
+        [self.barPlotViewController showSentAndReceivedWords];
+    }
+    
+    else if(sender == self.barChartTotalMessages) {
+        [self showBarPlot];
+        [self.barPlotViewController showTotalMessages];
     }
     
 }
