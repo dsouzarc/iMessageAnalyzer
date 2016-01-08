@@ -63,9 +63,11 @@
     }
     else if(sender == self.lineGraphMessagesButton) {
         [self.lineGraphDayViewButton setEnabled:YES];
+        [self.dropPlotViewController showThisConversationSentAndReceivedMessages];
     }
     else if(sender == self.lineGraphWordsButton) {
         [self.lineGraphDayViewButton setEnabled:YES];
+        [self.dropPlotViewController showThisConversationSentAndReceivedWords];
     }
     else if(sender == self.lineGraphDayViewButton) {
         
