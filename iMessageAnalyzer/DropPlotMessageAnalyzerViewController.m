@@ -642,6 +642,85 @@ static NSString *secondPlotId = @"secondPlot";
     return daysMessages;
 }
 
+- (NSDictionary*) getMaxYAndPointsForMessages:(NSMutableArray<NSMutableArray*>*)daysMessages countWords:(BOOL)countWords
+{
+    const CFTimeInterval methodStartTime = CACurrentMediaTime();
+    
+    NSMutableArray<NSDictionary*> *myPoints = [[NSMutableArray alloc] init];
+    NSMutableArray<NSDictionary*> *otherPoints = [[NSMutableArray alloc] init];
+    
+    int counter = 0;
+    double maxY = 0.0;
+    
+    for(NSMutableArray *dayMessages in daysMessages) {
+        
+        int myMessages = 0;
+        int otherMessages = 0;
+        
+        if(dayMessages.count > 0 && [dayMessages[0] class] == [Message class]) {
+            for(Message *message in dayMessages) {
+                
+                if(countWords) {
+                    int wordCount = (int) [message.messageText componentsSeparatedByString:@" "].count;
+                    if(message.isFromMe) {
+                        myMessages += wordCount;
+                    }
+                    else {
+                        otherMessages += wordCount;
+                    }
+                }
+                else {
+                    if(message.isFromMe) {
+                        myMessages++;
+                    }
+                    else {
+                        otherMessages++;
+                    }
+                }
+            }
+        }
+        else if(dayMessages.count > 0 && ([dayMessages[0] class] == [NSMutableDictionary class] || [[NSString stringWithFormat:@"%@", [dayMessages[0] class]] isEqualToString:@"__NSDictionaryM"])) {
+            for(NSMutableDictionary *dictionary in dayMessages) {
+                
+                BOOL isFromMe = [dictionary[@"isFromMe"] boolValue];
+                
+                if(isFromMe) {
+                    if(countWords) {
+                        myMessages += [dictionary[@"wordCount"] intValue];
+                    }
+                    else {
+                        myMessages++;
+                    }
+                }
+                else {
+                    if(countWords) {
+                        otherMessages += [dictionary[@"wordCount"] intValue];
+                    }
+                    else {
+                        otherMessages++;
+                    }
+                }
+            }
+        }
+        
+        [myPoints addObject:@{@"x": @(counter), @"y": @(myMessages)}];
+        [otherPoints addObject:@{@"x": @(counter), @"y": @(otherMessages)}];
+        
+        if(MAX(myMessages, otherMessages) > maxY) {
+            maxY = MAX(myMessages, otherMessages);
+        }
+    
+        counter++;
+    }
+
+    
+    NSLog(@"executionTime for max values = %f", (CACurrentMediaTime() - methodStartTime));
+    NSDictionary *results = [NSDictionary dictionaryWithObjectsAndKeys:myPoints, @"myPoints",
+                             otherPoints, @"otherPoints",
+                             [NSNumber numberWithDouble:maxY], @"maxY", nil];
+    return results;
+}
+
 - (NSDictionary*) getMaxYAndPointsForMessages:(NSMutableArray<NSMutableArray*>*)daysMessages
 {
     const CFTimeInterval methodStartTime = CACurrentMediaTime();
@@ -846,15 +925,47 @@ static NSString *secondPlotId = @"secondPlot";
         self.secondDataPoints = points;
 
         dispatch_async(dispatch_get_main_queue(), ^(void) {
-            CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *) self.graph.defaultPlotSpace;
-            plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:@(0)
-                                                            length:@(self.totalMaximumYValue)];
-            
-            CPTXYAxisSet *axisSet = (CPTXYAxisSet *)self.graph.axisSet;
-            axisSet.yAxis.majorIntervalLength = @([self getScale:self.totalMaximumYValue]);
-            [self.graph reloadData];
+            [self resetGraphAxis];
         });
     });
+}
+
+- (void) showThisConversationSentAndReceivedMessages
+{
+    NSDictionary *results = [self getMaxYAndPointsForMessages:self.myMessagesInDays countWords:NO];
+    [self thisConversationSentAndReceivedMessages:results];
+}
+
+- (void) showThisConversationSentAndReceivedWords
+{
+    NSDictionary *results = [self getMaxYAndPointsForMessages:self.myMessagesInDays countWords:YES];
+    [self thisConversationSentAndReceivedMessages:results];
+}
+
+- (void) thisConversationSentAndReceivedMessages:(NSDictionary*)results
+{
+    NSMutableArray<NSDictionary*> *myPoints = results[@"myPoints"];
+    NSMutableArray<NSDictionary*> *otherPoints = results[@"otherPoints"];
+    double maxY = [results[@"maxY"] doubleValue] * (11.0 / 10);
+    
+    self.maximumValueForYAxis = maxY;
+    self.totalMaximumYValue = maxY;
+    
+    self.mainDataPoints = myPoints;
+    self.secondDataPoints = otherPoints;
+    
+    [self resetGraphAxis];
+}
+
+- (void) resetGraphAxis
+{
+    CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *) self.graph.defaultPlotSpace;
+    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:@(0)
+                                                    length:@(self.totalMaximumYValue)];
+    
+    CPTXYAxisSet *axisSet = (CPTXYAxisSet *)self.graph.axisSet;
+    axisSet.yAxis.majorIntervalLength = @([self getScale:self.totalMaximumYValue]);
+    [self.graph reloadData];
 }
 
 
