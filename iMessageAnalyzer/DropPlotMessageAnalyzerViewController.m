@@ -131,7 +131,6 @@ static NSString *secondPlotId = @"secondPlot";
                                                           length:@(numDays)]];
     [plotSpace setYRange:[CPTPlotRange plotRangeWithLocation:@(0)
                                                           length:@(self.totalMaximumYValue)]];
-    
     [plotSpace setAllowsUserInteraction:YES];
     plotSpace.delegate = self;
 
@@ -168,8 +167,8 @@ static NSString *secondPlotId = @"secondPlot";
     yAxis.labelingPolicy = CPTAxisLabelingPolicyFixedInterval;
     //yAxis.minorTicksPerInterval = 9;
     yAxis.axisConstraints = [CPTConstraints constraintWithLowerOffset:0.0];
-    yAxis.majorIntervalLength = @([self getScale:(self.totalMaximumYValue)]);
-    
+    yAxis.majorIntervalLength = @([self getScale:(int)self.totalMaximumYValue]);
+
     //X AXIS
     CPTXYAxis *xAxis = [axisSet xAxis];
     xAxis.labelingPolicy = CPTAxisLabelingPolicyNone;
@@ -188,17 +187,24 @@ static NSString *secondPlotId = @"secondPlot";
     plotSymbol.size = CGSizeMake(5.0, 5.0);
     mainPlot.plotSymbol = plotSymbol;
     
-    plotSymbol = [CPTPlotSymbol ellipsePlotSymbol];
-    plotSymbol.fill = [CPTFill fillWithColor:secondPlot.dataLineStyle.lineColor];
-    plotSymbol.size = CGSizeMake(5.0, 5.0);
-    //secondPlot.plotSymbol = plotSymbol;
-    
     [self.graph addPlot:mainPlot toPlotSpace:plotSpace];
     [self.graph addPlot:secondPlot toPlotSpace:plotSpace];
     
-    [plotSpace scaleToFitPlots:[NSArray arrayWithObjects:mainPlot, secondPlot, nil]];
+    NSArray *plots = [NSArray arrayWithObjects:mainPlot, secondPlot, nil];
+    [plotSpace scaleToFitPlots:plots];
+    
+    CPTLegend *theLegend = [CPTLegend legendWithPlots:plots];
+    theLegend.numberOfColumns = 1;
+    [textStyle setFontSize:10.0f];
+    [textStyle setColor:[CPTColor whiteColor]];
+    theLegend.textStyle = textStyle;
+    theLegend.cornerRadius = 5.0;
+    self.graph.legend = theLegend;
+    self.graph.legendAnchor = CPTRectAnchorTopRight;
+    self.graph.legendDisplacement = CGPointMake(0.0, 0.0);
     
     [self.graph reloadData];
+    [self zoomOut];
 }
 
 /****************************************************************
@@ -339,12 +345,10 @@ static NSString *secondPlotId = @"secondPlot";
         case mainPlot:
             yValue = [self.mainDataPoints[idx][@"y"] stringValue];
             y = self.mainDataPoints[idx][@"y"];
-            NSLog(@"CLICKED FIRST: %@\t%@", self.mainDataPoints[idx][@"x"], self.mainDataPoints[idx][@"y"]);
             break;
         case secondPlot:
             yValue = [self.secondDataPoints[idx][@"y"] stringValue];
             y = self.secondDataPoints[idx][@"y"];
-            NSLog(@"CLICKED SECOND: %@\t%@", self.secondDataPoints[idx][@"x"], self.secondDataPoints[idx][@"y"]);
             break;
         default:
             NSLog(@"NIL IN plotSymbolWasSelectedAtRecordIndex");
@@ -361,7 +365,6 @@ static NSString *secondPlotId = @"secondPlot";
     self.yValueAnnotation.displacement = CGPointMake(0.0f, 10.0f);
     [self.graph.plotAreaFrame.plotArea addAnnotation:self.yValueAnnotation];
 }
-
 
 /****************************************************************
  *
@@ -570,7 +573,6 @@ static NSString *secondPlotId = @"secondPlot";
     axisSet.xAxis.axisLabels = results[@"tickLabels"];
     axisSet.xAxis.labelingPolicy = CPTAxisLabelingPolicyNone;
     
-    axisSet.yAxis.labelingPolicy = CPTAxisLabelingPolicyAutomatic; //CPTAxisLabelingPolicyNone;
     axisSet.yAxis.labelingPolicy = CPTAxisLabelingPolicyFixedInterval;
     axisSet.yAxis.axisConstraints = [CPTConstraints constraintWithLowerOffset:0.0];
     axisSet.yAxis.majorIntervalLength = @([self getScale:self.totalMaximumYValue]);
