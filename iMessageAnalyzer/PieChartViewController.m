@@ -16,6 +16,8 @@
 @property (strong, nonatomic) TemporaryDatabaseManager *messageManager;
 @property (strong, nonatomic) Person *person;
 
+@property PieType pieType;
+
 @end
 
 @implementation PieChartViewController
@@ -27,6 +29,7 @@
     if(self) {
         self.messageManager = temporaryDatabase;
         self.person = person;
+        self.pieType = sentAndReceivedWords;
     }
     
     return self;
@@ -59,7 +62,17 @@
 
 - (NSString*) legendTitleForPieChart:(CPTPieChart *)pieChart recordIndex:(NSUInteger)idx
 {
-    return @"HELLO";
+    switch (self.pieType) {
+        case sentAndReceivedWords:
+            return idx == 0 ? @"My Sent Words" : [NSString stringWithFormat:@"%@'s Sent Words", self.person.personName];
+        case sentAndReceivedMessages:
+            return idx == 0 ? @"My Sent Messages" : [NSString stringWithFormat:@"%@'s Sent Messages", self.person.personName];
+        case totalMessages:
+            return idx == 0 ? @"This Conversation's Messages" : @"All Other Messages";
+        default:
+            break;
+    }
+    return @"Error";
 }
 
 - (NSUInteger) numberOfRecordsForPlot:(CPTPlot *)plot
@@ -69,11 +82,36 @@
 
 - (id) numberForPlot:(CPTPlot *)plot field:(NSUInteger)fieldEnum recordIndex:(NSUInteger)idx
 {
-    return @(10);
+    switch (self.pieType) {
+        case sentAndReceivedWords:
+            return idx == 0 ? @([self.messageManager getMySentMessagesWordCountInConversation:0 endTime:INT_MAX]) : @([self.messageManager getMyReceivedMessagesWordCountInConversation:0 endTime:INT_MAX]);
+            
+        case sentAndReceivedMessages:
+            return idx == 0 ? @([self.messageManager getMySentMessagesCountInConversationStartTime:0 endTime:INT_MAX]) : @([self.messageManager getReceivedMessagesCountInConversationStartTime:0 endTime:INT_MAX]);
+            
+        case totalMessages:
+            return idx == 0 ? @([self.messageManager getConversationMessageCountStartTime:0 endTime:INT_MAX]) : @([self.messageManager getOtherMessagesCountStartTime:0 endTime:INT_MAX]);
+        default:
+            return @(0);
+    }
 }
 
+- (void) showSentAndReceivedMessages
+{
+    self.pieType = sentAndReceivedMessages;
+    [self.graph reloadData];
+}
 
+- (void) showSentAndReceivedWords
+{
+    self.pieType = sentAndReceivedWords;
+    [self.graph reloadData];
+}
 
-
+- (void) showTotalMessages
+{
+    self.pieType = totalMessages;
+    [self.graph reloadData];
+}
 
 @end
