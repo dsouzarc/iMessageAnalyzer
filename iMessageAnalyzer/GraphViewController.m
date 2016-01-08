@@ -17,6 +17,7 @@
 @property (strong, nonatomic) NSView *graphView;
 
 @property (strong, nonatomic) DropPlotMessageAnalyzerViewController *dropPlotViewController;
+@property (strong, nonatomic) PieChartViewController *pieChartViewController;
 
 @property (strong) IBOutlet NSButton *lineGraphAllTimeButton;
 @property (strong) IBOutlet NSButton *lineGraphCourseOfDayButton;
@@ -25,6 +26,9 @@
 @property (strong) IBOutlet NSButton *lineGraphDayViewButton;
 @property (strong) IBOutlet NSButton *lineGraphCompareToOthersButton;
 
+@property (strong) IBOutlet NSButton *pieChartSentAndReceivedMessages;
+@property (strong) IBOutlet NSButton *pieChartSentAndReceivedWords;
+@property (strong) IBOutlet NSButton *pieChartSentAndReceivedTotalMessages;
 
 @end
 
@@ -41,6 +45,8 @@
         self.graphView = graphView;
         
         self.dropPlotViewController = [[DropPlotMessageAnalyzerViewController alloc] initWithNibName:@"DropPlotMessageAnalyzerViewController" bundle:nibBundleOrNil person:self.person temporaryDatabase:self.database firstMessageDate:self.firstMessage];
+        
+        self.pieChartViewController = [[PieChartViewController alloc] initWithNibName:@"PieChartViewController" bundle:[NSBundle mainBundle] person:self.person temporaryDatabase:self.database];
     }
     
     return self;
@@ -50,11 +56,14 @@
     [super viewDidLoad];
     
     [[self.dropPlotViewController view] setFrame:self.view.frame];
+    [[self.pieChartViewController view] setFrame:self.view.frame];
+    
     [self.view addSubview:self.dropPlotViewController.view];
     //[self.view addSubview:self.dropPlotViewController.view positioned:NSWindowAbove relativeTo:self.view];
 }
 
 - (IBAction)buttonClick:(id)sender {
+
     if(sender == self.lineGraphAllTimeButton) {
         [self.lineGraphDayViewButton setEnabled:NO];
     }
@@ -83,7 +92,10 @@
         else {
             [self.dropPlotViewController hideSecondGraph];
         }
-        
+    }
+    
+    else if(sender == self.pieChartSentAndReceivedMessages) {
+        [self.view addSubview:self.pieChartViewController.view];
     }
 }
 

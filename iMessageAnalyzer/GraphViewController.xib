@@ -12,6 +12,9 @@
                 <outlet property="lineGraphDayViewButton" destination="UII-NS-NI9" id="e2O-tM-5H0"/>
                 <outlet property="lineGraphMessagesButton" destination="XVr-iI-FkL" id="dfC-CE-upc"/>
                 <outlet property="lineGraphWordsButton" destination="nc2-NJ-qca" id="hzQ-lz-or2"/>
+                <outlet property="pieChartSentAndReceivedMessages" destination="2Zc-ZQ-LE0" id="laU-jy-tzv"/>
+                <outlet property="pieChartSentAndReceivedTotalMessages" destination="24A-MS-RrU" id="ij3-9b-kw1"/>
+                <outlet property="pieChartSentAndReceivedWords" destination="thv-EY-Zk8" id="RRo-Km-p7W"/>
                 <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
             </connections>
         </customObject>
@@ -35,6 +38,14 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LrH-Q7-DN3">
+                    <rect key="frame" x="920" y="131" width="158" height="17"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Pie Chart" id="JyR-LC-rRf">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
                 <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uo4-az-g0P">
                     <rect key="frame" x="933" y="300" width="157" height="18"/>
                     <buttonCell key="cell" type="radio" title="All Time" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="Zgl-nW-O6O">
@@ -45,24 +56,14 @@
                         <action selector="buttonClick:" target="-2" id="kXH-A0-xPB"/>
                     </connections>
                 </button>
-                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XVr-iI-FkL">
-                    <rect key="frame" x="933" y="227" width="85" height="18"/>
-                    <buttonCell key="cell" type="radio" title="Messages" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="bvM-SP-4WW">
+                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="24A-MS-RrU">
+                    <rect key="frame" x="936" y="37" width="157" height="18"/>
+                    <buttonCell key="cell" type="radio" title="Total Messages" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="Aet-wa-bMV">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
                     <connections>
-                        <action selector="buttonClick:" target="-2" id="zX4-vn-hXF"/>
-                    </connections>
-                </button>
-                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nc2-NJ-qca">
-                    <rect key="frame" x="933" y="199" width="110" height="18"/>
-                    <buttonCell key="cell" type="radio" title="Words" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="Wgn-oV-1Mr">
-                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                        <font key="font" metaFont="system"/>
-                    </buttonCell>
-                    <connections>
-                        <action selector="buttonClick:" target="-2" id="cvz-TB-Oip"/>
+                        <action selector="buttonClick:" target="-2" id="ceF-Nr-SnJ"/>
                     </connections>
                 </button>
                 <box verticalHuggingPriority="750" fixedFrame="YES" title="Box" boxType="separator" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="fnC-rq-Fec">
@@ -72,7 +73,7 @@
                     <font key="titleFont" metaFont="system"/>
                 </box>
                 <box verticalHuggingPriority="750" fixedFrame="YES" title="Box" boxType="separator" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="DYF-hP-oxX">
-                    <rect key="frame" x="934" y="269" width="162" height="5"/>
+                    <rect key="frame" x="934" y="249" width="162" height="5"/>
                     <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                     <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <font key="titleFont" metaFont="system"/>
@@ -85,26 +86,36 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UII-NS-NI9">
-                    <rect key="frame" x="1011" y="210" width="79" height="18"/>
-                    <buttonCell key="cell" type="check" title="Day View" bezelStyle="regularSquare" imagePosition="left" enabled="NO" inset="2" id="O4O-qv-I3e">
+                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2Zc-ZQ-LE0">
+                    <rect key="frame" x="945" y="81" width="85" height="18"/>
+                    <buttonCell key="cell" type="radio" title="Messages" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="UMS-aP-f2I">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
                     <connections>
-                        <action selector="buttonClick:" target="-2" id="PEg-U2-Wfz"/>
+                        <action selector="buttonClick:" target="-2" id="cGG-Vo-IfR"/>
                     </connections>
                 </button>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Bqa-2S-L4B">
-                    <rect key="frame" x="930" y="252" width="160" height="17"/>
-                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Sent and Received" id="Xec-fQ-PdW">
+                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="thv-EY-Zk8">
+                    <rect key="frame" x="945" y="59" width="110" height="18"/>
+                    <buttonCell key="cell" type="radio" title="Words" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="U5j-bm-EAI">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="buttonClick:" target="-2" id="9ft-Sb-EkS"/>
+                    </connections>
+                </button>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6Oy-nj-PAn">
+                    <rect key="frame" x="935" y="106" width="160" height="17"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Sent and Received" id="Igo-9w-Pn2">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
                 <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eLF-hX-Iig">
-                    <rect key="frame" x="932" y="171" width="140" height="18"/>
+                    <rect key="frame" x="933" y="255" width="140" height="18"/>
                     <buttonCell key="cell" type="check" title="Compare to Others" bezelStyle="regularSquare" imagePosition="left" inset="2" id="v28-uE-rZ7">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
@@ -123,6 +134,50 @@
                         <action selector="buttonClick:" target="-2" id="EQI-gW-Tgo"/>
                     </connections>
                 </button>
+                <box verticalHuggingPriority="750" fixedFrame="YES" title="Box" boxType="separator" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="9aG-cz-8VP">
+                    <rect key="frame" x="913" y="154" width="181" height="5"/>
+                    <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
+                    <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <font key="titleFont" metaFont="system"/>
+                </box>
+                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XVr-iI-FkL">
+                    <rect key="frame" x="933" y="206" width="85" height="18"/>
+                    <buttonCell key="cell" type="radio" title="Messages" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="bvM-SP-4WW">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="buttonClick:" target="-2" id="zX4-vn-hXF"/>
+                    </connections>
+                </button>
+                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nc2-NJ-qca">
+                    <rect key="frame" x="933" y="178" width="110" height="18"/>
+                    <buttonCell key="cell" type="radio" title="Words" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="Wgn-oV-1Mr">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="buttonClick:" target="-2" id="cvz-TB-Oip"/>
+                    </connections>
+                </button>
+                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UII-NS-NI9">
+                    <rect key="frame" x="1011" y="189" width="79" height="18"/>
+                    <buttonCell key="cell" type="check" title="Day View" bezelStyle="regularSquare" imagePosition="left" enabled="NO" inset="2" id="O4O-qv-I3e">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="buttonClick:" target="-2" id="PEg-U2-Wfz"/>
+                    </connections>
+                </button>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Bqa-2S-L4B">
+                    <rect key="frame" x="930" y="231" width="160" height="17"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Sent and Received" id="Xec-fQ-PdW">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
             </subviews>
             <point key="canvasLocation" x="21" y="276"/>
         </customView>

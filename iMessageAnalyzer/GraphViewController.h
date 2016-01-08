@@ -11,6 +11,7 @@
 #import <CorePlot/CorePlot.h>
 
 #import "DropPlotMessageAnalyzerViewController.h"
+#import "PieChartViewController.h"
 
 #import "TemporaryDatabaseManager.h"
 #import "Message.h"
