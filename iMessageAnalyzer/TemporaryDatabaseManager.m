@@ -376,37 +376,37 @@ static TemporaryDatabaseManager *databaseManager;
 
 - (NSMutableArray*) getMySentWordsInConversationOverHoursInDay:(int)startTime endTime:(int)endTime
 {
-    NSString *query = [NSString stringWithFormat:@"SELECT date, wordCount FROM myMessages WHERE (date > %d AND date < %d) AND is_from_me='1'", startTime, endTime];
+    NSString *query = [NSString stringWithFormat:@"SELECT date, wordCount FROM myMessagesTable WHERE (date > %d AND date < %d) AND is_from_me='1'", startTime, endTime];
     return [self getSumsOrganizedByHours:query];
 }
 
 - (NSMutableArray*) getReceivedWordsInConversationOverHoursInDay:(int)startTime endTime:(int)endTime
 {
-    NSString *query = [NSString stringWithFormat:@"SELECT date, wordCount FROM myMessages WHERE (date > %d AND date < %d) AND is_from_me='0'", startTime, endTime];
+    NSString *query = [NSString stringWithFormat:@"SELECT date, wordCount FROM myMessagesTable WHERE (date > %d AND date < %d) AND is_from_me='0'", startTime, endTime];
     return [self getSumsOrganizedByHours:query];
 }
 
 - (NSMutableArray*) getMySentMessagesInConversationOverHoursInDay:(int)startTime endTime:(int)endTime
 {
-    NSString *query = [NSString stringWithFormat:@"SELECT date FROM myMessages WHERE (date > %d AND date < %d) AND is_from_me='1'", startTime, endTime];
+    NSString *query = [NSString stringWithFormat:@"SELECT date FROM myMessagesTable WHERE (date > %d AND date < %d) AND is_from_me='1'", startTime, endTime];
     return [self getCountsOrganizedByHours:query];
 }
 
 - (NSMutableArray*) getReceivedMessagesInConversationOverHoursInDay:(int)startTime endTime:(int)endTime
 {
-    NSString *query = [NSString stringWithFormat:@"SELECT date FROM myMessages WHERE (date > %d AND date < %d) AND is_from_me='1'", startTime, endTime];
+    NSString *query = [NSString stringWithFormat:@"SELECT date FROM myMessagesTable WHERE (date > %d AND date < %d) AND is_from_me='0'", startTime, endTime];
     return [self getCountsOrganizedByHours:query];
 }
 
 - (NSMutableArray*) getThisConversationMessagesOverHoursInDay:(int)startTime endTime:(int)endTime
 {
-    NSString *query = [NSString stringWithFormat:@"SELECT date FROM myMessages WHERE (date > %d AND date < %d)", startTime, endTime];
+    NSString *query = [NSString stringWithFormat:@"SELECT date FROM myMessagesTable WHERE (date > %d AND date < %d)", startTime, endTime];
     return [self getCountsOrganizedByHours:query];
 }
 
 - (NSMutableArray*) getOtherMessagesOverHoursInDay:(int)startTime endTime:(int)endTime
 {
-    NSString *query = [NSString stringWithFormat:@"SELECT date FROM myMessages WHERE (date > %d AND date < %d)", startTime, endTime];
+    NSString *query = [NSString stringWithFormat:@"SELECT date FROM otherMessagesTable WHERE (date > %d AND date < %d)", startTime, endTime];
     return [self getCountsOrganizedByHours:query];
 }
 
