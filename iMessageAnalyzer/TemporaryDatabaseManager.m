@@ -518,7 +518,7 @@ static TemporaryDatabaseManager *databaseManager;
             }
             else {
                 if(result == SQLITE_CONSTRAINT) {
-                    //printf("Duplicate ROWID for insert: %s\n", sqlStatement);
+                    printf("Duplicate ROWID for insert: %s\n", sqlStatement);
                     return YES;
                 }
                 else {
@@ -538,13 +538,13 @@ static TemporaryDatabaseManager *databaseManager;
 - (void) createOtherMessagesTable
 {
     //CREATE TABLE %@ (ROWID INTEGER PRIMARY KEY, date INTEGER, wordCount INTEGER, is_from_me INTEGER DEFAULT 0, cache_has_attachments INTEGER
-    NSString *createQuery = [NSString stringWithFormat:@"CREATE TABLE %@ (ROWID INTEGER PRIMARY KEY, date INTEGER, wordCount INTEGER, is_from_me INTEGER, cache_has_attachments INTEGER)", otherMessagesTable];
+    NSString *createQuery = [NSString stringWithFormat:@"CREATE TABLE %@ (ROWID INTEGER, date INTEGER, wordCount INTEGER, is_from_me INTEGER, cache_has_attachments INTEGER)", otherMessagesTable];
     [self createTable:otherMessagesTable createTableStatement:createQuery];
 }
 
 - (void) createMyMessagesTable
 {
-    NSString *createQuery = [NSString stringWithFormat:@"CREATE TABLE %@ (ROWID INTEGER PRIMARY KEY, guid TEXT UNIQUE NOT NULL, text TEXT, handle_id INTEGER DEFAULT 0, service TEXT, date INTEGER, date_read INTEGER, is_from_me, cache_has_attachments INTEGER DEFAULT 0, wordCount INTEGER)", myMessagesTable];
+    NSString *createQuery = [NSString stringWithFormat:@"CREATE TABLE %@ (ROWID INTEGER, guid TEXT UNIQUE NOT NULL, text TEXT, handle_id INTEGER DEFAULT 0, service TEXT, date INTEGER, date_read INTEGER, is_from_me, cache_has_attachments INTEGER DEFAULT 0, wordCount INTEGER)", myMessagesTable];
     [self createTable:myMessagesTable createTableStatement:createQuery];
 }
 
