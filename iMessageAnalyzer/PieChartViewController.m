@@ -119,18 +119,29 @@
 
 - (void) showSentAndReceivedMessages
 {
+    if(self.pieType == sentAndReceivedMessages) {
+        return;
+    }
     self.pieType = sentAndReceivedMessages;
     [self.graph reloadData];
 }
 
 - (void) showSentAndReceivedWords
 {
+    if(self.pieType == sentAndReceivedWords) {
+        return;
+    }
+    
     self.pieType = sentAndReceivedWords;
     [self.graph reloadData];
 }
 
 - (void) showTotalMessages
 {
+    if(self.pieType == totalMessages) {
+        return;
+    }
+    
     self.pieType = totalMessages;
     [self.graph reloadData];
 }
