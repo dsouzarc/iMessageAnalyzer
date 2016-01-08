@@ -11,6 +11,17 @@
 static NSString *mainPlotId = @"mainPlot";
 static NSString *secondPlotId = @"secondPlot";
 
+typedef enum {
+    sentAndReceivedMessages,
+    sentAndReceivedWords,
+    totalMessages
+} BarPlotType;
+
+typedef enum {
+    mainPlot,
+    secondPlot
+} BarPlotIdentifier;
+
 @interface BarPlotViewController ()
 
 @property (strong) IBOutlet CPTGraphHostingView *graphHostingView;
@@ -44,34 +55,64 @@ static NSString *secondPlotId = @"secondPlot";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.mainData = [self.messageManager getMySentWordsInConversationOverHoursInDay:0 endTime:INT_MAX];
+    self.mainData = [self.messageManager getMySentMessagesInConversationOverHoursInDay:0 endTime:INT_MAX];
     self.secondData = [self.messageManager getReceivedMessagesInConversationOverHoursInDay:0 endTime:INT_MAX];
+    
+    NSLog(@"%@\t%@", self.mainData, self.secondData);
+    
     [self setPlotRange];
     
     self.graph = [[CPTXYGraph alloc] initWithFrame:self.graphHostingView.frame];
     [self.graph applyTheme:[CPTTheme themeNamed:kCPTDarkGradientTheme]];
     [self.graphHostingView setHostedGraph:self.graph];
     
+    self.graph.paddingLeft = 0.0;
+    self.graph.paddingTop = 0.0;
+    self.graph.paddingRight = 0.0;
+    self.graph.paddingBottom = 0.0;
+    
+    self.graph.plotAreaFrame.paddingLeft = 55.0;
+    self.graph.plotAreaFrame.paddingTop = 40.0;
+    self.graph.plotAreaFrame.paddingRight = 40.0;
+    self.graph.plotAreaFrame.paddingBottom = 35.0;
+    
+    self.graph.plotAreaFrame.plotArea.fill = self.graph.plotAreaFrame.fill;
+    self.graph.plotAreaFrame.fill = nil;
+    
+    self.graph.plotAreaFrame.borderLineStyle = nil;
+    self.graph.plotAreaFrame.cornerRadius = 0.0;
+    self.graph.plotAreaFrame.masksToBorder = NO;
+    
+    CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *) self.graph.defaultPlotSpace;
+    
+    [plotSpace setXRange:[CPTPlotRange plotRangeWithLocation:@(0)
+                                                      length:@(24)]];
+    [plotSpace setYRange:[CPTPlotRange plotRangeWithLocation:@(0)
+                                                      length:@(15)]];
+    [plotSpace setAllowsUserInteraction:YES];
+    
+    
     CPTMutableLineStyle *barLineStyle = [[CPTMutableLineStyle alloc] init];
-    barLineStyle.lineColor = [CPTColor lightGrayColor];
+    barLineStyle.lineColor = [CPTColor whiteColor];
     barLineStyle.lineWidth = 0.5;
     
     CPTBarPlot *mainPlot = [[CPTBarPlot alloc] initWithFrame:self.graph.bounds];
     mainPlot.identifier = mainPlotId;
     mainPlot.delegate = self;
     mainPlot.dataSource = self;
-    mainPlot.barWidth = @(0.25f);
+    mainPlot.fill = [CPTFill fillWithColor:[CPTColor redColor]];
+    [barLineStyle setLineFill:[CPTFill fillWithColor:[CPTColor redColor]]];
     mainPlot.lineStyle = barLineStyle;
     
     CPTBarPlot *secondPlot = [[CPTBarPlot alloc] initWithFrame:self.graph.bounds];
     secondPlot.identifier = secondPlotId;
     secondPlot.delegate = self;
     secondPlot.dataSource = self;
-    secondPlot.barWidth = mainPlot.barWidth;
     secondPlot.barOffset = mainPlot.barWidth;
+    barLineStyle.lineColor = [CPTColor greenColor];
+    [barLineStyle setLineFill:[CPTFill fillWithColor:[CPTColor greenColor]]];
     secondPlot.lineStyle = barLineStyle;
-    
-    CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace*) self.graph.defaultPlotSpace;
+
     [self.graph addPlot:mainPlot toPlotSpace:plotSpace];
     [self.graph addPlot:secondPlot toPlotSpace:plotSpace];
     
@@ -81,22 +122,75 @@ static NSString *secondPlotId = @"secondPlot";
     
     CPTXYAxisSet *axis = (CPTXYAxisSet*) self.graph.axisSet;
     axis.xAxis.labelingPolicy = CPTAxisLabelingPolicyFixedInterval;
-    axis.xAxis.majorIntervalLength = @(1.0);
+    axis.xAxis.majorIntervalLength = @(1);
     
     axis.yAxis.labelingPolicy = CPTAxisLabelingPolicyAutomatic;
-    
-    
-    NSArray *plots = [NSArray arrayWithObjects:mainPlot, secondPlot, nil];
-    [plotSpace scaleToFitPlots:plots];
-    
-    CPTLegend *theLegend = [CPTLegend legendWithPlots:plots];
-    [theLegend setNumberOfColumns:2];
-    [theLegend setTextStyle:textStyle];
-    [self.graph setLegend:theLegend];
-    [self.graph setLegendAnchor:CPTRectAnchorBottom];
-    [self.graph setLegendDisplacement:CGPointMake(0.0, 0.0)];
-    
 }
+
+- (void) showSentAndReceivedMessages
+{
+    if(self.barPlotType == sentAndReceivedMessages) {
+        return;
+    }
+    
+    self.barPlotType = sentAndReceivedMessages;
+    self.mainData = [self.messageManager getMySentMessagesInConversationOverHoursInDay:0 endTime:INT_MAX];
+    self.secondData = [self.messageManager getReceivedMessagesInConversationOverHoursInDay:0 endTime:INT_MAX];
+    [self setPlotRange];
+    [self.graph reloadData];
+}
+
+- (CPTLayer*) dataLabelForPlot:(CPTPlot *)plot recordIndex:(NSUInteger)idx
+{
+    int value = 0;
+    CPTColor *color;
+    if([self getPlotType:plot] == mainPlot) {
+        value = [self.mainData[idx] intValue];
+        color = [CPTColor redColor];
+    }
+    else {
+        value = [self.secondData[idx] intValue];
+        color = [CPTColor greenColor];
+    }
+    
+    CPTTextLayer *label = [[CPTTextLayer alloc] initWithText:[NSString stringWithFormat:@"%d", value]];
+    CPTMutableTextStyle *textStyle = [label.textStyle mutableCopy];
+    
+    
+    
+    textStyle.color = color;
+    label.textStyle = textStyle;
+    return label;
+}
+
+- (void) showSentAndReceivedWords
+{
+    if(self.barPlotType == sentAndReceivedWords) {
+        return;
+    }
+    self.barPlotType = sentAndReceivedWords;
+    
+    self.mainData = [self.messageManager getMySentWordsInConversationOverHoursInDay:0 endTime:INT_MAX];
+    self.secondData = [self.messageManager getReceivedWordsInConversationOverHoursInDay:0 endTime:INT_MAX];
+    [self setPlotRange];
+    [self.graph reloadData];
+}
+
+- (void) showTotalMessages
+{
+    if(self.barPlotType == totalMessages) {
+        return;
+    }
+    
+    self.barPlotType = totalMessages;
+    
+    self.mainData = [self.messageManager getThisConversationMessagesOverHoursInDay:0 endTime:INT_MAX];
+    self.secondData = [self.messageManager getOtherMessagesOverHoursInDay:0 endTime:INT_MAX];
+    [self setPlotRange];
+    [self.graph reloadData];
+}
+
+
 
 - (NSUInteger) numberOfRecordsForPlot:(CPTPlot *)plot
 {
