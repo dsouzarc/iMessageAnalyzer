@@ -57,7 +57,7 @@ static TemporaryDatabaseManager *databaseManager;
         self.calendar = [NSCalendar currentCalendar];
         [self.calendar setTimeZone:[NSTimeZone systemTimeZone]];
         
-        const char *filePath = ":memory:"; //[self filePath]; //
+        const char *filePath = [self filePath]; //":memory:"; //
         
         if(sqlite3_open(filePath, &_database) == SQLITE_OK) {
             printf("OPENED TEMPORARY DATABASE\n");
@@ -332,25 +332,25 @@ static TemporaryDatabaseManager *databaseManager;
 
 - (int) getMySentMessagesCountInConversationStartTime:(int)startTime endTime:(int)endTime
 {
-    NSString *query = [NSString stringWithFormat:@"SELECT COUNT(*) FROM %@ WHERE (date > %d AND date < %d) AND is_from_me=1", myMessagesTable, startTime, endTime];
+    NSString *query = [NSString stringWithFormat:@"SELECT COUNT(*) FROM %@ WHERE (date > %d AND date < %d) AND is_from_me='1'", myMessagesTable, startTime, endTime];
     return [self getSimpleCountFromQuery:query];
 }
 
 - (int) getMySentOtherMessagesCountStartTime:(int)startTime endTime:(int)endTime
 {
-    NSString *query = [NSString stringWithFormat:@"SELECT COUNT(*) FROM %@ WHERE (date > %d AND date < %d) AND is_from_me=1", otherMessagesTable, startTime, endTime];
+    NSString *query = [NSString stringWithFormat:@"SELECT COUNT(*) FROM %@ WHERE (date > %d AND date < %d) AND is_from_me='1'", otherMessagesTable, startTime, endTime];
     return [self getSimpleCountFromQuery:query];
 }
 
 - (int) getReceivedMessagesCountInConversationStartTime:(int)startTime endTime:(int)endTime
 {
-    NSString *query = [NSString stringWithFormat:@"SELECT COUNT(*) FROM %@ WHERE (date > %d AND date < %d) AND is_from_me=0", myMessagesTable, startTime, endTime];
+    NSString *query = [NSString stringWithFormat:@"SELECT COUNT(*) FROM %@ WHERE (date > %d AND date < %d) AND is_from_me='0'", myMessagesTable, startTime, endTime];
     return [self getSimpleCountFromQuery:query];
 }
 
 - (int) getReceivedOtherMessagesCountStartTime:(int)startTime endTime:(int)endTime
 {
-    NSString *query = [NSString stringWithFormat:@"SELECT COUNT(*) FROM %@ WHERE (date > %d AND date < %d) AND is_from_me=0", otherMessagesTable, startTime, endTime];
+    NSString *query = [NSString stringWithFormat:@"SELECT COUNT(*) FROM %@ WHERE (date > %d AND date < %d) AND is_from_me='0'", otherMessagesTable, startTime, endTime];
     return [self getSimpleCountFromQuery:query];
 }
 
@@ -372,6 +372,45 @@ static TemporaryDatabaseManager *databaseManager;
     sqlite3_finalize(statement);
     
     return counters;
+}
+
+- (int) getMySentMessagesWordCountInConversation:(int)startTime endTime:(int)endTime
+{
+    NSString *query = [NSString stringWithFormat:@"SELECT COUNT(*) FROM myMessagesTable WHERE (date > %d AND date < %d) AND is_from_me='1'", startTime, endTime];
+    return [self getSimpleAdditionFromQuery:query];
+}
+
+- (int) getMyReceivedMessagesWordCountInConversation:(int)startTime endTime:(int)endTime
+{
+    NSString *query = [NSString stringWithFormat:@"SELECT COUNT(*) FROM myMessagesTable WHERE (date > %d AND date < %d) AND is_from_me='0'", startTime, endTime];
+    return [self getSimpleAdditionFromQuery:query];
+}
+
+- (int) getMySentOtherMessagesWordCount:(int)startTime endTime:(int)endTime
+{
+    NSString *query = [NSString stringWithFormat:@"SELECT COUNT(*) FROM otherMessagesTable WHERE (date > %d AND date < %d) AND is_from_me='1'", startTime, endTime];
+    return [self getSimpleAdditionFromQuery:query];
+}
+
+- (int) getMyReceivedOtherMessagesWordCount:(int)startTime endTime:(int)endTime
+{
+    NSString *query = [NSString stringWithFormat:@"SELECT COUNT(*) FROM otherMessagesTable WHERE (date > %d AND date < %d) AND is_from_me='0'", startTime, endTime];
+    return [self getSimpleAdditionFromQuery:query];
+}
+
+- (int) getSimpleAdditionFromQuery:(NSString*)queryString
+{
+    const char *query = [queryString UTF8String];
+    int result = 0;
+    sqlite3_stmt *statement;
+    
+    if(sqlite3_prepare(_database, query, -1, &statement, NULL) == SQLITE_OK) {
+        while(sqlite3_step(statement) == SQLITE_ROW) {
+            result += sqlite3_column_int(statement, 0);
+        }
+    }
+    sqlite3_finalize(statement);
+    return result;
 }
 
 - (int) getSimpleCountFromQuery:(NSString*)queryString

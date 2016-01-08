@@ -48,6 +48,12 @@
 - (int) getReceivedMessagesCountInConversationStartTime:(int)startTime endTime:(int)endTime;
 - (int) getReceivedOtherMessagesCountStartTime:(int)startTime endTime:(int)endTime;
 
+- (int) getMySentMessagesWordCountInConversation:(int)startTime endTime:(int)endTime;
+- (int) getMyReceivedMessagesWordCountInConversation:(int)startTime endTime:(int)endTime;
+
+- (int) getMySentOtherMessagesWordCount:(int)startTime endTime:(int)endTime;
+- (int) getMyReceivedOtherMessagesWordCount:(int)startTime endTime:(int)endTime;
+
 @property (nonatomic) BOOL finishedAddingEntries;
 
 @end
