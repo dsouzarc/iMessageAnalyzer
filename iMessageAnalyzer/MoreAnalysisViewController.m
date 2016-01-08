@@ -115,8 +115,8 @@
     
     if(self.person.statistics) {
         Statistics *stat = self.person.statistics;
-        long totalSent = stat.numberOfSentAttachments + stat.numberOfSentMessages;
-        long totalReceived = stat.numberOfReceivedMessages + stat.numberOfReceivedAttachments;
+        long totalSent = stat.numberOfSentMessages; // + stat.numberOfSentAttachments
+        long totalReceived = stat.numberOfReceivedMessages; // + stat.numberOfReceivedAttachments;
         
         [self setTextFieldLong:totalSent forTag:10];
         [self setTextFieldLong:totalReceived forTag:14];
