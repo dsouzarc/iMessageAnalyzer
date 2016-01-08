@@ -26,4 +26,7 @@ typedef enum {
 
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil person:(Person*)person temporaryDatabase:(TemporaryDatabaseManager*)temporaryDatabase firstMessageDate:(NSDate*)firstMessage;
 
+- (void) showAllOtherMessagesOverYear;
+- (void) hideSecondGraph;
+
 @end

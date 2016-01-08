@@ -70,7 +70,17 @@
     else if(sender == self.lineGraphDayViewButton) {
         
     }
+    
     else if(sender == self.lineGraphCompareToOthersButton) {
+        
+        if(self.lineGraphCompareToOthersButton.state == NSOnState) {
+            if(self.lineGraphAllTimeButton.state == NSOnState) {
+                [self.dropPlotViewController showAllOtherMessagesOverYear];
+            }
+        }
+        else {
+            [self.dropPlotViewController hideSecondGraph];
+        }
         
     }
 }

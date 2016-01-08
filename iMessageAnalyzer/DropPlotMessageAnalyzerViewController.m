@@ -25,7 +25,7 @@ static NSString *secondPlotId = @"secondPlot";
 @property (nonatomic, readwrite, assign) double maximumValueForYAxis;
 @property (nonatomic, readwrite, assign) double majorIntervalLengthForX;
 @property (nonatomic, readwrite, assign) double majorIntervalLengthForY;
-
+@property (nonatomic, readwrite, assign) double maximumYValueForFirstData;
 @property (nonatomic, readwrite, assign) double totalMaximumYValue;
 @property BOOL isZoomedOut;
 
@@ -127,6 +127,7 @@ static NSString *secondPlotId = @"secondPlot";
                                                           length:@(numDays)]];
     [plotSpace setYRange:[CPTPlotRange plotRangeWithLocation:@(0)
                                                           length:@(self.totalMaximumYValue)]];
+    
     [plotSpace setAllowsUserInteraction:YES];
     plotSpace.delegate = self;
 
@@ -193,7 +194,6 @@ static NSString *secondPlotId = @"secondPlot";
     
     [plotSpace scaleToFitPlots:[NSArray arrayWithObjects:mainPlot, secondPlot, nil]];
     
-    [self addAllMessagesGraph];
     [self.graph reloadData];
 }
 
@@ -696,6 +696,7 @@ static NSString *secondPlotId = @"secondPlot";
     const double maxY = [[data objectForKey:@"maxY"] doubleValue];
     
     self.totalMaximumYValue = maxY * (11.0 /10);
+    self.maximumYValueForFirstData = self.totalMaximumYValue;
 
     self.mainDataPoints = newData;
     
@@ -784,7 +785,20 @@ static NSString *secondPlotId = @"secondPlot";
     return [NSDictionary dictionaryWithObjectsAndKeys:tickLocations, @"tickLocations", tickLabels, @"tickLabels", nil];
 }
 
-- (void) addAllMessagesGraph
+- (void) hideSecondGraph
+{
+    self.secondDataPoints = nil;
+    CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *) self.graph.defaultPlotSpace;
+    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:@(0)
+                                                    length:@(self.maximumYValueForFirstData)];
+    
+    CPTXYAxisSet *axisSet = (CPTXYAxisSet *)self.graph.axisSet;
+    axisSet.yAxis.majorIntervalLength = @([self getScale:self.maximumYValueForFirstData]);
+    self.totalMaximumYValue = self.maximumYValueForFirstData;
+    [self.graph reloadData];
+}
+
+- (void) showAllOtherMessagesOverYear
 {
     //JUST GO THROUGH MESSAGES, NO NEED FOR SIDE DB
     
