@@ -123,8 +123,8 @@
     Statistics *statistics = self.lastChosenPerson.statistics;
     
     if(statistics) {
-        int totalSent = statistics.numberOfSentAttachments + statistics.numberOfSentMessages;
-        int totalReceived = statistics.numberOfReceivedMessages + statistics.numberOfReceivedAttachments;
+        int totalSent = (int) statistics.numberOfSentMessages; //statistics.numberOfSentAttachments +
+        int totalReceived = (int) statistics.numberOfReceivedAttachments; // statistics.numberOfReceivedMessages +
         
         [self.simpleAnalyticsViewController.numberOfSentMessages setStringValue:[NSString stringWithFormat:@"%d", totalSent]];
         [self.simpleAnalyticsViewController.numberOfReceivedMessages setStringValue:[NSString stringWithFormat:@"%d", totalReceived]];
