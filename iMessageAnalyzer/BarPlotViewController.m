@@ -35,6 +35,9 @@ typedef enum {
 @property (strong, nonatomic) NSMutableArray *mainData;
 @property (strong, nonatomic) NSMutableArray *secondData;
 
+@property (strong, nonatomic) CPTAnnotation *yValueAnnotation;
+@property (strong, nonatomic) NSNumber *barWidth;
+
 @end
 
 @implementation BarPlotViewController
@@ -89,7 +92,7 @@ typedef enum {
                                                       length:@(24)]];
     [plotSpace setYRange:[CPTPlotRange plotRangeWithLocation:@(0)
                                                       length:@(15)]];
-    [plotSpace setAllowsUserInteraction:YES];
+    [plotSpace setAllowsUserInteraction:NO];
     
     
     CPTMutableLineStyle *barLineStyle = [[CPTMutableLineStyle alloc] init];
@@ -101,7 +104,7 @@ typedef enum {
     mainPlot.delegate = self;
     mainPlot.dataSource = self;
     mainPlot.fill = [CPTFill fillWithColor:[CPTColor redColor]];
-    [barLineStyle setLineFill:[CPTFill fillWithColor:[CPTColor redColor]]];
+    [barLineStyle setLineFill:[CPTFill fillWithColor:[CPTColor whiteColor]]];
     mainPlot.lineStyle = barLineStyle;
     
     CPTBarPlot *secondPlot = [[CPTBarPlot alloc] initWithFrame:self.graph.bounds];
@@ -109,8 +112,10 @@ typedef enum {
     secondPlot.delegate = self;
     secondPlot.dataSource = self;
     secondPlot.barOffset = mainPlot.barWidth;
-    barLineStyle.lineColor = [CPTColor greenColor];
-    [barLineStyle setLineFill:[CPTFill fillWithColor:[CPTColor greenColor]]];
+    self.barWidth = mainPlot.barWidth;
+    barLineStyle.lineColor = [CPTColor whiteColor];
+    secondPlot.fill = [CPTFill fillWithColor:[CPTColor blueColor]];
+    [barLineStyle setLineFill:[CPTFill fillWithColor:[CPTColor whiteColor]]];
     secondPlot.lineStyle = barLineStyle;
 
     [self.graph addPlot:mainPlot toPlotSpace:plotSpace];
@@ -125,6 +130,17 @@ typedef enum {
     axis.xAxis.majorIntervalLength = @(1);
     
     axis.yAxis.labelingPolicy = CPTAxisLabelingPolicyAutomatic;
+    
+    CPTLegend *theLegend = [CPTLegend legendWithGraph:self.graph];
+    theLegend.numberOfColumns = 1;
+    [textStyle setFontSize:10.0f];
+    [textStyle setColor:[CPTColor whiteColor]];
+    theLegend.textStyle = textStyle;
+    theLegend.cornerRadius = 5.0;
+    self.graph.legend = theLegend;
+    self.graph.legendAnchor = CPTRectAnchorTopRight;
+    self.graph.legendDisplacement = CGPointMake(0.0, 0.0);
+    theLegend.delegate = self;
 }
 
 - (void) showSentAndReceivedMessages
@@ -140,27 +156,36 @@ typedef enum {
     [self.graph reloadData];
 }
 
-- (CPTLayer*) dataLabelForPlot:(CPTPlot *)plot recordIndex:(NSUInteger)idx
+- (void) barPlot:(CPTBarPlot *)plot barWasSelectedAtRecordIndex:(NSUInteger)idx
 {
+    if(self.yValueAnnotation) {
+        [self.graph.plotAreaFrame.plotArea removeAnnotation:self.yValueAnnotation];
+    }
+    
     int value = 0;
-    CPTColor *color;
+    int plotIndex = 0;
+    
     if([self getPlotType:plot] == mainPlot) {
         value = [self.mainData[idx] intValue];
-        color = [CPTColor redColor];
+        plotIndex = 0;
     }
     else {
         value = [self.secondData[idx] intValue];
-        color = [CPTColor greenColor];
+        plotIndex = 1;
     }
     
-    CPTTextLayer *label = [[CPTTextLayer alloc] initWithText:[NSString stringWithFormat:@"%d", value]];
-    CPTMutableTextStyle *textStyle = [label.textStyle mutableCopy];
+    CPTMutableTextStyle *textStyle = [CPTMutableTextStyle textStyle];
+    textStyle.fontSize = 15.0f;
+    textStyle.fontName = @"Helvetica-Bold";
+    textStyle.color = [CPTColor whiteColor];
+
+    NSArray *anchorPoint = [NSArray arrayWithObjects:@(idx + (plotIndex * [self.barWidth doubleValue])), @(value), nil];
     
-    
-    
-    textStyle.color = color;
-    label.textStyle = textStyle;
-    return label;
+    CPTTextLayer *textLayer = [[CPTTextLayer alloc] initWithText:[NSString stringWithFormat:@"%d", value] style:textStyle];
+    self.yValueAnnotation = [[CPTPlotSpaceAnnotation alloc] initWithPlotSpace:(CPTXYPlotSpace *)self.graph.defaultPlotSpace  anchorPlotPoint:anchorPoint];
+    self.yValueAnnotation.contentLayer = textLayer;
+    self.yValueAnnotation.displacement = CGPointMake(0.0f, 15.0f);
+    [self.graph.plotAreaFrame.plotArea addAnnotation:self.yValueAnnotation];
 }
 
 - (void) showSentAndReceivedWords
@@ -190,8 +215,6 @@ typedef enum {
     [self.graph reloadData];
 }
 
-
-
 - (NSUInteger) numberOfRecordsForPlot:(CPTPlot *)plot
 {
     return 24;
@@ -218,6 +241,10 @@ typedef enum {
 
 - (id) numberForPlot:(CPTPlot *)plot field:(NSUInteger)fieldEnum recordIndex:(NSUInteger)idx
 {
+    if(fieldEnum == CPTScatterPlotFieldX) {
+        return @(idx);
+    }
+    
     if([self getPlotType:plot] == mainPlot) {
         return self.mainData[idx];
     }
@@ -251,22 +278,5 @@ typedef enum {
     
     return max;
 }
-
-- (NSString*) legendTitleForBarPlot:(CPTBarPlot *)barPlot recordIndex:(NSUInteger)idx
-{
-    switch (self.barPlotType) {
-        case sentAndReceivedWords:
-            return idx == 0 ? [NSString stringWithFormat:@"My total words to %@", self.person.personName] : [NSString stringWithFormat:@"%@'s words to me", self.person.personName];
-        case sentAndReceivedMessages:
-            return idx == 0 ? [NSString stringWithFormat:@"My messages to %@", self.person.personName] : [NSString stringWithFormat:@"%@'s messages to me", self.person.personName];
-        case totalMessages:
-            return idx == 0 ? @"This conversation's messages" : @"All other messages";
-        default:
-            break;
-    }
-    return @"Error";
-}
-
-
 
 @end

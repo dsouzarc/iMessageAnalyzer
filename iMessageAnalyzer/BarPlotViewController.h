@@ -16,7 +16,7 @@
 #import "Person.h"
 #import "Statistics.h"
 
-@interface BarPlotViewController : NSViewController <CPTBarPlotDataSource, CPTBarPlotDelegate>
+@interface BarPlotViewController : NSViewController <CPTBarPlotDataSource, CPTBarPlotDelegate, CPTLegendDelegate>
 
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil person:(Person *)person temporaryDatabase:(TemporaryDatabaseManager *)temporaryDatabase;
 
