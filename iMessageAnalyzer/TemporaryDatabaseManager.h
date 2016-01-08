@@ -54,6 +54,7 @@
 - (int) getMySentOtherMessagesWordCount:(int)startTime endTime:(int)endTime;
 - (int) getMyReceivedOtherMessagesWordCount:(int)startTime endTime:(int)endTime;
 
+
 @property (nonatomic) BOOL finishedAddingEntries;
 
 @end

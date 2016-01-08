@@ -57,7 +57,7 @@ static TemporaryDatabaseManager *databaseManager;
         self.calendar = [NSCalendar currentCalendar];
         [self.calendar setTimeZone:[NSTimeZone systemTimeZone]];
         
-        const char *filePath = [self filePath]; //":memory:"; //
+        const char *filePath = ":memory:"; //[self filePath]; //
         
         if(sqlite3_open(filePath, &_database) == SQLITE_OK) {
             printf("OPENED TEMPORARY DATABASE\n");
@@ -376,41 +376,26 @@ static TemporaryDatabaseManager *databaseManager;
 
 - (int) getMySentMessagesWordCountInConversation:(int)startTime endTime:(int)endTime
 {
-    NSString *query = [NSString stringWithFormat:@"SELECT COUNT(*) FROM myMessagesTable WHERE (date > %d AND date < %d) AND is_from_me='1'", startTime, endTime];
-    return [self getSimpleAdditionFromQuery:query];
+    NSString *query = [NSString stringWithFormat:@"SELECT SUM(wordCount) FROM myMessagesTable WHERE (date > %d AND date < %d) AND is_from_me='1'", startTime, endTime];
+    return [self getSimpleCountFromQuery:query];
 }
 
 - (int) getMyReceivedMessagesWordCountInConversation:(int)startTime endTime:(int)endTime
 {
-    NSString *query = [NSString stringWithFormat:@"SELECT COUNT(*) FROM myMessagesTable WHERE (date > %d AND date < %d) AND is_from_me='0'", startTime, endTime];
-    return [self getSimpleAdditionFromQuery:query];
+    NSString *query = [NSString stringWithFormat:@"SELECT SUM(wordCount) FROM myMessagesTable WHERE (date > %d AND date < %d) AND is_from_me='0'", startTime, endTime];
+    return [self getSimpleCountFromQuery:query];
 }
 
 - (int) getMySentOtherMessagesWordCount:(int)startTime endTime:(int)endTime
 {
-    NSString *query = [NSString stringWithFormat:@"SELECT COUNT(*) FROM otherMessagesTable WHERE (date > %d AND date < %d) AND is_from_me='1'", startTime, endTime];
-    return [self getSimpleAdditionFromQuery:query];
+    NSString *query = [NSString stringWithFormat:@"SELECT SUM(wordCount) FROM otherMessagesTable WHERE (date > %d AND date < %d) AND is_from_me='1'", startTime, endTime];
+    return [self getSimpleCountFromQuery:query];
 }
 
 - (int) getMyReceivedOtherMessagesWordCount:(int)startTime endTime:(int)endTime
 {
-    NSString *query = [NSString stringWithFormat:@"SELECT COUNT(*) FROM otherMessagesTable WHERE (date > %d AND date < %d) AND is_from_me='0'", startTime, endTime];
-    return [self getSimpleAdditionFromQuery:query];
-}
-
-- (int) getSimpleAdditionFromQuery:(NSString*)queryString
-{
-    const char *query = [queryString UTF8String];
-    int result = 0;
-    sqlite3_stmt *statement;
-    
-    if(sqlite3_prepare(_database, query, -1, &statement, NULL) == SQLITE_OK) {
-        while(sqlite3_step(statement) == SQLITE_ROW) {
-            result += sqlite3_column_int(statement, 0);
-        }
-    }
-    sqlite3_finalize(statement);
-    return result;
+    NSString *query = [NSString stringWithFormat:@"SELECT SUM(wordCount) FROM otherMessagesTable WHERE (date > %d AND date < %d) AND is_from_me='0'", startTime, endTime];
+    return [self getSimpleCountFromQuery:query];
 }
 
 - (int) getSimpleCountFromQuery:(NSString*)queryString
