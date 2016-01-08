@@ -40,4 +40,7 @@
 - (NSDate*) dateBySubtractingMonths:(NSDate*)date months:(int)months;
 - (NSDate*) dateByAddingMonths:(NSDate*)date months:(int)months;
 
+- (int) getDateHour:(NSDate*)date;
+- (int) getDateHourFromDateInSeconds:(int)dateInSeconds;
+
 @end

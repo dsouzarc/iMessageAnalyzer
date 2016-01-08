@@ -48,6 +48,17 @@ static Constants *constants;
     return constants;
 }
 
+- (int) getDateHour:(NSDate *)date
+{
+    NSDateComponents *components = [self.calendar components:NSCalendarUnitHour fromDate:date];
+    return (int) [components hour];
+}
+
+- (int)getDateHourFromDateInSeconds:(int)dateInSeconds
+{
+    return [self getDateHour:[NSDate dateWithTimeIntervalSinceReferenceDate:dateInSeconds]];
+}
+
 - (int) monthsBetweenDates:(NSDate*)startDate endDate:(NSDate*)endDate
 {
     NSDateComponents *components = [self.calendar components:NSCalendarUnitMonth fromDate:startDate toDate:endDate options:0];
