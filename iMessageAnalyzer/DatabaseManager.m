@@ -388,7 +388,7 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
             int isFromMe = sqlite3_column_int(statement, 3);
             int hasAttachments = sqlite3_column_int(statement, 4);
             
-            NSDictionary *items = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:rowID], @"ROWID", [NSNumber numberWithInt:date], @"date", [NSNumber numberWithInt:wordCount], @"wordCount", [NSNumber numberWithInt:isFromMe], @"_is_from_me", [NSNumber numberWithInt:hasAttachments], @"cache_has_attachments", nil];
+            NSDictionary *items = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:rowID], @"ROWID", [NSNumber numberWithInt:date], @"date", [NSNumber numberWithInt:wordCount], @"wordCount", [NSNumber numberWithInt:isFromMe], @"is_from_me", [NSNumber numberWithInt:hasAttachments], @"cache_has_attachments", nil];
             [temporaryInformation addObject:items];
         }
     }
