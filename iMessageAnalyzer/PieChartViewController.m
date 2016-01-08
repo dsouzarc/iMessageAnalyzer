@@ -52,27 +52,48 @@
     
     [self.graph setAxisSet:nil];
     [self.graph setBorderLineStyle:nil];
+    
+    CPTMutableTextStyle *textStyle = [CPTMutableTextStyle textStyle];
+    [textStyle setFontSize:10.0f];
+    [textStyle setColor:[CPTColor colorWithCGColor:[[NSColor whiteColor] CGColor]]];
 
     CPTLegend *theLegend = [CPTLegend legendWithGraph:[self graph]];
     [theLegend setNumberOfColumns:2];
-    [[self graph] setLegend:theLegend];
-    [[self graph] setLegendAnchor:CPTRectAnchorBottom];
-    [[self graph] setLegendDisplacement:CGPointMake(0.0, 30.0)];
+    [theLegend setTextStyle:textStyle];
+    [self.graph setLegend:theLegend];
+    [self.graph setLegendAnchor:CPTRectAnchorBottom];
+    [self.graph setLegendDisplacement:CGPointMake(0.0, 0.0)];
 }
 
 - (NSString*) legendTitleForPieChart:(CPTPieChart *)pieChart recordIndex:(NSUInteger)idx
 {
     switch (self.pieType) {
         case sentAndReceivedWords:
-            return idx == 0 ? @"My Sent Words" : [NSString stringWithFormat:@"%@'s Sent Words", self.person.personName];
+            return idx == 0 ? [NSString stringWithFormat:@"My total words to %@", self.person.personName] : [NSString stringWithFormat:@"%@'s words to me", self.person.personName];
         case sentAndReceivedMessages:
-            return idx == 0 ? @"My Sent Messages" : [NSString stringWithFormat:@"%@'s Sent Messages", self.person.personName];
+            return idx == 0 ? [NSString stringWithFormat:@"My messages to %@", self.person.personName] : [NSString stringWithFormat:@"%@'s messages to me", self.person.personName];
         case totalMessages:
-            return idx == 0 ? @"This Conversation's Messages" : @"All Other Messages";
+            return idx == 0 ? @"This conversation's messages" : @"All other messages";
         default:
             break;
     }
     return @"Error";
+}
+
+- (CPTLayer*) dataLabelForPlot:(CPTPlot *)plot recordIndex:(NSUInteger)idx
+{
+    CPTMutableTextStyle *labelText = [[CPTMutableTextStyle alloc] init];
+    labelText.color = idx == 0 ? [CPTColor redColor] : [CPTColor greenColor];
+    
+    int firstSum = [[self numberForPlot:plot field:0 recordIndex:idx] intValue];
+    int secondSum = [[self numberForPlot:plot field:0 recordIndex:idx == 0 ? 1 : 0] intValue];
+    int total = firstSum + secondSum;
+
+    
+    NSString *text = @""; //[self legendTitleForPieChart:(CPTPieChart*) plot recordIndex:idx];
+
+    NSString *labelValue = [NSString stringWithFormat:@"%@%.2f%% (%d/%d)", text, (firstSum * 100.0 / total), firstSum, total];
+    return [[CPTTextLayer alloc] initWithText:labelValue style:labelText];
 }
 
 - (NSUInteger) numberOfRecordsForPlot:(CPTPlot *)plot
