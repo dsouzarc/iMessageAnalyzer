@@ -9,7 +9,6 @@
                 <outlet property="lineGraphAllTimeButton" destination="uo4-az-g0P" id="EFa-oB-Yzl"/>
                 <outlet property="lineGraphCompareToOthersButton" destination="eLF-hX-Iig" id="Jj6-pK-AXu"/>
                 <outlet property="lineGraphCourseOfDayButton" destination="KUR-0p-cdk" id="hVq-a1-PDv"/>
-                <outlet property="lineGraphDayViewButton" destination="UII-NS-NI9" id="e2O-tM-5H0"/>
                 <outlet property="lineGraphMessagesButton" destination="XVr-iI-FkL" id="dfC-CE-upc"/>
                 <outlet property="lineGraphWordsButton" destination="nc2-NJ-qca" id="hzQ-lz-or2"/>
                 <outlet property="pieChartSentAndReceivedMessages" destination="2Zc-ZQ-LE0" id="laU-jy-tzv"/>
@@ -158,16 +157,6 @@
                     </buttonCell>
                     <connections>
                         <action selector="buttonClick:" target="-2" id="cvz-TB-Oip"/>
-                    </connections>
-                </button>
-                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UII-NS-NI9">
-                    <rect key="frame" x="1011" y="189" width="79" height="18"/>
-                    <buttonCell key="cell" type="check" title="Day View" bezelStyle="regularSquare" imagePosition="left" enabled="NO" inset="2" id="O4O-qv-I3e">
-                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                        <font key="font" metaFont="system"/>
-                    </buttonCell>
-                    <connections>
-                        <action selector="buttonClick:" target="-2" id="PEg-U2-Wfz"/>
                     </connections>
                 </button>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Bqa-2S-L4B">

@@ -23,7 +23,6 @@
 @property (strong) IBOutlet NSButton *lineGraphCourseOfDayButton;
 @property (strong) IBOutlet NSButton *lineGraphMessagesButton;
 @property (strong) IBOutlet NSButton *lineGraphWordsButton;
-@property (strong) IBOutlet NSButton *lineGraphDayViewButton;
 @property (strong) IBOutlet NSButton *lineGraphCompareToOthersButton;
 
 @property (strong) IBOutlet NSButton *pieChartSentAndReceivedMessages;
@@ -79,7 +78,6 @@
 
 - (void) disableAllCheckMarks
 {
-    [self.lineGraphDayViewButton setEnabled:NO];
     [self.lineGraphCompareToOthersButton setEnabled:NO];
 }
 
@@ -99,19 +97,14 @@
     
     else if(sender == self.lineGraphMessagesButton) {
         [self showDropPlot];
-        [self.lineGraphDayViewButton setEnabled:YES];
         [self.dropPlotViewController showThisConversationSentAndReceivedMessages];
     }
     
     else if(sender == self.lineGraphWordsButton) {
         [self showDropPlot];
-        [self.lineGraphDayViewButton setEnabled:YES];
         [self.dropPlotViewController showThisConversationSentAndReceivedWords];
     }
-    
-    else if(sender == self.lineGraphDayViewButton) {
-        [self showDropPlot];
-    }
+
     
     else if(sender == self.lineGraphCompareToOthersButton) {
         [self showDropPlot];
