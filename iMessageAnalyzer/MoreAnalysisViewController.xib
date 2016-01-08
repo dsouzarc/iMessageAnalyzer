@@ -330,10 +330,10 @@
                     </connections>
                 </button>
                 <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QS6-9i-QEV">
-                    <rect key="frame" x="20" y="330" width="1096" height="370"/>
+                    <rect key="frame" x="20" y="219" width="1096" height="481"/>
                 </customView>
                 <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pm3-ly-H0F">
-                    <rect key="frame" x="835" y="163" width="240" height="135"/>
+                    <rect key="frame" x="562" y="159" width="240" height="135"/>
                     <clipView key="contentView" ambiguous="YES" id="cFH-JD-KII">
                         <rect key="frame" x="1" y="17" width="238" height="117"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -394,7 +394,7 @@
                     </tableHeaderView>
                 </scrollView>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9CJ-Qr-fpv">
-                    <rect key="frame" x="833" y="305" width="244" height="17"/>
+                    <rect key="frame" x="560" y="301" width="244" height="17"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="My Word Frequencies" id="Ig5-sF-LSW">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -402,7 +402,7 @@
                     </textFieldCell>
                 </textField>
                 <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zpd-II-0Yn">
-                    <rect key="frame" x="587" y="163" width="240" height="135"/>
+                    <rect key="frame" x="314" y="159" width="240" height="135"/>
                     <clipView key="contentView" ambiguous="YES" id="kgg-dF-IVL">
                         <rect key="frame" x="1" y="17" width="238" height="117"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -463,7 +463,7 @@
                     </tableHeaderView>
                 </scrollView>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="trT-RY-Ur1">
-                    <rect key="frame" x="585" y="305" width="244" height="17"/>
+                    <rect key="frame" x="312" y="301" width="244" height="17"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Friend's Word Frequencies" id="1E6-Mg-ZSW">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
