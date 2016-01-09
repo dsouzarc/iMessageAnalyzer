@@ -209,6 +209,11 @@ static NSString *secondPlotId = @"Other Messages";
     self.graph.legendDisplacement = CGPointMake(0.0, 0.0);
     theLegend.delegate = self;
     
+    textStyle = [CPTMutableTextStyle textStyle];
+    textStyle.color = [CPTColor yellowColor];
+    [self.graph setTitleTextStyle:textStyle];
+    [self.graph setTitle:[NSString stringWithFormat:@"Messages with %@", self.person.personName]];
+    
     [self.graph reloadData];
     [self zoomOut];
 }
@@ -889,7 +894,7 @@ static NSString *secondPlotId = @"Other Messages";
             self.secondPlot.plotSymbol = nil;
             self.mainPlot.title = @"This conversation's messages";
             self.secondPlot.title = @"All other conversations' messages";
-            
+            [self.graph setTitle:[NSString stringWithFormat:@"Messages with %@ vs All other messages", self.person.personName]];
             [self resetGraphAxis];
         });
     });
@@ -909,6 +914,7 @@ static NSString *secondPlotId = @"Other Messages";
     self.totalMaximumYValue = [data[@"maxY"] doubleValue] * (11.0 / 10);
     self.mainDataPoints = newData;
     
+    [self.graph setTitle:[NSString stringWithFormat:@"Messages with %@", self.person.personName]];
     self.mainPlot.title = [NSString stringWithFormat:@"Conversation with %@", self.person.personName];
     self.secondDataPoints = nil;
     self.secondPlot.title = nil;
@@ -920,6 +926,7 @@ static NSString *secondPlotId = @"Other Messages";
     NSDictionary *results = [self getMaxYAndPointsForMessages:self.myMessagesInDays countWords:NO];
     self.mainPlot.title = [NSString stringWithFormat:@"Messages to %@", self.person.personName];
     self.secondPlot.title = [NSString stringWithFormat:@"Messages from %@", self.person.personName];
+    [self.graph setTitle:[NSString stringWithFormat:@"Sent vs Received messages for %@", self.person.personName]];
     [self thisConversationSentAndReceivedMessages:results];
 }
 
@@ -928,6 +935,7 @@ static NSString *secondPlotId = @"Other Messages";
     NSDictionary *results = [self getMaxYAndPointsForMessages:self.myMessagesInDays countWords:YES];
     self.mainPlot.title = [NSString stringWithFormat:@"Words to %@", self.person.personName];
     self.secondPlot.title = [NSString stringWithFormat:@"Words from %@", self.person.personName];
+    [self.graph setTitle:[NSString stringWithFormat:@"Sent vs Received words for %@", self.person.personName]];
     [self thisConversationSentAndReceivedMessages:results];
 }
 

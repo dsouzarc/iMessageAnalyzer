@@ -153,6 +153,11 @@ typedef enum {
     self.graph.legendAnchor = CPTRectAnchorTopRight;
     self.graph.legendDisplacement = CGPointMake(0.0, 0.0);
     theLegend.delegate = self;
+    
+    textStyle = [CPTMutableTextStyle textStyle];
+    textStyle.color = [CPTColor yellowColor];
+    [self.graph setTitleTextStyle:textStyle];
+    [self.graph setTitle:[NSString stringWithFormat:@"Sent and received words with %@ over 24 hours", self.person.personName]];
 }
 
 - (void) showSentAndReceivedMessages
@@ -170,7 +175,7 @@ typedef enum {
     
     self.mainPlot.title = mainIdentifier;
     self.secondPlot.title = secondIdentifier;
-    
+    [self.graph setTitle:[NSString stringWithFormat:@"Sent and received messages with %@ over 24 hours", self.person.personName]];
     [self setPlotRange];
     [self.graph reloadData];
 }
@@ -190,6 +195,7 @@ typedef enum {
     
     self.mainPlot.title = mainIdentifier;
     self.secondPlot.title = secondIdentifier;
+    [self.graph setTitle:[NSString stringWithFormat:@"Sent and received words with %@ over 24 hours", self.person.personName]];
     
     [self setPlotRange];
     [self.graph reloadData];
@@ -211,6 +217,8 @@ typedef enum {
     
     self.mainPlot.title = mainIdentifier;
     self.secondPlot.title = secondIdentifier;
+    
+    [self.graph setTitle:[NSString stringWithFormat:@"Messages with %@ vs all other messages over 24 hours", self.person.personName]];
     
     [self setPlotRange];
     [self.graph reloadData];

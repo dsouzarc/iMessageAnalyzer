@@ -63,6 +63,11 @@
     [self.graph setLegend:theLegend];
     [self.graph setLegendAnchor:CPTRectAnchorBottom];
     [self.graph setLegendDisplacement:CGPointMake(0.0, 0.0)];
+    
+    textStyle = [CPTMutableTextStyle textStyle];
+    textStyle.color = [CPTColor yellowColor];
+    [self.graph setTitleTextStyle:textStyle];
+    [self.graph setTitle:[NSString stringWithFormat:@"Total sent and received words with %@", self.person.personName]];
 }
 
 - (NSString*) legendTitleForPieChart:(CPTPieChart *)pieChart recordIndex:(NSUInteger)idx
@@ -122,6 +127,7 @@
     if(self.pieType == sentAndReceivedMessages) {
         return;
     }
+    [self.graph setTitle:[NSString stringWithFormat:@"Total sent and received messages with %@", self.person.personName]];
     self.pieType = sentAndReceivedMessages;
     [self.graph reloadData];
 }
@@ -131,7 +137,7 @@
     if(self.pieType == sentAndReceivedWords) {
         return;
     }
-    
+    [self.graph setTitle:[NSString stringWithFormat:@"Total sent and received words with %@", self.person.personName]];
     self.pieType = sentAndReceivedWords;
     [self.graph reloadData];
 }
@@ -141,7 +147,7 @@
     if(self.pieType == totalMessages) {
         return;
     }
-    
+    [self.graph setTitle:[NSString stringWithFormat:@"Messages with %@ vs all other messages", self.person.personName]];
     self.pieType = totalMessages;
     [self.graph reloadData];
 }
