@@ -895,6 +895,26 @@ static NSString *secondPlotId = @"Other Messages";
     });
 }
 
+- (void) showThisConversationMessagesOverYear
+{
+    NSMutableArray *allMessages = [self.messageManager getAllMessagesForPerson:self.person];
+    
+    const int endTime = (int)[self.endDate timeIntervalSinceReferenceDate];
+    int startTime = (int) [self.startDate timeIntervalSinceReferenceDate];
+    
+    self.myMessagesInDays = [self.messageManager sortIntoDays:allMessages startTime:startTime endTime:endTime];
+    
+    NSDictionary *data = [self getMaxYAndPointsForMessages:self.myMessagesInDays];
+    NSMutableArray<NSDictionary*> *newData = [data objectForKey:@"points"];
+    self.totalMaximumYValue = [data[@"maxY"] doubleValue] * (11.0 / 10);
+    self.mainDataPoints = newData;
+    
+    self.mainPlot.title = [NSString stringWithFormat:@"Conversation with %@", self.person.personName];
+    self.secondDataPoints = nil;
+    self.secondPlot.title = nil;
+    [self resetGraphAxis];
+}
+
 - (void) showThisConversationSentAndReceivedMessages
 {
     NSDictionary *results = [self getMaxYAndPointsForMessages:self.myMessagesInDays countWords:NO];

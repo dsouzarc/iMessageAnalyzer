@@ -30,4 +30,5 @@ typedef enum {
 - (void) hideSecondGraph;
 - (void) showThisConversationSentAndReceivedWords;
 - (void) showThisConversationSentAndReceivedMessages;
+- (void) showThisConversationMessagesOverYear;
 @end

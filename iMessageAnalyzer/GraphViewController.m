@@ -106,6 +106,7 @@
     if(sender == self.lineGraphAllTimeButton) {
         [self showDropPlot];
         [self.lineGraphCompareToOthersButton setEnabled:YES];
+        [self.dropPlotViewController showThisConversationMessagesOverYear];
     }
     
     else if(sender == self.lineGraphCourseOfDayButton) {
@@ -116,11 +117,13 @@
     else if(sender == self.lineGraphMessagesButton) {
         [self showDropPlot];
         [self.dropPlotViewController showThisConversationSentAndReceivedMessages];
+        [self.lineGraphCompareToOthersButton setState:NSOffState];
     }
     
     else if(sender == self.lineGraphWordsButton) {
         [self showDropPlot];
         [self.dropPlotViewController showThisConversationSentAndReceivedWords];
+        [self.lineGraphCompareToOthersButton setState:NSOffState];
     }
 
     else if(sender == self.lineGraphCompareToOthersButton) {
@@ -140,31 +143,37 @@
     else if(sender == self.pieChartSentAndReceivedMessages) {
         [self showPieChart];
         [self.pieChartViewController showSentAndReceivedMessages];
+        [self.lineGraphCompareToOthersButton setState:NSOffState];
     }
     
     else if(sender == self.pieChartSentAndReceivedWords) {
         [self showPieChart];
         [self.pieChartViewController showSentAndReceivedWords];
+        [self.lineGraphCompareToOthersButton setState:NSOffState];
     }
     
     else if(sender == self.pieChartSentAndReceivedTotalMessages) {
         [self showPieChart];
         [self.pieChartViewController showTotalMessages];
+        [self.lineGraphCompareToOthersButton setState:NSOffState];
     }
     
     else if(sender == self.barChartSentAndReceivedMessages) {
         [self showBarPlot];
         [self.barPlotViewController showSentAndReceivedMessages];
+        [self.lineGraphCompareToOthersButton setState:NSOffState];
     }
     
     else if(sender == self.barChartSentAndReceivedWords) {
         [self showBarPlot];
         [self.barPlotViewController showSentAndReceivedWords];
+        [self.lineGraphCompareToOthersButton setState:NSOffState];
     }
     
     else if(sender == self.barChartTotalMessages) {
         [self showBarPlot];
         [self.barPlotViewController showTotalMessages];
+        [self.lineGraphCompareToOthersButton setState:NSOffState];
     }
     
 }
