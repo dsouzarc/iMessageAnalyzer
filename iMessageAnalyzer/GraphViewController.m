@@ -32,6 +32,7 @@
 @property (strong) IBOutlet NSButton *barChartSentAndReceivedMessages;
 @property (strong) IBOutlet NSButton *barChartSentAndReceivedWords;
 @property (strong) IBOutlet NSButton *barChartTotalMessages;
+@property (strong) IBOutlet NSButton *barChartTotalMessagesAsPercent;
 
 
 @end
@@ -167,6 +168,12 @@
     else if(sender == self.barChartTotalMessages) {
         [self showBarPlot];
         [self.barPlotViewController showTotalMessages];
+        [self.lineGraphCompareToOthersButton setState:NSOffState];
+    }
+    
+    else if(sender == self.barChartTotalMessagesAsPercent) {
+        [self showBarPlot];
+        [self.barPlotViewController showTotalMessagesAsPercentage];
         [self.lineGraphCompareToOthersButton setState:NSOffState];
     }
 }

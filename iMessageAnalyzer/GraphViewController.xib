@@ -9,6 +9,7 @@
                 <outlet property="barChartSentAndReceivedMessages" destination="iOa-qJ-uHW" id="bRL-jl-RiW"/>
                 <outlet property="barChartSentAndReceivedWords" destination="pda-pv-Vej" id="Bwl-Ns-tG6"/>
                 <outlet property="barChartTotalMessages" destination="Yaq-cg-lh9" id="fzz-K7-afO"/>
+                <outlet property="barChartTotalMessagesAsPercent" destination="jrd-n2-1vL" id="XdS-uj-058"/>
                 <outlet property="lineGraphAllTimeButton" destination="uo4-az-g0P" id="EFa-oB-Yzl"/>
                 <outlet property="lineGraphCompareToOthersButton" destination="eLF-hX-Iig" id="Jj6-pK-AXu"/>
                 <outlet property="lineGraphMessagesButton" destination="XVr-iI-FkL" id="dfC-CE-upc"/>
@@ -211,6 +212,16 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
+                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jrd-n2-1vL">
+                    <rect key="frame" x="935" y="18" width="157" height="18"/>
+                    <buttonCell key="cell" type="radio" title="Total Messages as %" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="6fg-hG-MnO">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="buttonClick:" target="-2" id="978-uX-g11"/>
+                    </connections>
+                </button>
             </subviews>
             <point key="canvasLocation" x="21" y="336.5"/>
         </customView>
