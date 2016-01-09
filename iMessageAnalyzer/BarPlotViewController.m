@@ -52,7 +52,7 @@ typedef enum {
     if(self) {
         self.messageManager = temporaryDatabase;
         self.person = person;
-        self.barPlotType = sentAndReceivedWords;
+        self.barPlotType = sentAndReceivedMessages;
         
         mainPlotId = [NSString stringWithFormat:@"Messages to %@", self.person.personName];
         secondPlotId = [NSString stringWithFormat:@"Messages from %@", self.person.personName];
@@ -95,7 +95,7 @@ typedef enum {
     [plotSpace setXRange:[CPTPlotRange plotRangeWithLocation:@(0)
                                                       length:@(24)]];
     [plotSpace setYRange:[CPTPlotRange plotRangeWithLocation:@(0)
-                                                      length:@(15)]];
+                                                      length:@([self getMaxFromData])]];
     [plotSpace setAllowsUserInteraction:NO];
     
     CPTMutableLineStyle *barLineStyle = [[CPTMutableLineStyle alloc] init];
