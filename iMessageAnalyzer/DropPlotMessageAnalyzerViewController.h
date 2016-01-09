@@ -16,19 +16,21 @@
 #import "Person.h"
 #import "Statistics.h"
 
-typedef enum {
-    mainPlot,
-    secondPlot,
-    noPlot
-} PlotType;
+/** Controls the line graph for viewing messages/words over time */
 
 @interface DropPlotMessageAnalyzerViewController : NSViewController <CPTPlotDataSource, CPTPlotSpaceDelegate, CPTScatterPlotDelegate, CPTLegendDelegate>
 
+#pragma mark Constructor
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil person:(Person*)person temporaryDatabase:(TemporaryDatabaseManager*)temporaryDatabase firstMessageDate:(NSDate*)firstMessage;
 
-- (void) showAllOtherMessagesOverYear;
-- (void) hideSecondGraph;
+
+#pragma mark Modify graph data
+
 - (void) showThisConversationSentAndReceivedWords;
 - (void) showThisConversationSentAndReceivedMessages;
 - (void) showThisConversationMessagesOverYear;
+
+- (void) showAllOtherMessagesOverYear;
+- (void) hideSecondGraph;
+
 @end

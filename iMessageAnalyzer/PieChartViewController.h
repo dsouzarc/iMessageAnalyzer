@@ -16,16 +16,16 @@
 #import "Person.h"
 #import "Statistics.h"
 
-typedef enum {
-    sentAndReceivedMessages,
-    sentAndReceivedWords,
-    totalMessages
-} PieType;
-
+/** Controls and shows the pie chart for data analysis */
 
 @interface PieChartViewController : NSViewController <CPTPieChartDataSource, CPTPieChartDelegate>
 
+#pragma mark Constructor
+
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil person:(Person *)person temporaryDatabase:(TemporaryDatabaseManager *)temporaryDatabase;
+
+
+#pragma mark Modifying data shown
 
 - (void) showSentAndReceivedMessages;
 - (void) showSentAndReceivedWords;

@@ -8,7 +8,18 @@
 
 #import "PieChartViewController.h"
 
+#pragma mark Graph type identifiers
+
+typedef enum {
+    sentAndReceivedMessages,
+    sentAndReceivedWords,
+    totalMessages
+} PieType;
+
+
 @interface PieChartViewController ()
+
+#pragma mark Private variables
 
 @property (strong) IBOutlet CPTGraphHostingView *graphHostingView;
 @property (strong, nonatomic) CPTGraph *graph;
@@ -21,6 +32,15 @@
 @end
 
 @implementation PieChartViewController
+
+
+/****************************************************************
+ *
+ *              Constructor
+ *
+*****************************************************************/
+
+# pragma mark Constructor
 
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil person:(Person *)person temporaryDatabase:(TemporaryDatabaseManager *)temporaryDatabase
 {
@@ -35,6 +55,15 @@
     return self;
 }
 
+
+/****************************************************************
+ *
+ *             Graph setup
+ *
+ *****************************************************************/
+
+# pragma mark Graph setup
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -48,15 +77,20 @@
     [pieChart setSliceDirection:CPTPieDirectionCounterClockwise];
     [pieChart setDataSource:self];
     [pieChart setDelegate:self];
-    [self.graph addPlot:pieChart];
     
+    [self.graph addPlot:pieChart];
     [self.graph setAxisSet:nil];
     [self.graph setBorderLineStyle:nil];
     
+    [self setGraphLegendAndTitle];
+}
+
+- (void) setGraphLegendAndTitle
+{
     CPTMutableTextStyle *textStyle = [CPTMutableTextStyle textStyle];
     [textStyle setFontSize:10.0f];
     [textStyle setColor:[CPTColor colorWithCGColor:[[NSColor whiteColor] CGColor]]];
-
+    
     CPTLegend *theLegend = [CPTLegend legendWithGraph:[self graph]];
     [theLegend setNumberOfColumns:2];
     [theLegend setTextStyle:textStyle];
@@ -70,19 +104,30 @@
     [self.graph setTitle:[NSString stringWithFormat:@"Total sent and received words with %@", self.person.personName]];
 }
 
+
+/****************************************************************
+ *
+ *              CPTPieChart Data Source
+ *
+*****************************************************************/
+
+# pragma mark CPTPieChart Data Source
+
 - (NSString*) legendTitleForPieChart:(CPTPieChart *)pieChart recordIndex:(NSUInteger)idx
 {
     switch (self.pieType) {
         case sentAndReceivedWords:
             return idx == 0 ? [NSString stringWithFormat:@"My total words to %@", self.person.personName] : [NSString stringWithFormat:@"%@'s words to me", self.person.personName];
+            
         case sentAndReceivedMessages:
             return idx == 0 ? [NSString stringWithFormat:@"My messages to %@", self.person.personName] : [NSString stringWithFormat:@"%@'s messages to me", self.person.personName];
+            
         case totalMessages:
             return idx == 0 ? @"This conversation's messages" : @"All other messages";
+            
         default:
-            break;
+            return @"Error";
     }
-    return @"Error";
 }
 
 - (CPTLayer*) dataLabelForPlot:(CPTPlot *)plot recordIndex:(NSUInteger)idx
@@ -101,11 +146,6 @@
     return [[CPTTextLayer alloc] initWithText:labelValue style:labelText];
 }
 
-- (NSUInteger) numberOfRecordsForPlot:(CPTPlot *)plot
-{
-    return 2;
-}
-
 - (id) numberForPlot:(CPTPlot *)plot field:(NSUInteger)fieldEnum recordIndex:(NSUInteger)idx
 {
     switch (self.pieType) {
@@ -121,6 +161,20 @@
             return @(0);
     }
 }
+
+- (NSUInteger) numberOfRecordsForPlot:(CPTPlot *)plot
+{
+    return 2;
+}
+
+
+/****************************************************************
+ *
+ *              Data Modification
+ *
+*****************************************************************/
+
+# pragma mark Data modification
 
 - (void) showSentAndReceivedMessages
 {
