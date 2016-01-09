@@ -250,6 +250,15 @@ typedef enum {
     else {
         [axis.yAxis setTitle:nil];
     }
+    [self removeAnnotations];
+}
+
+- (void) removeAnnotations
+{
+    if(self.yValueAnnotation) {
+        [self.graph.plotAreaFrame.plotArea removeAnnotation:self.yValueAnnotation];
+        self.yValueAnnotation = nil;
+    }
 }
 
 - (void) calculatePercents:(NSMutableArray*)messages total:(int)total
@@ -263,9 +272,7 @@ typedef enum {
 
 - (void) barPlot:(CPTBarPlot *)plot barWasSelectedAtRecordIndex:(NSUInteger)idx
 {
-    if(self.yValueAnnotation) {
-        [self.graph.plotAreaFrame.plotArea removeAnnotation:self.yValueAnnotation];
-    }
+    [self removeAnnotations];
     
     int value = 0;
     int plotIndex = 0;

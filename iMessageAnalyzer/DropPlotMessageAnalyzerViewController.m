@@ -343,10 +343,7 @@ static NSString *secondPlotId = @"Other Messages";
 
 - (void) scatterPlot:(CPTScatterPlot *)plot plotSymbolWasSelectedAtRecordIndex:(NSUInteger)idx
 {
-    if(self.yValueAnnotation) {
-        [self.graph.plotAreaFrame.plotArea removeAnnotation:self.yValueAnnotation];
-        self.yValueAnnotation = nil;
-    }
+    [self removeAnnotations];
     
     CPTMutableTextStyle *hitAnnotationTextStyle = [CPTMutableTextStyle textStyle];
     hitAnnotationTextStyle.color = [CPTColor yellowColor];
@@ -555,10 +552,7 @@ static NSString *secondPlotId = @"Other Messages";
 - (IBAction)zoomOut
 {
     self.isZoomedOut = YES;
-    if(self.yValueAnnotation) {
-        [self.graph.plotAreaFrame.plotArea removeAnnotation:self.yValueAnnotation];
-        self.yValueAnnotation = nil;
-    }
+    [self removeAnnotations];
     
     double minX = 0;
     double maxX = [self.constants daysBetweenDates:self.startDate endDate:self.endDate];
@@ -747,6 +741,8 @@ static NSString *secondPlotId = @"Other Messages";
 
 - (void) updateDataWithThisConversationMessages
 {
+    [self removeAnnotations];
+    
     NSMutableArray *allMessages = [self.messageManager getAllMessagesForPerson:self.person];
     
     const int endTime = (int)[self.endDate timeIntervalSinceReferenceDate];
@@ -854,8 +850,17 @@ static NSString *secondPlotId = @"Other Messages";
     return [NSDictionary dictionaryWithObjectsAndKeys:tickLocations, @"tickLocations", tickLabels, @"tickLabels", nil];
 }
 
+- (void) removeAnnotations
+{
+    if(self.yValueAnnotation) {
+        [self.graph.plotAreaFrame.plotArea removeAnnotation:self.yValueAnnotation];
+        self.yValueAnnotation = nil;
+    }
+}
+
 - (void) hideSecondGraph
 {
+    [self removeAnnotations];
     self.secondDataPoints = nil;
     CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *) self.graph.defaultPlotSpace;
     plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:@(0)
