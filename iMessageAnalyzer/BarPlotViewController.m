@@ -66,9 +66,7 @@ typedef enum {
     
     self.mainData = [self.messageManager getMySentMessagesInConversationOverHoursInDay:0 endTime:INT_MAX];
     self.secondData = [self.messageManager getReceivedMessagesInConversationOverHoursInDay:0 endTime:INT_MAX];
-    
-    NSLog(@"%@\t%@", self.mainData, self.secondData);
-    
+
     [self setPlotRange];
     
     self.graph = [[CPTXYGraph alloc] initWithFrame:self.graphHostingView.frame];

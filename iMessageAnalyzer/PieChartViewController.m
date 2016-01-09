@@ -127,6 +127,7 @@
     if(self.pieType == sentAndReceivedMessages) {
         return;
     }
+    
     [self.graph setTitle:[NSString stringWithFormat:@"Total sent and received messages with %@", self.person.personName]];
     self.pieType = sentAndReceivedMessages;
     [self.graph reloadData];
@@ -137,6 +138,7 @@
     if(self.pieType == sentAndReceivedWords) {
         return;
     }
+    
     [self.graph setTitle:[NSString stringWithFormat:@"Total sent and received words with %@", self.person.personName]];
     self.pieType = sentAndReceivedWords;
     [self.graph reloadData];
@@ -147,6 +149,7 @@
     if(self.pieType == totalMessages) {
         return;
     }
+    
     [self.graph setTitle:[NSString stringWithFormat:@"Messages with %@ vs all other messages", self.person.personName]];
     self.pieType = totalMessages;
     [self.graph reloadData];

@@ -101,10 +101,7 @@ static NSString *secondPlotId = @"Other Messages";
     self.endDate = conversationEnd;
     
     const int numDays = [self.constants daysBetweenDates:self.startDate endDate:self.endDate];
-    
-    //NSLog(@"MONTHS: %d\tDAYS: %d", [self.constants monthsBetweenDates:self.startDate endDate:self.endDate], [self.constants daysBetweenDates:self.startDate endDate:self.endDate]);
-    //NSLog(@"%@\t%@", [self.constants dayMonthYearString:self.startDate], [self.constants dayMonthYearString:self.endDate]);
-    
+
     [self updateDataWithThisConversationMessages];
     
     self.graph = [[CPTXYGraph alloc] initWithFrame:self.graphHostingView.frame];
@@ -173,7 +170,7 @@ static NSString *secondPlotId = @"Other Messages";
     //yAxis.minorTicksPerInterval = 9;
     yAxis.axisConstraints = [CPTConstraints constraintWithLowerOffset:0.0];
     yAxis.majorIntervalLength = @([self getScale:(int)self.totalMaximumYValue]);
-
+    
     //X AXIS
     CPTXYAxis *xAxis = [axisSet xAxis];
     xAxis.labelingPolicy = CPTAxisLabelingPolicyNone;
@@ -714,6 +711,10 @@ static NSString *secondPlotId = @"Other Messages";
 
 - (int) getScale:(int)maxY
 {
+    if(maxY < 10) {
+        return 1;
+    }
+    
     maxY = maxY * (11.0 / 10);
     
     int maxBigTicks = 10;
@@ -759,7 +760,11 @@ static NSString *secondPlotId = @"Other Messages";
     const double minX = 0;
     const double maxX = [self.constants daysBetweenDates:self.startDate endDate:self.endDate] * 60 * 60; //60 * 60 * 365;
     const double minY = 0;
-    const double maxY = [[data objectForKey:@"maxY"] doubleValue];
+    double maxY = [[data objectForKey:@"maxY"] doubleValue];
+    
+    if(maxY < 10) {
+        maxY = 10;
+    }
     
     self.totalMaximumYValue = maxY * (11.0 /10);
     self.maximumYValueForFirstData = self.totalMaximumYValue;
@@ -887,6 +892,10 @@ static NSString *secondPlotId = @"Other Messages";
         if(self.totalMaximumYValue < (maxY * (11.0 / 10))) {
             self.totalMaximumYValue = maxY * (11.0 / 10);
         }
+        if(self.totalMaximumYValue < 10) {
+            self.totalMaximumYValue = 10;
+        }
+        
         self.secondDataPoints = points;
 
         dispatch_async(dispatch_get_main_queue(), ^(void) {
@@ -912,6 +921,11 @@ static NSString *secondPlotId = @"Other Messages";
     NSDictionary *data = [self getMaxYAndPointsForMessages:self.myMessagesInDays];
     NSMutableArray<NSDictionary*> *newData = [data objectForKey:@"points"];
     self.totalMaximumYValue = [data[@"maxY"] doubleValue] * (11.0 / 10);
+    
+    if(self.totalMaximumYValue < 10) {
+        self.totalMaximumYValue = 10;
+    }
+    
     self.mainDataPoints = newData;
     
     [self.graph setTitle:[NSString stringWithFormat:@"Messages with %@", self.person.personName]];
@@ -946,7 +960,11 @@ static NSString *secondPlotId = @"Other Messages";
     double maxY = [results[@"maxY"] doubleValue] * (11.0 / 10);
     
     self.maximumValueForYAxis = maxY;
+    
     self.totalMaximumYValue = maxY;
+    if(self.totalMaximumYValue < 10) {
+        self.totalMaximumYValue = 10;
+    }
     
     self.mainDataPoints = myPoints;
     self.secondDataPoints = otherPoints;
