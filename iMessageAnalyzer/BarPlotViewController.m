@@ -67,8 +67,6 @@ typedef enum {
     
     self.mainData = [self.messageManager getMySentMessagesInConversationOverHoursInDay:0 endTime:INT_MAX];
     self.secondData = [self.messageManager getReceivedMessagesInConversationOverHoursInDay:0 endTime:INT_MAX];
-
-    [self setPlotRange];
     
     self.graph = [[CPTXYGraph alloc] initWithFrame:self.graphHostingView.frame];
     [self.graph applyTheme:[CPTTheme themeNamed:kCPTDarkGradientTheme]];
@@ -169,14 +167,12 @@ typedef enum {
     self.mainData = [self.messageManager getMySentMessagesInConversationOverHoursInDay:0 endTime:INT_MAX];
     self.secondData = [self.messageManager getReceivedMessagesInConversationOverHoursInDay:0 endTime:INT_MAX];
     
-    NSString *mainIdentifier = [NSString stringWithFormat:@"Messages to %@", self.person.personName];
-    NSString *secondIdentifier = [NSString stringWithFormat:@"Messages from %@", self.person.personName];
+    NSString *graphTitle = [NSString stringWithFormat:@"Sent and received messages with %@ over 24 hours", self.person.personName];
+    NSString *mainPlotTitle = [NSString stringWithFormat:@"Messages to %@", self.person.personName];
+    NSString *secondPlotTitle = [NSString stringWithFormat:@"Messages from %@", self.person.personName];
     
-    self.mainPlot.title = mainIdentifier;
-    self.secondPlot.title = secondIdentifier;
-    [self.graph setTitle:[NSString stringWithFormat:@"Sent and received messages with %@ over 24 hours", self.person.personName]];
+    [self setGraphTitle:graphTitle mainPlotTitle:mainPlotTitle secondPlotTitle:secondPlotTitle];
     [self setPlotRange];
-    [self.graph reloadData];
 }
 
 - (void) showSentAndReceivedWords
@@ -189,15 +185,12 @@ typedef enum {
     self.mainData = [self.messageManager getMySentWordsInConversationOverHoursInDay:0 endTime:INT_MAX];
     self.secondData = [self.messageManager getReceivedWordsInConversationOverHoursInDay:0 endTime:INT_MAX];
     
-    NSString *mainIdentifier = [NSString stringWithFormat:@"Words to %@", self.person.personName];
-    NSString *secondIdentifier = [NSString stringWithFormat:@"Words from %@", self.person.personName];
+    NSString *graphTitle = [NSString stringWithFormat:@"Sent and received words with %@ over 24 hours", self.person.personName];
+    NSString *mainPlotTitle = [NSString stringWithFormat:@"Words to %@", self.person.personName];
+    NSString *secondPlotTitle = [NSString stringWithFormat:@"Words from %@", self.person.personName];
     
-    self.mainPlot.title = mainIdentifier;
-    self.secondPlot.title = secondIdentifier;
-    [self.graph setTitle:[NSString stringWithFormat:@"Sent and received words with %@ over 24 hours", self.person.personName]];
-    
+    [self setGraphTitle:graphTitle mainPlotTitle:mainPlotTitle secondPlotTitle:secondPlotTitle];
     [self setPlotRange];
-    [self.graph reloadData];
 }
 
 - (void) showTotalMessages
@@ -211,16 +204,12 @@ typedef enum {
     self.mainData = [self.messageManager getThisConversationMessagesOverHoursInDay:0 endTime:INT_MAX];
     self.secondData = [self.messageManager getOtherMessagesOverHoursInDay:0 endTime:INT_MAX];
     
-    NSString *mainIdentifier = [NSString stringWithFormat:@"Conversation with %@", self.person.personName];
-    NSString *secondIdentifier = @"All other messages";
+    NSString *graphTitle = [NSString stringWithFormat:@"Messages with %@ vs all other messages over 24 hours", self.person.personName];
+    NSString *mainPlotTitle = [NSString stringWithFormat:@"Conversation with %@", self.person.personName];
+    NSString *secondPlotTitle = @"All other messages";
     
-    self.mainPlot.title = mainIdentifier;
-    self.secondPlot.title = secondIdentifier;
-    
-    [self.graph setTitle:[NSString stringWithFormat:@"Messages with %@ vs all other messages over 24 hours", self.person.personName]];
-    
+    [self setGraphTitle:graphTitle mainPlotTitle:mainPlotTitle secondPlotTitle:secondPlotTitle];
     [self setPlotRange];
-    [self.graph reloadData];
 }
 
 - (void) showTotalMessagesAsPercentage
@@ -245,9 +234,7 @@ typedef enum {
     NSString *secondPlotTitle = @"% of all other messages";
     
     [self setGraphTitle:graphTitle mainPlotTitle:mainPlotTitle secondPlotTitle:secondPlotTitle];
-    
     [self setPlotRange];
-    [self.graph reloadData];
 }
 
 - (void) setGraphTitle:(NSString*)graphTitle mainPlotTitle:(NSString*)mainPlotTitle secondPlotTitle:(NSString*)secondPlotTitle
@@ -256,9 +243,12 @@ typedef enum {
     [self.mainPlot setTitle:mainPlotTitle];
     [self.secondPlot setTitle:secondPlotTitle];
     
+    CPTXYAxisSet *axis = (CPTXYAxisSet*) self.graph.axisSet;
     if(self.barPlotType == totalMessagesAsPercentage) {
-        CPTXYAxisSet *axis = (CPTXYAxisSet*) self.graph.axisSet;
         [axis.yAxis setTitle:@"% of total messages"];
+    }
+    else {
+        [axis.yAxis setTitle:nil];
     }
 }
 
@@ -395,6 +385,7 @@ typedef enum {
     CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace*) self.graph.defaultPlotSpace;
     plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:@(0) length:@(24)];
     plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:@(0) length:@([self getMaxFromData])];
+    [self.graph reloadData];
 }
 
 - (double) getMaxFromData
