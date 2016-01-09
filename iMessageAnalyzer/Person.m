@@ -21,6 +21,7 @@
         self.chatIdentifier = chatIdentifier;
         self.groupId = groupId;
         self.isIMessage = isImessage;
+        
         self.personName = personName;
         
         self.secondaryChatId = -1;

@@ -125,6 +125,11 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
                 person.secondaryChatId = chatId;
             }
             else {
+                
+                if(!name || name.length == 0) {
+                    name = number;
+                }
+                
                 Person *person = [[Person alloc] initWithChatId:chatId guid:guid accountId:accountID chatIdentifier:chatIdentifier groupId:groupID isIMessage:isIMessage personName:name];
                 person.number = number;
                 person.contact = abPerson;
