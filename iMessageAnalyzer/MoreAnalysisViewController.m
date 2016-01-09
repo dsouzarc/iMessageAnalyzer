@@ -31,7 +31,6 @@
 
 @property (strong, nonatomic) NSDictionary *messageWithAttachmentAttributes;
 
-
 @property (strong, nonatomic) NSDateFormatter *dateFormatter;
 @property (strong, nonatomic) NSDate *calendarChosenDate;
 
@@ -152,8 +151,8 @@
                 
                 if(self.person.statistics) {
                     Statistics *stat = self.person.statistics;
-                    long totalSent = stat.numberOfSentAttachments + stat.numberOfSentMessages;
-                    long totalReceived = stat.numberOfReceivedMessages + stat.numberOfReceivedAttachments;
+                    long totalSent = stat.numberOfSentMessages; //+ stat.numberOfSentAttachments;
+                    long totalReceived = stat.numberOfReceivedMessages;// + stat.numberOfReceivedAttachments;
                     
                     self.myAverageWordCountPerMessage = (double) self.myWordCount / totalSent;
                     self.friendAverageWordCountPerMessage = (double) self.friendCount / totalReceived;
@@ -543,8 +542,8 @@ int tempCounter = 2;
     
     else if(self.person.secondaryStatistics) {
         Statistics *stat = self.person.secondaryStatistics;
-        long totalSent = stat.numberOfSentAttachments + stat.numberOfSentMessages;
-        long totalReceived = stat.numberOfReceivedMessages + stat.numberOfReceivedAttachments;
+        long totalSent = stat.numberOfSentMessages; //+ stat.numberOfSentAttachments;
+        long totalReceived = stat.numberOfReceivedMessages;// + stat.numberOfReceivedAttachments;
         
         [self setTextFieldLong:totalSent forTag:11];
         [self setTextFieldLong:totalReceived forTag:15];

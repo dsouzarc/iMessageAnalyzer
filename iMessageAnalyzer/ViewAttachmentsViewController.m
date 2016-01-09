@@ -185,7 +185,7 @@
     
     else if([object isKindOfClass:[NSString class]]) {
         NSTextField *field = [[NSTextField alloc] initWithFrame:CGRectMake(0, 0, 300, 300)];
-        [field setStringValue:field];
+        [field setStringValue:[NSString stringWithFormat:@"%@", object]];
         [view addSubview:field];
     }
     
