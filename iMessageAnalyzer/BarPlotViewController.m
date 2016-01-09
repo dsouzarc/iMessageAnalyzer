@@ -14,7 +14,8 @@ static NSString *secondPlotId = @"secondPlot";
 typedef enum {
     sentAndReceivedMessages,
     sentAndReceivedWords,
-    totalMessages
+    totalMessages,
+    totalMessagesAsPercentage
 } BarPlotType;
 
 typedef enum {
@@ -222,6 +223,54 @@ typedef enum {
     [self.graph reloadData];
 }
 
+- (void) showTotalMessagesAsPercentage
+{
+    if(self.barPlotType == totalMessagesAsPercentage) {
+        return;
+    }
+    
+    self.barPlotType = totalMessagesAsPercentage;
+    
+    self.mainData = [self.messageManager getThisConversationMessagesOverHoursInDay:0 endTime:INT_MAX];
+    self.secondData = [self.messageManager getOtherMessagesOverHoursInDay:0 endTime:INT_MAX];
+    
+    const int totalConversation = [self.messageManager getConversationMessageCountStartTime:0 endTime:INT_MAX];
+    const int totalAllOtherMessages = [self.messageManager getOtherMessagesCountStartTime:0 endTime:INT_MAX];
+    
+    [self calculatePercents:self.mainData total:totalConversation];
+    [self calculatePercents:self.secondData total:totalAllOtherMessages];
+    
+    NSString *graphTitle = [NSString stringWithFormat:@"%% of messages with %@ vs %% of all other messages over 24 hours", self.person.personName];
+    NSString *mainPlotTitle = [NSString stringWithFormat:@"%% of total messages with %@", self.person.personName];
+    NSString *secondPlotTitle = @"% of all other messages";
+    
+    [self setGraphTitle:graphTitle mainPlotTitle:mainPlotTitle secondPlotTitle:secondPlotTitle];
+    
+    [self setPlotRange];
+    [self.graph reloadData];
+}
+
+- (void) setGraphTitle:(NSString*)graphTitle mainPlotTitle:(NSString*)mainPlotTitle secondPlotTitle:(NSString*)secondPlotTitle
+{
+    [self.graph setTitle:graphTitle];
+    [self.mainPlot setTitle:mainPlotTitle];
+    [self.secondPlot setTitle:secondPlotTitle];
+    
+    if(self.barPlotType == totalMessagesAsPercentage) {
+        CPTXYAxisSet *axis = (CPTXYAxisSet*) self.graph.axisSet;
+        [axis.yAxis setTitle:@"% of total messages"];
+    }
+}
+
+- (void) calculatePercents:(NSMutableArray*)messages total:(int)total
+{
+    for(int i = 0; i < messages.count; i++) {
+        int messageCount = [messages[i] intValue];
+        double percentage = (messageCount * 100.0) / total;
+        messages[i] = @(percentage);
+    }
+}
+
 - (void) barPlot:(CPTBarPlot *)plot barWasSelectedAtRecordIndex:(NSUInteger)idx
 {
     if(self.yValueAnnotation) {
@@ -247,7 +296,15 @@ typedef enum {
 
     NSArray *anchorPoint = [NSArray arrayWithObjects:@(idx + (plotIndex * [self.barWidth doubleValue])), @(value), nil];
     
-    CPTTextLayer *textLayer = [[CPTTextLayer alloc] initWithText:[NSString stringWithFormat:@"%d", value] style:textStyle];
+    NSString *text = nil;
+    if(self.barPlotType == totalMessagesAsPercentage) {
+        text = [NSString stringWithFormat:@"%d%%", value];
+    }
+    else {
+        text = [NSString stringWithFormat:@"%d", value];
+    }
+    
+    CPTTextLayer *textLayer = [[CPTTextLayer alloc] initWithText:text style:textStyle];
     self.yValueAnnotation = [[CPTPlotSpaceAnnotation alloc] initWithPlotSpace:(CPTXYPlotSpace *)self.graph.defaultPlotSpace  anchorPlotPoint:anchorPoint];
     self.yValueAnnotation.contentLayer = textLayer;
     self.yValueAnnotation.displacement = CGPointMake(0.0f, 15.0f);

@@ -23,6 +23,6 @@
 - (void) showSentAndReceivedMessages;
 - (void) showSentAndReceivedWords;
 - (void) showTotalMessages;
-
+- (void) showTotalMessagesAsPercentage;
 
 @end
