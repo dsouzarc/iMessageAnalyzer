@@ -43,6 +43,13 @@
         if(![self isIdentifiableMedia:((Attachment*) self.attachments[0]).fileType]) {
             [self.view setFrameSize:CGSizeMake(self.view.bounds.size.width, 20)];
         }
+        else {
+            NSTextField *notGood = [[NSTextField alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height/2, self.view.bounds.size.width, 20)];
+            [notGood setEditable:NO];
+            [notGood setSelectable:NO];
+            [notGood setStringValue:@"Unsupported attachment or attachment not found"];
+            [self.view addSubview:notGood];
+        }
     }
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
@@ -53,17 +60,24 @@
 
             if([type containsString:@"image/"]) {
                 NSImage *image = [[NSImage alloc] initWithContentsOfFile:attachment.filePath];
-                [self.objectsToShow addObject:image];
+                if(image) {
+                    [self.objectsToShow addObject:image];
+                }
             }
             
             else if([type containsString:@"/pdf"]) {
                 PDFDocument *document = [[PDFDocument alloc] initWithURL:filePath];
-                [self.objectsToShow addObject:document];
+                if(document) {
+                    [self.objectsToShow addObject:document];
+                }
             }
             
             else if([type containsString:@"video/"]) {
                 AVPlayer *player = [[AVPlayer alloc] initWithURL:[NSURL fileURLWithPath:attachment.filePath]];
-                [self.objectsToShow addObject:player];
+                
+                if(player) {
+                    [self.objectsToShow addObject:player];
+                }
                 
                 /*QTMovie *movie = [[QTMovie alloc] initWithURL:filePath error:&error];
                 
@@ -96,7 +110,7 @@
                 }*/
             }
             else {
-                [self.objectsToShow addObject:[[NSObject alloc] init]];
+                [self.objectsToShow addObject:@"Unsupported attachment or attachment not found"];
             }
         }
         
@@ -167,6 +181,12 @@
         
         [view.layer addSublayer:playerLayer];
         [player play];
+    }
+    
+    else if([object isKindOfClass:[NSString class]]) {
+        NSTextField *field = [[NSTextField alloc] initWithFrame:CGRectMake(0, 0, 300, 300)];
+        [field setStringValue:field];
+        [view addSubview:field];
     }
     
     NSButton *button = [[NSButton alloc] init];
