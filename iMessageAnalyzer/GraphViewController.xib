@@ -11,7 +11,6 @@
                 <outlet property="barChartTotalMessages" destination="Yaq-cg-lh9" id="fzz-K7-afO"/>
                 <outlet property="lineGraphAllTimeButton" destination="uo4-az-g0P" id="EFa-oB-Yzl"/>
                 <outlet property="lineGraphCompareToOthersButton" destination="eLF-hX-Iig" id="Jj6-pK-AXu"/>
-                <outlet property="lineGraphCourseOfDayButton" destination="KUR-0p-cdk" id="hVq-a1-PDv"/>
                 <outlet property="lineGraphMessagesButton" destination="XVr-iI-FkL" id="dfC-CE-upc"/>
                 <outlet property="lineGraphWordsButton" destination="nc2-NJ-qca" id="hzQ-lz-or2"/>
                 <outlet property="pieChartSentAndReceivedMessages" destination="2Zc-ZQ-LE0" id="laU-jy-tzv"/>
@@ -41,7 +40,7 @@
                     </textFieldCell>
                 </textField>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LrH-Q7-DN3">
-                    <rect key="frame" x="920" y="242" width="158" height="17"/>
+                    <rect key="frame" x="920" y="261" width="158" height="17"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Pie Chart" id="JyR-LC-rRf">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -59,7 +58,7 @@
                     </connections>
                 </button>
                 <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="24A-MS-RrU">
-                    <rect key="frame" x="936" y="148" width="157" height="18"/>
+                    <rect key="frame" x="936" y="167" width="157" height="18"/>
                     <buttonCell key="cell" type="radio" title="Total Messages" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="Aet-wa-bMV">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
@@ -75,7 +74,7 @@
                     <font key="titleFont" metaFont="system"/>
                 </box>
                 <box verticalHuggingPriority="750" fixedFrame="YES" title="Box" boxType="separator" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="DYF-hP-oxX">
-                    <rect key="frame" x="934" y="360" width="162" height="5"/>
+                    <rect key="frame" x="934" y="379" width="162" height="5"/>
                     <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                     <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <font key="titleFont" metaFont="system"/>
@@ -89,7 +88,7 @@
                     </textFieldCell>
                 </textField>
                 <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2Zc-ZQ-LE0">
-                    <rect key="frame" x="945" y="192" width="85" height="18"/>
+                    <rect key="frame" x="945" y="211" width="85" height="18"/>
                     <buttonCell key="cell" type="radio" title="Messages" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="UMS-aP-f2I">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
@@ -99,7 +98,7 @@
                     </connections>
                 </button>
                 <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="thv-EY-Zk8">
-                    <rect key="frame" x="945" y="170" width="110" height="18"/>
+                    <rect key="frame" x="945" y="189" width="110" height="18"/>
                     <buttonCell key="cell" type="radio" title="Words" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="U5j-bm-EAI">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
@@ -109,7 +108,7 @@
                     </connections>
                 </button>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6Oy-nj-PAn">
-                    <rect key="frame" x="935" y="217" width="160" height="17"/>
+                    <rect key="frame" x="935" y="236" width="160" height="17"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Sent and Received" id="Igo-9w-Pn2">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -117,7 +116,7 @@
                     </textFieldCell>
                 </textField>
                 <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eLF-hX-Iig">
-                    <rect key="frame" x="933" y="366" width="140" height="18"/>
+                    <rect key="frame" x="933" y="388" width="140" height="18"/>
                     <buttonCell key="cell" type="check" title="Compare to Others" bezelStyle="regularSquare" imagePosition="left" inset="2" id="v28-uE-rZ7">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
@@ -126,24 +125,14 @@
                         <action selector="buttonClick:" target="-2" id="vuo-wK-Uuw"/>
                     </connections>
                 </button>
-                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KUR-0p-cdk">
-                    <rect key="frame" x="933" y="387" width="110" height="18"/>
-                    <buttonCell key="cell" type="radio" title="Course of Day" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="90T-1S-44w">
-                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                        <font key="font" metaFont="system"/>
-                    </buttonCell>
-                    <connections>
-                        <action selector="buttonClick:" target="-2" id="EQI-gW-Tgo"/>
-                    </connections>
-                </button>
                 <box verticalHuggingPriority="750" fixedFrame="YES" title="Box" boxType="separator" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="9aG-cz-8VP">
-                    <rect key="frame" x="913" y="265" width="181" height="5"/>
+                    <rect key="frame" x="913" y="284" width="181" height="5"/>
                     <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                     <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <font key="titleFont" metaFont="system"/>
                 </box>
                 <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XVr-iI-FkL">
-                    <rect key="frame" x="933" y="317" width="85" height="18"/>
+                    <rect key="frame" x="933" y="336" width="85" height="18"/>
                     <buttonCell key="cell" type="radio" title="Messages" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="bvM-SP-4WW">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
@@ -153,7 +142,7 @@
                     </connections>
                 </button>
                 <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nc2-NJ-qca">
-                    <rect key="frame" x="933" y="289" width="110" height="18"/>
+                    <rect key="frame" x="933" y="308" width="110" height="18"/>
                     <buttonCell key="cell" type="radio" title="Words" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="Wgn-oV-1Mr">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
@@ -163,7 +152,7 @@
                     </connections>
                 </button>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Bqa-2S-L4B">
-                    <rect key="frame" x="930" y="342" width="160" height="17"/>
+                    <rect key="frame" x="930" y="361" width="160" height="17"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Sent and Received" id="Xec-fQ-PdW">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -171,13 +160,13 @@
                     </textFieldCell>
                 </textField>
                 <box verticalHuggingPriority="750" fixedFrame="YES" title="Box" boxType="separator" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="3G8-3l-eKU">
-                    <rect key="frame" x="913" y="138" width="180" height="5"/>
+                    <rect key="frame" x="913" y="157" width="180" height="5"/>
                     <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                     <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <font key="titleFont" metaFont="system"/>
                 </box>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9pL-XI-oS2">
-                    <rect key="frame" x="920" y="115" width="158" height="17"/>
+                    <rect key="frame" x="920" y="134" width="158" height="17"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Bar Chart Over Day" id="cGZ-fi-bws">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -185,7 +174,7 @@
                     </textFieldCell>
                 </textField>
                 <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Yaq-cg-lh9">
-                    <rect key="frame" x="936" y="21" width="157" height="18"/>
+                    <rect key="frame" x="936" y="40" width="157" height="18"/>
                     <buttonCell key="cell" type="radio" title="Total Messages" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="qyM-IZ-uia">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
@@ -195,7 +184,7 @@
                     </connections>
                 </button>
                 <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iOa-qJ-uHW">
-                    <rect key="frame" x="945" y="65" width="85" height="18"/>
+                    <rect key="frame" x="945" y="84" width="85" height="18"/>
                     <buttonCell key="cell" type="radio" title="Messages" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="AYA-8P-bkK">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
@@ -205,7 +194,7 @@
                     </connections>
                 </button>
                 <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pda-pv-Vej">
-                    <rect key="frame" x="945" y="43" width="110" height="18"/>
+                    <rect key="frame" x="945" y="62" width="110" height="18"/>
                     <buttonCell key="cell" type="radio" title="Words" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="24a-q6-XaY">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
@@ -215,7 +204,7 @@
                     </connections>
                 </button>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eVv-5z-y2a">
-                    <rect key="frame" x="935" y="90" width="160" height="17"/>
+                    <rect key="frame" x="935" y="109" width="160" height="17"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Sent and Received" id="UK3-8E-vM7">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>

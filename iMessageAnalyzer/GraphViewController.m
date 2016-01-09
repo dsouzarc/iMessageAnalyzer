@@ -21,7 +21,6 @@
 @property (strong, nonatomic) BarPlotViewController *barPlotViewController;
 
 @property (strong) IBOutlet NSButton *lineGraphAllTimeButton;
-@property (strong) IBOutlet NSButton *lineGraphCourseOfDayButton;
 @property (strong) IBOutlet NSButton *lineGraphMessagesButton;
 @property (strong) IBOutlet NSButton *lineGraphWordsButton;
 @property (strong) IBOutlet NSButton *lineGraphCompareToOthersButton;
@@ -109,11 +108,6 @@
         [self.dropPlotViewController showThisConversationMessagesOverYear];
     }
     
-    else if(sender == self.lineGraphCourseOfDayButton) {
-        [self showDropPlot];
-        [self.lineGraphCompareToOthersButton setEnabled:YES];
-    }
-    
     else if(sender == self.lineGraphMessagesButton) {
         [self showDropPlot];
         [self.dropPlotViewController showThisConversationSentAndReceivedMessages];
@@ -175,9 +169,6 @@
         [self.barPlotViewController showTotalMessages];
         [self.lineGraphCompareToOthersButton setState:NSOffState];
     }
-    
 }
-
-
 
 @end
