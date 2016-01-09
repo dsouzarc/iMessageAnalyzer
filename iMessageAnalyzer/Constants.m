@@ -21,6 +21,15 @@ static Constants *constants;
 
 @implementation Constants
 
+
+/****************************************************************
+ *
+ *              CONSTRUCTORS
+ *
+*****************************************************************/
+
+# pragma mark CONSTRUCTORS
+
 - (instancetype) init
 {
     self = [super init];
@@ -48,37 +57,14 @@ static Constants *constants;
     return constants;
 }
 
-- (int) getDateHour:(NSDate *)date
-{
-    NSDateComponents *components = [self.calendar components:NSCalendarUnitHour fromDate:date];
-    return (int) [components hour];
-}
 
-- (int)getDateHourFromDateInSeconds:(int)dateInSeconds
-{
-    return [self getDateHour:[NSDate dateWithTimeIntervalSinceReferenceDate:dateInSeconds]];
-}
+/****************************************************************
+ *
+ *              DATE FROM INFORMATION
+ *
+ *****************************************************************/
 
-- (int) monthsBetweenDates:(NSDate*)startDate endDate:(NSDate*)endDate
-{
-    NSDateComponents *components = [self.calendar components:NSCalendarUnitMonth fromDate:startDate toDate:endDate options:0];
-    return (int)[components month];
-}
-
-- (NSString*) stringForDateAfterStart:(int)startDay
-{
-    // Selectively convert the date components (year, month, day) of the input date
-    NSDateComponents *dateComps = [self dateComponentsForDay:[NSDate date]];
-    
-    [dateComps setHour:0];
-    [dateComps setMinute:0];
-    [dateComps setSecond:1];
-    [dateComps setMonth:1];
-    [dateComps setDay:startDay];
-    NSDate *beginningOfYear = [self.calendar dateFromComponents:dateComps];
-    
-    return [self.monthDateYearFormatter stringFromDate:beginningOfYear];
-}
+# pragma mark DATE FROM INFORMATION
 
 - (NSDate*) dateAtEndOfMonth:(NSDate*)date
 {
@@ -104,6 +90,30 @@ static Constants *constants;
     return [self.calendar dateFromComponents:components];
 }
 
+- (NSDate*) getDateAtEndOfYear:(NSDate*)inputDate
+{
+    NSDateComponents *dateComps = [self dateComponentsForDay:inputDate];
+    [dateComps setHour:23];
+    [dateComps setMinute:59];
+    [dateComps setSecond:59];
+    [dateComps setMonth:12];
+    [dateComps setDay:31];
+    
+    return [self.calendar dateFromComponents:dateComps];
+}
+
+- (NSDate*) getDateAtBeginningOfYear:(NSDate*)inputDate
+{
+    NSDateComponents *dateComps = [self dateComponentsForDay:inputDate];
+    [dateComps setHour:0];
+    [dateComps setMinute:0];
+    [dateComps setSecond:1];
+    [dateComps setMonth:1];
+    [dateComps setDay:1];
+    
+    return [self.calendar dateFromComponents:dateComps];
+}
+
 - (NSDate*) dateByAddingDays:(NSDate*)date days:(int)days
 {
     static NSDateComponents *dateComponent;
@@ -124,24 +134,41 @@ static Constants *constants;
     return [self.calendar dateFromComponents:components];
 }
 
+- (NSDate*) dateByAddingMonths:(NSDate *)date months:(int)months
+{
+    return [self dateBySubtractingMonths:date months:(months * -1)];
+}
+
+
+/****************************************************************
+ *
+ *              NUMBERS FROM INFORMATION
+ *
+*****************************************************************/
+
+# pragma mark SEARCHFIELD_DELEGATE
+
 - (int) daysInMonthForDate:(NSDate *)date
 {
     NSRange range = [self.calendar rangeOfUnit:NSCalendarUnitDay inUnit:NSCalendarUnitMonth forDate:date];
     return (int) range.length;
 }
 
-- (NSDate*) dateByAddingMonths:(NSDate *)date months:(int)months
+- (int) getDateHour:(NSDate *)date
 {
-    return [self dateBySubtractingMonths:date months:(months * -1)];
+    NSDateComponents *components = [self.calendar components:NSCalendarUnitHour fromDate:date];
+    return (int) [components hour];
 }
 
-- (BOOL) isBeginningOfMonth:(NSDate *)date
+- (int) getDateHourFromDateInSeconds:(int)dateInSeconds
 {
-    NSDateComponents *components = [self dateComponentsForDay:date];
-    
-    int day = (int) [components day];
-    
-    return  day <= 7;
+    return [self getDateHour:[NSDate dateWithTimeIntervalSinceReferenceDate:dateInSeconds]];
+}
+
+- (int) monthsBetweenDates:(NSDate*)startDate endDate:(NSDate*)endDate
+{
+    NSDateComponents *components = [self.calendar components:NSCalendarUnitMonth fromDate:startDate toDate:endDate options:0];
+    return (int)[components month];
 }
 
 - (int) daysBetweenDates:(NSDate*)startDate endDate:(NSDate*)endDate
@@ -150,10 +177,59 @@ static Constants *constants;
     return (int)[components day];
 }
 
-- (NSDateComponents*) dateComponentsForDay:(NSDate*)date
+- (long) timeAtBeginningOfDayForDate:(NSDate*)inputDate
 {
-    return [self.calendar components:NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay fromDate:date];
+    NSDateComponents *dateComps = [self dateComponentsForDay:inputDate];
+    [dateComps setHour:0];
+    [dateComps setMinute:0];
+    [dateComps setSecond:0]; //Or should it be 1?
+    return [[self.calendar dateFromComponents:dateComps] timeIntervalSinceReferenceDate];
 }
+
+- (long) timeAtEndOfDayForDate:(NSDate*)inputDate
+{
+    // Selectively convert the date components (year, month, day) of the input date
+    NSDateComponents *dateComps = [self dateComponentsForDay:inputDate];
+    
+    // Set the time components manually
+    [dateComps setHour:23];
+    [dateComps setMinute:59];
+    [dateComps setSecond:59];
+    
+    // Convert back
+    NSDate *endOfDay = [self.calendar dateFromComponents:dateComps];
+    return [endOfDay timeIntervalSinceReferenceDate];
+}
+
+
+/****************************************************************
+ *
+ *              BOOLS FROM INFORMATION
+ *
+*****************************************************************/
+
+# pragma mark BOOLS FROM INFORMATION
+
+- (BOOL) isBeginningOfMonth:(NSDate *)date
+{
+    NSDateComponents *components = [self dateComponentsForDay:date];
+    int day = (int) [components day];
+    return  day <= 7;
+}
+
+- (BOOL) isIMessage:(char*)text
+{
+    return strcmp(text, "iMessage") == 0;
+}
+
+
+/****************************************************************
+ *
+ *              STRING FROM DATE INFORMATION
+ *
+*****************************************************************/
+
+# pragma mark SEARCHFIELD_DELEGATE
 
 - (NSString*) dayMonthYearString:(NSDate*)date
 {
@@ -175,57 +251,32 @@ static Constants *constants;
     return monthName;
 }
 
-- (NSDate*) getDateAtEndOfYear:(NSDate*)inputDate
+- (NSString*) stringForDateAfterStart:(int)startDay
 {
-    NSDateComponents *dateComps = [self dateComponentsForDay:inputDate];
-    [dateComps setHour:23];
-    [dateComps setMinute:59];
-    [dateComps setSecond:59];
-    [dateComps setMonth:12];
-    [dateComps setDay:31];
-
-    return [self.calendar dateFromComponents:dateComps];
-}
-
-- (NSDate*) getDateAtBeginningOfYear:(NSDate*)inputDate
-{
-    NSDateComponents *dateComps = [self dateComponentsForDay:inputDate];
+    NSDateComponents *dateComps = [self dateComponentsForDay:[NSDate date]];
+    
     [dateComps setHour:0];
     [dateComps setMinute:0];
     [dateComps setSecond:1];
     [dateComps setMonth:1];
-    [dateComps setDay:1];
-
-    return [self.calendar dateFromComponents:dateComps];
-}
-
-- (long)timeAtBeginningOfDayForDate:(NSDate*)inputDate
-{
-    NSDateComponents *dateComps = [self dateComponentsForDay:inputDate];
-    [dateComps setHour:0];
-    [dateComps setMinute:0];
-    [dateComps setSecond:0]; //Or should it be 1?
-    return [[self.calendar dateFromComponents:dateComps] timeIntervalSinceReferenceDate];
-}
-
-- (long)timeAtEndOfDayForDate:(NSDate*)inputDate
-{
-    // Selectively convert the date components (year, month, day) of the input date
-    NSDateComponents *dateComps = [self dateComponentsForDay:inputDate];
+    [dateComps setDay:startDay];
+    NSDate *beginningOfYear = [self.calendar dateFromComponents:dateComps];
     
-    // Set the time components manually
-    [dateComps setHour:23];
-    [dateComps setMinute:59];
-    [dateComps setSecond:59];
-    
-    // Convert back
-    NSDate *endOfDay = [self.calendar dateFromComponents:dateComps];
-    return [endOfDay timeIntervalSinceReferenceDate];
+    return [self.monthDateYearFormatter stringFromDate:beginningOfYear];
 }
 
-- (BOOL) isIMessage:(char*)text
+
+/****************************************************************
+ *
+ *              AUXILLARY
+ *
+*****************************************************************/
+
+# pragma mark AUXILLARY
+
+- (NSDateComponents*) dateComponentsForDay:(NSDate*)date
 {
-    return strcmp(text, "iMessage") == 0;
+    return [self.calendar components:NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay fromDate:date];
 }
 
 @end

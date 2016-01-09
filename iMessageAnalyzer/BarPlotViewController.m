@@ -8,6 +8,9 @@
 
 #import "BarPlotViewController.h"
 
+
+#pragma mark Plot and graph type identifiers 
+
 static NSString *mainPlotId = @"mainPlot";
 static NSString *secondPlotId = @"secondPlot";
 
@@ -23,28 +26,51 @@ typedef enum {
     secondPlot
 } BarPlotIdentifier;
 
+
 @interface BarPlotViewController ()
+
+
+/****************************************************************
+ *
+ *              Private class variables
+ *
+*****************************************************************/
+
+#pragma mark CPTGraph Variables
 
 @property (strong) IBOutlet CPTGraphHostingView *graphHostingView;
 @property (strong, nonatomic) CPTGraph *graph;
 
-@property (strong, nonatomic) TemporaryDatabaseManager *messageManager;
-@property (strong, nonatomic) Person *person;
-
-@property BarPlotType barPlotType;
-
-@property (strong, nonatomic) NSMutableArray *mainData;
-@property (strong, nonatomic) NSMutableArray *secondData;
-
+@property (strong, nonatomic) CPTBarPlot *mainPlot;
+@property (strong, nonatomic) CPTBarPlot *secondPlot;
 @property (strong, nonatomic) CPTAnnotation *yValueAnnotation;
 @property (strong, nonatomic) NSNumber *barWidth;
 
-@property (strong, nonatomic) CPTBarPlot *mainPlot;
-@property (strong, nonatomic) CPTBarPlot *secondPlot;
+
+#pragma mark Data variables
+
+@property (strong, nonatomic) NSMutableArray *mainData;
+@property (strong, nonatomic) NSMutableArray *secondData;
+@property BarPlotType barPlotType;
+
+
+#pragma mark Person variables
+
+@property (strong, nonatomic) TemporaryDatabaseManager *messageManager;
+@property (strong, nonatomic) Person *person;
 
 @end
 
 @implementation BarPlotViewController
+
+
+/****************************************************************
+ *
+ *              Constructor
+ *
+*****************************************************************/
+
+# pragma mark Constructor
 
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil person:(Person *)person temporaryDatabase:(TemporaryDatabaseManager *)temporaryDatabase
 {
@@ -62,9 +88,11 @@ typedef enum {
     return self;
 }
 
-- (void)viewDidLoad {
+- (void) viewDidLoad {
+    
     [super viewDidLoad];
     
+    //Start off showing sent vs received messages
     self.mainData = [self.messageManager getMySentMessagesInConversationOverHoursInDay:0 endTime:INT_MAX];
     self.secondData = [self.messageManager getReceivedMessagesInConversationOverHoursInDay:0 endTime:INT_MAX];
     
@@ -72,6 +100,77 @@ typedef enum {
     [self.graph applyTheme:[CPTTheme themeNamed:kCPTDarkGradientTheme]];
     [self.graphHostingView setHostedGraph:self.graph];
     
+    [self setGraphPaddingAndPlotArea];
+    [self createGraphPlots];
+    [self setGraphAxisProperties];
+    
+    CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *) self.graph.defaultPlotSpace;
+    [plotSpace setXRange:[CPTPlotRange plotRangeWithLocation:@(0)
+                                                      length:@(24)]];
+    [plotSpace setYRange:[CPTPlotRange plotRangeWithLocation:@(0)
+                                                      length:@([self getMaxFromData])]];
+    [plotSpace setAllowsUserInteraction:NO];
+    
+    [self.graph addPlot:self.mainPlot toPlotSpace:plotSpace];
+    [self.graph addPlot:self.secondPlot toPlotSpace:plotSpace];
+    
+    [self setLegendAndTitle];
+}
+
+
+/****************************************************************
+ *
+ *              Set Graph Properties
+ *
+*****************************************************************/
+
+# pragma mark Set Graph Properties
+
+- (void) setLegendAndTitle
+{
+    CPTMutableTextStyle *textStyle = [CPTMutableTextStyle textStyle];
+    [textStyle setFontSize:10.0f];
+    [textStyle setColor:[CPTColor whiteColor]];
+    
+    CPTLegend *theLegend = [CPTLegend legendWithGraph:self.graph];
+    theLegend.numberOfColumns = 1;
+    theLegend.textStyle = textStyle;
+    theLegend.cornerRadius = 5.0;
+    theLegend.delegate = self;
+    
+    self.graph.legend = theLegend;
+    self.graph.legendAnchor = CPTRectAnchorTopRight;
+    self.graph.legendDisplacement = CGPointMake(0.0, 0.0);
+    
+    textStyle = [CPTMutableTextStyle textStyle];
+    textStyle.color = [CPTColor yellowColor];
+    [self.graph setTitleTextStyle:textStyle];
+    [self.graph setTitle:[NSString stringWithFormat:@"Sent and received words with %@ over 24 hours", self.person.personName]];
+}
+
+- (void) setGraphAxisProperties
+{
+    NSDictionary *result = [self getTickLocationsAndLabelsForHours];
+    
+    CPTMutableTextStyle *textStyle = [CPTMutableTextStyle textStyle];
+    [textStyle setFontSize:10.0f];
+    [textStyle setColor:[CPTColor colorWithCGColor:[[NSColor whiteColor] CGColor]]];
+    
+    CPTXYAxisSet *axis = (CPTXYAxisSet*) self.graph.axisSet;
+    [axis.xAxis setMajorIntervalLength:[NSNumber numberWithDouble:24.0]];
+    [axis.xAxis setMinorTickLineStyle:nil];
+    [axis.xAxis setLabelTextStyle:textStyle];
+    [axis.xAxis setLabelRotation:M_PI/6];
+    
+    axis.xAxis.labelingPolicy = CPTAxisLabelingPolicyNone;
+    axis.xAxis.majorTickLocations = result[@"tickLocations"];
+    axis.xAxis.axisLabels = result[@"tickLabels"];
+    
+    axis.yAxis.labelingPolicy = CPTAxisLabelingPolicyAutomatic;
+}
+
+- (void) setGraphPaddingAndPlotArea
+{
     self.graph.paddingLeft = 0.0;
     self.graph.paddingTop = 0.0;
     self.graph.paddingRight = 0.0;
@@ -88,15 +187,10 @@ typedef enum {
     self.graph.plotAreaFrame.borderLineStyle = nil;
     self.graph.plotAreaFrame.cornerRadius = 0.0;
     self.graph.plotAreaFrame.masksToBorder = NO;
-    
-    CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *) self.graph.defaultPlotSpace;
-    
-    [plotSpace setXRange:[CPTPlotRange plotRangeWithLocation:@(0)
-                                                      length:@(24)]];
-    [plotSpace setYRange:[CPTPlotRange plotRangeWithLocation:@(0)
-                                                      length:@([self getMaxFromData])]];
-    [plotSpace setAllowsUserInteraction:NO];
-    
+}
+
+- (void) createGraphPlots
+{
     CPTMutableLineStyle *barLineStyle = [[CPTMutableLineStyle alloc] init];
     barLineStyle.lineColor = [CPTColor whiteColor];
     barLineStyle.lineFill = [CPTFill fillWithColor:[CPTColor whiteColor]];
@@ -120,42 +214,16 @@ typedef enum {
     barLineStyle.lineFill =[CPTFill fillWithColor:[CPTColor whiteColor]];
     self.secondPlot.fill = [CPTFill fillWithColor:[CPTColor blueColor]];
     self.secondPlot.lineStyle = barLineStyle;
-
-    [self.graph addPlot:self.mainPlot toPlotSpace:plotSpace];
-    [self.graph addPlot:self.secondPlot toPlotSpace:plotSpace];
-    
-    CPTMutableTextStyle *textStyle = [CPTMutableTextStyle textStyle];
-    [textStyle setFontSize:10.0f];
-    [textStyle setColor:[CPTColor colorWithCGColor:[[NSColor whiteColor] CGColor]]];
-    
-    CPTXYAxisSet *axis = (CPTXYAxisSet*) self.graph.axisSet;
-    [axis.xAxis setMajorIntervalLength:[NSNumber numberWithDouble:24.0]];
-    [axis.xAxis setMinorTickLineStyle:nil];
-    [axis.xAxis setLabelingPolicy:CPTAxisLabelingPolicyNone];
-    [axis.xAxis setLabelTextStyle:textStyle];
-    [axis.xAxis setLabelRotation:M_PI/6];
-    
-    NSDictionary *result = [self getTickLocationsAndLabelsForHours];
-    axis.xAxis.majorTickLocations = result[@"tickLocations"];
-    axis.xAxis.axisLabels = result[@"tickLabels"];
-    axis.yAxis.labelingPolicy = CPTAxisLabelingPolicyAutomatic;
-    
-    CPTLegend *theLegend = [CPTLegend legendWithGraph:self.graph];
-    theLegend.numberOfColumns = 1;
-    [textStyle setFontSize:10.0f];
-    [textStyle setColor:[CPTColor whiteColor]];
-    theLegend.textStyle = textStyle;
-    theLegend.cornerRadius = 5.0;
-    self.graph.legend = theLegend;
-    self.graph.legendAnchor = CPTRectAnchorTopRight;
-    self.graph.legendDisplacement = CGPointMake(0.0, 0.0);
-    theLegend.delegate = self;
-    
-    textStyle = [CPTMutableTextStyle textStyle];
-    textStyle.color = [CPTColor yellowColor];
-    [self.graph setTitleTextStyle:textStyle];
-    [self.graph setTitle:[NSString stringWithFormat:@"Sent and received words with %@ over 24 hours", self.person.personName]];
 }
+
+
+/****************************************************************
+ *
+ *              Modify graph data
+ *
+*****************************************************************/
+
+# pragma mark Modify graph data
 
 - (void) showSentAndReceivedMessages
 {
@@ -237,38 +305,14 @@ typedef enum {
     [self setPlotRange];
 }
 
-- (void) setGraphTitle:(NSString*)graphTitle mainPlotTitle:(NSString*)mainPlotTitle secondPlotTitle:(NSString*)secondPlotTitle
-{
-    [self.graph setTitle:graphTitle];
-    [self.mainPlot setTitle:mainPlotTitle];
-    [self.secondPlot setTitle:secondPlotTitle];
-    
-    CPTXYAxisSet *axis = (CPTXYAxisSet*) self.graph.axisSet;
-    if(self.barPlotType == totalMessagesAsPercentage) {
-        [axis.yAxis setTitle:@"% of total messages"];
-    }
-    else {
-        [axis.yAxis setTitle:nil];
-    }
-    [self removeAnnotations];
-}
 
-- (void) removeAnnotations
-{
-    if(self.yValueAnnotation) {
-        [self.graph.plotAreaFrame.plotArea removeAnnotation:self.yValueAnnotation];
-        self.yValueAnnotation = nil;
-    }
-}
+/****************************************************************
+ *
+ *              CPTBarPlot Delegate
+ *
+*****************************************************************/
 
-- (void) calculatePercents:(NSMutableArray*)messages total:(int)total
-{
-    for(int i = 0; i < messages.count; i++) {
-        int messageCount = [messages[i] intValue];
-        double percentage = (messageCount * 100.0) / total;
-        messages[i] = @(percentage);
-    }
-}
+# pragma mark CPTBarPlot Delegate
 
 - (void) barPlot:(CPTBarPlot *)plot barWasSelectedAtRecordIndex:(NSUInteger)idx
 {
@@ -308,69 +352,18 @@ typedef enum {
     [self.graph.plotAreaFrame.plotArea addAnnotation:self.yValueAnnotation];
 }
 
-- (NSDictionary*) getTickLocationsAndLabelsForHours
-{
-    CPTXYAxis *xAxis = [((CPTXYAxisSet *)self.graph.axisSet) xAxis];
-    
-    NSMutableArray *tickLocations = [[NSMutableArray alloc] init];
-    NSMutableArray *tickLabels = [[NSMutableArray alloc] init];
-    
-    double tickLocation = 0;
-    double labelLocation = 0;
-    
-    for(int i = 0; i < 24; i++) {
-        
-        NSString *text = @"";
-        
-        if(i == 0) {
-            text = @"12AM";
-        }
-        else if(i < 12) {
-            text = [NSString stringWithFormat:@"%dAM", i];
-        }
-        else if(i == 12) {
-            text = @"12PM";
-        }
-        else if(i < 24) {
-            text = [NSString stringWithFormat:@"%dPM", (i - 12)];
-        }
 
-        [tickLocations addObject:@(tickLocation)];
-        tickLocation += 1;
-        CPTAxisLabel *label = [[CPTAxisLabel alloc] initWithText:text textStyle:xAxis.labelTextStyle];
-        label.tickLocation = @(labelLocation);
-        labelLocation += 1;
-        label.offset = 4.0f;
-        label.rotation = M_PI / 6;
+/****************************************************************
+ *
+ *              CPTBarPlot Data Source
+ *
+*****************************************************************/
 
-        [tickLabels addObject:label];
-    }
-    
-    return [NSDictionary dictionaryWithObjectsAndKeys:tickLocations, @"tickLocations", tickLabels, @"tickLabels", nil];
-}
+# pragma mark CPTBarPlot Data Source
 
 - (NSUInteger) numberOfRecordsForPlot:(CPTPlot *)plot
 {
     return 24;
-}
-
-- (BarPlotIdentifier) getPlotType:(CPTPlot*)plot
-{
-    NSString *plotType = (NSString*) plot.plotSpace.identifier;
-    if([plot.identifier isEqual:mainPlotId]) {
-        return mainPlot;
-    }
-    else if([plot.identifier isEqual:secondPlotId]) {
-        return secondPlot;
-    }
-    
-    if([plotType isEqualToString:mainPlotId]) {
-        return mainPlot;
-    }
-    else if([plotType isEqualToString:secondPlotId]) {
-        return secondPlot;
-    }
-    return mainPlot;
 }
 
 - (id) numberForPlot:(CPTPlot *)plot field:(NSUInteger)fieldEnum recordIndex:(NSUInteger)idx
@@ -384,6 +377,48 @@ typedef enum {
     }
     else {
         return self.secondData[idx];
+    }
+}
+
+
+/****************************************************************
+ *
+ *              Auxillary methods
+ *
+*****************************************************************/
+
+# pragma mark Auxillary methods
+
+- (void) setGraphTitle:(NSString*)graphTitle mainPlotTitle:(NSString*)mainPlotTitle secondPlotTitle:(NSString*)secondPlotTitle
+{
+    [self.graph setTitle:graphTitle];
+    [self.mainPlot setTitle:mainPlotTitle];
+    [self.secondPlot setTitle:secondPlotTitle];
+    
+    CPTXYAxisSet *axis = (CPTXYAxisSet*) self.graph.axisSet;
+    if(self.barPlotType == totalMessagesAsPercentage) {
+        [axis.yAxis setTitle:@"% of total messages"];
+    }
+    else {
+        [axis.yAxis setTitle:nil];
+    }
+    [self removeAnnotations];
+}
+
+- (void) removeAnnotations
+{
+    if(self.yValueAnnotation) {
+        [self.graph.plotAreaFrame.plotArea removeAnnotation:self.yValueAnnotation];
+        self.yValueAnnotation = nil;
+    }
+}
+
+- (void) calculatePercents:(NSMutableArray*)messages total:(int)total
+{
+    for(int i = 0; i < messages.count; i++) {
+        int messageCount = [messages[i] intValue];
+        double percentage = (messageCount * 100.0) / total;
+        messages[i] = @(percentage);
     }
 }
 
@@ -412,6 +447,66 @@ typedef enum {
     }
     
     return max;
+}
+
+- (BarPlotIdentifier) getPlotType:(CPTPlot*)plot
+{
+    NSString *plotType = (NSString*) plot.plotSpace.identifier;
+    if([plot.identifier isEqual:mainPlotId]) {
+        return mainPlot;
+    }
+    else if([plot.identifier isEqual:secondPlotId]) {
+        return secondPlot;
+    }
+    
+    if([plotType isEqualToString:mainPlotId]) {
+        return mainPlot;
+    }
+    else if([plotType isEqualToString:secondPlotId]) {
+        return secondPlot;
+    }
+    return mainPlot;
+}
+
+- (NSDictionary*) getTickLocationsAndLabelsForHours
+{
+    CPTXYAxis *xAxis = [((CPTXYAxisSet *)self.graph.axisSet) xAxis];
+    
+    NSMutableArray *tickLocations = [[NSMutableArray alloc] init];
+    NSMutableArray *tickLabels = [[NSMutableArray alloc] init];
+    
+    double tickLocation = 0;
+    double labelLocation = 0;
+    
+    for(int i = 0; i < 24; i++) {
+        
+        NSString *text = @"";
+        
+        if(i == 0) {
+            text = @"12AM";
+        }
+        else if(i < 12) {
+            text = [NSString stringWithFormat:@"%dAM", i];
+        }
+        else if(i == 12) {
+            text = @"12PM";
+        }
+        else if(i < 24) {
+            text = [NSString stringWithFormat:@"%dPM", (i - 12)];
+        }
+        
+        [tickLocations addObject:@(tickLocation)];
+        tickLocation += 1;
+        CPTAxisLabel *label = [[CPTAxisLabel alloc] initWithText:text textStyle:xAxis.labelTextStyle];
+        label.tickLocation = @(labelLocation);
+        labelLocation += 1;
+        label.offset = 4.0f;
+        label.rotation = M_PI / 6;
+        
+        [tickLabels addObject:label];
+    }
+    
+    return [NSDictionary dictionaryWithObjectsAndKeys:tickLocations, @"tickLocations", tickLabels, @"tickLabels", nil];
 }
 
 @end

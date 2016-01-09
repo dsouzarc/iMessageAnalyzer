@@ -8,37 +8,50 @@
 
 #import <Foundation/Foundation.h>
 
+/** Classless, helpful auxillary methods used by a variety of classes */
+
 @interface Constants : NSObject
 
-+ (instancetype) instance;
+#pragma mark CONSTRUCTORS
 
++ (instancetype) instance;
 @property (readonly) Constants *instance;
 
-- (long)timeAtBeginningOfDayForDate:(NSDate*)inputDate;
-- (NSDate*) getDateAtBeginningOfYear:(NSDate*)inputDate;
-- (NSDate*) getDateAtEndOfYear:(NSDate*)inputDate;
-- (NSString*)MonthNameString:(int)monthNumber;
+#pragma mark STRING FROM INFORMATION
+
+- (NSString*) MonthNameString:(int)monthNumber;
+- (NSString*) dayMonthYearString:(NSDate*)date;
+- (NSString*) monthYearToString:(NSDate*)date;
 - (NSString*) stringForDateAfterStart:(int)startDay;
 
-- (long)timeAtEndOfDayForDate:(NSDate*)inputDate;
+
+#pragma mark BOOL FROM INFORMATION
+
 - (BOOL) isIMessage:(char*)text;
 - (BOOL) isBeginningOfMonth:(NSDate*)date;
 
-- (int) monthsBetweenDates:(NSDate*)startDate endDate:(NSDate*)endDate;
-- (NSDate*) dateByAddingDays:(NSDate*)date days:(int)days;
-- (NSString*) dayMonthYearString:(NSDate*)date;
+
+#pragma mark DATE FROM INFORMATION
+
+- (NSDate*) getDateAtBeginningOfYear:(NSDate*)inputDate;
+- (NSDate*) getDateAtEndOfYear:(NSDate*)inputDate;
 
 - (NSDate*) dateAtEndOfMonth:(NSDate*)date;
 - (NSDate*) dateAtBeginningOfMonth:(NSDate*)date;
 - (NSDate*) dateAtBeginningOfNextMonth:(NSDate*)date;
 
-- (int) daysBetweenDates:(NSDate*)startDate endDate:(NSDate*)endDate;
-- (int) daysInMonthForDate:(NSDate*)date;
-
-- (NSString*) monthYearToString:(NSDate*)date;
-
 - (NSDate*) dateBySubtractingMonths:(NSDate*)date months:(int)months;
 - (NSDate*) dateByAddingMonths:(NSDate*)date months:(int)months;
+- (NSDate*) dateByAddingDays:(NSDate*)date days:(int)days;
+
+#pragma mark NUMBERS FROM INFORMATION
+
+- (int) daysBetweenDates:(NSDate*)startDate endDate:(NSDate*)endDate;
+- (int) daysInMonthForDate:(NSDate*)date;
+- (int) monthsBetweenDates:(NSDate*)startDate endDate:(NSDate*)endDate;
+
+- (long) timeAtBeginningOfDayForDate:(NSDate*)inputDate;
+- (long) timeAtEndOfDayForDate:(NSDate*)inputDate;
 
 - (int) getDateHour:(NSDate*)date;
 - (int) getDateHourFromDateInSeconds:(int)dateInSeconds;
