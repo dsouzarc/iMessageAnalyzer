@@ -34,7 +34,6 @@
 @property (strong) IBOutlet NSButton *barChartTotalMessages;
 @property (strong) IBOutlet NSButton *barChartTotalMessagesAsPercent;
 
-
 @end
 
 @implementation GraphViewController
@@ -103,78 +102,78 @@
     
     [self disableAllCheckMarks];
     
-    if(sender == self.lineGraphAllTimeButton) {
-        [self showDropPlot];
-        [self.lineGraphCompareToOthersButton setEnabled:YES];
-        [self.dropPlotViewController showThisConversationMessagesOverYear];
-    }
-    
-    else if(sender == self.lineGraphMessagesButton) {
-        [self showDropPlot];
-        [self.dropPlotViewController showThisConversationSentAndReceivedMessages];
+    //Multiples of 7 have to do with bar graphs
+    if([sender tag] % 7 == 0) {
+        [self showBarPlot];
         [self.lineGraphCompareToOthersButton setState:NSOffState];
-    }
-    
-    else if(sender == self.lineGraphWordsButton) {
-        [self showDropPlot];
-        [self.dropPlotViewController showThisConversationSentAndReceivedWords];
-        [self.lineGraphCompareToOthersButton setState:NSOffState];
-    }
-
-    else if(sender == self.lineGraphCompareToOthersButton) {
-        [self showDropPlot];
-        [self.lineGraphCompareToOthersButton setEnabled:YES];
         
-        if(self.lineGraphCompareToOthersButton.state == NSOnState) {
-            if(self.lineGraphAllTimeButton.state == NSOnState) {
-                [self.dropPlotViewController showAllOtherMessagesOverYear];
+        if(sender == self.barChartSentAndReceivedMessages) {
+            [self.barPlotViewController showSentAndReceivedMessages];
+        }
+        
+        else if(sender == self.barChartSentAndReceivedWords) {
+            [self.barPlotViewController showSentAndReceivedWords];
+        }
+        
+        else if(sender == self.barChartTotalMessages) {
+            [self.barPlotViewController showTotalMessages];
+        }
+        
+        else if(sender == self.barChartTotalMessagesAsPercent) {
+            [self.barPlotViewController showTotalMessagesAsPercentage];
+        }
+    }
+    
+    //Multiples of 5 have to do with pie charts
+    else if([sender tag] % 5 == 0) {
+        
+        [self showPieChart];
+        [self.lineGraphCompareToOthersButton setState:NSOffState];
+        
+        if(sender == self.pieChartSentAndReceivedMessages) {
+            [self.pieChartViewController showSentAndReceivedMessages];
+        }
+        
+        else if(sender == self.pieChartSentAndReceivedWords) {
+            [self.pieChartViewController showSentAndReceivedWords];
+        }
+        
+        else if(sender == self.pieChartSentAndReceivedTotalMessages) {
+            [self.pieChartViewController showTotalMessages];
+        }
+    }
+    
+    //Multiples of 3 have to do with pie charts
+    else if([sender tag] % 3 == 0) {
+        
+        [self showDropPlot];
+
+        if(sender == self.lineGraphAllTimeButton) {
+            [self.dropPlotViewController showThisConversationMessagesOverYear];
+            [self.lineGraphCompareToOthersButton setEnabled:YES];
+        }
+        
+        else if(sender == self.lineGraphMessagesButton) {
+            [self.dropPlotViewController showThisConversationSentAndReceivedMessages];
+            [self.lineGraphCompareToOthersButton setState:NSOffState];
+        }
+        
+        else if(sender == self.lineGraphWordsButton) {
+            [self.dropPlotViewController showThisConversationSentAndReceivedWords];
+            [self.lineGraphCompareToOthersButton setState:NSOffState];
+        }
+        
+        else if(sender == self.lineGraphCompareToOthersButton) {
+            [self.lineGraphCompareToOthersButton setEnabled:YES];
+            if(self.lineGraphCompareToOthersButton.state == NSOnState) {
+                if(self.lineGraphAllTimeButton.state == NSOnState) {
+                    [self.dropPlotViewController showAllOtherMessagesOverYear];
+                }
+            }
+            else {
+                [self.dropPlotViewController hideSecondGraph];
             }
         }
-        else {
-            [self.dropPlotViewController hideSecondGraph];
-        }
-    }
-    
-    else if(sender == self.pieChartSentAndReceivedMessages) {
-        [self showPieChart];
-        [self.pieChartViewController showSentAndReceivedMessages];
-        [self.lineGraphCompareToOthersButton setState:NSOffState];
-    }
-    
-    else if(sender == self.pieChartSentAndReceivedWords) {
-        [self showPieChart];
-        [self.pieChartViewController showSentAndReceivedWords];
-        [self.lineGraphCompareToOthersButton setState:NSOffState];
-    }
-    
-    else if(sender == self.pieChartSentAndReceivedTotalMessages) {
-        [self showPieChart];
-        [self.pieChartViewController showTotalMessages];
-        [self.lineGraphCompareToOthersButton setState:NSOffState];
-    }
-    
-    else if(sender == self.barChartSentAndReceivedMessages) {
-        [self showBarPlot];
-        [self.barPlotViewController showSentAndReceivedMessages];
-        [self.lineGraphCompareToOthersButton setState:NSOffState];
-    }
-    
-    else if(sender == self.barChartSentAndReceivedWords) {
-        [self showBarPlot];
-        [self.barPlotViewController showSentAndReceivedWords];
-        [self.lineGraphCompareToOthersButton setState:NSOffState];
-    }
-    
-    else if(sender == self.barChartTotalMessages) {
-        [self showBarPlot];
-        [self.barPlotViewController showTotalMessages];
-        [self.lineGraphCompareToOthersButton setState:NSOffState];
-    }
-    
-    else if(sender == self.barChartTotalMessagesAsPercent) {
-        [self showBarPlot];
-        [self.barPlotViewController showTotalMessagesAsPercentage];
-        [self.lineGraphCompareToOthersButton setState:NSOffState];
     }
 }
 

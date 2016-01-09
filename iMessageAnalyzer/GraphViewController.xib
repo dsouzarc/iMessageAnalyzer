@@ -48,7 +48,7 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uo4-az-g0P">
+                <button fixedFrame="YES" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="uo4-az-g0P">
                     <rect key="frame" x="933" y="411" width="157" height="18"/>
                     <buttonCell key="cell" type="radio" title="All Time" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="Zgl-nW-O6O">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -58,7 +58,7 @@
                         <action selector="buttonClick:" target="-2" id="kXH-A0-xPB"/>
                     </connections>
                 </button>
-                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="24A-MS-RrU">
+                <button fixedFrame="YES" tag="15" translatesAutoresizingMaskIntoConstraints="NO" id="24A-MS-RrU">
                     <rect key="frame" x="936" y="167" width="157" height="18"/>
                     <buttonCell key="cell" type="radio" title="Total Messages" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="Aet-wa-bMV">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -88,7 +88,7 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2Zc-ZQ-LE0">
+                <button fixedFrame="YES" tag="5" translatesAutoresizingMaskIntoConstraints="NO" id="2Zc-ZQ-LE0">
                     <rect key="frame" x="945" y="211" width="85" height="18"/>
                     <buttonCell key="cell" type="radio" title="Messages" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="UMS-aP-f2I">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -98,7 +98,7 @@
                         <action selector="buttonClick:" target="-2" id="cGG-Vo-IfR"/>
                     </connections>
                 </button>
-                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="thv-EY-Zk8">
+                <button fixedFrame="YES" tag="10" translatesAutoresizingMaskIntoConstraints="NO" id="thv-EY-Zk8">
                     <rect key="frame" x="945" y="189" width="110" height="18"/>
                     <buttonCell key="cell" type="radio" title="Words" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="U5j-bm-EAI">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -116,7 +116,7 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eLF-hX-Iig">
+                <button fixedFrame="YES" tag="6" translatesAutoresizingMaskIntoConstraints="NO" id="eLF-hX-Iig">
                     <rect key="frame" x="933" y="388" width="140" height="18"/>
                     <buttonCell key="cell" type="check" title="Compare to Others" bezelStyle="regularSquare" imagePosition="left" inset="2" id="v28-uE-rZ7">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -132,7 +132,7 @@
                     <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <font key="titleFont" metaFont="system"/>
                 </box>
-                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XVr-iI-FkL">
+                <button fixedFrame="YES" tag="9" translatesAutoresizingMaskIntoConstraints="NO" id="XVr-iI-FkL">
                     <rect key="frame" x="933" y="336" width="85" height="18"/>
                     <buttonCell key="cell" type="radio" title="Messages" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="bvM-SP-4WW">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -142,7 +142,7 @@
                         <action selector="buttonClick:" target="-2" id="zX4-vn-hXF"/>
                     </connections>
                 </button>
-                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nc2-NJ-qca">
+                <button fixedFrame="YES" tag="12" translatesAutoresizingMaskIntoConstraints="NO" id="nc2-NJ-qca">
                     <rect key="frame" x="933" y="308" width="110" height="18"/>
                     <buttonCell key="cell" type="radio" title="Words" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="Wgn-oV-1Mr">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -174,7 +174,7 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Yaq-cg-lh9">
+                <button fixedFrame="YES" tag="21" translatesAutoresizingMaskIntoConstraints="NO" id="Yaq-cg-lh9">
                     <rect key="frame" x="936" y="40" width="157" height="18"/>
                     <buttonCell key="cell" type="radio" title="Total Messages" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="qyM-IZ-uia">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -184,7 +184,7 @@
                         <action selector="buttonClick:" target="-2" id="epV-Io-5O5"/>
                     </connections>
                 </button>
-                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iOa-qJ-uHW">
+                <button fixedFrame="YES" tag="7" translatesAutoresizingMaskIntoConstraints="NO" id="iOa-qJ-uHW">
                     <rect key="frame" x="945" y="84" width="85" height="18"/>
                     <buttonCell key="cell" type="radio" title="Messages" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="AYA-8P-bkK">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -194,7 +194,7 @@
                         <action selector="buttonClick:" target="-2" id="f0T-cJ-1sG"/>
                     </connections>
                 </button>
-                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pda-pv-Vej">
+                <button fixedFrame="YES" tag="14" translatesAutoresizingMaskIntoConstraints="NO" id="pda-pv-Vej">
                     <rect key="frame" x="945" y="62" width="110" height="18"/>
                     <buttonCell key="cell" type="radio" title="Words" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="24a-q6-XaY">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -212,7 +212,7 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jrd-n2-1vL">
+                <button fixedFrame="YES" tag="28" translatesAutoresizingMaskIntoConstraints="NO" id="jrd-n2-1vL">
                     <rect key="frame" x="935" y="18" width="157" height="18"/>
                     <buttonCell key="cell" type="radio" title="Total Messages as %" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="6fg-hG-MnO">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
