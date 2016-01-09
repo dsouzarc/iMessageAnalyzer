@@ -8,23 +8,24 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "MessageManager.h"
-
 #import "ChatTableViewCell.h"
 #import "TextTableCellView.h"
 
-#import "MoreAnalysisWindowController.h"
-#import "NSTextField+Messages.h"
-
 #import "CalendarPopUpViewController.h"
+#import "MoreAnalysisWindowController.h"
+#import "ViewAttachmentsViewController.h"
 #import "SimpleAnalyticsPopupViewController.h"
 
-#import "ViewAttachmentsViewController.h"
+#import "NSTextField+Messages.h"
+
+#import "MessageManager.h"
 
 #import "Contact.h"
 #import "Message.h"
 #import "Attachment.h"
 #import "Person.h"
+
+/** Shows all conversations and all messages. Central to everything */
 
 @interface MainViewController : NSViewController <NSTableViewDataSource, NSTableViewDelegate, NSSearchFieldDelegate, CalendarPopUpViewControllerDelegate, NSPopoverDelegate, SimpleAnalyticsPopUpViewControllerDelegate, MoreAnalysisWindowControllerDelegate, NSTextField_MessagesDelegate>
 

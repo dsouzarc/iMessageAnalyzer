@@ -10,16 +10,27 @@
 
 @interface ViewAttachmentsViewController ()
 
+#pragma mark Private variables
+
 @property (strong) IBOutlet NSTableView *mainTableView;
+
+@property (nonatomic) NSSize defaultSize;
 
 @property (strong, nonatomic) NSMutableArray *attachments;
 @property (strong, nonatomic) NSMutableArray *objectsToShow;
 
-@property (nonatomic) NSSize defaultSize;
-
 @end
 
 @implementation ViewAttachmentsViewController
+
+
+/****************************************************************
+ *
+ *              Constructor
+ *
+*****************************************************************/
+
+# pragma mark Constructor
 
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil attachments:(NSMutableArray *)attachments
 {
@@ -121,15 +132,14 @@
     });
 }
 
-- (NSInteger) numberOfRowsInTableView:(NSTableView *)tableView
-{
-    return self.objectsToShow.count;
-}
 
-- (id) tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
-{
-    return nil;
-}
+/****************************************************************
+ *
+ *              NSTableView Data Source and Delegate
+ *
+*****************************************************************/
+
+# pragma mark NSTableView Data Source and Delegate
 
 - (CGFloat) tableView:(NSTableView *)tableView heightOfRow:(NSInteger)row
 {
@@ -210,6 +220,25 @@
     
     return view;
 }
+
+- (NSInteger) numberOfRowsInTableView:(NSTableView *)tableView
+{
+    return self.objectsToShow.count;
+}
+
+- (id) tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
+{
+    return nil;
+}
+
+
+/****************************************************************
+ *
+ *              Auxillary Methods
+ *
+*****************************************************************/
+
+# pragma mark Auxillary Methods
 
 - (BOOL) isIdentifiableMedia:(NSString*)fileType
 {

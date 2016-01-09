@@ -20,7 +20,13 @@
 #import "Statistics.h"
 #import "Message.h"
 
+
+/** Shows more analysis screen that includes graph */
+
 @interface MoreAnalysisViewController : NSViewController <NSTableViewDataSource, NSTableViewDelegate, NSDatePickerCellDelegate, NSPopoverDelegate, NSTextField_MessagesDelegate>
+
+
+#pragma mark Constructor 
 
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil person:(Person*)person messages:(NSMutableArray*)messages databaseManager:(TemporaryDatabaseManager*)databaseManager;
 

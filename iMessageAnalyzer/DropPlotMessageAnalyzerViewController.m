@@ -288,7 +288,6 @@ typedef enum {
     return label;
 }
 
-
 - (NSUInteger) numberOfRecordsForPlot:(CPTPlot *)plot
 {
     switch ([self getPlotType:plot]) {
@@ -398,6 +397,31 @@ typedef enum {
     return NO;
 }
 
+- (BOOL) plotSpace:(CPTPlotSpace *)space shouldHandlePointingDeviceDraggedEvent:(id)event atPoint:(CGPoint)interactionPoint
+{
+    CPTPlotSpaceAnnotation *annotation = self.zoomAnnotation;
+    
+    if (annotation) {
+        CPTPlotArea *plotArea = self.graph.plotAreaFrame.plotArea;
+        CGRect plotBounds = plotArea.bounds;
+        
+        CGPoint dragStartInPlotArea = [self.graph convertPoint:self.dragStart toLayer:plotArea];
+        CGPoint dragEndInPlotArea   = [self.graph convertPoint:interactionPoint toLayer:plotArea];
+        
+        CGFloat endX = MAX(MIN(dragEndInPlotArea.x, CGRectGetMaxX(plotBounds)), CGRectGetMinX(plotBounds));
+        CGFloat endY = MAX(MIN(dragEndInPlotArea.y, CGRectGetMaxY(plotBounds)), CGRectGetMinY(plotBounds));
+        CGRect borderRect = CGRectMake(dragStartInPlotArea.x, dragStartInPlotArea.y,
+                                       (endX - dragStartInPlotArea.x),
+                                       (endY - dragStartInPlotArea.y) );
+        
+        annotation.contentAnchorPoint = CGPointMake(dragEndInPlotArea.x >= dragStartInPlotArea.x ? 0.0 : 1.0,
+                                                    dragEndInPlotArea.y >= dragStartInPlotArea.y ? 0.0 : 1.0);
+        annotation.contentLayer.frame = borderRect;
+    }
+    
+    return NO;
+}
+
 - (CPTPlotRange*) plotSpace:(CPTPlotSpace *)space willChangePlotRangeTo:(CPTPlotRange *)newRange forCoordinate:(CPTCoordinate)coordinate
 {
     CPTPlotRange *updatedRange = nil;
@@ -459,31 +483,6 @@ typedef enum {
     [self.graph.plotAreaFrame.plotArea addAnnotation:self.yValueAnnotation];
 }
 
-- (BOOL) plotSpace:(CPTPlotSpace *)space shouldHandlePointingDeviceDraggedEvent:(id)event atPoint:(CGPoint)interactionPoint
-{
-    CPTPlotSpaceAnnotation *annotation = self.zoomAnnotation;
-    
-    if (annotation) {
-        CPTPlotArea *plotArea = self.graph.plotAreaFrame.plotArea;
-        CGRect plotBounds = plotArea.bounds;
-        
-        CGPoint dragStartInPlotArea = [self.graph convertPoint:self.dragStart toLayer:plotArea];
-        CGPoint dragEndInPlotArea   = [self.graph convertPoint:interactionPoint toLayer:plotArea];
-        
-        CGFloat endX = MAX(MIN(dragEndInPlotArea.x, CGRectGetMaxX(plotBounds)), CGRectGetMinX(plotBounds));
-        CGFloat endY = MAX(MIN(dragEndInPlotArea.y, CGRectGetMaxY(plotBounds)), CGRectGetMinY(plotBounds));
-        CGRect borderRect = CGRectMake(dragStartInPlotArea.x, dragStartInPlotArea.y,
-                                       (endX - dragStartInPlotArea.x),
-                                       (endY - dragStartInPlotArea.y) );
-        
-        annotation.contentAnchorPoint = CGPointMake(dragEndInPlotArea.x >= dragStartInPlotArea.x ? 0.0 : 1.0,
-                                                    dragEndInPlotArea.y >= dragStartInPlotArea.y ? 0.0 : 1.0);
-        annotation.contentLayer.frame = borderRect;
-    }
-    
-    return NO;
-}
-
 - (void) plotSpace:(CPTPlotSpace *)space didChangePlotRangeForCoordinate:(CPTCoordinate)coordinate
 {
     //NSLog(@"CHANGED!!");
@@ -492,13 +491,13 @@ typedef enum {
 
 /****************************************************************
  *
- *              ZOOM METHODS
+ *              Zoom methods
  *
  *****************************************************************/
 
-# pragma mark ZOOM_METHODS
+# pragma mark Zoom methods
 
--(IBAction)zoomIn
+- (IBAction)zoomIn
 {
     self.isZoomedOut = NO;
     

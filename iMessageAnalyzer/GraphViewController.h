@@ -19,7 +19,12 @@
 #import "Person.h"
 #import "Statistics.h"
 
+
+/** Presents options for and manages BarPlot, DropPlot, and PieChart ViewControllers */
+
 @interface GraphViewController : NSViewController
+
+#pragma mark Constructor 
 
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil person:(Person*)person temporaryDatabase:(TemporaryDatabaseManager*)temporaryDatabase firstMessageDate:(NSDate*)firstMessage graphView:(NSView*)graphView;
 

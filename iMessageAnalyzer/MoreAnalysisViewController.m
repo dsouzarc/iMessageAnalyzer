@@ -10,19 +10,20 @@
 
 @interface MoreAnalysisViewController ()
 
+
+#pragma mark UI Variables
+
 @property (strong) IBOutlet NSView *mainViewForGraph;
 
 @property (strong) IBOutlet NSTableView *messagesTableView;
-
 @property (strong) IBOutlet NSTableView *myWordFrequenciesTableView;
 @property (strong) IBOutlet NSTableView *friendsWordFrequenciesTableView;
-@property (strong) IBOutlet NSTextField *friendsWordsFrequenciesTextField;
 
+@property (strong) IBOutlet NSTextField *friendsWordsFrequenciesTextField;
 @property (strong) IBOutlet NSDatePicker *mainDatePicker;
 
 @property (strong, nonatomic) NSTextView *sizingView;
 @property (strong, nonatomic) NSTextField *sizingField;
-
 @property (strong, nonatomic) NSTextField *noMessagesField;
 
 @property NSRect messageFromMe;
@@ -34,6 +35,16 @@
 @property (strong, nonatomic) NSDateFormatter *dateFormatter;
 @property (strong, nonatomic) NSDate *calendarChosenDate;
 
+
+#pragma mark View Controllers
+
+@property (strong, nonatomic) NSPopover *viewAttachmentsPopover;
+@property (strong, nonatomic) ViewAttachmentsViewController *viewAttachmentsViewController;
+@property (strong, nonatomic) GraphViewController *graphViewController;
+
+
+#pragma mark Arrays for messages and frequencies
+
 @property (strong, nonatomic) NSMutableArray *messages;
 @property (strong, nonatomic) NSMutableArray *messagesToDisplay;
 
@@ -43,14 +54,11 @@
 @property (strong, nonatomic) NSMutableArray *friendWords;
 @property (strong, nonatomic) NSMutableArray *friendWordFrequencies;
 
-@property (strong, nonatomic) NSPopover *viewAttachmentsPopover;
-@property (strong, nonatomic) ViewAttachmentsViewController *viewAttachmentsViewController;
 
-@property (strong, nonatomic) GraphViewController *graphViewController;
+#pragma mark Person information
 
 @property (strong, nonatomic) Person *person;
 @property (strong, nonatomic) TemporaryDatabaseManager *databaseManager;
-
 
 @property int myWordCount;
 @property int friendCount;
@@ -61,6 +69,15 @@
 @end
 
 @implementation MoreAnalysisViewController
+
+
+/****************************************************************
+ *
+ *              Constructor
+ *
+*****************************************************************/
+
+# pragma mark Constructor
 
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil person:(Person *)person messages:(NSMutableArray *)messages databaseManager:(TemporaryDatabaseManager *)databaseManager
 {
@@ -133,6 +150,15 @@
 {
     [self dealWithWordFrequencies];
 }
+
+
+/****************************************************************
+ *
+ *              Word Frequencies
+ *
+*****************************************************************/
+
+# pragma mark Word Frequencies
 
 - (void) dealWithWordFrequencies
 {
@@ -244,28 +270,11 @@
 
 /****************************************************************
  *
- *              NSTABLEVIEW DELEGATE
+ *              NSTableView Delegate
  *
 *****************************************************************/
 
-# pragma mark NSTABLEVIEW_DELEGATE
-
-- (NSInteger) numberOfRowsInTableView:(NSTableView *)tableView
-{
-    if(tableView == self.messagesTableView) {
-        return self.messagesToDisplay.count;
-    }
-    
-    if(tableView == self.myWordFrequenciesTableView && self.myWordFrequencies) {
-        return self.myWordFrequencies.count;
-    }
-    
-    if(tableView == self.friendsWordFrequenciesTableView && self.friendWordFrequencies) {
-        return self.friendWordFrequencies.count;
-    }
-    
-    return 0;
-}
+# pragma mark NSTableView Delegate
 
 - (NSView*) tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
@@ -480,6 +489,22 @@
     return 80.0;
 }
 
+- (NSInteger) numberOfRowsInTableView:(NSTableView *)tableView
+{
+    if(tableView == self.messagesTableView) {
+        return self.messagesToDisplay.count;
+    }
+    
+    if(tableView == self.myWordFrequenciesTableView && self.myWordFrequencies) {
+        return self.myWordFrequencies.count;
+    }
+    
+    if(tableView == self.friendsWordFrequenciesTableView && self.friendWordFrequencies) {
+        return self.friendWordFrequencies.count;
+    }
+    
+    return 0;
+}
 
 - (BOOL) tableView:(NSTableView *)tableView shouldSelectRow:(NSInteger)row
 {
@@ -505,13 +530,13 @@
 
 /****************************************************************
  *
- *              DATEPICKERCELL DELEGATE
+ *              DatePickerCell Delegate
  *
  *****************************************************************/
 
 int tempCounter = 2;
 
-# pragma mark DATEPICKERCELL_DELEGATE
+# pragma mark DatePickerCell Delegate
 
 - (void) datePickerCell:(NSDatePickerCell *)aDatePickerCell validateProposedDateValue:(NSDate *__autoreleasing  _Nonnull *)proposedDateValue timeInterval:(NSTimeInterval *)proposedTimeInterval
 {
@@ -562,11 +587,11 @@ int tempCounter = 2;
 
 /****************************************************************
  *
- *              TEXTFIELD_MESSAGES DELEGATE
+ *              TextField Delegate
  *
  *****************************************************************/
 
-# pragma mark TEXTFIELD_MESSAGES DELEGATE
+# pragma mark TextField Delegate
 
 - (void) clickedOnTextField:(int32_t)textFieldNumber
 {
@@ -591,11 +616,11 @@ int tempCounter = 2;
 
 /****************************************************************
  *
- *              NSPOPOVER DELEGATE
+ *              NSPopOver Delegate
  *
  *****************************************************************/
 
-# pragma mark NSPOPOVER_DELEGATE
+# pragma mark NSPopOver Delegate
 
 - (void) popoverDidClose:(NSNotification *)notification
 {
@@ -606,11 +631,11 @@ int tempCounter = 2;
 
 /****************************************************************
  *
- *              MISC_HELPERS
+ *              Auxillary Methods
  *
 *****************************************************************/
 
-# pragma mark MISC_HELPERS
+# pragma mark Auxillary Methods
 
 - (IBAction)clearCalendarButton:(id)sender {
     self.messagesToDisplay = self.messages;

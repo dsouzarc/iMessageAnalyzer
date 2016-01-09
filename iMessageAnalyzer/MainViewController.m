@@ -10,6 +10,9 @@
 
 @interface MainViewController ()
 
+
+#pragma mark UI Elements
+
 @property (strong) IBOutlet NSTableView *contactsTableView;
 @property (strong) IBOutlet NSTableView *messagesTableView;
 
@@ -26,6 +29,8 @@
 @property NSRect timeStampRect;
 
 
+#pragma mark View Controllers and Popovers
+
 @property (strong, nonatomic) NSPopover *calendarPopover;
 @property (strong, nonatomic) CalendarPopUpViewController *calendarPopUpViewController;
 
@@ -35,18 +40,24 @@
 @property (strong, nonatomic) NSPopover *simpleAnalyticsPopOver;
 @property (strong, nonatomic) SimpleAnalyticsPopUpViewController *simpleAnalyticsViewController;
 
+@property (strong, nonatomic) MoreAnalysisWindowController *moreAnalysisWindowController;
+
+
+#pragma mark Date formatters
 @property (strong, nonatomic) NSDateFormatter *dateFormatter;
 @property (strong, nonatomic) NSDate *calendarChosenDate;
 
+
+#pragma mark Chat and conversation variables
 @property (strong, nonatomic) NSMutableArray *chats;
 @property (strong, nonatomic) NSMutableArray *searchConversationChats;
 @property (strong, nonatomic) NSMutableArray *currentConversationChats;
 
-@property (strong, nonatomic) NSDictionary *messageWithAttachmentAttributes;
 
-@property (strong, nonatomic) MoreAnalysisWindowController *moreAnalysisWindowController;
+#pragma mark Managers and last chosen person
 
 @property (strong, nonatomic) MessageManager *messageManager;
+@property (strong, nonatomic) NSDictionary *messageWithAttachmentAttributes;
 
 @property (strong, nonatomic) Person *lastChosenPerson;
 @property (nonatomic) NSInteger lastChosenPersonIndex;
@@ -55,6 +66,15 @@
 @end
 
 @implementation MainViewController
+
+
+/****************************************************************
+ *
+ *              Constructor
+ *
+*****************************************************************/
+
+# pragma mark Constructor
 
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -191,31 +211,11 @@
 
 /****************************************************************
  *
- *              NSTABLEVIEW DELEGATE
+ *              NSTableView Delegate
  *
  *****************************************************************/
 
-# pragma mark TABLEVIEW_DELEGATE
-
-- (NSInteger) numberOfRowsInTableView:(NSTableView *)tableView
-{
-    if(tableView == self.contactsTableView) {
-        return self.searchConversationChats.count;
-    }
-    else if(tableView == self.messagesTableView) {
-        
-        if(self.currentConversationChats.count > 0) {
-            if(self.noMessagesField) {
-                [self.noMessagesField setHidden:YES];
-            }
-            return self.currentConversationChats.count;
-        }
-        return 1;
-    }
-    else {
-        return 0;
-    }
-}
+# pragma mark NSTableView Delegate
 
 - (CGFloat) tableView:(NSTableView *)tableView heightOfRow:(NSInteger)row
 {
@@ -468,6 +468,26 @@
     return @"PROBLEM";
 }
 
+- (NSInteger) numberOfRowsInTableView:(NSTableView *)tableView
+{
+    if(tableView == self.contactsTableView) {
+        return self.searchConversationChats.count;
+    }
+    else if(tableView == self.messagesTableView) {
+        
+        if(self.currentConversationChats.count > 0) {
+            if(self.noMessagesField) {
+                [self.noMessagesField setHidden:YES];
+            }
+            return self.currentConversationChats.count;
+        }
+        return 1;
+    }
+    else {
+        return 0;
+    }
+}
+
 - (void) doubleClickContactCell
 {
     self.calendarPopUpViewController = [[CalendarPopUpViewController alloc] initWithNibName:@"CalendarPopUpViewController" bundle:[NSBundle mainBundle]];
@@ -483,7 +503,7 @@
 
 /****************************************************************
  *
- *              NSSEARCHFIELD DELEGATE
+ *              NSearchField Delegate
  *
  *****************************************************************/
 
@@ -563,11 +583,11 @@
 
 /****************************************************************
  *
- *              NSTEXTFIELD_MESSAGES DELEGATE
+ *              NSTextField Delegate
  *
  *****************************************************************/
 
-# pragma mark NSTEXTFIELD_MESSAGES_DELEGATE
+# pragma mark NSTextField Delegate
 
 - (void) clickedOnTextField:(int32_t)textFieldNumber
 {
@@ -593,11 +613,11 @@
 
 /****************************************************************
  *
- *              NSPOPOVER DELEGATE
+ *              NSPopover Delegate
  *
  *****************************************************************/
 
-# pragma mark NSPOPOVER_DELEGATE
+# pragma mark NSPopover Delegate
 
 - (void) popoverDidClose:(NSNotification *)notification
 {
@@ -610,11 +630,11 @@
 
 /****************************************************************
  *
- *              HELPER METHODS
+ *              Helper Methods
  *
  *****************************************************************/
 
-# pragma mark HELPERS
+# pragma mark Helper Methods
 
 /** Deprecated */
 - (BOOL) conversationMatchesRequirement:(Person*)person searchText:(NSString*)searchText {

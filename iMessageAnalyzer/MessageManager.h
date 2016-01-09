@@ -16,9 +16,16 @@
 #import "Message.h"
 #import "Statistics.h"
 
+/** Manages getting messages from the database */
+
 @interface MessageManager : NSObject
 
+#pragma mark Singleton
+
 + (instancetype) getInstance;
+
+
+#pragma mark Getting information
 
 - (NSMutableArray*) getAllChats;
 - (NSMutableDictionary*) getAllChatsAndConversations;
@@ -26,12 +33,15 @@
 - (NSMutableArray*) getAllMessagesForPerson:(Person*)person;
 - (NSMutableArray*) getAllMessagesForPerson:(Person*)person onDay:(NSDate*)day;
 
-- (NSArray*) peopleForSearchCriteria:(NSString*)searchText;
-
-- (Person*) personForPhoneNumber:(NSString*)number;
-
 - (int32_t) getMessageCountWithPersonOnDate:(NSDate*)date person:(Person*)person;
 - (int32_t) getMessageCountOnDate:(NSDate*)date;
+
+- (NSArray*) peopleForSearchCriteria:(NSString*)searchText;
+- (Person*) personForPhoneNumber:(NSString*)number;
+
+
+#pragma mark Auxillary methods
+
 - (void) updateMessagesWithAttachments:(NSMutableArray*)messages person:(Person*)person;
 
 @end

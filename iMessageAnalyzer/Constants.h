@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
+
 /** Classless, helpful auxillary methods used by a variety of classes */
 
 @interface Constants : NSObject

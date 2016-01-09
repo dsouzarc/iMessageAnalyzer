@@ -16,6 +16,7 @@
 #import "Person.h"
 #import "Statistics.h"
 
+
 /** Controls and shows the pie chart for data analysis */
 
 @interface PieChartViewController : NSViewController <CPTPieChartDataSource, CPTPieChartDelegate>

@@ -13,17 +13,31 @@ static MessageManager *messageInstance;
 @interface MessageManager ()
 
 @property (strong, nonatomic) DatabaseManager *databaseManager;
+
+#pragma mark Variables for holding all information
+
 @property (strong, nonatomic) NSMutableDictionary* allChatsAndConversations;
 @property (strong, nonatomic) NSMutableDictionary *allPeople;
 @property (strong, nonatomic) NSMutableArray *allChats;
 
-@property (strong, nonatomic) NSCalendar *calendar;
 
+#pragma mark Auxillary variables
+
+@property (strong, nonatomic) NSCalendar *calendar;
 @property (strong, nonatomic) NSSortDescriptor *lastMessageSentDescriptor;
 
 @end
 
 @implementation MessageManager
+
+
+/****************************************************************
+ *
+ *              Constructor
+ *
+*****************************************************************/
+
+# pragma mark Constructor
 
 + (instancetype) getInstance
 {
@@ -72,48 +86,14 @@ static MessageManager *messageInstance;
     return self;
 }
 
-- (int32_t) getMessageCountWithPersonOnDate:(NSDate*)date person:(Person*)person
-{
-    long startTime = [[Constants instance] timeAtBeginningOfDayForDate:date];
-    long endTime = [[Constants instance] timeAtEndOfDayForDate:date];
-    
-    return [self.databaseManager messageCountForPerson:person startTimeInSeconds:startTime endTimeInSeconds:endTime];
-}
 
-- (int32_t) getMessageCountOnDate:(NSDate*)date
-{
-    long startTime = [[Constants instance] timeAtBeginningOfDayForDate:date];
-    long endTime = [[Constants instance] timeAtEndOfDayForDate:date];
-    
-    return [self.databaseManager totalMessagesForStartTime:startTime endTimeInSeconds:endTime];
-}
+/****************************************************************
+ *
+ *              Getting information
+ *
+*****************************************************************/
 
-- (NSArray*) sortChatsByLastMessageSent:(NSMutableArray*)arrayOfPeople
-{
-    return [arrayOfPeople sortedArrayUsingDescriptors:[NSArray arrayWithObject:self.lastMessageSentDescriptor]];
-}
-
-- (Person*) personForPhoneNumber:(NSString *)number
-{
-    return [self.allPeople objectForKey:number];
-}
-
-- (NSArray*) peopleForSearchCriteria:(NSString*)searchText
-{
-    NSMutableArray *numbers = [self getAllNumbersForSearchText:searchText];
-    return [self peopleForNumbers:numbers];
-}
-
-- (NSArray*) peopleForNumbers:(NSMutableArray*)numbers
-{
-    NSMutableArray *results = [[NSMutableArray alloc] init];
-    
-    for(NSString *number in numbers) {
-        [results addObject:[self.allPeople objectForKey:number]];
-    }
-
-    return [self sortChatsByLastMessageSent:results];
-}
+# pragma mark Getting information
 
 - (NSMutableArray*) getAllNumbersForSearchText:(NSString *)text
 {
@@ -161,28 +141,6 @@ static MessageManager *messageInstance;
     return messages;
 }
 
-- (void) updateMessagesWithAttachments:(NSMutableArray*)messages person:(Person*)person
-{
-    NSMutableDictionary *attachmentsForPerson = [self.databaseManager getAllAttachmentsForPerson:person];
-    
-    //For each message
-    for(Message *message in messages) {
-        NSMutableArray *attachments = [attachmentsForPerson objectForKey:message.messageGUID];
-        
-        //If the message has an attachment
-        if(attachments) {
-            message.attachments = attachments;
-            
-            [attachmentsForPerson removeObjectForKey:message.messageGUID];
-            
-            //If there aren't any more attachments, we're done here
-            if(attachmentsForPerson.count == 0) {
-                return;
-            }
-        }
-    }
-}
-
 - (NSMutableArray*) getAllMessagesForPerson:(Person *)person
 {
     NSMutableArray *messages = [self.allChatsAndConversations objectForKey:person.number];
@@ -204,6 +162,79 @@ static MessageManager *messageInstance;
 - (NSMutableDictionary*) getAllChatsAndConversations
 {
     return self.allChatsAndConversations;
+}
+
+#pragma mark Get people
+
+- (NSArray*) peopleForSearchCriteria:(NSString*)searchText
+{
+    NSMutableArray *numbers = [self getAllNumbersForSearchText:searchText];
+    return [self peopleForNumbers:numbers];
+}
+
+- (NSArray*) peopleForNumbers:(NSMutableArray*)numbers
+{
+    NSMutableArray *results = [[NSMutableArray alloc] init];
+    
+    for(NSString *number in numbers) {
+        [results addObject:[self.allPeople objectForKey:number]];
+    }
+    
+    return [self sortChatsByLastMessageSent:results];
+}
+
+- (NSArray*) sortChatsByLastMessageSent:(NSMutableArray*)arrayOfPeople
+{
+    return [arrayOfPeople sortedArrayUsingDescriptors:[NSArray arrayWithObject:self.lastMessageSentDescriptor]];
+}
+
+- (Person*) personForPhoneNumber:(NSString *)number
+{
+    return [self.allPeople objectForKey:number];
+}
+
+
+#pragma mark Get counts
+
+- (int32_t) getMessageCountWithPersonOnDate:(NSDate*)date person:(Person*)person
+{
+    long startTime = [[Constants instance] timeAtBeginningOfDayForDate:date];
+    long endTime = [[Constants instance] timeAtEndOfDayForDate:date];
+    
+    return [self.databaseManager messageCountForPerson:person startTimeInSeconds:startTime endTimeInSeconds:endTime];
+}
+
+- (int32_t) getMessageCountOnDate:(NSDate*)date
+{
+    long startTime = [[Constants instance] timeAtBeginningOfDayForDate:date];
+    long endTime = [[Constants instance] timeAtEndOfDayForDate:date];
+    
+    return [self.databaseManager totalMessagesForStartTime:startTime endTimeInSeconds:endTime];
+}
+
+
+#pragma mark Update messages
+
+- (void) updateMessagesWithAttachments:(NSMutableArray*)messages person:(Person*)person
+{
+    NSMutableDictionary *attachmentsForPerson = [self.databaseManager getAllAttachmentsForPerson:person];
+    
+    //For each message
+    for(Message *message in messages) {
+        NSMutableArray *attachments = [attachmentsForPerson objectForKey:message.messageGUID];
+        
+        //If the message has an attachment
+        if(attachments) {
+            message.attachments = attachments;
+            
+            [attachmentsForPerson removeObjectForKey:message.messageGUID];
+            
+            //If there aren't any more attachments, we're done here
+            if(attachmentsForPerson.count == 0) {
+                return;
+            }
+        }
+    }
 }
 
 @end
