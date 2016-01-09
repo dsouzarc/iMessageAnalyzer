@@ -48,6 +48,9 @@ static NSString *secondPlotId = @"Other Messages";
 @property (strong, nonatomic) NSMutableArray<NSMutableArray*> *myMessagesInDays;
 @property (strong, nonatomic) NSMutableArray<NSMutableArray*> *otherMessagesInDays;
 
+@property (strong, nonatomic) CPTScatterPlot *mainPlot;
+@property (strong, nonatomic) CPTScatterPlot *secondPlot;
+
 @end
 
 @implementation DropPlotMessageAnalyzerViewController
@@ -135,25 +138,27 @@ static NSString *secondPlotId = @"Other Messages";
     plotSpace.delegate = self;
 
     // Create the main plot for the delimited data
-    CPTScatterPlot *mainPlot = [[CPTScatterPlot alloc] initWithFrame:self.graph.bounds];
-    mainPlot.identifier = mainPlotId;
-    mainPlot.delegate = self;
-    mainPlot.dataSource = self;
+    self.mainPlot = [[CPTScatterPlot alloc] initWithFrame:self.graph.bounds];
+    self.mainPlot.identifier = mainPlotId;
+    self.mainPlot.delegate = self;
+    self.mainPlot.dataSource = self;
+    self.mainPlot.title = @"This conversation's messages";
     
-    CPTScatterPlot *secondPlot = [[CPTScatterPlot alloc] initWithFrame:self.graph.bounds];
-    secondPlot.identifier = secondPlotId;
-    secondPlot.delegate = self;
-    secondPlot.dataSource = self;
+    self.secondPlot = [[CPTScatterPlot alloc] initWithFrame:self.graph.bounds];
+    self.secondPlot.identifier = secondPlotId;
+    self.secondPlot.delegate = self;
+    self.secondPlot.dataSource = self;
+    self.secondPlot.title = nil;
     
-    CPTMutableLineStyle *lineStyle = [mainPlot.dataLineStyle mutableCopy];
+    CPTMutableLineStyle *lineStyle = [self.mainPlot.dataLineStyle mutableCopy];
     lineStyle.lineWidth = 1.0;
     lineStyle.lineColor = [CPTColor whiteColor];
-    mainPlot.dataLineStyle = lineStyle;
+    self.mainPlot.dataLineStyle = lineStyle;
     
-    lineStyle = [secondPlot.dataLineStyle mutableCopy];
+    lineStyle = [self.secondPlot.dataLineStyle mutableCopy];
     lineStyle.lineWidth = 1.0;
     lineStyle.lineColor = [CPTColor greenColor];
-    secondPlot.dataLineStyle = lineStyle;
+    self.secondPlot.dataLineStyle = lineStyle;
     
     CPTMutableTextStyle *textStyle = [CPTMutableTextStyle textStyle];
     [textStyle setFontSize:8.0f];
@@ -183,14 +188,14 @@ static NSString *secondPlotId = @"Other Messages";
     xAxis.axisLabels = results[@"tickLabels"];
     
     CPTPlotSymbol *plotSymbol = [CPTPlotSymbol ellipsePlotSymbol];
-    plotSymbol.fill = [CPTFill fillWithColor:mainPlot.dataLineStyle.lineColor];
+    plotSymbol.fill = [CPTFill fillWithColor:self.mainPlot.dataLineStyle.lineColor];
     plotSymbol.size = CGSizeMake(5.0, 5.0);
-    mainPlot.plotSymbol = plotSymbol;
+    self.mainPlot.plotSymbol = plotSymbol;
     
-    [self.graph addPlot:mainPlot toPlotSpace:plotSpace];
-    [self.graph addPlot:secondPlot toPlotSpace:plotSpace];
+    [self.graph addPlot:self.mainPlot toPlotSpace:plotSpace];
+    [self.graph addPlot:self.secondPlot toPlotSpace:plotSpace];
     
-    NSArray *plots = [NSArray arrayWithObjects:mainPlot, secondPlot, nil];
+    NSArray *plots = [NSArray arrayWithObjects:self.mainPlot, self.secondPlot, nil];
     [plotSpace scaleToFitPlots:plots];
     
     CPTLegend *theLegend = [CPTLegend legendWithPlots:plots];
@@ -246,6 +251,13 @@ static NSString *secondPlotId = @"Other Messages";
 {
     NSString *plotType = (NSString*) plot.plotSpace.identifier;
     
+    if(plot == self.mainPlot) {
+        return mainPlot;
+    }
+    else if(plot == self.secondPlot) {
+        return secondPlot;
+    }
+    
     if([plot.identifier isEqual:mainPlotId]) {
         return mainPlot;
     }
@@ -271,7 +283,7 @@ static NSString *secondPlotId = @"Other Messages";
         case secondPlot:
             return self.secondDataPoints.count;
         default:
-            NSLog(@"NUMBER OF RECORDS IS NIL");
+            NSLog(@"NUMBER OF RECORDS IS NIL\t%@", plot);
             return 0;
     }
 }
@@ -874,8 +886,9 @@ static NSString *secondPlotId = @"Other Messages";
 
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             
-            CPTScatterPlot *secondPlot = (CPTScatterPlot*) [self.graph plotWithIdentifier:secondPlotId];
-            secondPlot.plotSymbol = nil;
+            self.secondPlot.plotSymbol = nil;
+            self.mainPlot.title = @"This conversation's messages";
+            self.secondPlot.title = @"All other conversations' messages";
             
             [self resetGraphAxis];
         });
@@ -885,12 +898,16 @@ static NSString *secondPlotId = @"Other Messages";
 - (void) showThisConversationSentAndReceivedMessages
 {
     NSDictionary *results = [self getMaxYAndPointsForMessages:self.myMessagesInDays countWords:NO];
+    self.mainPlot.title = [NSString stringWithFormat:@"Messages to %@", self.person.personName];
+    self.secondPlot.title = [NSString stringWithFormat:@"Messages from %@", self.person.personName];
     [self thisConversationSentAndReceivedMessages:results];
 }
 
 - (void) showThisConversationSentAndReceivedWords
 {
     NSDictionary *results = [self getMaxYAndPointsForMessages:self.myMessagesInDays countWords:YES];
+    self.mainPlot.title = [NSString stringWithFormat:@"Words to %@", self.person.personName];
+    self.secondPlot.title = [NSString stringWithFormat:@"Words from %@", self.person.personName];
     [self thisConversationSentAndReceivedMessages:results];
 }
 
@@ -935,7 +952,7 @@ static NSString *secondPlotId = @"Other Messages";
 
 # pragma mark EXPORT_METHODS
 
--(IBAction)exportToPDF:(id)sender
+- (IBAction)exportToPDF:(id)sender
 {
     NSSavePanel *pdfSavingDialog = [NSSavePanel savePanel];
     
@@ -950,7 +967,7 @@ static NSString *secondPlotId = @"Other Messages";
     }
 }
 
--(IBAction)exportToPNG:(id)sender
+- (IBAction)exportToPNG:(id)sender
 {
     NSSavePanel *pngSavingDialog = [NSSavePanel savePanel];
     [pngSavingDialog setAllowedFileTypes:@[@"png"]];
