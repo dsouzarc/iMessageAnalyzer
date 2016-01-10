@@ -18,6 +18,7 @@
 		941C04F71C02C586002E2FAB /* ViewAttachmentsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 941C04F51C02C586002E2FAB /* ViewAttachmentsViewController.m */; };
 		941C04F81C02C586002E2FAB /* ViewAttachmentsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 941C04F61C02C586002E2FAB /* ViewAttachmentsViewController.xib */; };
 		942A0B471C37069A00C89982 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 942A0B461C37069A00C89982 /* Constants.m */; };
+		9433C5B41C42DC5600B48493 /* CorePlot.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9433C5A71C42DBF000B48493 /* CorePlot.framework */; };
 		9438FC371BD049DA00B239BE /* Contact.m in Sources */ = {isa = PBXBuildFile; fileRef = 9438FC361BD049DA00B239BE /* Contact.m */; };
 		9438FD071BE07CFF00B239BE /* MainWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9438FD051BE07CFF00B239BE /* MainWindowController.m */; };
 		9438FD081BE07CFF00B239BE /* MainWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9438FD061BE07CFF00B239BE /* MainWindowController.xib */; };
@@ -64,6 +65,55 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		9433C5A61C42DBF000B48493 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9433C5991C42DBEF00B48493 /* CorePlot.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8DC2EF5B0486A6940098B216;
+			remoteInfo = "CorePlot Mac";
+		};
+		9433C5A81C42DBF000B48493 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9433C5991C42DBEF00B48493 /* CorePlot.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 0730F600109492D800E95162;
+			remoteInfo = "UnitTests Mac";
+		};
+		9433C5AA1C42DBF000B48493 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9433C5991C42DBEF00B48493 /* CorePlot.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C38A09781A46185200D45436;
+			remoteInfo = "CorePlot iOS";
+		};
+		9433C5AC1C42DBF000B48493 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9433C5991C42DBEF00B48493 /* CorePlot.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C38A09821A46185300D45436;
+			remoteInfo = "UnitTests iOS";
+		};
+		9433C5AE1C42DBF000B48493 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9433C5991C42DBEF00B48493 /* CorePlot.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C38A09BA1A4619A900D45436;
+			remoteInfo = "CorePlot-CocoaTouch";
+		};
+		9433C5B01C42DBF000B48493 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9433C5991C42DBEF00B48493 /* CorePlot.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C38A09C41A4619A900D45436;
+			remoteInfo = "CorePlot-CocoaTouchTests";
+		};
+		9433C5B21C42DC4100B48493 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9433C5991C42DBEF00B48493 /* CorePlot.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 8DC2EF4F0486A6940098B216;
+			remoteInfo = "CorePlot Mac";
+		};
 		94A992511BBDC734003BA1D5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 94A992321BBDC733003BA1D5 /* Project object */;
@@ -77,48 +127,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 94A992391BBDC733003BA1D5;
 			remoteInfo = iMessageAnalyzer;
-		};
-		94F8CDA71C3B39E400E58BB3 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 9400C3BA1C00402A0005EB5A /* CorePlot.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 8DC2EF5B0486A6940098B216;
-			remoteInfo = "CorePlot Mac";
-		};
-		94F8CDA91C3B39E400E58BB3 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 9400C3BA1C00402A0005EB5A /* CorePlot.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 0730F600109492D800E95162;
-			remoteInfo = "UnitTests Mac";
-		};
-		94F8CDAB1C3B39E400E58BB3 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 9400C3BA1C00402A0005EB5A /* CorePlot.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = C38A09781A46185200D45436;
-			remoteInfo = "CorePlot iOS";
-		};
-		94F8CDAD1C3B39E400E58BB3 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 9400C3BA1C00402A0005EB5A /* CorePlot.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = C38A09821A46185300D45436;
-			remoteInfo = "UnitTests iOS";
-		};
-		94F8CDAF1C3B39E400E58BB3 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 9400C3BA1C00402A0005EB5A /* CorePlot.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = C38A09BA1A4619A900D45436;
-			remoteInfo = "CorePlot-CocoaTouch";
-		};
-		94F8CDB11C3B39E400E58BB3 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 9400C3BA1C00402A0005EB5A /* CorePlot.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = C38A09C41A4619A900D45436;
-			remoteInfo = "CorePlot-CocoaTouchTests";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -136,7 +144,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		9400C3BA1C00402A0005EB5A /* CorePlot.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CorePlot.xcodeproj; path = "../../Downloads/core-plot-master 2/framework/CorePlot.xcodeproj"; sourceTree = "<group>"; };
 		940136C81C0585A7003AF393 /* DropPlotMessageAnalyzerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropPlotMessageAnalyzerViewController.h; sourceTree = "<group>"; };
 		940136C91C0585A7003AF393 /* DropPlotMessageAnalyzerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DropPlotMessageAnalyzerViewController.m; sourceTree = "<group>"; };
 		940136CA1C0585A7003AF393 /* DropPlotMessageAnalyzerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DropPlotMessageAnalyzerViewController.xib; sourceTree = "<group>"; };
@@ -155,6 +162,7 @@
 		941C04F61C02C586002E2FAB /* ViewAttachmentsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ViewAttachmentsViewController.xib; sourceTree = "<group>"; };
 		942A0B451C37069A00C89982 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		942A0B461C37069A00C89982 /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Constants.m; sourceTree = "<group>"; };
+		9433C5991C42DBEF00B48493 /* CorePlot.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CorePlot.xcodeproj; path = "../../Downloads/core-plot-master/framework/CorePlot.xcodeproj"; sourceTree = "<group>"; };
 		9438FC351BD049DA00B239BE /* Contact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Contact.h; sourceTree = "<group>"; };
 		9438FC361BD049DA00B239BE /* Contact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Contact.m; sourceTree = "<group>"; };
 		9438FD041BE07CFF00B239BE /* MainWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainWindowController.h; sourceTree = "<group>"; };
@@ -232,6 +240,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9433C5B41C42DC5600B48493 /* CorePlot.framework in Frameworks */,
 				94E70EB41BF9C80A00653F94 /* QuartzCore.framework in Frameworks */,
 				94F3AC371BC1D9C600948A23 /* libsqlite3.0.tbd in Frameworks */,
 				94F3AC381BC1D9C600948A23 /* libsqlite3.tbd in Frameworks */,
@@ -332,6 +341,19 @@
 				940136CA1C0585A7003AF393 /* DropPlotMessageAnalyzerViewController.xib */,
 			);
 			name = "DropPlot View Controller";
+			sourceTree = "<group>";
+		};
+		9433C59A1C42DBEF00B48493 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				9433C5A71C42DBF000B48493 /* CorePlot.framework */,
+				9433C5A91C42DBF000B48493 /* UnitTests.xctest */,
+				9433C5AB1C42DBF000B48493 /* CorePlot.framework */,
+				9433C5AD1C42DBF000B48493 /* UnitTests iOS.xctest */,
+				9433C5AF1C42DBF000B48493 /* libCorePlot-CocoaTouch.a */,
+				9433C5B11C42DBF000B48493 /* CorePlot-CocoaTouchTests.xctest */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		9438FD021BE077E400B239BE /* Objects */ = {
@@ -518,11 +540,11 @@
 		94A992311BBDC733003BA1D5 = {
 			isa = PBXGroup;
 			children = (
+				9433C5991C42DBEF00B48493 /* CorePlot.xcodeproj */,
 				94E70EB31BF9C80A00653F94 /* QuartzCore.framework */,
 				94A9923C1BBDC733003BA1D5 /* iMessageAnalyzer */,
 				94A992531BBDC734003BA1D5 /* iMessageAnalyzerTests */,
 				94A9925E1BBDC734003BA1D5 /* iMessageAnalyzerUITests */,
-				9400C3BA1C00402A0005EB5A /* CorePlot.xcodeproj */,
 				94A9923B1BBDC733003BA1D5 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -614,19 +636,6 @@
 			name = Statistics;
 			sourceTree = "<group>";
 		};
-		94F8CD9B1C3B39E400E58BB3 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				94F8CDA81C3B39E400E58BB3 /* CorePlot.framework */,
-				94F8CDAA1C3B39E400E58BB3 /* UnitTests.xctest */,
-				94F8CDAC1C3B39E400E58BB3 /* CorePlot.framework */,
-				94F8CDAE1C3B39E400E58BB3 /* UnitTests iOS.xctest */,
-				94F8CDB01C3B39E400E58BB3 /* libCorePlot-CocoaTouch.a */,
-				94F8CDB21C3B39E400E58BB3 /* CorePlot-CocoaTouchTests.xctest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		94F8CDB31C3B39F500E58BB3 /* Constants */ = {
 			isa = PBXGroup;
 			children = (
@@ -651,6 +660,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				9433C5B31C42DC4100B48493 /* PBXTargetDependency */,
 			);
 			name = iMessageAnalyzer;
 			productName = iMessageAnalyzer;
@@ -728,8 +738,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 94F8CD9B1C3B39E400E58BB3 /* Products */;
-					ProjectRef = 9400C3BA1C00402A0005EB5A /* CorePlot.xcodeproj */;
+					ProductGroup = 9433C59A1C42DBEF00B48493 /* Products */;
+					ProjectRef = 9433C5991C42DBEF00B48493 /* CorePlot.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -742,46 +752,46 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		94F8CDA81C3B39E400E58BB3 /* CorePlot.framework */ = {
+		9433C5A71C42DBF000B48493 /* CorePlot.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = CorePlot.framework;
-			remoteRef = 94F8CDA71C3B39E400E58BB3 /* PBXContainerItemProxy */;
+			remoteRef = 9433C5A61C42DBF000B48493 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		94F8CDAA1C3B39E400E58BB3 /* UnitTests.xctest */ = {
+		9433C5A91C42DBF000B48493 /* UnitTests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = UnitTests.xctest;
-			remoteRef = 94F8CDA91C3B39E400E58BB3 /* PBXContainerItemProxy */;
+			remoteRef = 9433C5A81C42DBF000B48493 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		94F8CDAC1C3B39E400E58BB3 /* CorePlot.framework */ = {
+		9433C5AB1C42DBF000B48493 /* CorePlot.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = CorePlot.framework;
-			remoteRef = 94F8CDAB1C3B39E400E58BB3 /* PBXContainerItemProxy */;
+			remoteRef = 9433C5AA1C42DBF000B48493 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		94F8CDAE1C3B39E400E58BB3 /* UnitTests iOS.xctest */ = {
+		9433C5AD1C42DBF000B48493 /* UnitTests iOS.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = "UnitTests iOS.xctest";
-			remoteRef = 94F8CDAD1C3B39E400E58BB3 /* PBXContainerItemProxy */;
+			remoteRef = 9433C5AC1C42DBF000B48493 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		94F8CDB01C3B39E400E58BB3 /* libCorePlot-CocoaTouch.a */ = {
+		9433C5AF1C42DBF000B48493 /* libCorePlot-CocoaTouch.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = "libCorePlot-CocoaTouch.a";
-			remoteRef = 94F8CDAF1C3B39E400E58BB3 /* PBXContainerItemProxy */;
+			remoteRef = 9433C5AE1C42DBF000B48493 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		94F8CDB21C3B39E400E58BB3 /* CorePlot-CocoaTouchTests.xctest */ = {
+		9433C5B11C42DBF000B48493 /* CorePlot-CocoaTouchTests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = "CorePlot-CocoaTouchTests.xctest";
-			remoteRef = 94F8CDB11C3B39E400E58BB3 /* PBXContainerItemProxy */;
+			remoteRef = 9433C5B01C42DBF000B48493 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -886,6 +896,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		9433C5B31C42DC4100B48493 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "CorePlot Mac";
+			targetProxy = 9433C5B21C42DC4100B48493 /* PBXContainerItemProxy */;
+		};
 		94A992521BBDC734003BA1D5 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 94A992391BBDC733003BA1D5 /* iMessageAnalyzer */;
