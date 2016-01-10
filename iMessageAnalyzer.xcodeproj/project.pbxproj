@@ -27,6 +27,8 @@
 		944E19581BE540E9005132E1 /* blank_profile_outline.png in Resources */ = {isa = PBXBuildFile; fileRef = 944E19571BE540E9005132E1 /* blank_profile_outline.png */; };
 		945037121BF59F4700F995E7 /* SimpleAnalyticsPopUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 945037101BF59F4700F995E7 /* SimpleAnalyticsPopUpViewController.m */; };
 		945037131BF59F4700F995E7 /* SimpleAnalyticsPopUpViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 945037111BF59F4700F995E7 /* SimpleAnalyticsPopUpViewController.xib */; };
+		945544FC1C423DA80099CF3A /* StartupWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 945544FA1C423DA80099CF3A /* StartupWindowController.m */; };
+		945544FD1C423DA80099CF3A /* StartupWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 945544FB1C423DA80099CF3A /* StartupWindowController.xib */; };
 		9465900D1C17ED70007D363A /* GraphViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9465900B1C17ED70007D363A /* GraphViewController.m */; };
 		9465900E1C17ED70007D363A /* GraphViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9465900C1C17ED70007D363A /* GraphViewController.xib */; };
 		946D2A6C1BE55BF900270BF0 /* Statistics.m in Sources */ = {isa = PBXBuildFile; fileRef = 946D2A6B1BE55BF900270BF0 /* Statistics.m */; };
@@ -164,6 +166,9 @@
 		9450370F1BF59F4700F995E7 /* SimpleAnalyticsPopUpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleAnalyticsPopUpViewController.h; sourceTree = "<group>"; };
 		945037101BF59F4700F995E7 /* SimpleAnalyticsPopUpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimpleAnalyticsPopUpViewController.m; sourceTree = "<group>"; };
 		945037111BF59F4700F995E7 /* SimpleAnalyticsPopUpViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SimpleAnalyticsPopUpViewController.xib; sourceTree = "<group>"; };
+		945544F91C423DA80099CF3A /* StartupWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StartupWindowController.h; sourceTree = "<group>"; };
+		945544FA1C423DA80099CF3A /* StartupWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StartupWindowController.m; sourceTree = "<group>"; };
+		945544FB1C423DA80099CF3A /* StartupWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StartupWindowController.xib; sourceTree = "<group>"; };
 		9465900A1C17ED70007D363A /* GraphViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GraphViewController.h; sourceTree = "<group>"; };
 		9465900B1C17ED70007D363A /* GraphViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GraphViewController.m; sourceTree = "<group>"; };
 		9465900C1C17ED70007D363A /* GraphViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GraphViewController.xib; sourceTree = "<group>"; };
@@ -426,6 +431,9 @@
 			children = (
 				94A9923D1BBDC733003BA1D5 /* AppDelegate.h */,
 				94A9923E1BBDC733003BA1D5 /* AppDelegate.m */,
+				945544F91C423DA80099CF3A /* StartupWindowController.h */,
+				945544FA1C423DA80099CF3A /* StartupWindowController.m */,
+				945544FB1C423DA80099CF3A /* StartupWindowController.xib */,
 			);
 			name = "App Delegate";
 			sourceTree = "<group>";
@@ -780,6 +788,7 @@
 				94A992471BBDC733003BA1D5 /* Assets.xcassets in Resources */,
 				944E19581BE540E9005132E1 /* blank_profile_outline.png in Resources */,
 				9438FD081BE07CFF00B239BE /* MainWindowController.xib in Resources */,
+				945544FD1C423DA80099CF3A /* StartupWindowController.xib in Resources */,
 				947B53CB1BE1AA2700484D66 /* ChatTableViewCell.xib in Resources */,
 				94DAC4A51BE7DAF90016ED35 /* calendar-icon.png in Resources */,
 				941C04F81C02C586002E2FAB /* ViewAttachmentsViewController.xib in Resources */,
@@ -828,6 +837,7 @@
 				9438FD071BE07CFF00B239BE /* MainWindowController.m in Sources */,
 				940878FA1C40158D006F6C87 /* PieChartViewController.m in Sources */,
 				948AE96A1BF976170031D97C /* WordFrequencyHeapDataStructure.m in Sources */,
+				945544FC1C423DA80099CF3A /* StartupWindowController.m in Sources */,
 				945037121BF59F4700F995E7 /* SimpleAnalyticsPopUpViewController.m in Sources */,
 				94A992451BBDC733003BA1D5 /* ViewController.m in Sources */,
 				94F3AC441BC727BE00948A23 /* MessageManager.m in Sources */,
