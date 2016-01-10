@@ -27,6 +27,8 @@
 #pragma mark Singleton constructor
 
 + (instancetype) getInstance;
++ (instancetype) getInstanceForDatabasePath:(NSString*)path;
+- (void) deleteDatabase;
 
 #pragma mark Getting chats
 

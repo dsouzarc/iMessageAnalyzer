@@ -23,6 +23,7 @@
 #pragma mark Singleton
 
 + (instancetype) getInstance;
++ (instancetype) getInstanceForDatabase:(NSString*)databasePath;
 
 
 #pragma mark Getting information

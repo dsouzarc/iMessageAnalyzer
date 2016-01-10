@@ -50,11 +50,22 @@ static MessageManager *messageInstance;
     return messageInstance;
 }
 
-- (instancetype) init
++ (instancetype) getInstanceForDatabase:(NSString *)databasePath
+{
+    @synchronized(self) {
+        if(!messageInstance) {
+            messageInstance = [[self alloc] initWithPath:databasePath];
+        }
+    }
+    
+    return messageInstance;
+}
+
+- (instancetype) initWithPath:(NSString*)databasePath
 {
     if(!messageInstance) {
         messageInstance = [super init];
-        self.databaseManager = [DatabaseManager getInstance];
+        self.databaseManager = [DatabaseManager getInstanceForDatabasePath:databasePath];
         self.allChats = [self.databaseManager getAllChats];
         
         self.allPeople = [[NSMutableDictionary alloc] init];

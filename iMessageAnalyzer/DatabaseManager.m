@@ -38,19 +38,31 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
 {
     @synchronized(self) {
         if(!databaseInstance) {
-            databaseInstance = [[self alloc] init];
+            pathToDB = [NSString stringWithFormat:@"/Users/%@/Library/Messages/chat.db", NSUserName()];
+            databaseInstance = [[self alloc] initWithDatabasePath:pathToDB];
         }
     }
     
     return databaseInstance;
 }
 
-- (instancetype) init
++ (instancetype) getInstanceForDatabasePath:(NSString *)path
+{
+    @synchronized(self) {
+        if(!databaseInstance) {
+            databaseInstance = [[self alloc] initWithDatabasePath:path];
+        }
+    }
+    
+    return databaseInstance;
+}
+
+- (instancetype) initWithDatabasePath:(NSString*)path
 {
     if(!databaseInstance) {
         databaseInstance = [super init];
         
-        if(sqlite3_open([pathToDB cStringUsingEncoding:NSASCIIStringEncoding], &_database) == SQLITE_OK) {
+        if(sqlite3_open([path cStringUsingEncoding:NSASCIIStringEncoding], &_database) == SQLITE_OK) {
             printf("DATABASE SUCCESSFULLY OPENED\n");
         }
         else {
@@ -639,6 +651,15 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
         }
         
         sqlite3_finalize(statement);
+    }
+}
+
+- (void) deleteDatabase
+{
+    //If we're not dealing with the original
+    if(![pathToDB isEqualToString:[NSString stringWithFormat:@"/Users/%@/Library/Messages/chat.db", NSUserName()]]) {
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        [fileManager removeItemAtPath:pathToDB error:NULL];
     }
 }
 
