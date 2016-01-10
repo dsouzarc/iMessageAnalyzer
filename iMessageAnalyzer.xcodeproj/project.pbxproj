@@ -29,6 +29,8 @@
 		945037131BF59F4700F995E7 /* SimpleAnalyticsPopUpViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 945037111BF59F4700F995E7 /* SimpleAnalyticsPopUpViewController.xib */; };
 		945544FC1C423DA80099CF3A /* StartupWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 945544FA1C423DA80099CF3A /* StartupWindowController.m */; };
 		945544FD1C423DA80099CF3A /* StartupWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 945544FB1C423DA80099CF3A /* StartupWindowController.xib */; };
+		9455450B1C423FA10099CF3A /* StartupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 945545091C423FA10099CF3A /* StartupViewController.m */; };
+		9455450C1C423FA10099CF3A /* StartupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9455450A1C423FA10099CF3A /* StartupViewController.xib */; };
 		9465900D1C17ED70007D363A /* GraphViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9465900B1C17ED70007D363A /* GraphViewController.m */; };
 		9465900E1C17ED70007D363A /* GraphViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9465900C1C17ED70007D363A /* GraphViewController.xib */; };
 		946D2A6C1BE55BF900270BF0 /* Statistics.m in Sources */ = {isa = PBXBuildFile; fileRef = 946D2A6B1BE55BF900270BF0 /* Statistics.m */; };
@@ -169,6 +171,9 @@
 		945544F91C423DA80099CF3A /* StartupWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StartupWindowController.h; sourceTree = "<group>"; };
 		945544FA1C423DA80099CF3A /* StartupWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StartupWindowController.m; sourceTree = "<group>"; };
 		945544FB1C423DA80099CF3A /* StartupWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StartupWindowController.xib; sourceTree = "<group>"; };
+		945545081C423FA10099CF3A /* StartupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StartupViewController.h; sourceTree = "<group>"; };
+		945545091C423FA10099CF3A /* StartupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StartupViewController.m; sourceTree = "<group>"; };
+		9455450A1C423FA10099CF3A /* StartupViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StartupViewController.xib; sourceTree = "<group>"; };
 		9465900A1C17ED70007D363A /* GraphViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GraphViewController.h; sourceTree = "<group>"; };
 		9465900B1C17ED70007D363A /* GraphViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GraphViewController.m; sourceTree = "<group>"; };
 		9465900C1C17ED70007D363A /* GraphViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GraphViewController.xib; sourceTree = "<group>"; };
@@ -434,6 +439,9 @@
 				945544F91C423DA80099CF3A /* StartupWindowController.h */,
 				945544FA1C423DA80099CF3A /* StartupWindowController.m */,
 				945544FB1C423DA80099CF3A /* StartupWindowController.xib */,
+				945545081C423FA10099CF3A /* StartupViewController.h */,
+				945545091C423FA10099CF3A /* StartupViewController.m */,
+				9455450A1C423FA10099CF3A /* StartupViewController.xib */,
 			);
 			name = "App Delegate";
 			sourceTree = "<group>";
@@ -783,6 +791,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9455450C1C423FA10099CF3A /* StartupViewController.xib in Resources */,
 				9480B1651BF7B5F300ECDE38 /* MoreAnalysisWindowController.xib in Resources */,
 				940878FB1C40158D006F6C87 /* PieChartViewController.xib in Resources */,
 				94A992471BBDC733003BA1D5 /* Assets.xcassets in Resources */,
@@ -844,6 +853,7 @@
 				94F3AC411BC481B900948A23 /* Message.m in Sources */,
 				947B53CC1BE1AA2700484D66 /* ChatTableViewCell.m in Sources */,
 				9480B1691BF7B60700ECDE38 /* MoreAnalysisViewController.m in Sources */,
+				9455450B1C423FA10099CF3A /* StartupViewController.m in Sources */,
 				941C04F31C028B12002E2FAB /* NSTextField+Messages.m in Sources */,
 				94F3AC471BC7282A00948A23 /* DatabaseManager.m in Sources */,
 				946D2A6F1BE5DBC800270BF0 /* TextTableCellView.m in Sources */,

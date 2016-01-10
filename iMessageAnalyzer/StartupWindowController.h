@@ -8,9 +8,11 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import "StartupViewController.h"
 #import "MainWindowController.h"
+
 #import "DatabaseManager.h"
 
-@interface StartupWindowController : NSWindowController
+@interface StartupWindowController : NSWindowController <NSWindowDelegate>
 
 @end
