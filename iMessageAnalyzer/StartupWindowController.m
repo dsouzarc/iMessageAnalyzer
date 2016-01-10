@@ -58,7 +58,7 @@
 
 - (void) didWishToContinue
 {
-    NSString *description = [NSString stringWithFormat:@"Choose the source from which to analyze your messages:\n\nThe default Mac Messages.app: %@\n\nThe most recent iPhone backup: %@\n", self.messagesPath, self.iPhonePath];
+    NSString *description = [NSString stringWithFormat:@"Choose the source from which to analyze your messages:\n\nThe default Mac Messages.app: %@\n\nThe most recent iPhone backup: %@\n\nPlease note the following loading might take some time as the database is being copied to the file's directory so that the original will not be corrupted.\nThat temporary database will be deleted when the app is exited.", self.messagesPath, self.iPhonePath];
     
     NSAlert *prompt = [[NSAlert alloc] init];
     [prompt setAlertStyle:NSWarningAlertStyle];
@@ -98,7 +98,7 @@
             [self showErrorPrompt:@"Error making a backup of chat.db" informationText:[NSString stringWithFormat:@"We were not able to make a backup of your Messages.db\n%@", [error description]]];
         }
         else {
-            //Good to go
+            [self showMainWindow:newFileLocation];
         }
         
     }
@@ -156,23 +156,22 @@
                 [self showErrorPrompt:@"Error making a backup of iPhone chat" informationText:[NSString stringWithFormat:@"We were not able to make a backup of your Messages.db\n%@", [error description]]];
             }
             else {
-                //Good to go
+                [self showMainWindow:newFileLocation];
             }
         }
         else {
             [self showErrorPrompt:@"iPhone backup not found" informationText:@"Either the iPhone's text message backups were not found in this directory or they were encrypted. When syncing or backing up with iTunes, disable encryption"];
             return;
         }
-        
-        
     }
 }
 
-- (void) mainWindow
+- (void) showMainWindow:(NSString*)databasePath
 {
-    self.mainWindowController = [[MainWindowController alloc] initWithWindowNibName:@"MainWindowController"];
+    self.mainWindowController = [[MainWindowController alloc] initWithWindowNibName:@"MainWindowController" databasePath:databasePath];
     [self.mainWindowController showWindow:self];
     [self.mainWindowController.window makeKeyAndOrderFront:self];
+    [self.window close];
 }
 
 @end

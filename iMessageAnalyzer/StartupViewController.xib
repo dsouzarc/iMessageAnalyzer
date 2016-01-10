@@ -6,6 +6,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="StartupViewController">
             <connections>
+                <outlet property="continueButton" destination="6pv-Vh-wNc" id="PT0-8d-Qnj"/>
                 <outlet property="descriptionTextField" destination="ruv-yG-mLM" id="Jfs-sg-oLh"/>
                 <outlet property="emailTextField" destination="6OI-o1-wWR" id="ick-UB-tVq"/>
                 <outlet property="sourceCodeTextField" destination="7Od-mP-wts" id="QOC-jK-fjQ"/>
@@ -100,7 +101,7 @@
                     </textFieldCell>
                 </textField>
                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6pv-Vh-wNc">
-                    <rect key="frame" x="383" y="9" width="153" height="41"/>
+                    <rect key="frame" x="383" y="9" width="153" height="32"/>
                     <buttonCell key="cell" type="push" title="Continue" bezelStyle="rounded" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="8KL-y8-kKW">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>

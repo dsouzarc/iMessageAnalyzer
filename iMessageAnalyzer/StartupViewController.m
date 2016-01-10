@@ -15,6 +15,7 @@
 @property (strong) IBOutlet NSTextField *descriptionTextField;
 
 @property (strong, nonatomic) NSDictionary *fontAttributes;
+@property (strong) IBOutlet NSButton *continueButton;
 
 @end
 
@@ -48,6 +49,9 @@
     
     [self.sourceCodeTextField setSelectable:YES];
     [self.sourceCodeTextField setAttributedStringValue:[self getSourceCodeString]];
+    
+    [[self.view window] setDefaultButtonCell:[self.continueButton cell]];
+    [self.continueButton setBezelStyle:NSRoundedBezelStyle];
 }
 
 - (NSMutableAttributedString*) getEmailTextFieldAsString
