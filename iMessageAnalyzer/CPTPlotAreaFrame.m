@@ -1,0 +1,244 @@
+#import "CPTPlotAreaFrame.h"
+
+#import "CPTAxisSet.h"
+#import "CPTPlotArea.h"
+#import "CPTPlotGroup.h"
+
+/// @cond
+@interface CPTPlotAreaFrame()
+
+@property (nonatomic, readwrite, strong) CPTPlotArea *plotArea;
+
+@end
+
+/// @endcond
+
+#pragma mark -
+
+/**
+ *  @brief A layer drawn on top of the graph layer and behind all plot elements.
+ *
+ *  All graph elements, except for titles, legends, and other annotations
+ *  attached directly to the graph itself are clipped to the plot area frame.
+ **/
+@implementation CPTPlotAreaFrame
+
+/** @property CPTPlotArea *plotArea
+ *  @brief The plot area.
+ **/
+@synthesize plotArea;
+
+/** @property CPTAxisSet *axisSet
+ *  @brief The axis set.
+ **/
+@dynamic axisSet;
+
+/** @property CPTPlotGroup *plotGroup
+ *  @brief The plot group.
+ **/
+@dynamic plotGroup;
+
+#pragma mark -
+#pragma mark Init/Dealloc
+
+/// @name Initialization
+/// @{
+
+/** @brief Initializes a newly allocated CPTPlotAreaFrame object with the provided frame rectangle.
+ *
+ *  This is the designated initializer. The initialized layer will have the following properties:
+ *  - @ref plotArea = a new CPTPlotArea with the same frame rectangle
+ *  - @ref masksToBorder = @YES
+ *  - @ref needsDisplayOnBoundsChange = @YES
+ *
+ *  @param newFrame The frame rectangle.
+ *  @return The initialized CPTPlotAreaFrame object.
+ **/
+-(instancetype)initWithFrame:(CGRect)newFrame
+{
+    if ( (self = [super initWithFrame:newFrame]) ) {
+        plotArea = nil;
+
+        CPTPlotArea *newPlotArea = [[CPTPlotArea alloc] initWithFrame:newFrame];
+        self.plotArea = newPlotArea;
+
+        self.masksToBorder              = YES;
+        self.needsDisplayOnBoundsChange = YES;
+    }
+    return self;
+}
+
+/// @}
+
+/// @cond
+
+-(instancetype)initWithLayer:(id)layer
+{
+    if ( (self = [super initWithLayer:layer]) ) {
+        CPTPlotAreaFrame *theLayer = (CPTPlotAreaFrame *)layer;
+
+        plotArea = theLayer->plotArea;
+    }
+    return self;
+}
+
+/// @endcond
+
+#pragma mark -
+#pragma mark NSCoding Methods
+
+/// @cond
+
+-(void)encodeWithCoder:(NSCoder *)coder
+{
+    [super encodeWithCoder:coder];
+
+    [coder encodeObject:self.plotArea forKey:@"CPTPlotAreaFrame.plotArea"];
+}
+
+-(instancetype)initWithCoder:(NSCoder *)coder
+{
+    if ( (self = [super initWithCoder:coder]) ) {
+        plotArea = [coder decodeObjectForKey:@"CPTPlotAreaFrame.plotArea"];
+    }
+    return self;
+}
+
+/// @endcond
+
+#pragma mark -
+#pragma mark Event Handling
+
+/// @name User Interaction
+/// @{
+
+/**
+ *  @brief Informs the receiver that the user has
+ *  @if MacOnly pressed the mouse button. @endif
+ *  @if iOSOnly touched the screen. @endif
+ *
+ *  @param event The OS event.
+ *  @param interactionPoint The coordinates of the interaction.
+ *  @return Whether the event was handled or not.
+ **/
+-(BOOL)pointingDeviceDownEvent:(CPTNativeEvent *)event atPoint:(CGPoint)interactionPoint
+{
+    if ( [self.plotArea pointingDeviceDownEvent:event atPoint:interactionPoint] ) {
+        return YES;
+    }
+    else {
+        return [super pointingDeviceDownEvent:event atPoint:interactionPoint];
+    }
+}
+
+/**
+ *  @brief Informs the receiver that the user has
+ *  @if MacOnly released the mouse button. @endif
+ *  @if iOSOnly lifted their finger off the screen. @endif
+ *
+ *  @param event The OS event.
+ *  @param interactionPoint The coordinates of the interaction.
+ *  @return Whether the event was handled or not.
+ **/
+-(BOOL)pointingDeviceUpEvent:(CPTNativeEvent *)event atPoint:(CGPoint)interactionPoint
+{
+    if ( [self.plotArea pointingDeviceUpEvent:event atPoint:interactionPoint] ) {
+        return YES;
+    }
+    else {
+        return [super pointingDeviceUpEvent:event atPoint:interactionPoint];
+    }
+}
+
+/**
+ *  @brief Informs the receiver that the user has moved
+ *  @if MacOnly the mouse with the button pressed. @endif
+ *  @if iOSOnly their finger while touching the screen. @endif
+ *
+ *  @param event The OS event.
+ *  @param interactionPoint The coordinates of the interaction.
+ *  @return Whether the event was handled or not.
+ **/
+-(BOOL)pointingDeviceDraggedEvent:(CPTNativeEvent *)event atPoint:(CGPoint)interactionPoint
+{
+    if ( [self.plotArea pointingDeviceDraggedEvent:event atPoint:interactionPoint] ) {
+        return YES;
+    }
+    else {
+        return [super pointingDeviceDraggedEvent:event atPoint:interactionPoint];
+    }
+}
+
+/**
+ *  @brief Informs the receiver that tracking of
+ *  @if MacOnly mouse moves @endif
+ *  @if iOSOnly touches @endif
+ *  has been cancelled for any reason.
+ *
+ *  @param event The OS event.
+ *  @return Whether the event was handled or not.
+ **/
+-(BOOL)pointingDeviceCancelledEvent:(CPTNativeEvent *)event
+{
+    if ( [self.plotArea pointingDeviceCancelledEvent:event] ) {
+        return YES;
+    }
+    else {
+        return [super pointingDeviceCancelledEvent:event];
+    }
+}
+
+/// @}
+
+#pragma mark -
+#pragma mark Accessors
+
+/// @cond
+
+-(void)setPlotArea:(CPTPlotArea *)newPlotArea
+{
+    if ( newPlotArea != plotArea ) {
+        [plotArea removeFromSuperlayer];
+        plotArea = newPlotArea;
+
+        if ( newPlotArea ) {
+            [self insertSublayer:newPlotArea atIndex:0];
+            newPlotArea.graph = self.graph;
+        }
+
+        [self setNeedsLayout];
+    }
+}
+
+-(CPTAxisSet *)axisSet
+{
+    return self.plotArea.axisSet;
+}
+
+-(void)setAxisSet:(CPTAxisSet *)newAxisSet
+{
+    self.plotArea.axisSet = newAxisSet;
+}
+
+-(CPTPlotGroup *)plotGroup
+{
+    return self.plotArea.plotGroup;
+}
+
+-(void)setPlotGroup:(CPTPlotGroup *)newPlotGroup
+{
+    self.plotArea.plotGroup = newPlotGroup;
+}
+
+-(void)setGraph:(CPTGraph *)newGraph
+{
+    if ( newGraph != self.graph ) {
+        [super setGraph:newGraph];
+
+        self.plotArea.graph = newGraph;
+    }
+}
+
+/// @endcond
+
+@end
