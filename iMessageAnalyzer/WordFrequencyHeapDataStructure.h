@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+/** Max Heap datastructure for calculating and storing the frequencies of words */
+
 @interface WordFrequencyHeapDataStructure : NSObject
 
 - (instancetype) initWithSize:(NSInteger)size;
