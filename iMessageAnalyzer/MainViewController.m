@@ -76,12 +76,12 @@
 
 # pragma mark Constructor
 
-- (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+- (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil databasePath:(NSString *)databasePath
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     
     if(self) {
-        self.messageManager = [MessageManager getInstance];
+        self.messageManager = [MessageManager getInstanceForDatabase:databasePath];
         
         self.chats = [self.messageManager getAllChats];
         self.searchConversationChats = [[NSMutableArray alloc] initWithArray:self.chats];

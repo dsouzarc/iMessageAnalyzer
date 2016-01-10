@@ -29,4 +29,6 @@
 
 @interface MainViewController : NSViewController <NSTableViewDataSource, NSTableViewDelegate, NSSearchFieldDelegate, CalendarPopUpViewControllerDelegate, NSPopoverDelegate, SimpleAnalyticsPopUpViewControllerDelegate, MoreAnalysisWindowControllerDelegate, NSTextField_MessagesDelegate>
 
+- (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil databasePath:(NSString*)databasePath;
+
 @end

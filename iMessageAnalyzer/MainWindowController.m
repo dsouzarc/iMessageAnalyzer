@@ -16,12 +16,12 @@
 
 @implementation MainWindowController
 
-- (instancetype) initWithWindowNibName:(NSString *)windowNibName
+- (instancetype) initWithWindowNibName:(NSString *)windowNibName databasePath:(NSString *)databasePath
 {
     self = [super initWithWindowNibName:windowNibName];
     
     if(self) {
-        self.mainViewController = [[MainViewController alloc] initWithNibName:@"MainViewController" bundle:[NSBundle mainBundle]];
+        self.mainViewController = [[MainViewController alloc] initWithNibName:@"MainViewController" bundle:[NSBundle mainBundle] databasePath:databasePath];
     }
     
     return self;
