@@ -16,14 +16,21 @@
 #import "Person.h"
 #import "Statistics.h"
 
+
+/** Manages a temporary database for MoreAnalysisViewController */
+
 @interface TemporaryDatabaseManager : NSObject
+
+#pragma mark Constructors and Misc.
 
 + (instancetype) getInstance;
 + (instancetype) getInstanceWithperson:(Person*)person messages:(NSMutableArray*)messages;
 + (void) closeDatabase;
 
+@property (nonatomic) BOOL finishedAddingEntries;
 
-#pragma GET_MESSAGES
+
+#pragma mark Get messages
 
 - (NSMutableArray*) getAllMessagesForPerson:(Person *)person;
 - (NSMutableArray*) getAllMessagesForPerson:(Person *)person startTimeInSeconds:(long)startTimeInSeconds endTimeInSeconds:(long)endTimeInSeconds;
@@ -35,7 +42,8 @@
 
 - (NSMutableArray<NSMutableArray*>*) sortIntoDays:(NSMutableArray*)allMessages startTime:(int)startTime endTime:(int)endTime;
 
-#pragma GET_COUNTS
+
+#pragma Get counts
 
 - (NSMutableArray*) getConversationAndOtherMessagesCountStartTime:(int)startTime endTime:(int)endTime;
 
@@ -54,6 +62,9 @@
 - (int) getMySentOtherMessagesWordCount:(int)startTime endTime:(int)endTime;
 - (int) getMyReceivedOtherMessagesWordCount:(int)startTime endTime:(int)endTime;
 
+
+#pragma mark Get counts organized by hours
+
 - (NSMutableArray*) getMySentWordsInConversationOverHoursInDay:(int)startTime endTime:(int)endTime;
 - (NSMutableArray*) getReceivedWordsInConversationOverHoursInDay:(int)startTime endTime:(int)endTime;
 
@@ -63,6 +74,5 @@
 - (NSMutableArray*) getThisConversationMessagesOverHoursInDay:(int)startTime endTime:(int)endTime;
 - (NSMutableArray*) getOtherMessagesOverHoursInDay:(int)startTime endTime:(int)endTime;
 
-@property (nonatomic) BOOL finishedAddingEntries;
 
 @end

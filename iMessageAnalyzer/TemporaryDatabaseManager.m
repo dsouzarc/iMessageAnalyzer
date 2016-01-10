@@ -6,16 +6,20 @@
 //  Copyright © 2015 Ryan D'souza. All rights reserved.
 //
 
-#define MAX_DB_TRIES 40
-
 #import "TemporaryDatabaseManager.h"
+
+#pragma mark Static variables
+#define MAX_DB_TRIES 40
 
 static NSString *myMessagesTable = @"myMessagesTable";
 static NSString *otherMessagesTable = @"otherMessagesTable";
 
 static TemporaryDatabaseManager *databaseManager;
 
+
 @interface TemporaryDatabaseManager ()
+
+#pragma mark Private variables
 
 @property (strong, nonatomic) Person *person;
 @property (strong, nonatomic) NSCalendar *calendar;
@@ -25,6 +29,15 @@ static TemporaryDatabaseManager *databaseManager;
 @end
 
 @implementation TemporaryDatabaseManager
+
+
+/****************************************************************
+ *
+ *              Constructor
+ *
+*****************************************************************/
+
+# pragma mark Constructor
 
 + (instancetype) getInstanceWithperson:(Person *)person messages:(NSMutableArray *)messages
 {
@@ -94,11 +107,11 @@ static TemporaryDatabaseManager *databaseManager;
 
 /****************************************************************
  *
- *              INSERT MY MESSAGES
+ *              Insert into my messages
  *
 *****************************************************************/
 
-# pragma mark INSERT_MY_MESSAGES
+# pragma mark Insert into my messages
 
 - (NSString*) insertMessageQuery:(Message*)message
 {
@@ -129,11 +142,11 @@ static TemporaryDatabaseManager *databaseManager;
 
 /****************************************************************
  *
- *              INSERT OTHER MESSAGES
+ *              Insert into other messages
  *
  *****************************************************************/
 
-# pragma mark INSERT_OTHER_MESSAGES
+# pragma mark Insert into other messages
 
 - (void) addOtherMessagesToDatabase:(NSMutableArray*)otherMessages
 {
@@ -179,13 +192,14 @@ static TemporaryDatabaseManager *databaseManager;
     return [NSString stringWithFormat:@"INSERT INTO %@(ROWID, date, wordCount, is_from_me, cache_has_attachments) VALUES (%d, %d, %d, %d, %d)", otherMessagesTable, rowID, date, wordCount, isFromMe, hasAttachment];
 }
 
+
 /****************************************************************
  *
- *              GET MY MESSAGES
+ *              Get my messages
  *
  *****************************************************************/
 
-# pragma mark GET_MY_MESSAGES
+# pragma mark Get my messages
 
 - (NSMutableArray*) getAllMessagesForPerson:(Person *)person onDay:(NSDate *)day
 {
@@ -280,6 +294,15 @@ static TemporaryDatabaseManager *databaseManager;
     return allMessagesForChat;
 }
 
+
+/****************************************************************
+ *
+ *              Get other messages
+ *
+ *****************************************************************/
+
+# pragma mark Get other messages
+
 - (NSMutableArray*) getAllOtherMessagesFromStartTime:(int)startTime endTime:(int)endTime
 {
     NSMutableArray *allOtherMessages = [[NSMutableArray alloc] init];
@@ -316,7 +339,35 @@ static TemporaryDatabaseManager *databaseManager;
     return allOtherMessages;
 }
 
-#pragma mark GET_COUNTS
+
+/****************************************************************
+ *
+ *              Get dates for messages
+ *
+*****************************************************************/
+
+# pragma mark Get dates for messages
+
+- (NSMutableArray*) getAllMessageTimingsForAll
+{
+    NSString *query = @"SELECT date FROM otherMessagesTable ORDER BY date";
+    return [self getAllMessageTimingsQuery:query];
+}
+
+- (NSMutableArray*) getAllMessageTimingsInConversation
+{
+    NSString *query = @"SELECT date FROM myMessagesTable ORDER BY date";
+    return [self getAllMessageTimingsQuery:query];
+}
+
+
+/****************************************************************
+ *
+ *              Get counts
+ *
+*****************************************************************/
+
+# pragma mark Get counts
 
 - (int) getConversationMessageCountStartTime:(int)startTime endTime:(int)endTime
 {
@@ -374,6 +425,15 @@ static TemporaryDatabaseManager *databaseManager;
     return counters;
 }
 
+
+/****************************************************************
+ *
+ *              Get counts organized by hours
+ *
+*****************************************************************/
+
+# pragma mark Get counts organized by hours
+
 - (NSMutableArray*) getMySentWordsInConversationOverHoursInDay:(int)startTime endTime:(int)endTime
 {
     NSString *query = [NSString stringWithFormat:@"SELECT date, wordCount FROM myMessagesTable WHERE (date > %d AND date < %d) AND is_from_me='1'", startTime, endTime];
@@ -409,6 +469,87 @@ static TemporaryDatabaseManager *databaseManager;
     NSString *query = [NSString stringWithFormat:@"SELECT date FROM otherMessagesTable WHERE (date > %d AND date < %d)", startTime, endTime];
     return [self getCountsOrganizedByHours:query];
 }
+
+
+/****************************************************************
+ *
+ *              Get counts (sums)
+ *
+*****************************************************************/
+
+# pragma mark Get counts (sums)
+
+- (int) getMySentMessagesWordCountInConversation:(int)startTime endTime:(int)endTime
+{
+    NSString *query = [NSString stringWithFormat:@"SELECT SUM(wordCount) FROM myMessagesTable WHERE (date > %d AND date < %d) AND is_from_me='1'", startTime, endTime];
+    return [self getSimpleCountFromQuery:query];
+}
+
+- (int) getMyReceivedMessagesWordCountInConversation:(int)startTime endTime:(int)endTime
+{
+    NSString *query = [NSString stringWithFormat:@"SELECT SUM(wordCount) FROM myMessagesTable WHERE (date > %d AND date < %d) AND is_from_me='0'", startTime, endTime];
+    return [self getSimpleCountFromQuery:query];
+}
+
+- (int) getMySentOtherMessagesWordCount:(int)startTime endTime:(int)endTime
+{
+    NSString *query = [NSString stringWithFormat:@"SELECT SUM(wordCount) FROM otherMessagesTable WHERE (date > %d AND date < %d) AND is_from_me='1'", startTime, endTime];
+    return [self getSimpleCountFromQuery:query];
+}
+
+- (int) getMyReceivedOtherMessagesWordCount:(int)startTime endTime:(int)endTime
+{
+    NSString *query = [NSString stringWithFormat:@"SELECT SUM(wordCount) FROM otherMessagesTable WHERE (date > %d AND date < %d) AND is_from_me='0'", startTime, endTime];
+    return [self getSimpleCountFromQuery:query];
+}
+
+
+/****************************************************************
+ *
+ *              Helpers to get data from queryString
+ *
+*****************************************************************/
+
+# pragma mark Helpers to get data from queryString
+
+- (int) getSimpleCountFromQuery:(NSString*)queryString
+{
+    const char *query = [queryString UTF8String];
+    int result = 0;
+    sqlite3_stmt *statement;
+    
+    if(sqlite3_prepare(_database, query, -1, &statement, NULL) == SQLITE_OK) {
+        while(sqlite3_step(statement) == SQLITE_ROW) {
+            result = sqlite3_column_int(statement, 0);
+        }
+    }
+    
+    sqlite3_finalize(statement);
+    return result;
+}
+
+- (NSMutableArray*) getAllMessageTimingsQuery:(NSString*)query
+{
+    NSMutableArray *results = [[NSMutableArray alloc] init];
+    sqlite3_stmt *statement;
+    
+    if(sqlite3_prepare(_database, [query UTF8String], -1, &statement, NULL) == SQLITE_ROW) {
+        while(sqlite3_step(statement) == SQLITE_ROW) {
+            [results addObject:[NSNumber numberWithInt:sqlite3_column_int(statement, 0)]];
+        }
+    }
+    sqlite3_finalize(statement);
+    return results;
+}
+
+
+/****************************************************************
+ *
+ *              Helpers to organize by hours or days
+ *
+*****************************************************************/
+
+# pragma mark Helpers to organize by hours
 
 - (NSMutableArray*) getSumsOrganizedByHours:(NSString*)query
 {
@@ -454,72 +595,6 @@ static TemporaryDatabaseManager *databaseManager;
     
     sqlite3_finalize(statement);
     return mySentMessages;
-}
-
-- (int) getMySentMessagesWordCountInConversation:(int)startTime endTime:(int)endTime
-{
-    NSString *query = [NSString stringWithFormat:@"SELECT SUM(wordCount) FROM myMessagesTable WHERE (date > %d AND date < %d) AND is_from_me='1'", startTime, endTime];
-    return [self getSimpleCountFromQuery:query];
-}
-
-- (int) getMyReceivedMessagesWordCountInConversation:(int)startTime endTime:(int)endTime
-{
-    NSString *query = [NSString stringWithFormat:@"SELECT SUM(wordCount) FROM myMessagesTable WHERE (date > %d AND date < %d) AND is_from_me='0'", startTime, endTime];
-    return [self getSimpleCountFromQuery:query];
-}
-
-- (int) getMySentOtherMessagesWordCount:(int)startTime endTime:(int)endTime
-{
-    NSString *query = [NSString stringWithFormat:@"SELECT SUM(wordCount) FROM otherMessagesTable WHERE (date > %d AND date < %d) AND is_from_me='1'", startTime, endTime];
-    return [self getSimpleCountFromQuery:query];
-}
-
-- (int) getMyReceivedOtherMessagesWordCount:(int)startTime endTime:(int)endTime
-{
-    NSString *query = [NSString stringWithFormat:@"SELECT SUM(wordCount) FROM otherMessagesTable WHERE (date > %d AND date < %d) AND is_from_me='0'", startTime, endTime];
-    return [self getSimpleCountFromQuery:query];
-}
-
-- (int) getSimpleCountFromQuery:(NSString*)queryString
-{
-    const char *query = [queryString UTF8String];
-    int result = 0;
-    sqlite3_stmt *statement;
-    
-    if(sqlite3_prepare(_database, query, -1, &statement, NULL) == SQLITE_OK) {
-        while(sqlite3_step(statement) == SQLITE_ROW) {
-            result = sqlite3_column_int(statement, 0);
-        }
-    }
-    
-    sqlite3_finalize(statement);
-    return result;
-}
-
-- (NSMutableArray*) getAllMessageTimingsForAll
-{
-    NSString *query = @"SELECT date FROM otherMessagesTable ORDER BY date";
-    return [self getAllMessageTimingsQuery:query];
-}
-
-- (NSMutableArray*) getAllMessageTimingsInConversation
-{
-    NSString *query = @"SELECT date FROM myMessagesTable ORDER BY date";
-    return [self getAllMessageTimingsQuery:query];
-}
-
-- (NSMutableArray*) getAllMessageTimingsQuery:(NSString*)query
-{
-    NSMutableArray *results = [[NSMutableArray alloc] init];
-    sqlite3_stmt *statement;
-    
-    if(sqlite3_prepare(_database, [query UTF8String], -1, &statement, NULL) == SQLITE_ROW) {
-        while(sqlite3_step(statement) == SQLITE_ROW) {
-            [results addObject:[NSNumber numberWithInt:sqlite3_column_int(statement, 0)]];
-        }
-    }
-    sqlite3_finalize(statement);
-    return results;
 }
 
 - (NSMutableArray<NSMutableArray*>*) sortIntoDays:(NSMutableArray*)allMessages startTime:(int)startTime endTime:(int)endTime
@@ -579,13 +654,14 @@ static TemporaryDatabaseManager *databaseManager;
     return daysMessages;
 }
 
+
 /****************************************************************
  *
- *              SQLITE_HELPERS
+ *              SQLite Helpers
  *
 *****************************************************************/
 
-# pragma mark SQLITE_HELPERS
+# pragma mark SQLite Helpers
 
 - (BOOL) executeSQLStatement:(const char *)sqlStatement errorMessage:(char*)errorMessage
 {
@@ -617,6 +693,9 @@ static TemporaryDatabaseManager *databaseManager;
     return NO;
 }
 
+
+#pragma mark Create tables
+
 - (void) createOtherMessagesTable
 {
     //CREATE TABLE %@ (ROWID INTEGER PRIMARY KEY, date INTEGER, wordCount INTEGER, is_from_me INTEGER DEFAULT 0, cache_has_attachments INTEGER
@@ -640,6 +719,9 @@ static TemporaryDatabaseManager *databaseManager;
         printf("ERROR CREATING TABLE: %s\t%s\n", [tableName UTF8String], sqlite3_errmsg(_database));
     }
 }
+
+
+#pragma mark Misc. SQLite helpers
 
 - (void) addPragmas
 {

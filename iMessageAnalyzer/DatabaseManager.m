@@ -14,6 +14,8 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
 
 @interface DatabaseManager ()
 
+#pragma mark Private variables
+
 @property sqlite3 *database;
 
 @property (strong, nonatomic) NSMutableDictionary *allContacts;
@@ -22,6 +24,15 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
 @end
 
 @implementation DatabaseManager
+
+
+/****************************************************************
+ *
+ *              Constructor
+ *
+*****************************************************************/
+
+# pragma mark Constructor
 
 + (instancetype) getInstance
 {
@@ -63,11 +74,11 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
 
 /****************************************************************
  *
- *              GET_CONTACTS
+ *              Handle IDs
  *
 *****************************************************************/
 
-# pragma mark GET_CONTACTS
+# pragma mark Handle IDs
 
 - (NSMutableSet*) getHandleIDsForMessageText:(NSString*)messageText
 {
@@ -94,6 +105,47 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
     
     return handle_ids;
 }
+
+- (int32_t) getHandleForChatID:(int32_t)chatID
+{
+    const char *query = [[NSString stringWithFormat:@"SELECT handle_id FROM chat_handle_join WHERE chat_id=%d", chatID] UTF8String];
+    sqlite3_stmt *statement;
+    
+    int result = -1;
+    
+    if(sqlite3_prepare_v2(_database, query, -1, &statement, NULL) == SQLITE_OK) {
+        while(sqlite3_step(statement) == SQLITE_ROW) {
+            result = sqlite3_column_int(statement, 0);
+        }
+    }
+    
+    sqlite3_finalize(statement);
+    
+    return result;
+}
+
+
+- (void) updateHandleIDsForPerson:(Person*)person
+{
+    //Uninitialized handleID
+    if(person.handleID < 0) {
+        int handleID = [self getHandleForChatID:person.chatId];
+        person.handleID = handleID;
+        
+        //If there is a secondary chat id, get its handle form
+        int handleID2 = person.secondaryChatId < 0 ? handleID : [self getHandleForChatID:person.secondaryChatId];
+        person.secondaryHandleId = handleID2;
+    }
+}
+
+
+/****************************************************************
+ *
+ *              Chats
+ *
+*****************************************************************/
+
+# pragma mark Chats
 
 - (void) updateAllChatsGlobalVariable
 {
@@ -142,38 +194,14 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
     sqlite3_finalize(statement);
 }
 
-- (int32_t) getHandleForChatID:(int32_t)chatID
-{
-    const char *query = [[NSString stringWithFormat:@"SELECT handle_id FROM chat_handle_join WHERE chat_id=%d", chatID] UTF8String];
-    sqlite3_stmt *statement;
-    
-    int result = -1;
-    
-    if(sqlite3_prepare_v2(_database, query, -1, &statement, NULL) == SQLITE_OK) {
-        while(sqlite3_step(statement) == SQLITE_ROW) {
-            result = sqlite3_column_int(statement, 0);
-        }
-    }
 
-    sqlite3_finalize(statement);
-    
-    return result;
-}
+/****************************************************************
+ *
+ *              Contacts
+ *
+*****************************************************************/
 
-
-- (void) updateHandleIDsForPerson:(Person*)person
-{
-    //Uninitialized handleID
-    if(person.handleID < 0) {
-        int handleID = [self getHandleForChatID:person.chatId];
-        person.handleID = handleID;
-        
-        //If there is a secondary chat id, get its handle form
-        int handleID2 = person.secondaryChatId < 0 ? handleID : [self getHandleForChatID:person.secondaryChatId];
-        person.secondaryHandleId = handleID2;
-    }
-}
-
+# pragma mark Contacts
 
 - (void) getAllContacts
 {
@@ -248,32 +276,15 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
 
 /****************************************************************
  *
- *              GET MESSAGES
+ *              Messages
  *
 *****************************************************************/
 
-# pragma mark GET_MESSAGES
+# pragma mark Messages
 
 - (int32_t) totalMessagesForStartTime:(long)startTimeInSeconds endTimeInSeconds:(long)endTimeInSeconds
 {
     const char *query = [[NSString stringWithFormat:@"SELECT count(*) from message WHERE date > %ld AND date < %ld", startTimeInSeconds, endTimeInSeconds] UTF8String];
-    
-    sqlite3_stmt *statement;
-    
-    int result = 0;
-    
-    if(sqlite3_prepare_v2(_database, query, -1, &statement, NULL) == SQLITE_OK) {
-        result = sqlite3_column_int(statement, 0);
-    }
-    
-    sqlite3_finalize(statement);
-    return result;
-}
-
-- (int32_t) messageCountForPerson:(Person*)person startTimeInSeconds:(long)startTimeInSeconds endTimeInSeconds:(long)endTimeInSeconds
-{
-    //const char *query = [[NSString stringWithFormat:@"SELECT count(*) from message WHERE (handle_id=%d OR handle_id=%d) AND date > %ld AND date < %ld", person.handleID, person.secondaryHandleId, startTimeInSeconds, endTimeInSeconds] UTF8String];
-    const char *query = [[NSString stringWithFormat:@"SELECT count(*) FROM message messageT INNER JOIN chat_message_join chatMessageT ON (chatMessageT.chat_id=%ld OR chatMessageT.chat_id=%ld) AND messageT.ROWID=chatMessageT.message_id AND (messageT.date > %ld AND messageT.date < %ld) ORDER BY messageT.date", person.chatId, person.secondaryChatId, startTimeInSeconds, endTimeInSeconds] UTF8String];
     
     sqlite3_stmt *statement;
     
@@ -439,14 +450,31 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
     return result;
 }
 
+- (int32_t) messageCountForPerson:(Person*)person startTimeInSeconds:(long)startTimeInSeconds endTimeInSeconds:(long)endTimeInSeconds
+{
+    //const char *query = [[NSString stringWithFormat:@"SELECT count(*) from message WHERE (handle_id=%d OR handle_id=%d) AND date > %ld AND date < %ld", person.handleID, person.secondaryHandleId, startTimeInSeconds, endTimeInSeconds] UTF8String];
+    const char *query = [[NSString stringWithFormat:@"SELECT count(*) FROM message messageT INNER JOIN chat_message_join chatMessageT ON (chatMessageT.chat_id=%ld OR chatMessageT.chat_id=%ld) AND messageT.ROWID=chatMessageT.message_id AND (messageT.date > %ld AND messageT.date < %ld) ORDER BY messageT.date", person.chatId, person.secondaryChatId, startTimeInSeconds, endTimeInSeconds] UTF8String];
+    
+    sqlite3_stmt *statement;
+    
+    int result = 0;
+    
+    if(sqlite3_prepare_v2(_database, query, -1, &statement, NULL) == SQLITE_OK) {
+        result = sqlite3_column_int(statement, 0);
+    }
+    
+    sqlite3_finalize(statement);
+    return result;
+}
+
 
 /****************************************************************
  *
- *             GET ATTACHMENTS
+ *             Attachments
  *
 *****************************************************************/
 
-# pragma mark GET_ATTACHMENTS
+# pragma mark Attachments
 
 - (NSMutableDictionary*) getAllAttachmentsForPerson:(Person*)person
 {
@@ -526,11 +554,11 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
 
 /****************************************************************
  *
- *              MISC_METHODS
+ *              Helper methods
  *
 *****************************************************************/
 
-# pragma mark MISC_METHODS
+# pragma mark Helper methods
 
 - (NSString*) cleanNumber:(NSString*)originalNumber
 {
@@ -566,8 +594,7 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
     return [self.allChats allValues];
 }
 
-/** Slow - gets every message_id associated with a handle_id
- searches the messages db for everything associated with that handle */
+/** Deperecated */
 - (void) getSequentialMessagesForChatID:(int32_t)chatID
 {
     NSMutableArray *messageIDs = [[NSMutableArray alloc] init];
