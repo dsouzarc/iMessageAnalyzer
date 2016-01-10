@@ -13,6 +13,6 @@
 
 #import "DatabaseManager.h"
 
-@interface StartupWindowController : NSWindowController <NSWindowDelegate>
+@interface StartupWindowController : NSWindowController <NSWindowDelegate, StartupViewControllerDelegate>
 
 @end
