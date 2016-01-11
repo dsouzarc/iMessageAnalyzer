@@ -80,6 +80,48 @@
 			remoteGlobalIDString = 94A992391BBDC733003BA1D5;
 			remoteInfo = iMessageAnalyzer;
 		};
+		94DD09AB1C432C64004FA62D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 94DD09821C4329C2004FA62D /* CorePlot.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8DC2EF5B0486A6940098B216;
+			remoteInfo = "CorePlot Mac";
+		};
+		94DD09AD1C432C64004FA62D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 94DD09821C4329C2004FA62D /* CorePlot.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 0730F600109492D800E95162;
+			remoteInfo = "UnitTests Mac";
+		};
+		94DD09AF1C432C64004FA62D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 94DD09821C4329C2004FA62D /* CorePlot.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C38A09781A46185200D45436;
+			remoteInfo = "CorePlot iOS";
+		};
+		94DD09B11C432C64004FA62D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 94DD09821C4329C2004FA62D /* CorePlot.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C38A09821A46185300D45436;
+			remoteInfo = "UnitTests iOS";
+		};
+		94DD09B31C432C64004FA62D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 94DD09821C4329C2004FA62D /* CorePlot.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C38A09BA1A4619A900D45436;
+			remoteInfo = "CorePlot-CocoaTouch";
+		};
+		94DD09B51C432C64004FA62D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 94DD09821C4329C2004FA62D /* CorePlot.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C38A09C41A4619A900D45436;
+			remoteInfo = "CorePlot-CocoaTouchTests";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -271,8 +313,6 @@
 			children = (
 				94F3AC451BC7282A00948A23 /* DatabaseManager.h */,
 				94F3AC461BC7282A00948A23 /* DatabaseManager.m */,
-				940136D61C05C7CF003AF393 /* TemporaryDatabaseManager.h */,
-				940136D71C05C7CF003AF393 /* TemporaryDatabaseManager.m */,
 			);
 			name = "Database Manager";
 			sourceTree = "<group>";
@@ -325,6 +365,7 @@
 				946D2A701BE5EAA700270BF0 /* TextTableCellView.xib */,
 				946D2A6D1BE5DBC800270BF0 /* TextTableCellView.h */,
 				946D2A6E1BE5DBC800270BF0 /* TextTableCellView.m */,
+				94DAC4A41BE7DAF90016ED35 /* calendar-icon.png */,
 			);
 			name = "iMessage Text Table Cell View";
 			sourceTree = "<group>";
@@ -379,7 +420,7 @@
 			isa = PBXGroup;
 			children = (
 				941C04FB1C0300AB002E2FAB /* Message Manager */,
-				941C04FC1C0300B3002E2FAB /* Database Manager */,
+				94DD09BB1C432CC8004FA62D /* Database Manager */,
 			);
 			name = Managers;
 			sourceTree = "<group>";
@@ -399,12 +440,6 @@
 			children = (
 				94A9923D1BBDC733003BA1D5 /* AppDelegate.h */,
 				94A9923E1BBDC733003BA1D5 /* AppDelegate.m */,
-				945544F91C423DA80099CF3A /* StartupWindowController.h */,
-				945544FA1C423DA80099CF3A /* StartupWindowController.m */,
-				945544FB1C423DA80099CF3A /* StartupWindowController.xib */,
-				945545081C423FA10099CF3A /* StartupViewController.h */,
-				945545091C423FA10099CF3A /* StartupViewController.m */,
-				9455450A1C423FA10099CF3A /* StartupViewController.xib */,
 			);
 			name = "App Delegate";
 			sourceTree = "<group>";
@@ -441,7 +476,6 @@
 		947B53DB1BE53F6500484D66 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
-				94DAC4A41BE7DAF90016ED35 /* calendar-icon.png */,
 				944E19571BE540E9005132E1 /* blank_profile_outline.png */,
 				9480B15F1BF7B48900ECDE38 /* more_icon.png */,
 			);
@@ -481,10 +515,8 @@
 		94A992311BBDC733003BA1D5 = {
 			isa = PBXGroup;
 			children = (
-				94DD099B1C432A1E004FA62D /* CorePlot.framework */,
-				94DD09821C4329C2004FA62D /* CorePlot.xcodeproj */,
-				94E70EB31BF9C80A00653F94 /* QuartzCore.framework */,
 				94A9923C1BBDC733003BA1D5 /* iMessageAnalyzer */,
+				94DD099E1C432C63004FA62D /* Frameworks */,
 				94A992531BBDC734003BA1D5 /* iMessageAnalyzerTests */,
 				94A9925E1BBDC734003BA1D5 /* iMessageAnalyzerUITests */,
 				94A9923B1BBDC733003BA1D5 /* Products */,
@@ -521,6 +553,7 @@
 				947B53D51BE1AE4C00484D66 /* Main Window Controller */,
 				9480B16B1BF7B93900ECDE38 /* Simple Analytics View Controller */,
 				9480B16D1BF7B95A00ECDE38 /* More Analysis Window Controller */,
+				94DD09B91C432CA5004FA62D /* Startup Screen */,
 				947B53D31BE1AE2E00484D66 /* App Delegate */,
 				947549681BF207B2006CD211 /* iMessage Text Table Cell View */,
 				947B53D41BE1AE3B00484D66 /* VIew Controller - Default */,
@@ -558,6 +591,76 @@
 				94A992611BBDC734003BA1D5 /* Info.plist */,
 			);
 			path = iMessageAnalyzerUITests;
+			sourceTree = "<group>";
+		};
+		94DD099E1C432C63004FA62D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				94DD099B1C432A1E004FA62D /* CorePlot.framework */,
+				94DD09821C4329C2004FA62D /* CorePlot.xcodeproj */,
+				94E70EB31BF9C80A00653F94 /* QuartzCore.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		94DD099F1C432C64004FA62D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				94DD09AC1C432C64004FA62D /* CorePlot.framework */,
+				94DD09AE1C432C64004FA62D /* UnitTests.xctest */,
+				94DD09B01C432C64004FA62D /* CorePlot.framework */,
+				94DD09B21C432C64004FA62D /* UnitTests iOS.xctest */,
+				94DD09B41C432C64004FA62D /* libCorePlot-CocoaTouch.a */,
+				94DD09B61C432C64004FA62D /* CorePlot-CocoaTouchTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		94DD09B71C432C83004FA62D /* StartupViewController */ = {
+			isa = PBXGroup;
+			children = (
+				945545081C423FA10099CF3A /* StartupViewController.h */,
+				945545091C423FA10099CF3A /* StartupViewController.m */,
+				9455450A1C423FA10099CF3A /* StartupViewController.xib */,
+			);
+			name = StartupViewController;
+			sourceTree = "<group>";
+		};
+		94DD09B81C432C8C004FA62D /* StartupWindowController */ = {
+			isa = PBXGroup;
+			children = (
+				945544F91C423DA80099CF3A /* StartupWindowController.h */,
+				945544FA1C423DA80099CF3A /* StartupWindowController.m */,
+				945544FB1C423DA80099CF3A /* StartupWindowController.xib */,
+			);
+			name = StartupWindowController;
+			sourceTree = "<group>";
+		};
+		94DD09B91C432CA5004FA62D /* Startup Screen */ = {
+			isa = PBXGroup;
+			children = (
+				94DD09B81C432C8C004FA62D /* StartupWindowController */,
+				94DD09B71C432C83004FA62D /* StartupViewController */,
+			);
+			name = "Startup Screen";
+			sourceTree = "<group>";
+		};
+		94DD09BA1C432CBC004FA62D /* Temporary Database Manager */ = {
+			isa = PBXGroup;
+			children = (
+				940136D61C05C7CF003AF393 /* TemporaryDatabaseManager.h */,
+				940136D71C05C7CF003AF393 /* TemporaryDatabaseManager.m */,
+			);
+			name = "Temporary Database Manager";
+			sourceTree = "<group>";
+		};
+		94DD09BB1C432CC8004FA62D /* Database Manager */ = {
+			isa = PBXGroup;
+			children = (
+				94DD09BA1C432CBC004FA62D /* Temporary Database Manager */,
+				941C04FC1C0300B3002E2FAB /* Database Manager */,
+			);
+			name = "Database Manager";
 			sourceTree = "<group>";
 		};
 		94E70EA91BF9BF1E00653F94 /* Data Structures */ = {
@@ -677,6 +780,12 @@
 			mainGroup = 94A992311BBDC733003BA1D5;
 			productRefGroup = 94A9923B1BBDC733003BA1D5 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 94DD099F1C432C64004FA62D /* Products */;
+					ProjectRef = 94DD09821C4329C2004FA62D /* CorePlot.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				94A992391BBDC733003BA1D5 /* iMessageAnalyzer */,
@@ -685,6 +794,51 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		94DD09AC1C432C64004FA62D /* CorePlot.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = CorePlot.framework;
+			remoteRef = 94DD09AB1C432C64004FA62D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		94DD09AE1C432C64004FA62D /* UnitTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = UnitTests.xctest;
+			remoteRef = 94DD09AD1C432C64004FA62D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		94DD09B01C432C64004FA62D /* CorePlot.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = CorePlot.framework;
+			remoteRef = 94DD09AF1C432C64004FA62D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		94DD09B21C432C64004FA62D /* UnitTests iOS.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "UnitTests iOS.xctest";
+			remoteRef = 94DD09B11C432C64004FA62D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		94DD09B41C432C64004FA62D /* libCorePlot-CocoaTouch.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libCorePlot-CocoaTouch.a";
+			remoteRef = 94DD09B31C432C64004FA62D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		94DD09B61C432C64004FA62D /* CorePlot-CocoaTouchTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "CorePlot-CocoaTouchTests.xctest";
+			remoteRef = 94DD09B51C432C64004FA62D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		94A992381BBDC733003BA1D5 /* Resources */ = {
