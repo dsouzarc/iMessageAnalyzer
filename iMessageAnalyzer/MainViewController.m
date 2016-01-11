@@ -8,6 +8,13 @@
 
 #import "MainViewController.h"
 
+static NSString *orderByRecent = @"Recent";
+static NSString *orderByLongAgo = @"Long ago";
+static NSString *orderByMostMessages = @"Most messages";
+static NSString *orderByLeastMessages = @"Least messages";
+static NSString *orderByMostWords = @"Most words";
+static NSString *orderByLeastWords = @"Least words";
+
 @interface MainViewController ()
 
 
@@ -19,6 +26,7 @@
 @property (strong) IBOutlet NSTextField *contactNameTextField;
 @property (strong) IBOutlet NSSearchField *searchField;
 @property (strong) IBOutlet NSButton *calendarButton;
+@property (strong) IBOutlet NSPopUpButton *orderByPopUpButton;
 
 @property (strong, nonatomic) NSTextView *sizingView;
 @property (strong, nonatomic) NSTextField *sizingField;
@@ -124,6 +132,14 @@
     
     [self.messagesTableView setSelectionHighlightStyle:NSTableViewSelectionHighlightStyleNone];
     [self.contactsTableView setDoubleAction:@selector(doubleClickedContactCell:)];
+    
+    [self.orderByPopUpButton removeAllItems];
+    [self.orderByPopUpButton addItemWithTitle:orderByRecent];
+    [self.orderByPopUpButton addItemWithTitle:orderByLongAgo];
+    [self.orderByPopUpButton addItemWithTitle:orderByMostMessages];
+    [self.orderByPopUpButton addItemWithTitle:orderByLeastMessages];
+    [self.orderByPopUpButton addItemWithTitle:orderByMostWords];
+    [self.orderByPopUpButton addItemWithTitle:orderByLeastWords];
 }
 
 - (void) doubleClickedContactCell:(id)object
@@ -187,6 +203,27 @@
     }
     self.calendarPopUpViewController.dateToShow = lastDate;
     [self.calendarPopover showRelativeToRect:[self.calendarButton bounds] ofView:self.calendarButton preferredEdge:NSMaxXEdge];
+}
+
+- (IBAction)orderByButton:(id)sender {
+    if([self.orderByPopUpButton.titleOfSelectedItem isEqualToString:orderByRecent]) {
+        
+    }
+    else if([self.orderByPopUpButton.titleOfSelectedItem isEqualToString:orderByLongAgo]) {
+        
+    }
+    else if([self.orderByPopUpButton.titleOfSelectedItem isEqualToString:orderByMostMessages]) {
+        
+    }
+    else if([self.orderByPopUpButton.titleOfSelectedItem isEqualToString:orderByLeastMessages]) {
+        
+    }
+    else if([self.orderByPopUpButton.titleOfSelectedItem isEqualToString:orderByMostWords]) {
+        
+    }
+    else if([self.orderByPopUpButton.titleOfSelectedItem isEqualToString:orderByLeastWords]) {
+        
+    }
 }
 
 - (void) dateChosen:(NSDate *)chosenDate

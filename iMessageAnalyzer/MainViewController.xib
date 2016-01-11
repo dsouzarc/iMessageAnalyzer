@@ -10,6 +10,7 @@
                 <outlet property="contactNameTextField" destination="YFw-ne-ukc" id="67j-H9-XYi"/>
                 <outlet property="contactsTableView" destination="S3H-Yk-c4c" id="GQw-hH-Kjr"/>
                 <outlet property="messagesTableView" destination="gb8-do-be4" id="xJj-Lr-fAB"/>
+                <outlet property="orderByPopUpButton" destination="iOq-0G-jae" id="Hrz-6u-uyR"/>
                 <outlet property="searchField" destination="Kpw-Oj-Sda" id="o5r-QY-eCu"/>
                 <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
             </connections>
@@ -88,6 +89,23 @@
                                         <autoresizingMask key="autoresizingMask"/>
                                     </tableHeaderView>
                                 </scrollView>
+                                <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iOq-0G-jae">
+                                    <rect key="frame" x="148" y="660" width="74" height="22"/>
+                                    <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="19X-aF-fhw" id="oM0-t9-IFU">
+                                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                        <font key="font" metaFont="smallSystem"/>
+                                        <menu key="menu" id="0X6-WK-7Al">
+                                            <items>
+                                                <menuItem title="Item 1" state="on" id="19X-aF-fhw"/>
+                                                <menuItem title="Item 2" id="qcl-gN-Lhy"/>
+                                                <menuItem title="Item 3" id="XtO-BZ-KRT"/>
+                                            </items>
+                                        </menu>
+                                    </popUpButtonCell>
+                                    <connections>
+                                        <action selector="orderByButton:" target="-2" id="4hE-uh-wZM"/>
+                                    </connections>
+                                </popUpButton>
                             </subviews>
                             <constraints>
                                 <constraint firstItem="Kpw-Oj-Sda" firstAttribute="leading" secondItem="jQ9-qK-j6u" secondAttribute="leading" id="9OO-09-Caa"/>
