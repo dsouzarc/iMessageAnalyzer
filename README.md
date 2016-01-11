@@ -187,3 +187,14 @@ Overlaying the messages with a friend (white) with all other messages on that da
 
 ![Screenshot 18](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_18.png)
 Zooming in on that overlay
+
+![Screenshot 19](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_19.png)
+![Screenshot 20](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_20.png)
+![Screenshot 21](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_21.png)
+![Screenshot 22](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_22.png)
+![Screenshot 23](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_23.png)
+![Screenshot 24](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_24.png)
+![Screenshot 25](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_25.png)
+![Screenshot 26](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_26.png)
+![Screenshot 27](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_27.png)
+
