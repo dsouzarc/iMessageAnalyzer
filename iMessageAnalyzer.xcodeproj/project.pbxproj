@@ -340,6 +340,7 @@
 		9438FD021BE077E400B239BE /* Objects */ = {
 			isa = PBXGroup;
 			children = (
+				94E70EA91BF9BF1E00653F94 /* Data Structures */,
 				94E70EAA1BF9BF2E00653F94 /* Statistics */,
 				947B53CD1BE1ADC400484D66 /* Person */,
 				947B53CE1BE1ADCB00484D66 /* Attachment */,
@@ -359,13 +360,61 @@
 			path = ..;
 			sourceTree = "<group>";
 		};
+		9459BFF51C44660000F66B98 /* Graphs */ = {
+			isa = PBXGroup;
+			children = (
+				9408790C1C403820006F6C87 /* BarPlotViewController */,
+				940879061C401591006F6C87 /* PieChartViewController */,
+				942A0B531C38920000C89982 /* DropPlot View Controller */,
+				942A0B521C3891E100C89982 /* Graph View Controller */,
+			);
+			name = Graphs;
+			sourceTree = "<group>";
+		};
+		9459C0001C44665500F66B98 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				941C04F91C030086002E2FAB /* NSTextField for Messages */,
+				947B53D21BE1AE1F00484D66 /* Chats Cell */,
+				947549681BF207B2006CD211 /* iMessage Text Table Cell View */,
+			);
+			name = Cells;
+			sourceTree = "<group>";
+		};
+		9459C0011C44669200F66B98 /* Main View and Window */ = {
+			isa = PBXGroup;
+			children = (
+				947B53D61BE1AE5400484D66 /* Main View Controller */,
+				947B53D51BE1AE4C00484D66 /* Main Window Controller */,
+			);
+			name = "Main View and Window";
+			sourceTree = "<group>";
+		};
+		9459C0021C4466A500F66B98 /* More Analysis View and Window */ = {
+			isa = PBXGroup;
+			children = (
+				9459BFF51C44660000F66B98 /* Graphs */,
+				9480B16C1BF7B94B00ECDE38 /* More Analysis View Controller */,
+				9480B16D1BF7B95A00ECDE38 /* More Analysis Window Controller */,
+			);
+			name = "More Analysis View and Window";
+			sourceTree = "<group>";
+		};
+		9459C0031C4466C000F66B98 /* Popup View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				947549691BF207CB006CD211 /* Calendar Popup View Controller */,
+				9480B16B1BF7B93900ECDE38 /* Simple Analytics View Controller */,
+			);
+			name = "Popup View Controllers";
+			sourceTree = "<group>";
+		};
 		947549681BF207B2006CD211 /* iMessage Text Table Cell View */ = {
 			isa = PBXGroup;
 			children = (
 				946D2A701BE5EAA700270BF0 /* TextTableCellView.xib */,
 				946D2A6D1BE5DBC800270BF0 /* TextTableCellView.h */,
 				946D2A6E1BE5DBC800270BF0 /* TextTableCellView.m */,
-				94DAC4A41BE7DAF90016ED35 /* calendar-icon.png */,
 			);
 			name = "iMessage Text Table Cell View";
 			sourceTree = "<group>";
@@ -476,6 +525,7 @@
 		947B53DB1BE53F6500484D66 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				94DAC4A41BE7DAF90016ED35 /* calendar-icon.png */,
 				944E19571BE540E9005132E1 /* blank_profile_outline.png */,
 				9480B15F1BF7B48900ECDE38 /* more_icon.png */,
 			);
@@ -536,26 +586,16 @@
 		94A9923C1BBDC733003BA1D5 /* iMessageAnalyzer */ = {
 			isa = PBXGroup;
 			children = (
-				94F8CDB31C3B39F500E58BB3 /* Constants */,
-				9408790C1C403820006F6C87 /* BarPlotViewController */,
-				940879061C401591006F6C87 /* PieChartViewController */,
-				942A0B531C38920000C89982 /* DropPlot View Controller */,
-				942A0B521C3891E100C89982 /* Graph View Controller */,
-				9480B16C1BF7B94B00ECDE38 /* More Analysis View Controller */,
-				941C04FA1C030099002E2FAB /* View Attachments View Controller */,
-				947B53D61BE1AE5400484D66 /* Main View Controller */,
 				947B53D11BE1AE0D00484D66 /* Managers */,
-				941C04F91C030086002E2FAB /* NSTextField for Messages */,
-				947B53D21BE1AE1F00484D66 /* Chats Cell */,
-				947549691BF207CB006CD211 /* Calendar Popup View Controller */,
-				94E70EA91BF9BF1E00653F94 /* Data Structures */,
+				94F8CDB31C3B39F500E58BB3 /* Constants */,
+				9459C0021C4466A500F66B98 /* More Analysis View and Window */,
+				9459C0011C44669200F66B98 /* Main View and Window */,
+				941C04FA1C030099002E2FAB /* View Attachments View Controller */,
+				9459C0031C4466C000F66B98 /* Popup View Controllers */,
+				9459C0001C44665500F66B98 /* Cells */,
 				9438FD021BE077E400B239BE /* Objects */,
-				947B53D51BE1AE4C00484D66 /* Main Window Controller */,
-				9480B16B1BF7B93900ECDE38 /* Simple Analytics View Controller */,
-				9480B16D1BF7B95A00ECDE38 /* More Analysis Window Controller */,
 				94DD09B91C432CA5004FA62D /* Startup Screen */,
 				947B53D31BE1AE2E00484D66 /* App Delegate */,
-				947549681BF207B2006CD211 /* iMessage Text Table Cell View */,
 				947B53D41BE1AE3B00484D66 /* VIew Controller - Default */,
 				947B53DB1BE53F6500484D66 /* Icons */,
 				94A992401BBDC733003BA1D5 /* Supporting Files */,

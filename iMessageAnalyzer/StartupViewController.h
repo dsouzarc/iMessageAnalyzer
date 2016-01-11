@@ -8,6 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+#pragma mark Delegate
+
 @protocol StartupViewControllerDelegate <NSObject>
 
 - (void) didWishToContinue;

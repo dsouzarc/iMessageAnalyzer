@@ -10,16 +10,29 @@
 
 @interface StartupViewController ()
 
+#pragma mark UI Elements
+
 @property (strong) IBOutlet NSTextField *sourceCodeTextField;
 @property (strong) IBOutlet NSTextField *emailTextField;
 @property (strong) IBOutlet NSTextField *descriptionTextField;
+@property (strong) IBOutlet NSButton *continueButton;
+
+#pragma mark Private variables
 
 @property (strong, nonatomic) NSDictionary *fontAttributes;
-@property (strong) IBOutlet NSButton *continueButton;
 
 @end
 
 @implementation StartupViewController
+
+
+/****************************************************************
+ *
+ *              Constructor
+ *
+*****************************************************************/
+
+# pragma mark Constructor
 
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -53,6 +66,15 @@
     [[self.view window] setDefaultButtonCell:[self.continueButton cell]];
     [self.continueButton setBezelStyle:NSRoundedBezelStyle];
 }
+
+
+/****************************************************************
+ *
+ *              Auxillary methods
+ *
+*****************************************************************/
+
+# pragma mark Auxillary methods
 
 - (NSMutableAttributedString*) getEmailTextFieldAsString
 {
@@ -102,6 +124,15 @@
     [attributedString addAttribute:NSForegroundColorAttributeName value:[NSColor blueColor] range:range];
     [attributedString addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInt:NSUnderlineStyleSingle] range:range];
 }
+
+/****************************************************************
+ *
+ *              Button clicks
+ *
+*****************************************************************/
+
+# pragma mark Button clicks
+
 - (IBAction)continueButton:(id)sender {
     [self.delegate didWishToContinue];
 }

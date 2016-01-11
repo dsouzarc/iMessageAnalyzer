@@ -20,6 +20,15 @@
 
 @implementation StartupWindowController
 
+
+/****************************************************************
+ *
+ *              Constructor
+ *
+*****************************************************************/
+
+# pragma mark Constructor
+
 - (instancetype) initWithWindowNibName:(NSString *)windowNibName
 {
     self = [super initWithWindowNibName:windowNibName];
@@ -34,7 +43,6 @@
     return self;
 }
 
-
 - (void)windowDidLoad {
     [super windowDidLoad];
     
@@ -46,15 +54,14 @@
     [self.window setContentViewController:self.startupViewController];
 }
 
-- (NSSize) windowWillResize:(NSWindow *)sender toSize:(NSSize)frameSize
-{
-    return self.window.frame.size;
-}
 
-- (void) didWishToExit
-{
-    [NSApp terminate:self];
-}
+/****************************************************************
+ *
+ *              StartupViewController Delegate
+ *
+*****************************************************************/
+
+# pragma mark StartupViewController Delegate
 
 - (void) didWishToContinue
 {
@@ -80,6 +87,20 @@
         }
     }];
 }
+
+- (void) didWishToExit
+{
+    [NSApp terminate:self];
+}
+
+
+/****************************************************************
+ *
+ *              Auxillary methods
+ *
+*****************************************************************/
+
+# pragma mark Auxillary methods
 
 - (void) messagesDataSource
 {
@@ -107,21 +128,10 @@
     }
 }
 
-- (void) showErrorPrompt:(NSString*)messageText informationText:(NSString*)informationText
-{
-    NSAlert *prompt = [[NSAlert alloc] init];
-    [prompt setAlertStyle:NSWarningAlertStyle];
-    [prompt setMessageText:messageText];
-    [prompt setInformativeText:informationText];
-    [prompt addButtonWithTitle:@"Return to main screen"];
-    [prompt beginSheetModalForWindow:self.window completionHandler:nil];
-}
-
 - (void) iPhoneDataSource
 {
     NSString *fileName = @"3d0d7e5fb2ce288813306e4d4636395e047a3d28";
     NSFileManager *fileManager = [NSFileManager defaultManager];
-    NSError *error;
     
     NSOpenPanel *directoryPanel = [NSOpenPanel openPanel];
     [directoryPanel setCanChooseDirectories:YES];
@@ -166,12 +176,36 @@
     }
 }
 
+- (void) showErrorPrompt:(NSString*)messageText informationText:(NSString*)informationText
+{
+    NSAlert *prompt = [[NSAlert alloc] init];
+    [prompt setAlertStyle:NSWarningAlertStyle];
+    [prompt setMessageText:messageText];
+    [prompt setInformativeText:informationText];
+    [prompt addButtonWithTitle:@"Return to main screen"];
+    [prompt beginSheetModalForWindow:self.window completionHandler:nil];
+}
+
 - (void) showMainWindow:(NSString*)databasePath
 {
     self.mainWindowController = [[MainWindowController alloc] initWithWindowNibName:@"MainWindowController" databasePath:databasePath];
     [self.mainWindowController showWindow:self];
     [self.mainWindowController.window makeKeyAndOrderFront:self];
     [self.window close];
+}
+
+
+/****************************************************************
+ *
+ *              NSWindow Delegate
+ *
+ *****************************************************************/
+
+# pragma mark NSWindow Delegate
+
+- (NSSize) windowWillResize:(NSWindow *)sender toSize:(NSSize)frameSize
+{
+    return self.window.frame.size;
 }
 
 @end
