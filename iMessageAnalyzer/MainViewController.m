@@ -9,11 +9,7 @@
 #import "MainViewController.h"
 
 static NSString *orderByRecent = @"Recent";
-static NSString *orderByLongAgo = @"Long ago";
 static NSString *orderByMostMessages = @"Most messages";
-static NSString *orderByLeastMessages = @"Least messages";
-static NSString *orderByMostWords = @"Most words";
-static NSString *orderByLeastWords = @"Least words";
 
 @interface MainViewController ()
 
@@ -133,13 +129,11 @@ static NSString *orderByLeastWords = @"Least words";
     [self.messagesTableView setSelectionHighlightStyle:NSTableViewSelectionHighlightStyleNone];
     [self.contactsTableView setDoubleAction:@selector(doubleClickedContactCell:)];
     
+    //TODO: UNHIDE AND IMPLEMENT
+    [self.orderByPopUpButton setHidden:YES];
     [self.orderByPopUpButton removeAllItems];
     [self.orderByPopUpButton addItemWithTitle:orderByRecent];
-    [self.orderByPopUpButton addItemWithTitle:orderByLongAgo];
     [self.orderByPopUpButton addItemWithTitle:orderByMostMessages];
-    [self.orderByPopUpButton addItemWithTitle:orderByLeastMessages];
-    [self.orderByPopUpButton addItemWithTitle:orderByMostWords];
-    [self.orderByPopUpButton addItemWithTitle:orderByLeastWords];
 }
 
 - (void) doubleClickedContactCell:(id)object
@@ -206,24 +200,37 @@ static NSString *orderByLeastWords = @"Least words";
 }
 
 - (IBAction)orderByButton:(id)sender {
+    
     if([self.orderByPopUpButton.titleOfSelectedItem isEqualToString:orderByRecent]) {
-        
-    }
-    else if([self.orderByPopUpButton.titleOfSelectedItem isEqualToString:orderByLongAgo]) {
-        
+        self.searchConversationChats = self.chats;
     }
     else if([self.orderByPopUpButton.titleOfSelectedItem isEqualToString:orderByMostMessages]) {
+        Person *person = self.lastChosenPerson;
         
-    }
-    else if([self.orderByPopUpButton.titleOfSelectedItem isEqualToString:orderByLeastMessages]) {
+        if(!self.lastChosenPerson) {
+            return;
+        }
         
-    }
-    else if([self.orderByPopUpButton.titleOfSelectedItem isEqualToString:orderByMostWords]) {
+        //We need to find the counts for each person
+        if(person.messagesWithPerson == INT_MIN || person.messagesWithPerson == 0) {
+            for(Person *person in self.searchConversationChats) {
+                person.messagesWithPerson = [self.messageManager getMessageCountWithPerson:person];
+                NSLog(@"GOT: %d", person.messagesWithPerson);
+            }
+        }
         
-    }
-    else if([self.orderByPopUpButton.titleOfSelectedItem isEqualToString:orderByLeastWords]) {
+        NSArray *mostMessages = [self.searchConversationChats sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
+            Person *first = (Person*) a;
+            Person *second = (Person*) b;
+            
+            return [[NSNumber numberWithInt:first.messagesWithPerson] compare:[NSNumber numberWithInt:second.messagesWithPerson]];
+        }];
+        self.searchConversationChats = [[NSMutableArray alloc] initWithArray:mostMessages];
+        [self.contactsTableView reloadData];
         
+        NSLog(@"FINISHED WITH SORTING");
     }
+
 }
 
 - (void) dateChosen:(NSDate *)chosenDate
