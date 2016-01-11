@@ -11,10 +11,9 @@
 #import "StartupViewController.h"
 #import "MainWindowController.h"
 
-#import "DatabaseManager.h"
-
 /** Controls the Startup Window and View --> Shows about me page and asks for data source */
 
 @interface StartupWindowController : NSWindowController <NSWindowDelegate, StartupViewControllerDelegate>
+
 
 @end
