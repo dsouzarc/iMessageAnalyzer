@@ -51,6 +51,8 @@
 		94A992551BBDC734003BA1D5 /* iMessageAnalyzerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A992541BBDC734003BA1D5 /* iMessageAnalyzerTests.m */; };
 		94A992601BBDC734003BA1D5 /* iMessageAnalyzerUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A9925F1BBDC734003BA1D5 /* iMessageAnalyzerUITests.m */; };
 		94DAC4A51BE7DAF90016ED35 /* calendar-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 94DAC4A41BE7DAF90016ED35 /* calendar-icon.png */; };
+		94DD099C1C432A1E004FA62D /* CorePlot.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94DD099B1C432A1E004FA62D /* CorePlot.framework */; };
+		94DD099D1C432A2E004FA62D /* CorePlot.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 94DD099B1C432A1E004FA62D /* CorePlot.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		94E70EB41BF9C80A00653F94 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94E70EB31BF9C80A00653F94 /* QuartzCore.framework */; };
 		94F01DDD1BE852CF00B47D9D /* CalendarPopUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94F01DDB1BE852CF00B47D9D /* CalendarPopUpViewController.m */; };
 		94F01DDE1BE852CF00B47D9D /* CalendarPopUpViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94F01DDC1BE852CF00B47D9D /* CalendarPopUpViewController.xib */; };
@@ -78,57 +80,16 @@
 			remoteGlobalIDString = 94A992391BBDC733003BA1D5;
 			remoteInfo = iMessageAnalyzer;
 		};
-		94F8CDA71C3B39E400E58BB3 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 9400C3BA1C00402A0005EB5A /* CorePlot.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 8DC2EF5B0486A6940098B216;
-			remoteInfo = "CorePlot Mac";
-		};
-		94F8CDA91C3B39E400E58BB3 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 9400C3BA1C00402A0005EB5A /* CorePlot.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 0730F600109492D800E95162;
-			remoteInfo = "UnitTests Mac";
-		};
-		94F8CDAB1C3B39E400E58BB3 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 9400C3BA1C00402A0005EB5A /* CorePlot.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = C38A09781A46185200D45436;
-			remoteInfo = "CorePlot iOS";
-		};
-		94F8CDAD1C3B39E400E58BB3 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 9400C3BA1C00402A0005EB5A /* CorePlot.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = C38A09821A46185300D45436;
-			remoteInfo = "UnitTests iOS";
-		};
-		94F8CDAF1C3B39E400E58BB3 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 9400C3BA1C00402A0005EB5A /* CorePlot.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = C38A09BA1A4619A900D45436;
-			remoteInfo = "CorePlot-CocoaTouch";
-		};
-		94F8CDB11C3B39E400E58BB3 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 9400C3BA1C00402A0005EB5A /* CorePlot.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = C38A09C41A4619A900D45436;
-			remoteInfo = "CorePlot-CocoaTouchTests";
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		94E70ED31BF9C89100653F94 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 12;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				94DD099D1C432A2E004FA62D /* CorePlot.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -136,7 +97,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		9400C3BA1C00402A0005EB5A /* CorePlot.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CorePlot.xcodeproj; path = "../../Downloads/core-plot-master 2/framework/CorePlot.xcodeproj"; sourceTree = "<group>"; };
 		940136C81C0585A7003AF393 /* DropPlotMessageAnalyzerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropPlotMessageAnalyzerViewController.h; sourceTree = "<group>"; };
 		940136C91C0585A7003AF393 /* DropPlotMessageAnalyzerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DropPlotMessageAnalyzerViewController.m; sourceTree = "<group>"; };
 		940136CA1C0585A7003AF393 /* DropPlotMessageAnalyzerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DropPlotMessageAnalyzerViewController.xib; sourceTree = "<group>"; };
@@ -209,6 +169,8 @@
 		94A9925F1BBDC734003BA1D5 /* iMessageAnalyzerUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = iMessageAnalyzerUITests.m; sourceTree = "<group>"; };
 		94A992611BBDC734003BA1D5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		94DAC4A41BE7DAF90016ED35 /* calendar-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "calendar-icon.png"; sourceTree = "<group>"; };
+		94DD09821C4329C2004FA62D /* CorePlot.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CorePlot.xcodeproj; path = "../../Downloads/core-plot-master/framework/CorePlot.xcodeproj"; sourceTree = "<group>"; };
+		94DD099B1C432A1E004FA62D /* CorePlot.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CorePlot.framework; path = "../../Library/Developer/Xcode/DerivedData/iMessageAnalyzer-ffpcimkfnfjmwwgkcpqdpzqvctfg/Build/Products/Debug/CorePlot.framework"; sourceTree = "<group>"; };
 		94E70EB31BF9C80A00653F94 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		94F01DDA1BE852CF00B47D9D /* CalendarPopUpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalendarPopUpViewController.h; sourceTree = "<group>"; };
 		94F01DDB1BE852CF00B47D9D /* CalendarPopUpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalendarPopUpViewController.m; sourceTree = "<group>"; };
@@ -232,6 +194,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				94DD099C1C432A1E004FA62D /* CorePlot.framework in Frameworks */,
 				94E70EB41BF9C80A00653F94 /* QuartzCore.framework in Frameworks */,
 				94F3AC371BC1D9C600948A23 /* libsqlite3.0.tbd in Frameworks */,
 				94F3AC381BC1D9C600948A23 /* libsqlite3.tbd in Frameworks */,
@@ -518,11 +481,12 @@
 		94A992311BBDC733003BA1D5 = {
 			isa = PBXGroup;
 			children = (
+				94DD099B1C432A1E004FA62D /* CorePlot.framework */,
+				94DD09821C4329C2004FA62D /* CorePlot.xcodeproj */,
 				94E70EB31BF9C80A00653F94 /* QuartzCore.framework */,
 				94A9923C1BBDC733003BA1D5 /* iMessageAnalyzer */,
 				94A992531BBDC734003BA1D5 /* iMessageAnalyzerTests */,
 				94A9925E1BBDC734003BA1D5 /* iMessageAnalyzerUITests */,
-				9400C3BA1C00402A0005EB5A /* CorePlot.xcodeproj */,
 				94A9923B1BBDC733003BA1D5 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -612,19 +576,6 @@
 				946D2A6B1BE55BF900270BF0 /* Statistics.m */,
 			);
 			name = Statistics;
-			sourceTree = "<group>";
-		};
-		94F8CD9B1C3B39E400E58BB3 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				94F8CDA81C3B39E400E58BB3 /* CorePlot.framework */,
-				94F8CDAA1C3B39E400E58BB3 /* UnitTests.xctest */,
-				94F8CDAC1C3B39E400E58BB3 /* CorePlot.framework */,
-				94F8CDAE1C3B39E400E58BB3 /* UnitTests iOS.xctest */,
-				94F8CDB01C3B39E400E58BB3 /* libCorePlot-CocoaTouch.a */,
-				94F8CDB21C3B39E400E58BB3 /* CorePlot-CocoaTouchTests.xctest */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		94F8CDB31C3B39F500E58BB3 /* Constants */ = {
@@ -726,12 +677,6 @@
 			mainGroup = 94A992311BBDC733003BA1D5;
 			productRefGroup = 94A9923B1BBDC733003BA1D5 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 94F8CD9B1C3B39E400E58BB3 /* Products */;
-					ProjectRef = 9400C3BA1C00402A0005EB5A /* CorePlot.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				94A992391BBDC733003BA1D5 /* iMessageAnalyzer */,
@@ -740,51 +685,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		94F8CDA81C3B39E400E58BB3 /* CorePlot.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = CorePlot.framework;
-			remoteRef = 94F8CDA71C3B39E400E58BB3 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		94F8CDAA1C3B39E400E58BB3 /* UnitTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = UnitTests.xctest;
-			remoteRef = 94F8CDA91C3B39E400E58BB3 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		94F8CDAC1C3B39E400E58BB3 /* CorePlot.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = CorePlot.framework;
-			remoteRef = 94F8CDAB1C3B39E400E58BB3 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		94F8CDAE1C3B39E400E58BB3 /* UnitTests iOS.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = "UnitTests iOS.xctest";
-			remoteRef = 94F8CDAD1C3B39E400E58BB3 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		94F8CDB01C3B39E400E58BB3 /* libCorePlot-CocoaTouch.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = "libCorePlot-CocoaTouch.a";
-			remoteRef = 94F8CDAF1C3B39E400E58BB3 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		94F8CDB21C3B39E400E58BB3 /* CorePlot-CocoaTouchTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = "CorePlot-CocoaTouchTests.xctest";
-			remoteRef = 94F8CDB11C3B39E400E58BB3 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		94A992381BBDC733003BA1D5 /* Resources */ = {
