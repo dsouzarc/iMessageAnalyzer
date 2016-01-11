@@ -36,6 +36,7 @@
 
 - (int32_t) getMessageCountWithPersonOnDate:(NSDate*)date person:(Person*)person;
 - (int32_t) getMessageCountOnDate:(NSDate*)date;
+- (int32_t) getMessageCountWithPerson:(Person*)person;
 
 - (NSArray*) peopleForSearchCriteria:(NSString*)searchText;
 - (Person*) personForPhoneNumber:(NSString*)number;

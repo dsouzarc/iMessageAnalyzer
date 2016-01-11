@@ -38,5 +38,6 @@
 @property BOOL isIMessage;
 
 @property long timeOfLastMessage;
+@property int messagesWithPerson;
 
 @end

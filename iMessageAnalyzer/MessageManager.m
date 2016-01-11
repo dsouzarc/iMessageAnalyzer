@@ -207,6 +207,11 @@ static MessageManager *messageInstance;
 
 #pragma mark Get counts
 
+- (int32_t) getMessageCountWithPerson:(Person *)person
+{
+    return [self.databaseManager messageCountForPerson:person startTimeInSeconds:0 endTimeInSeconds:INT_MAX];
+}
+
 - (int32_t) getMessageCountWithPersonOnDate:(NSDate*)date person:(Person*)person
 {
     long startTime = [[Constants instance] timeAtBeginningOfDayForDate:date];

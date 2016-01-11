@@ -29,6 +29,7 @@
         self.secondaryHandleId = -1;
         
         self.timeOfLastMessage = 0;
+        self.messagesWithPerson = INT_MIN;
         
         self.statistics = [[Statistics alloc] init];
     }
