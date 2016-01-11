@@ -47,13 +47,13 @@
 - (void)windowDidLoad {
     [super windowDidLoad];
 
-    [self.window setShowsResizeIndicator:NO];
+    //[self.window setShowsResizeIndicator:NO];
     [self.window setTitle:self.windowTitle];
 }
 
-- (NSSize) windowWillResize:(NSWindow *)sender toSize:(NSSize)frameSize
+/*- (NSSize) windowWillResize:(NSWindow *)sender toSize:(NSSize)frameSize
 {
     return self.window.frame.size;
-}
+}*/
 
 @end
