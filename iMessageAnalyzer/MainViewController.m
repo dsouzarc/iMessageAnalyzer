@@ -444,7 +444,7 @@ static NSString *orderByMostMessages = @"Most messages";
         cell.contactPhoto.layer.cornerRadius = 30.0;
         cell.contactPhoto.layer.masksToBounds = YES;
         
-        NSData *contactPhotoData = [person.contact imageData];
+        NSData *contactPhotoData = [self getContactPhoto]; //[person.contact imageData];
         
         if(!contactPhotoData) {
             contactPhotoData = [[NSData alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"blank_profile_outline" ofType:@"png"]];
@@ -456,6 +456,22 @@ static NSString *orderByMostMessages = @"Most messages";
     }
     
     return [[NSView alloc] init];
+}
+
+- (NSData*) getContactPhoto
+{
+    static NSString *directory = @"/Users/Ryan/Downloads/CatPhotos";
+    static int counter = 1;
+    
+    if(counter > 124) {
+        counter = 1;
+    }
+    
+    NSString *fileName = [NSString stringWithFormat:@"%d.jpg", counter];
+    counter++;
+
+    NSData *fileAtPath = [NSData dataWithContentsOfFile:[NSString stringWithFormat:@"%@/%@", directory, fileName]];
+    return fileAtPath;
 }
 
 - (BOOL) tableView:(NSTableView *)tableView shouldSelectRow:(NSInteger)row
