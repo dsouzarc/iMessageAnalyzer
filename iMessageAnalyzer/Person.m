@@ -22,7 +22,11 @@
         self.groupId = groupId;
         self.isIMessage = isImessage;
         
-        self.personName = personName;
+        static int counter = 1;
+        self.personName = [NSString stringWithFormat:@"Anonymous person %d", counter];
+        counter++;
+        
+        //self.personName = personName;
         
         self.secondaryChatId = -1;
         self.handleID = -1;
