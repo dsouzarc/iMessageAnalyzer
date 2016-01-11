@@ -123,7 +123,7 @@ static NSString *orderByMostMessages = @"Most messages";
         self.lastChosenPerson = self.searchConversationChats[0];
         self.currentConversationChats = [self.messageManager getAllMessagesForPerson:self.lastChosenPerson];
         [self.messagesTableView reloadData];
-        [self.contactNameTextField setStringValue:[NSString stringWithFormat:@"%@ %@", self.lastChosenPerson.personName, self.lastChosenPerson.number]];
+        [self.contactNameTextField setStringValue:[NSString stringWithFormat:@"%@ %@", self.lastChosenPerson.personName, @"anonymous number"]]; //self.lastChosenPerson.number]];
     }
     
     [self.messagesTableView setSelectionHighlightStyle:NSTableViewSelectionHighlightStyleNone];
@@ -311,7 +311,7 @@ static NSString *orderByMostMessages = @"Most messages";
                 text = @"No messages or conversations";
             }
             else {
-                text = [NSString stringWithFormat:@"No messages with %@ (%@)", self.lastChosenPerson.personName, self.lastChosenPerson.number];
+                text = [NSString stringWithFormat:@"No messages with %@ (%@)", self.lastChosenPerson.personName, @"anonymous number"]; // self.lastChosenPerson.number];
                 
                 if(self.calendarChosenDate) {
                     text = [NSString stringWithFormat:@"%@ on %@", text, [self.dateFormatter stringFromDate:self.calendarChosenDate]];
@@ -431,7 +431,10 @@ static NSString *orderByMostMessages = @"Most messages";
         else {
             [cell.contactName setStringValue:person.number];
         }
-        [cell.contactNumber setStringValue:person.number];
+        static int counter = 0;
+        [cell.contactNumber setStringValue:[NSString stringWithFormat:@"%d Anonymous number", counter]];
+        counter++;
+        //[cell.contactNumber setStringValue:person.number];
 
         NSMutableArray *messages = [self.messageManager getAllMessagesForPerson:person];
         if(messages && messages.count > 0) {
@@ -445,6 +448,7 @@ static NSString *orderByMostMessages = @"Most messages";
         cell.contactPhoto.layer.masksToBounds = YES;
         
         NSData *contactPhotoData = [self getContactPhoto]; //[person.contact imageData];
+        person.contact.imageData = contactPhotoData;
         
         if(!contactPhotoData) {
             contactPhotoData = [[NSData alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"blank_profile_outline" ofType:@"png"]];
@@ -486,7 +490,7 @@ static NSString *orderByMostMessages = @"Most messages";
         self.lastChosenPerson = self.searchConversationChats[row];
         self.currentConversationChats = [self.messageManager getAllMessagesForPerson:self.lastChosenPerson];
         
-        [self.contactNameTextField setStringValue:[NSString stringWithFormat:@"%@ %@", self.lastChosenPerson.personName, self.lastChosenPerson.number]];
+        [self.contactNameTextField setStringValue:[NSString stringWithFormat:@"%@ %@", self.lastChosenPerson.personName, @"anonymous number"]];//self.lastChosenPerson.number]];
         
         [self.messagesTableView reloadData];
         
@@ -629,7 +633,7 @@ static NSString *orderByMostMessages = @"Most messages";
     if(self.searchConversationChats.count > 0 && self.searchConversationChats[0] != self.lastChosenPerson) {
         self.lastChosenPerson = self.searchConversationChats[0];
         self.currentConversationChats = [self.messageManager getAllMessagesForPerson:self.lastChosenPerson];
-        [self.contactNameTextField setStringValue:[NSString stringWithFormat:@"%@ %@", self.lastChosenPerson.personName, self.lastChosenPerson.number]];
+        [self.contactNameTextField setStringValue:[NSString stringWithFormat:@"%@ %@", self.lastChosenPerson.personName, @"anonymous number"]]; //self.lastChosenPerson.number]];
         [self.messagesTableView reloadData];
     }
     else if(self.searchConversationChats.count == 0) {
