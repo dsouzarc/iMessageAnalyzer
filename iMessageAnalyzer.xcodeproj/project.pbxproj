@@ -657,8 +657,8 @@
 		94DD09BB1C432CC8004FA62D /* Database Manager */ = {
 			isa = PBXGroup;
 			children = (
-				94DD09BA1C432CBC004FA62D /* Temporary Database Manager */,
 				941C04FC1C0300B3002E2FAB /* Database Manager */,
+				94DD09BA1C432CBC004FA62D /* Temporary Database Manager */,
 			);
 			name = "Database Manager";
 			sourceTree = "<group>";
