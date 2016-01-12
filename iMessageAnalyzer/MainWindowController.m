@@ -31,6 +31,7 @@
     [super windowDidLoad];
     
     [self.window setContentViewController:self.mainViewController];
+    [self.window setFrame:self.mainViewController.view.frame display:YES];
     //[self.window setShowsResizeIndicator:NO];
     [self.window setTitle:@"iMessage Analyzer"];
 }

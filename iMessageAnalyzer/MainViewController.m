@@ -48,11 +48,13 @@ static NSString *orderByMostMessages = @"Most messages";
 
 
 #pragma mark Date formatters
+
 @property (strong, nonatomic) NSDateFormatter *dateFormatter;
 @property (strong, nonatomic) NSDate *calendarChosenDate;
 
 
 #pragma mark Chat and conversation variables
+
 @property (strong, nonatomic) NSMutableArray *chats;
 @property (strong, nonatomic) NSMutableArray *searchConversationChats;
 @property (strong, nonatomic) NSMutableArray *currentConversationChats;
@@ -136,6 +138,15 @@ static NSString *orderByMostMessages = @"Most messages";
     [self.orderByPopUpButton addItemWithTitle:orderByMostMessages];
 }
 
+
+/****************************************************************
+ *
+ *              Click handlers
+ *
+*****************************************************************/
+
+# pragma mark Click handlers
+
 - (void) doubleClickedContactCell:(id)object
 {
     if(!self.simpleAnalyticsPopOver || !self.simpleAnalyticsViewController) {
@@ -163,18 +174,6 @@ static NSString *orderByMostMessages = @"Most messages";
     
     NSView *selectedView = [self.contactsTableView viewAtColumn:0 row:self.lastChosenPersonIndex makeIfNecessary:YES];
     [self.simpleAnalyticsPopOver showRelativeToRect:selectedView.bounds ofView:selectedView preferredEdge:NSMaxXEdge];
-}
-
-- (void) wantsMoreAnalysis
-{
-    self.moreAnalysisWindowController = [[MoreAnalysisWindowController alloc] initWithWindowNibName:@"MoreAnalysisWindowController" person:self.lastChosenPerson messages:[self.messageManager getAllMessagesForPerson:self.lastChosenPerson]];
-    [self.moreAnalysisWindowController showWindow:self];
-    self.moreAnalysisWindowController.delegate = self;
-}
-
-- (void) moreAnalysisWindowControllerDidClose
-{
-    self.moreAnalysisWindowController = nil;
 }
 
 - (IBAction)calendarButtonClick:(id)sender {
@@ -230,7 +229,6 @@ static NSString *orderByMostMessages = @"Most messages";
         
         NSLog(@"FINISHED WITH SORTING");
     }
-
 }
 
 - (void) dateChosen:(NSDate *)chosenDate
@@ -250,6 +248,18 @@ static NSString *orderByMostMessages = @"Most messages";
     if(!chosenDate) {
         [self.calendarPopover performClose:@"close"];
     }
+}
+
+- (void) wantsMoreAnalysis
+{
+    self.moreAnalysisWindowController = [[MoreAnalysisWindowController alloc] initWithWindowNibName:@"MoreAnalysisWindowController" person:self.lastChosenPerson messages:[self.messageManager getAllMessagesForPerson:self.lastChosenPerson]];
+    [self.moreAnalysisWindowController showWindow:self];
+    self.moreAnalysisWindowController.delegate = self;
+}
+
+- (void) moreAnalysisWindowControllerDidClose
+{
+    self.moreAnalysisWindowController = nil;
 }
 
 
@@ -297,33 +307,13 @@ static NSString *orderByMostMessages = @"Most messages";
     return 80.0;
 }
 
-
 - (NSView*) tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
     if(tableView == self.messagesTableView) {
         
         if(row > self.currentConversationChats.count || self.currentConversationChats.count == 0) {
-            self.noMessagesField = [[NSTextField alloc] initWithFrame:CGRectMake(0, 0, self.messagesTableView.bounds.size.width, self.messagesTableView.bounds.size.height)];
-            
-            NSString *text;
-            
-            if(!self.lastChosenPerson) {
-                text = @"No messages or conversations";
-            }
-            else {
-                text = [NSString stringWithFormat:@"No messages with %@ (%@)", self.lastChosenPerson.personName, self.lastChosenPerson.number];
-                
-                if(self.calendarChosenDate) {
-                    text = [NSString stringWithFormat:@"%@ on %@", text, [self.dateFormatter stringFromDate:self.calendarChosenDate]];
-                }
-            }
-            [self.noMessagesField setStringValue:text];
-            [self.noMessagesField setAlignment:NSTextAlignmentCenter];
-            [self.noMessagesField setFocusRingType:NSFocusRingTypeNone];
-            [self.noMessagesField setBordered:NO];
-            
+            [self setupNoMessagesView];
             [self.messagesTableView addSubview:self.noMessagesField];
-            
             return self.noMessagesField;
         }
         
@@ -337,7 +327,7 @@ static NSString *orderByMostMessages = @"Most messages";
         [timeField setBordered:NO];
         
         NSTextField_Messages *messageField = [[NSTextField_Messages alloc] initWithFrame:frame];
-        [messageField setTextFieldNumber:row];
+        [messageField setTextFieldNumber:(int)row];
         [messageField setTag:100];
         [messageField setDelegate:self];
         [messageField setDrawsBackground:YES];
@@ -456,6 +446,28 @@ static NSString *orderByMostMessages = @"Most messages";
     }
     
     return [[NSView alloc] init];
+}
+
+- (void) setupNoMessagesView
+{
+    self.noMessagesField = [[NSTextField alloc] initWithFrame:CGRectMake(0, 0, self.messagesTableView.bounds.size.width, self.messagesTableView.bounds.size.height)];
+    
+    NSString *text;
+    
+    if(!self.lastChosenPerson) {
+        text = @"No messages or conversations";
+    }
+    else {
+        text = [NSString stringWithFormat:@"No messages with %@ (%@)", self.lastChosenPerson.personName, self.lastChosenPerson.number];
+        
+        if(self.calendarChosenDate) {
+            text = [NSString stringWithFormat:@"%@ on %@", text, [self.dateFormatter stringFromDate:self.calendarChosenDate]];
+        }
+    }
+    [self.noMessagesField setStringValue:text];
+    [self.noMessagesField setAlignment:NSTextAlignmentCenter];
+    [self.noMessagesField setFocusRingType:NSFocusRingTypeNone];
+    [self.noMessagesField setBordered:NO];
 }
 
 - (BOOL) tableView:(NSTableView *)tableView shouldSelectRow:(NSInteger)row
