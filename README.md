@@ -57,18 +57,18 @@ Adds some unique functionality from Messages.app that provides a better experien
         - Date selected from calendar view on bottom left
         - The actual messages sent and received
 
-- **Graphs and charts **
-  + Line graph of messages with that person since your first message
+- **Graphs and charts**
+  + **Line graph** of messages with that person since your first message
     - Allows for zooming in on specific date ranges
     - Data can be changed to show
         + Messages with that person compared to all other messages sent during that time period
         + Your sent vs received messages with that person over time 
         + Your sent vs received words with that person over time
-  + Pie Chart
+  + **Pie Chart**
     - Sent messages vs received messages with person
     - Sent words vs received words with that person
     - Total messages with person vs all other messages in inbox
-  + Bar Chart
+  + **Bar Chart**
     - Sent vs received messages per hour of day --> When y'all talk the most
     - Sent vs received words per hour of day --> When y'all talk the most
     - Percentage of total messages with person per hour of day vs percentage of all other messages with other people per hour of day --> When y'all talk the most in comparison to when you mainly talk to everyone else
