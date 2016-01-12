@@ -279,4 +279,9 @@ static Constants *constants;
     return [self.calendar components:NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay fromDate:date];
 }
 
++ (BOOL) isDevelopmentMode
+{
+    return DEVELOPMENT;
+}
+
 @end

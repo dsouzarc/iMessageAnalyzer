@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
+const static BOOL DEVELOPMENT = NO;
 
 /** Classless, helpful auxillary methods used by a variety of classes */
 
@@ -16,6 +17,7 @@
 #pragma mark CONSTRUCTORS
 
 + (instancetype) instance;
++ (BOOL) isDevelopmentMode;
 @property (readonly) Constants *instance;
 
 #pragma mark STRING FROM INFORMATION

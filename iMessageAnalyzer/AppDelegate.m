@@ -10,6 +10,7 @@
 
 @interface AppDelegate ()
 
+@property (strong, nonatomic) MainWindowController *mainWindowController;
 @property (strong, nonatomic) StartupWindowController *startupWindowController;
 
 @end
@@ -18,6 +19,14 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     
+    if([Constants isDevelopmentMode]) {
+        self.mainWindowController = [[MainWindowController alloc] initWithWindowNibName:@"MainWindowController" databasePath:@"/Users/Ryan/FLV MP4/iMessage/mac_chat.db"];
+        [self.mainWindowController showWindow:self];
+        [self.mainWindowController.window makeKeyAndOrderFront:self];
+        
+        return;
+    }
+    
     self.startupWindowController = [[StartupWindowController alloc] initWithWindowNibName:@"StartupWindowController"];
     [self.startupWindowController showWindow:self];
     [self.startupWindowController.window makeKeyAndOrderFront:self];
@@ -25,7 +34,6 @@
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {
     [[DatabaseManager getInstance] deleteDatabase];
-    NSLog(@"Database deleted");
 }
 
 @end

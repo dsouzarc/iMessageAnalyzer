@@ -12,6 +12,6 @@
 
 @interface MainWindowController : NSWindowController <NSWindowDelegate>
 
-- (instancetype) initWithWindowNibName:(NSString *)windowNibName databasePath:(NSString*)databasePath;
+- (instancetype) initWithWindowNibName:(NSString *)windowNibName databasePath:(NSString *)databasePath;
 
 @end

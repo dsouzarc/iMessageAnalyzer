@@ -468,6 +468,7 @@
 		947B53D11BE1AE0D00484D66 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
+				94F8CDB31C3B39F500E58BB3 /* Constants */,
 				941C04FB1C0300AB002E2FAB /* Message Manager */,
 				94DD09BB1C432CC8004FA62D /* Database Manager */,
 			);
@@ -587,7 +588,6 @@
 			isa = PBXGroup;
 			children = (
 				947B53D11BE1AE0D00484D66 /* Managers */,
-				94F8CDB31C3B39F500E58BB3 /* Constants */,
 				9459C0021C4466A500F66B98 /* More Analysis View and Window */,
 				9459C0011C44669200F66B98 /* Main View and Window */,
 				941C04FA1C030099002E2FAB /* View Attachments View Controller */,

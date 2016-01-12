@@ -8,9 +8,10 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import "Constants.h"
 #import "StartupWindowController.h"
+#import "MainWindowController.h"
 
 @interface AppDelegate : NSObject <NSApplicationDelegate>
-
 
 @end

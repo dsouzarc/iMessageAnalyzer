@@ -656,10 +656,15 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
 
 - (void) deleteDatabase
 {
+    if([Constants isDevelopmentMode]) {
+        return;
+    }
+    
     //If we're not dealing with the original
     if(![pathToDB isEqualToString:[NSString stringWithFormat:@"/Users/%@/Library/Messages/chat.db", NSUserName()]]) {
         NSFileManager *fileManager = [NSFileManager defaultManager];
         [fileManager removeItemAtPath:pathToDB error:NULL];
+        NSLog(@"Database deleted");
     }
 }
 
