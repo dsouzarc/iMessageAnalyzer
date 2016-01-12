@@ -171,6 +171,32 @@ How that can vary from person to person
 
 ---
 
+![Screenshot 29](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_29.png)
+More analysis screen
+
+- Shows all messages sent and received
+
+- Shows the total word count, sent and received
+
+- Shows the average word per message
+
+- Shows all words for each participant in order of freuency
+
+- All messages are displayed on tableview at bottom of the screen
+
+---
+
+![Screenshot 30](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_30.png)
+More analysis screen
+
+Clicking on a date in the calendar on the bottom left
+    - Shows above statistics but on that date
+        + Includes recalculating word frequencies, words sent and received on date, and average word/message on date ("Avg. Word/Message (D)")
+    - Shows messages sent on that day 
+    - Pressing "Clear" resets everything to the initial screen
+
+---
+
 ![Screenshot 0](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_0.png)
 View full conversations - all at once - with a person, starting from the first interaction
 Also shows delivered/read receipts for each person
@@ -212,29 +238,3 @@ Movie attachments and PDFs are also shown and movies begin playing automatically
 
 ![Screenshot 28](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_28.png)
 Double clicking a contact shows quick statistics and gives the option to view more icon (circle icon)
-
----
-
-![Screenshot 29](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_29.png)
-More analysis screen
-
-- Shows all messages sent and received
-
-- Shows the total word count, sent and received
-
-- Shows the average word per message
-
-- Shows all words for each participant in order of freuency
-
-- All messages are displayed on tableview at bottom of the screen
-
----
-
-![Screenshot 30](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_30.png)
-More analysis screen
-
-Clicking on a date in the calendar on the bottom left
-    - Shows above statistics but on that date
-        + Includes recalculating word frequencies, words sent and received on date, and average word/message on date ("Avg. Word/Message (D)")
-    - Shows messages sent on that day 
-    - Pressing "Clear" resets everything to the initial screen
