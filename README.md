@@ -4,7 +4,8 @@
 
 ###Analyzes a user's iMessages while providing cool functionality
 
-Analyzes a user's iMessage database (chat.db*) to understand a user and their friends' messaging habits.
+Analyzes a user's iMessage database (chat.db*) to understand a user and their friends' messaging habits by graphing (and calculating statistics) on those characteristics.
+
 Adds some unique functionality from Messages.app that provides a better experience, including a refined search for messages.
 
 *chat.db, where a user's messages are stored, can be found in 2 ways:
@@ -56,17 +57,27 @@ Adds some unique functionality from Messages.app that provides a better experien
         - Date selected from calendar view on bottom left
         - The actual messages sent and received
 
+- **Graphs and charts **
+  + Line graph of messages with that person since your first message
+    - Allows for zooming in on specific date ranges
+    - Data can be changed to show
+        + Messages with that person compared to all other messages sent during that time period
+        + Your sent vs received messages with that person over time 
+        + Your sent vs received words with that person over time
+  + Pie Chart
+    - Sent messages vs received messages with person
+    - Sent words vs received words with that person
+    - Total messages with person vs all other messages in inbox
+  + Bar Chart
+    - Sent vs received messages per hour of day --> When y'all talk the most
+    - Sent vs received words per hour of day --> When y'all talk the most
+    - Percentage of total messages with person per hour of day vs percentage of all other messages with other people per hour of day --> When y'all talk the most in comparison to when you mainly talk to everyone else
+
 
 ---
 
 ####Features in implementation:
 - Statistics on actual messaging habits
-- Graphing
-    + Number of messages with person compared to number of messages with all other contacts
-        - ex. You and X exchanged 1,200 messages on 09/29 while you only exchanged 200 messages with other people on that day
-        - Graph in terms of days, weeks, and months
-        - Pie chart as well as bar graph
-    + Number of messages sent and received with person over the course of a day
     + Length of each person's messages over the course of a day
     + Average reply time over the course of a day
 - Autoreply based on replies to certain messages --> Machine Learning
