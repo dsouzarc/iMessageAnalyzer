@@ -85,7 +85,91 @@ Adds some unique functionality from Messages.app that provides a better experien
 ---
 
 ##Screenshots
-- Scroll to the bottom to see the graphs
+- Scroll to the bottom to see beginning flow
+
+
+![Screenshot 31](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_31.png)
+A graph of all messages with a person over the course of a year.
+This person seems like a good friend
+
+---
+
+![Screenshot 32](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_32.png)
+Zooming in on that graph
+
+---
+
+![Screenshot 33](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_33.png)
+Clicking on a point shows the y-value above it.
+
+---
+
+
+![Screenshot 34](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_34.png)
+Graphing message frequency with another one.
+This seems like a broken-off friendship
+
+---
+
+![Screenshot 35](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_35.png)
+Overlaying the messages with a friend (white) with all other messages on that day (green)
+
+---
+
+![Screenshot 36](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_36.png)
+Zooming in on that overlay
+
+---
+
+![Screenshot 19](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_19.png)
+Sent vs Received messages
+
+---
+
+![Screenshot 20](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_20.png)
+Sent vs Received words
+
+---
+
+![Screenshot 21](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_21.png)
+Pie chart of sent vs received messages
+
+---
+
+![Screenshot 22](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_22.png)
+Pie chart of sent vs received words
+
+---
+
+![Screenshot 23](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_23.png)
+Pie chart of total messages to that person vs all other messages
+
+---
+
+![Screenshot 24](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_24.png)
+When y'all send the most amount of messages to each other throughout the day
+
+---
+
+![Screenshot 25](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_25.png)
+When y'all type the most to each other throughout the day
+
+---
+
+![Screenshot 26](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_26.png)
+That conversation vs all other conversations throughout the day
+
+---
+
+![Screenshot 27](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_27.png)
+A percentage breakdown of that conversation vs all other conversations throughout the day
+
+---
+
+![Screenshot 37](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_37.png)
+How that can vary from person to person
+
+---
 
 ![Screenshot 0](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_0.png)
 View full conversations - all at once - with a person, starting from the first interaction
@@ -154,47 +238,3 @@ Clicking on a date in the calendar on the bottom left
         + Includes recalculating word frequencies, words sent and received on date, and average word/message on date ("Avg. Word/Message (D)")
     - Shows messages sent on that day 
     - Pressing "Clear" resets everything to the initial screen
-
----
-
-![Screenshot 31](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_31.png)
-A graph of all messages with a person over the course of a year.
-This person seems like a good friend
-
----
-
-![Screenshot 32](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_32.png)
-Zooming in on that graph
-
----
-
-![Screenshot 33](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_33.png)
-Clicking on a point shows the y-value above it.
-Clicking on another point removes the prior label and places a new one on the clicked point
-
----
-
-
-![Screenshot 34](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_34.png)
-Graphing message frequency with another one.
-This seems like a broken-off friendship
-
----
-
-![Screenshot 35](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_35.png)
-Overlaying the messages with a friend (white) with all other messages on that day (green)
-
----
-
-![Screenshot 36](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_36.png)
-Zooming in on that overlay
-
-![Screenshot 19](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_19.png)
-![Screenshot 20](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_20.png)
-![Screenshot 21](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_21.png)
-![Screenshot 22](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_22.png)
-![Screenshot 23](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_23.png)
-![Screenshot 24](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_24.png)
-![Screenshot 25](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_25.png)
-![Screenshot 26](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_26.png)
-![Screenshot 27](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_27.png)
