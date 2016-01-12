@@ -33,7 +33,7 @@ Adds some unique functionality from Messages.app that provides a better experien
         - Minimal CPU usage
 
 - Searching for text shows conversations 
-    + **With text that matches the conversation**
+    + With text that matches the conversation
     + With contact names/numbers/emails that match the text
     + Still (somehow) quicker than iMessage's search for conversations with text
     + Searched text is highlighted in yellow
@@ -78,7 +78,6 @@ Adds some unique functionality from Messages.app that provides a better experien
 
 ####Features in implementation:
 - Statistics on actual messaging habits
-    + Length of each person's messages over the course of a day
     + Average reply time over the course of a day
 - Autoreply based on replies to certain messages --> Machine Learning
 
@@ -127,12 +126,12 @@ Movie attachments and PDFs are also shown and movies begin playing automatically
 
 ---
 
-![Screenshot 7](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_7.png)
+![Screenshot 28](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_28.png)
 Double clicking a contact shows quick statistics and gives the option to view more icon (circle icon)
 
 ---
 
-![Screenshot 8](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_8.png)
+![Screenshot 29](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_29.png)
 More analysis screen
 
 - Shows all messages sent and received
@@ -147,7 +146,7 @@ More analysis screen
 
 ---
 
-![Screenshot 9](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_9.png)
+![Screenshot 30](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_30.png)
 More analysis screen
 
 Clicking on a date in the calendar on the bottom left
@@ -158,23 +157,18 @@ Clicking on a date in the calendar on the bottom left
 
 ---
 
-![Screenshot 10](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_10.png)
+![Screenshot 31](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_31.png)
 A graph of all messages with a person over the course of a year.
 This person seems like a good friend
 
 ---
 
-![Screenshot 11](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_11.png)
+![Screenshot 32](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_32.png)
 Zooming in on that graph
 
 ---
 
-![Screenshot 12](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_12.png)
-Zooming in even more on the graph
-
----
-
-![Screenshot 13](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_13.png)
+![Screenshot 33](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_33.png)
 Clicking on a point shows the y-value above it.
 Clicking on another point removes the prior label and places a new one on the clicked point
 
