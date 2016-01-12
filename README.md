@@ -174,23 +174,19 @@ Clicking on another point removes the prior label and places a new one on the cl
 
 ---
 
-![Screenshot 14](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_14.png)
+
+![Screenshot 34](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_34.png)
 Graphing message frequency with another one.
 This seems like a broken-off friendship
 
 ---
 
-![Screenshot 15](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_15.png)
-Graphing a brief summer friendship
-
----
-
-![Screenshot 17](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_17.png)
+![Screenshot 35](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_35.png)
 Overlaying the messages with a friend (white) with all other messages on that day (green)
 
 ---
 
-![Screenshot 18](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_18.png)
+![Screenshot 36](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_36.png)
 Zooming in on that overlay
 
 ![Screenshot 19](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_19.png)
@@ -202,4 +198,3 @@ Zooming in on that overlay
 ![Screenshot 25](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_25.png)
 ![Screenshot 26](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_26.png)
 ![Screenshot 27](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_27.png)
-

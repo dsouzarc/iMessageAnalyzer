@@ -551,8 +551,7 @@ int tempCounter = 2;
     [self dealWithWordFrequencies];
     [self.messagesTableView reloadData];
     
-    //[self setTextFieldText:[NSString stringWithFormat:@"Messages on %@", [self.dateFormatter stringFromDate:self.calendarChosenDate]] forTag:1];
-    [self setTextFieldText:[NSString stringWithFormat:@"Messages on 11/%d/15", tempCounter] forTag:1];
+    [self setTextFieldText:[NSString stringWithFormat:@"Messages on %@", [self.dateFormatter stringFromDate:self.calendarChosenDate]] forTag:1];
     tempCounter++;
     
     if(self.messagesToDisplay.count == 0 || !self.person.secondaryStatistics) {
