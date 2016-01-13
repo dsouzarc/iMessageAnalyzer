@@ -268,6 +268,23 @@ static Constants *constants;
 
 /****************************************************************
  *
+ *              Miscellaneous
+ *
+*****************************************************************/
+
+# pragma mark Miscellaneous
+
++ (NSString*) getStrippedWord:(NSString*)original
+{
+    NSCharacterSet *charactersToRemove = [[NSCharacterSet alphanumericCharacterSet] invertedSet];
+    original = [original lowercaseString];
+    original = [[original componentsSeparatedByCharactersInSet:charactersToRemove] componentsJoinedByString:@""];
+    return original;
+}
+
+
+/****************************************************************
+ *
  *              AUXILLARY
  *
 *****************************************************************/

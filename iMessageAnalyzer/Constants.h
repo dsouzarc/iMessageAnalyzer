@@ -59,4 +59,8 @@ const static BOOL DEVELOPMENT = YES;
 - (int) getDateHour:(NSDate*)date;
 - (int) getDateHourFromDateInSeconds:(int)dateInSeconds;
 
+#pragma mark Miscellaneous
+
++ (NSString*) getStrippedWord:(NSString*)original;
+
 @end
