@@ -153,17 +153,6 @@
     [self dealWithWordFrequencies];
 }
 
-- (void) controlTextDidBeginEditing:(NSNotification *)obj
-{
-    
-    NSLog(@"DID BEGIN");
-}
-
-- (void) controlTextDidChange:(NSNotification *)obj
-{
-    NSLog(@"DID CHANGE");
-}
-
 
 /****************************************************************
  *
@@ -585,6 +574,48 @@ int tempCounter = 2;
         [self setTextFieldDouble:self.friendAverageWordCountPerMessage forTag:34];
         [self setTextFieldDouble:average forTag:35];
     }
+}
+
+
+/****************************************************************
+ *
+ *              NSTextField Delegate
+ *
+*****************************************************************/
+
+# pragma mark NSTextField
+
+- (void) controlTextDidChange:(NSNotification *)obj
+{
+    NSString *searchValue = self.frequencySearchField.stringValue;
+    
+    if(searchValue == nil || searchValue.length == 0) {
+        self.myWordsAndFrequenciesSearch = self.myWordsAndFrequencies;
+        self.friendWordsAndFrequenciesSearch = self.friendWordsAndFrequencies;
+    }
+    else {
+        NSMutableArray<NSDictionary*> *mySearchResults = [[NSMutableArray alloc] init];
+        NSMutableArray<NSDictionary*> *friendSearchResults = [[NSMutableArray alloc] init];
+        
+        for(NSDictionary *wordFrequency in self.myWordsAndFrequencies) {
+            NSString *word = wordFrequency[@"word"];
+            if([word rangeOfString:searchValue options:NSCaseInsensitiveSearch].location != NSNotFound) {
+                [mySearchResults addObject:wordFrequency];
+            }
+        }
+        
+        for(NSDictionary *wordFrequency in self.friendWordsAndFrequencies) {
+            NSString *word = wordFrequency[@"word"];
+            if([word rangeOfString:searchValue options:NSCaseInsensitiveSearch].location != NSNotFound) {
+                [friendSearchResults addObject:wordFrequency];
+            }
+        }
+        self.myWordsAndFrequenciesSearch = mySearchResults;
+        self.friendWordsAndFrequenciesSearch = friendSearchResults;
+    }
+    
+    [self.myWordFrequenciesTableView reloadData];
+    [self.friendsWordFrequenciesTableView reloadData];
 }
 
 
