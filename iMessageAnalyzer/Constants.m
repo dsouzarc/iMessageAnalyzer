@@ -276,8 +276,9 @@ static Constants *constants;
 
 + (NSString*) getStrippedWord:(NSString*)original
 {
-    NSCharacterSet *charactersToRemove = [[NSCharacterSet alphanumericCharacterSet] invertedSet];
     original = [original lowercaseString];
+    
+    NSCharacterSet *charactersToRemove = [[NSCharacterSet alphanumericCharacterSet] invertedSet];
     original = [[original componentsSeparatedByCharactersInSet:charactersToRemove] componentsJoinedByString:@""];
     return original;
 }

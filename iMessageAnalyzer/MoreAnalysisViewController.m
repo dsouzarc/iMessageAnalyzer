@@ -217,7 +217,7 @@
         NSArray *words = [message.messageText componentsSeparatedByString:@" "];
         
         for(NSString *word in words) {
-            NSString *wordToUse = [Constants getStrippedWord:word];
+            NSString *wordToUse = word; //[Constants getStrippedWord:word];
             
             NSNumber *frequency = message.isFromMe ? [myWordFrequencies objectForKey:wordToUse] : [friendWordFrequencies objectForKey:wordToUse];
             
@@ -588,7 +588,7 @@ int tempCounter = 2;
 
 - (void) controlTextDidChange:(NSNotification *)obj
 {
-    NSString *searchValue = [Constants getStrippedWord:self.frequencySearchField.stringValue];
+    NSString *searchValue = self.frequencySearchField.stringValue; //[Constants getStrippedWord:self.frequencySearchField.stringValue];
     
     if(searchValue == nil || searchValue.length == 0) {
         self.myWordsAndFrequenciesSearch = self.myWordsAndFrequencies;
