@@ -18,6 +18,7 @@
 @property (strong) IBOutlet NSTableView *messagesTableView;
 @property (strong) IBOutlet NSTableView *myWordFrequenciesTableView;
 @property (strong) IBOutlet NSTableView *friendsWordFrequenciesTableView;
+@property (strong) IBOutlet NSTextField *frequencySearchField;
 
 @property (strong) IBOutlet NSTextField *friendsWordsFrequenciesTextField;
 @property (strong) IBOutlet NSDatePicker *mainDatePicker;
@@ -48,11 +49,11 @@
 @property (strong, nonatomic) NSMutableArray *messages;
 @property (strong, nonatomic) NSMutableArray *messagesToDisplay;
 
-@property (strong, nonatomic) NSMutableArray *myWords;
-@property (strong, nonatomic) NSMutableArray *myWordFrequencies;
+@property (strong, nonatomic) NSMutableArray<NSDictionary*> *myWordsAndFrequencies;
+@property (strong, nonatomic) NSMutableArray<NSDictionary*> *myWordsAndFrequenciesSearch;
 
-@property (strong, nonatomic) NSMutableArray *friendWords;
-@property (strong, nonatomic) NSMutableArray *friendWordFrequencies;
+@property (strong, nonatomic) NSMutableArray<NSDictionary*> *friendWordsAndFrequencies;
+@property (strong, nonatomic) NSMutableArray<NSDictionary*> *friendWordsAndFrequenciesSearch;
 
 
 #pragma mark Person information
@@ -100,11 +101,11 @@
             self.calendarChosenDate = [[NSDate alloc] init];
         }
         
-        self.myWordFrequencies = [[NSMutableArray alloc] init];
-        self.myWords = [[NSMutableArray alloc] init];
+        self.myWordsAndFrequencies = [[NSMutableArray alloc] init];
+        self.myWordsAndFrequenciesSearch = [[NSMutableArray alloc] init];
         
-        self.friendWordFrequencies = [[NSMutableArray alloc] init];
-        self.friendWords = [[NSMutableArray alloc] init];
+        self.friendWordsAndFrequencies = [[NSMutableArray alloc] init];
+        self.friendWordsAndFrequenciesSearch = [[NSMutableArray alloc] init];
         
         self.messageWithAttachmentAttributes = [NSDictionary dictionaryWithObjectsAndKeys:[NSColor yellowColor], NSForegroundColorAttributeName,
                                                 [NSNumber numberWithInt:NSUnderlineStyleSingle], NSUnderlineStyleAttributeName, nil];
@@ -143,12 +144,24 @@
     
     [[self.graphViewController view] setFrame:self.mainViewForGraph.frame];
     [self.view addSubview:self.graphViewController.view positioned:NSWindowAbove relativeTo:self.mainViewForGraph];
+    [self.frequencySearchField setDelegate:self];
 }
 
 
 - (void) viewDidAppear
 {
     [self dealWithWordFrequencies];
+}
+
+- (void) controlTextDidBeginEditing:(NSNotification *)obj
+{
+    
+    NSLog(@"DID BEGIN");
+}
+
+- (void) controlTextDidChange:(NSNotification *)obj
+{
+    NSLog(@"DID CHANGE");
 }
 
 
@@ -251,20 +264,11 @@
         [friendWords addWord:word frequency:[friendWordFrequencies objectForKey:word]];
     }
     
-    self.myWords = [[NSMutableArray alloc] initWithCapacity:myWordFrequencies.count];
-    self.myWordFrequencies = [[NSMutableArray alloc] initWithCapacity:myWordFrequencies.count];
+    self.myWordsAndFrequencies = [myWords getAllWordsAndFrequencies];
+    self.myWordsAndFrequenciesSearch = self.myWordsAndFrequencies;
     
-    self.friendWords = [[NSMutableArray alloc] initWithCapacity:friendWordFrequencies.count];
-    self.friendWordFrequencies = [[NSMutableArray alloc] initWithCapacity:friendWordFrequencies.count];
-    
-    NSMutableArray *temp = self.myWords;
-    NSMutableArray *temp1 = self.myWordFrequencies;
-    [myWords updateArrayWithAllWords:&temp andFrequencies:&temp1];
-    
-    temp = self.friendWords;
-    temp1 = self.friendWordFrequencies;
-    
-    [friendWords updateArrayWithAllWords:&temp andFrequencies:&temp1];
+    self.friendWordsAndFrequencies = [friendWords getAllWordsAndFrequencies];
+    self.friendWordsAndFrequenciesSearch = self.friendWordsAndFrequencies;
 }
 
 
@@ -436,19 +440,19 @@
     
     if(tableView == self.myWordFrequenciesTableView) {
         if([tableColumn.identifier isEqualToString:@"Occurrence"]) {
-            return [NSString stringWithFormat:@"%ld", [self.myWordFrequencies[row] integerValue]];
+            return [self.myWordsAndFrequenciesSearch[row] objectForKey:@"frequency"];
         }
         else if([tableColumn.identifier isEqualToString:@"Word"]) {
-            return self.myWords[row];
+            return [self.myWordsAndFrequenciesSearch[row] objectForKey:@"word"];
         }
     }
     
     if(tableView == self.friendsWordFrequenciesTableView) {
         if([tableColumn.identifier isEqualToString:@"Occurrence"]) {
-            return [NSString stringWithFormat:@"%ld", [self.friendWordFrequencies[row] integerValue]];
+            return [self.friendWordsAndFrequenciesSearch[row] objectForKey:@"frequency"];
         }
         else if([tableColumn.identifier isEqualToString:@"Word"]) {
-            return self.friendWords[row];
+            return [self.friendWordsAndFrequenciesSearch[row] objectForKey:@"word"];
         }
     }
     return @"PROBLEM";
@@ -495,12 +499,12 @@
         return self.messagesToDisplay.count;
     }
     
-    if(tableView == self.myWordFrequenciesTableView && self.myWordFrequencies) {
-        return self.myWordFrequencies.count;
+    if(tableView == self.myWordFrequenciesTableView && self.myWordsAndFrequenciesSearch) {
+        return self.myWordsAndFrequenciesSearch.count;
     }
     
-    if(tableView == self.friendsWordFrequenciesTableView && self.friendWordFrequencies) {
-        return self.friendWordFrequencies.count;
+    if(tableView == self.friendsWordFrequenciesTableView && self.friendWordsAndFrequenciesSearch) {
+        return self.friendWordsAndFrequenciesSearch.count;
     }
     
     return 0;

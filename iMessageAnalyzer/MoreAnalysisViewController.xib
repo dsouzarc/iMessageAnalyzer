@@ -6,6 +6,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="MoreAnalysisViewController">
             <connections>
+                <outlet property="frequencySearchField" destination="bXm-M1-gSg" id="Bch-tN-LO8"/>
                 <outlet property="friendsWordFrequenciesTableView" destination="y4Y-tW-yvY" id="w8g-qG-GWy"/>
                 <outlet property="friendsWordsFrequenciesTextField" destination="trT-RY-Ur1" id="8tL-V0-lBG"/>
                 <outlet property="mainDatePicker" destination="Pk4-FZ-WuY" id="0Uy-U5-VE1"/>
@@ -331,6 +332,19 @@
                 </button>
                 <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QS6-9i-QEV">
                     <rect key="frame" x="20" y="219" width="1096" height="481"/>
+                    <subviews>
+                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bXm-M1-gSg">
+                            <rect key="frame" x="292" y="103" width="489" height="22"/>
+                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" placeholderString="Search word frequencies" drawsBackground="YES" id="oWI-hF-Ifx">
+                                <font key="font" metaFont="system"/>
+                                <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                            </textFieldCell>
+                            <connections>
+                                <outlet property="delegate" destination="-2" id="DE8-SK-pvA"/>
+                            </connections>
+                        </textField>
+                    </subviews>
                 </customView>
                 <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pm3-ly-H0F">
                     <rect key="frame" x="562" y="159" width="240" height="135"/>

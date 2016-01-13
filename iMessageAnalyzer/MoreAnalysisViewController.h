@@ -23,7 +23,7 @@
 
 /** Shows more analysis screen that includes graph */
 
-@interface MoreAnalysisViewController : NSViewController <NSTableViewDataSource, NSTableViewDelegate, NSDatePickerCellDelegate, NSPopoverDelegate, NSTextField_MessagesDelegate>
+@interface MoreAnalysisViewController : NSViewController <NSTextFieldDelegate, NSTableViewDataSource, NSTableViewDelegate, NSDatePickerCellDelegate, NSPopoverDelegate, NSTextField_MessagesDelegate>
 
 
 #pragma mark Constructor 
