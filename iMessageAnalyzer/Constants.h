@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-const static BOOL DEVELOPMENT = YES;
+const static BOOL DEVELOPMENT = NO;
 
 /** Classless, helpful auxillary methods used by a variety of classes */
 
