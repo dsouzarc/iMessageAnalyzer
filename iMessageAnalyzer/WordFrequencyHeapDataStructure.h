@@ -15,6 +15,6 @@
 - (instancetype) initWithSize:(NSInteger)size;
 
 - (void) addWord:(NSString*)word frequency:(NSNumber*)frequency;
-- (void) updateArrayWithAllWords:(NSMutableArray**)words andFrequencies:(NSMutableArray**)frequencies;
+- (NSMutableArray<NSDictionary*>*) getAllWordsAndFrequencies;
 
 @end

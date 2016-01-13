@@ -41,18 +41,20 @@
     return self;
 }
 
-- (void) updateArrayWithAllWords:(NSMutableArray**)words andFrequencies:(NSMutableArray**)frequencies
+- (NSMutableArray<NSDictionary*>*) getAllWordsAndFrequencies
 {
+    NSMutableArray<NSDictionary*>* allWordsAndFrequencies = [[NSMutableArray alloc] init];
     while (self.size > 0) {
         
         if(![self.underlyingFrequencies[1] isEqualToNumber:[NSNumber numberWithInteger:INT32_MIN]]) {
-            [*words addObject:self.underlyingWords[1]];
-            [*frequencies addObject:self.underlyingFrequencies[1]];
+            [allWordsAndFrequencies addObject:@{@"word": self.underlyingWords[1], @"frequency": self.underlyingFrequencies[1]}];
         }
         
         [self exchangeIndex:1 withIndex:self.size--];
         [self sinkFromIndex:1];
     }
+    
+    return allWordsAndFrequencies;
 }
 
 - (void) addWord:(NSString *)word frequency:(NSNumber*)frequency
