@@ -8,7 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
-const static BOOL DEVELOPMENT = NO;
+const static BOOL DEVELOPMENT = YES;
+extern NSString* const pathToDevelopmentDB;
 
 /** Classless, helpful auxillary methods used by a variety of classes */
 

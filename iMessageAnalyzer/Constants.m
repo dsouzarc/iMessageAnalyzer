@@ -9,6 +9,8 @@
 
 #import "Constants.h"
 
+NSString* const pathToDevelopmentDB = @"/Users/Ryan/FLV MP4/iMessage/iphone_chat.db";
+
 static Constants *constants;
 
 @interface Constants ()
