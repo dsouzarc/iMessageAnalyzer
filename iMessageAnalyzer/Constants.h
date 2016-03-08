@@ -11,6 +11,11 @@
 const static BOOL DEVELOPMENT = YES;
 const static NSString *pathToDevelopmentDB = @"/Users/Ryan/FLV MP4/iMessage/iphone_chat.db";
 
+//Range for a message to be considered a double message - 3min to 8 hours
+const static int MIN_DOUBLE_MESSAGE = 180;
+const static int MAX_DOUBLE_MESSAGE = 28880;
+
+
 /** Classless, helpful auxillary methods used by a variety of classes */
 
 @interface Constants : NSObject
@@ -63,5 +68,6 @@ const static NSString *pathToDevelopmentDB = @"/Users/Ryan/FLV MP4/iMessage/ipho
 #pragma mark Miscellaneous
 
 + (NSString*) getStrippedWord:(NSString*)original;
++ (BOOL) isDoubleMessage:(int)timeDifference;
 
 @end

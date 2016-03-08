@@ -64,6 +64,9 @@
 @property int myWordCount;
 @property int friendCount;
 
+@property int myDoubleMessage;
+@property int friendDoubleMessage;
+
 @property double myAverageWordCountPerMessage;
 @property double friendAverageWordCountPerMessage;
 
@@ -210,10 +213,55 @@
     self.myWordCount = 0;
     self.friendCount = 0;
     
+    self.myDoubleMessage = 0;
+    self.friendDoubleMessage = 0;
+    
     NSMutableDictionary *myWordFrequencies = [[NSMutableDictionary alloc] init];
     NSMutableDictionary *friendWordFrequencies = [[NSMutableDictionary alloc] init];
     
+    BOOL lastFromMe;
+    int lastMessageTime;
+    
+    if(self.messagesToDisplay.count > 0) {
+        Message *first = [self.messagesToDisplay firstObject];
+        lastFromMe = first.isFromMe;
+        lastMessageTime = (int) [first.dateSent timeIntervalSinceReferenceDate];
+    }
+    else {
+        lastFromMe = NO;
+        lastMessageTime = (int)[[NSDate date] timeIntervalSinceReferenceDate];
+    }
+    
     for(Message *message in self.messagesToDisplay) {
+        
+        //Last message isn't from me, but this one is - continuing conversation
+        if(message.isFromMe && !lastFromMe) {
+            lastFromMe = YES;
+        }
+        
+        //Last message is from me, but this one isn't - continuing conversation
+        else if(!message.isFromMe && lastFromMe) {
+            lastFromMe = NO;
+        }
+        
+        //Double message
+        else {
+            int sentTime = (int)[message.dateSent timeIntervalSinceReferenceDate];
+            int timeDiscrepancy = sentTime - lastMessageTime;
+            
+            //
+            if([Constants isDoubleMessage:timeDiscrepancy]) {
+                if(message.isFromMe) {
+                    self.myDoubleMessage++;
+                }
+                else {
+                    self.friendDoubleMessage++;
+                }
+            }
+        }
+        
+        lastMessageTime = (int) [message.dateSent timeIntervalSinceReferenceDate];
+        
         NSArray *words = [message.messageText componentsSeparatedByString:@" "];
         
         for(NSString *word in words) {
@@ -259,6 +307,10 @@
     
     self.friendWordsAndFrequencies = [friendWords getAllWordsAndFrequencies];
     self.friendWordsAndFrequenciesSearch = self.friendWordsAndFrequencies;
+    
+    NSLog(@"MY DOUBLE: %d", self.myDoubleMessage);
+    
+    NSLog(@"FRIEND DOUBLE: %d", self.friendDoubleMessage);
 }
 
 
