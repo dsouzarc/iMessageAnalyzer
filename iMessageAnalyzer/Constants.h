@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 const static BOOL DEVELOPMENT = YES;
-extern NSString* const pathToDevelopmentDB;
+const static NSString *pathToDevelopmentDB = @"/Users/Ryan/FLV MP4/iMessage/iphone_chat.db";
 
 /** Classless, helpful auxillary methods used by a variety of classes */
 
