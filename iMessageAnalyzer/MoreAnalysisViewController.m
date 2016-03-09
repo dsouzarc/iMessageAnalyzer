@@ -221,11 +221,13 @@
     
     BOOL lastFromMe;
     int lastMessageTime;
+    Message *lastMessage;
     
     if(self.messagesToDisplay.count > 0) {
         Message *first = [self.messagesToDisplay firstObject];
         lastFromMe = first.isFromMe;
         lastMessageTime = (int) [first.dateSent timeIntervalSinceReferenceDate];
+        lastMessage = first;
     }
     else {
         lastFromMe = NO;
@@ -253,14 +255,17 @@
             if([Constants isDoubleMessage:timeDiscrepancy]) {
                 if(message.isFromMe) {
                     self.myDoubleMessage++;
+                    //NSLog(@"MY DOUBLE: %@\t%@", lastMessage.messageText, message.messageText);
                 }
                 else {
                     self.friendDoubleMessage++;
+                    //NSLog(@"FRIEND DOUBLE: %@\t%@", lastMessage.messageText, message.messageText);
                 }
             }
         }
         
         lastMessageTime = (int) [message.dateSent timeIntervalSinceReferenceDate];
+        lastMessage = message;
         
         NSArray *words = [message.messageText componentsSeparatedByString:@" "];
         

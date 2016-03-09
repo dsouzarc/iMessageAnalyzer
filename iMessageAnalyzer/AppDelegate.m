@@ -20,7 +20,7 @@
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     
     if([Constants isDevelopmentMode]) {
-        self.mainWindowController = [[MainWindowController alloc] initWithWindowNibName:@"MainWindowController" databasePath:Constants.pathToDevelopmentDB];
+        self.mainWindowController = [[MainWindowController alloc] initWithWindowNibName:@"MainWindowController" databasePath:pathToDevelopmentDB];
         [self.mainWindowController showWindow:self];
         [self.mainWindowController.window makeKeyAndOrderFront:self];
         
