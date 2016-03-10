@@ -67,6 +67,9 @@
 @property int myDoubleMessage;
 @property int friendDoubleMessage;
 
+@property int myConversationStarter;
+@property int friendConversationStarter;
+
 @property double myAverageWordCountPerMessage;
 @property double friendAverageWordCountPerMessage;
 
@@ -219,53 +222,71 @@
     NSMutableDictionary *myWordFrequencies = [[NSMutableDictionary alloc] init];
     NSMutableDictionary *friendWordFrequencies = [[NSMutableDictionary alloc] init];
     
-    BOOL lastFromMe;
-    int lastMessageTime;
-    Message *lastMessage;
+    BOOL lastFromMeDoubleMessage;
+    int lastMessageTimeDoubleMessage;
+    Message *lastMessageDoubleMessage;
+    
+    BOOL lastFromMeConversationStarter;
+    int lastMessageTimeConversationStarter;
+    Message *lastMessageConversationStarter;
     
     if(self.messagesToDisplay.count > 0) {
         Message *first = [self.messagesToDisplay firstObject];
-        lastFromMe = first.isFromMe;
-        lastMessageTime = (int) [first.dateSent timeIntervalSinceReferenceDate];
-        lastMessage = first;
+        
+        lastFromMeDoubleMessage = first.isFromMe;
+        lastMessageTimeDoubleMessage = (int) [first.dateSent timeIntervalSinceReferenceDate];
+        lastMessageDoubleMessage = first;
+        
+        lastFromMeConversationStarter = first.isFromMe;
+        lastFromMeConversationStarter = (int) [first.dateSent timeIntervalSinceReferenceDate];
+        lastMessageConversationStarter = first;
     }
     else {
-        lastFromMe = NO;
-        lastMessageTime = (int)[[NSDate date] timeIntervalSinceReferenceDate];
+        lastFromMeDoubleMessage = NO;
+        lastMessageTimeDoubleMessage = (int)[[NSDate date] timeIntervalSinceReferenceDate];
+    
+        lastFromMeConversationStarter = NO;
+        lastMessageTimeConversationStarter = (int) [[NSDate date] timeIntervalSinceReferenceDate];
     }
     
     for(Message *message in self.messagesToDisplay) {
         
         //Last message isn't from me, but this one is - continuing conversation
-        if(message.isFromMe && !lastFromMe) {
-            lastFromMe = YES;
+        if(message.isFromMe && !lastFromMeDoubleMessage) {
+            lastFromMeDoubleMessage = YES;
+            lastFromMeConversationStarter = YES;
         }
         
         //Last message is from me, but this one isn't - continuing conversation
-        else if(!message.isFromMe && lastFromMe) {
-            lastFromMe = NO;
+        else if(!message.isFromMe && lastFromMeDoubleMessage) {
+            lastFromMeDoubleMessage = NO;
+            lastFromMeConversationStarter = NO;
         }
         
         //Double message
         else {
             int sentTime = (int)[message.dateSent timeIntervalSinceReferenceDate];
-            int timeDiscrepancy = sentTime - lastMessageTime;
+            int timeDiscrepancy = sentTime - lastMessageTimeDoubleMessage;
             
-            //
+            //If it should count as a double message
             if([Constants isDoubleMessage:timeDiscrepancy]) {
                 if(message.isFromMe) {
                     self.myDoubleMessage++;
-                    //NSLog(@"MY DOUBLE: %@\t%@", lastMessage.messageText, message.messageText);
+                    NSLog(@"MY DOUBLE: %@\t%@", lastMessageDoubleMessage.messageText, message.messageText);
                 }
                 else {
                     self.friendDoubleMessage++;
-                    //NSLog(@"FRIEND DOUBLE: %@\t%@", lastMessage.messageText, message.messageText);
+                    NSLog(@"FRIEND DOUBLE: %@\t%@", lastMessageDoubleMessage.messageText, message.messageText);
                 }
+            }
+            
+            else if([Constants isConversationStarter:timeDiscrepancy]) {
+                
             }
         }
         
-        lastMessageTime = (int) [message.dateSent timeIntervalSinceReferenceDate];
-        lastMessage = message;
+        lastMessageTimeDoubleMessage = (int) [message.dateSent timeIntervalSinceReferenceDate];
+        lastMessageDoubleMessage = message;
         
         NSArray *words = [message.messageText componentsSeparatedByString:@" "];
         
