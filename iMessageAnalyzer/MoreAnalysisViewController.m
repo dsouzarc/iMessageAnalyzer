@@ -281,12 +281,22 @@
             }
             
             else if([Constants isConversationStarter:timeDiscrepancy]) {
-                
+                if(message.isFromMe) {
+                    self.myConversationStarter++;
+                    NSLog(@"MY STARTER: %@\t%@", lastMessageConversationStarter.messageText, message.messageText);
+                }
+                else {
+                    self.friendConversationStarter++;
+                    NSLog(@"FRIEND STARTER: %@\t%@", lastMessageConversationStarter.messageText, message.messageText);
+                }
             }
         }
         
         lastMessageTimeDoubleMessage = (int) [message.dateSent timeIntervalSinceReferenceDate];
         lastMessageDoubleMessage = message;
+        
+        lastMessageTimeConversationStarter = (int) [message.dateSent timeIntervalSinceReferenceDate];
+        lastMessageConversationStarter = message;
         
         NSArray *words = [message.messageText componentsSeparatedByString:@" "];
         
@@ -335,8 +345,9 @@
     self.friendWordsAndFrequenciesSearch = self.friendWordsAndFrequencies;
     
     NSLog(@"MY DOUBLE: %d", self.myDoubleMessage);
-    
     NSLog(@"FRIEND DOUBLE: %d", self.friendDoubleMessage);
+    
+    NSLog(@"")
 }
 
 
