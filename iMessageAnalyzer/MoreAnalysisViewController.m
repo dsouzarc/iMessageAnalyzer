@@ -771,12 +771,16 @@ int tempCounter = 2;
 
 - (void) setTextFieldDouble:(double)value forTag:(NSInteger)tag
 {
-    [self setTextFieldText:[NSString stringWithFormat:@"%.2lf", value] forTag:tag];
+    NSString *text = [NSNumberFormatter localizedStringFromNumber:@(value) numberStyle:NSNumberFormatterDecimalStyle];
+    [self setTextFieldText:text forTag:tag];
+    //[self setTextFieldText:[NSString stringWithFormat:@"%.2lf", value] forTag:tag];
 }
 
 - (void) setTextFieldLong:(long)value forTag:(NSInteger)tag
 {
-    [self setTextFieldText:[NSString stringWithFormat:@"%ld", value] forTag:tag];
+    NSString *text = [NSNumberFormatter localizedStringFromNumber:@(value) numberStyle:NSNumberFormatterDecimalStyle];
+    [self setTextFieldText:text forTag:tag];
+    //[self setTextFieldText:[NSString stringWithFormat:@"%ld", value] forTag:tag];
 }
 
 - (void) setTextFieldText:(NSString*)text forTag:(NSInteger)tag
