@@ -9,8 +9,7 @@
 #import "DatabaseManager.h"
 
 static DatabaseManager *databaseInstance;
-
-static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
+static NSString *pathToDB;
 
 @interface DatabaseManager ()
 
@@ -38,7 +37,12 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
 {
     @synchronized(self) {
         if(!databaseInstance) {
-            pathToDB = [NSString stringWithFormat:@"/Users/%@/Library/Messages/chat.db", NSUserName()];
+            if([Constants isDevelopmentMode]) {
+                pathToDB = pathToDevelopmentDB;
+            }
+            else {
+                pathToDB = [NSString stringWithFormat:@"/Users/%@/Library/Messages/chat.db", NSUserName()];
+            }
             databaseInstance = [[self alloc] initWithDatabasePath:pathToDB];
         }
     }
@@ -118,7 +122,7 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
     return handle_ids;
 }
 
-- (int32_t) getHandleForChatID:(int32_t)chatID
+- (int) getHandleForChatID:(int32_t)chatID
 {
     const char *query = [[NSString stringWithFormat:@"SELECT handle_id FROM chat_handle_join WHERE chat_id=%d", chatID] UTF8String];
     sqlite3_stmt *statement;
@@ -657,14 +661,16 @@ static NSString *pathToDB = @"/Users/Ryan/FLV MP4/iMessage/mac_chat.db";
 - (void) deleteDatabase
 {
     if([Constants isDevelopmentMode]) {
+        sqlite3_close(self.database);
+        NSLog(@"Closed temporary DB");
         return;
     }
     
-    //If we're not dealing with the original
-    if(![pathToDB isEqualToString:[NSString stringWithFormat:@"/Users/%@/Library/Messages/chat.db", NSUserName()]]) {
+    //If we're not dealing with the original or with my copy of it
+    if(![pathToDB isEqualToString:[NSString stringWithFormat:@"/Users/%@/Library/Messages/chat.db", NSUserName()]] && ![pathToDB isEqualToString:pathToDevelopmentDB]) {
         NSFileManager *fileManager = [NSFileManager defaultManager];
         [fileManager removeItemAtPath:pathToDB error:NULL];
-        NSLog(@"Database deleted");
+        NSLog(@"Temporary database deleted");
     }
 }
 

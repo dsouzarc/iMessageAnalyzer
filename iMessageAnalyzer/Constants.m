@@ -302,4 +302,14 @@ static Constants *constants;
     return DEVELOPMENT;
 }
 
++ (BOOL) isDoubleMessage:(int)timeDifference
+{
+    return (timeDifference >= MIN_DOUBLE_MESSAGE) && (timeDifference <= MAX_DOUBLE_MESSAGE);
+}
+
++ (BOOL) isConversationStarter:(int)timeDifference
+{
+    return timeDifference >= MIN_CONVERSATION_STARTER;
+}
+
 @end

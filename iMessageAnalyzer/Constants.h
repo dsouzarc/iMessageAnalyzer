@@ -9,6 +9,14 @@
 #import <Foundation/Foundation.h>
 
 const static BOOL DEVELOPMENT = NO;
+const static NSString *pathToDevelopmentDB = @"/Users/Ryan/FLV MP4/iMessage/iphone_chat.db";
+
+//Range for a message to be considered a double message - 3min to 11 hours
+const static int MIN_DOUBLE_MESSAGE = 180;
+const static int MAX_DOUBLE_MESSAGE = 39600;
+
+//Range for a message to be considered a conversation starter - 11 hours
+const static int MIN_CONVERSATION_STARTER = MAX_DOUBLE_MESSAGE + 1;
 
 /** Classless, helpful auxillary methods used by a variety of classes */
 
@@ -62,5 +70,7 @@ const static BOOL DEVELOPMENT = NO;
 #pragma mark Miscellaneous
 
 + (NSString*) getStrippedWord:(NSString*)original;
++ (BOOL) isDoubleMessage:(int)timeDifference;
++ (BOOL) isConversationStarter:(int)timeDifference;
 
 @end

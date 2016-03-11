@@ -64,6 +64,12 @@
 @property int myWordCount;
 @property int friendCount;
 
+@property int myDoubleMessage;
+@property int friendDoubleMessage;
+
+@property int myConversationStarter;
+@property int friendConversationStarter;
+
 @property double myAverageWordCountPerMessage;
 @property double friendAverageWordCountPerMessage;
 
@@ -210,10 +216,88 @@
     self.myWordCount = 0;
     self.friendCount = 0;
     
+    self.myDoubleMessage = 0;
+    self.friendDoubleMessage = 0;
+    
     NSMutableDictionary *myWordFrequencies = [[NSMutableDictionary alloc] init];
     NSMutableDictionary *friendWordFrequencies = [[NSMutableDictionary alloc] init];
     
+    BOOL lastFromMeDoubleMessage;
+    int lastMessageTimeDoubleMessage;
+    Message *lastMessageDoubleMessage;
+    
+    BOOL lastFromMeConversationStarter;
+    int lastMessageTimeConversationStarter;
+    Message *lastMessageConversationStarter;
+    
+    if(self.messagesToDisplay.count > 0) {
+        Message *first = [self.messagesToDisplay firstObject];
+        
+        lastFromMeDoubleMessage = first.isFromMe;
+        lastMessageTimeDoubleMessage = (int) [first.dateSent timeIntervalSinceReferenceDate];
+        lastMessageDoubleMessage = first;
+        
+        lastFromMeConversationStarter = first.isFromMe;
+        lastFromMeConversationStarter = (int) [first.dateSent timeIntervalSinceReferenceDate];
+        lastMessageConversationStarter = first;
+    }
+    else {
+        lastFromMeDoubleMessage = NO;
+        lastMessageTimeDoubleMessage = (int)[[NSDate date] timeIntervalSinceReferenceDate];
+    
+        lastFromMeConversationStarter = NO;
+        lastMessageTimeConversationStarter = (int) [[NSDate date] timeIntervalSinceReferenceDate];
+    }
+    
     for(Message *message in self.messagesToDisplay) {
+        
+        //Last message isn't from me, but this one is - continuing conversation
+        if(message.isFromMe && !lastFromMeDoubleMessage) {
+            lastFromMeDoubleMessage = YES;
+            lastFromMeConversationStarter = YES;
+        }
+        
+        //Last message is from me, but this one isn't - continuing conversation
+        else if(!message.isFromMe && lastFromMeDoubleMessage) {
+            lastFromMeDoubleMessage = NO;
+            lastFromMeConversationStarter = NO;
+        }
+        
+        //Double message
+        else {
+            int sentTime = (int)[message.dateSent timeIntervalSinceReferenceDate];
+            int timeDiscrepancy = sentTime - lastMessageTimeDoubleMessage;
+            
+            //If it should count as a double message
+            if([Constants isDoubleMessage:timeDiscrepancy]) {
+                if(message.isFromMe) {
+                    self.myDoubleMessage++;
+                    NSLog(@"MY DOUBLE: %@\t%@", lastMessageDoubleMessage.messageText, message.messageText);
+                }
+                else {
+                    self.friendDoubleMessage++;
+                    NSLog(@"FRIEND DOUBLE: %@\t%@", lastMessageDoubleMessage.messageText, message.messageText);
+                }
+            }
+            
+            else if([Constants isConversationStarter:timeDiscrepancy]) {
+                if(message.isFromMe) {
+                    self.myConversationStarter++;
+                    NSLog(@"MY STARTER: %@\t%@", lastMessageConversationStarter.messageText, message.messageText);
+                }
+                else {
+                    self.friendConversationStarter++;
+                    NSLog(@"FRIEND STARTER: %@\t%@", lastMessageConversationStarter.messageText, message.messageText);
+                }
+            }
+        }
+        
+        lastMessageTimeDoubleMessage = (int) [message.dateSent timeIntervalSinceReferenceDate];
+        lastMessageDoubleMessage = message;
+        
+        lastMessageTimeConversationStarter = (int) [message.dateSent timeIntervalSinceReferenceDate];
+        lastMessageConversationStarter = message;
+        
         NSArray *words = [message.messageText componentsSeparatedByString:@" "];
         
         for(NSString *word in words) {
@@ -259,6 +343,12 @@
     
     self.friendWordsAndFrequencies = [friendWords getAllWordsAndFrequencies];
     self.friendWordsAndFrequenciesSearch = self.friendWordsAndFrequencies;
+    
+    NSLog(@"MY DOUBLE: %d", self.myDoubleMessage);
+    NSLog(@"FRIEND DOUBLE: %d", self.friendDoubleMessage);
+    
+    NSLog(@"MY CONVERSATION STARTER: %d", self.myConversationStarter);
+    NSLog(@"FRIEND CONVERSATION STARTER: %d", self.friendConversationStarter);
 }
 
 

@@ -16,6 +16,7 @@
 #import "MessageManager.h"
 #import "TemporaryDatabaseManager.h"
 
+#import "Constants.h"
 #import "Person.h"
 #import "Statistics.h"
 #import "Message.h"
