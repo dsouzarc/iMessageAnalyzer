@@ -347,7 +347,8 @@
     NSLog(@"MY DOUBLE: %d", self.myDoubleMessage);
     NSLog(@"FRIEND DOUBLE: %d", self.friendDoubleMessage);
     
-    NSLog(@"")
+    NSLog(@"MY CONVERSATION STARTER: %d", self.myConversationStarter);
+    NSLog(@"FRIEND CONVERSATION STARTER: %d", self.friendConversationStarter);
 }
 
 
