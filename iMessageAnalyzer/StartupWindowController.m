@@ -36,8 +36,8 @@
     if(self) {
         self.startupViewController = [[StartupViewController alloc] initWithNibName:@"StartupViewController" bundle:[NSBundle mainBundle]];
         
-        self.messagesPath = [NSString stringWithFormat:@"/Users/%@/Library/Messages", NSUserName()];
-        self.iPhonePath = [NSString stringWithFormat:@"/Users/%@/Library/Application Support/MobileSync/Backup", NSUserName()];
+        self.messagesPath = [NSString stringWithFormat:@"%@/Library/Messages", NSHomeDirectory()];
+        self.iPhonePath = [NSString stringWithFormat:@"%@/Library/Application Support/MobileSync/Backup", NSHomeDirectory()];
     }
     
     return self;

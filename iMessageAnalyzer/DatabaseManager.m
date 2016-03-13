@@ -41,7 +41,7 @@ static NSString *pathToDB;
                 pathToDB = pathToDevelopmentDB;
             }
             else {
-                pathToDB = [NSString stringWithFormat:@"/Users/%@/Library/Messages/chat.db", NSUserName()];
+                pathToDB = [NSString stringWithFormat:@"%@/Library/Messages/chat.db", NSHomeDirectory()];
             }
             databaseInstance = [[self alloc] initWithDatabasePath:pathToDB];
         }
@@ -667,7 +667,7 @@ static NSString *pathToDB;
     }
     
     //If we're not dealing with the original or with my copy of it
-    if(![pathToDB isEqualToString:[NSString stringWithFormat:@"/Users/%@/Library/Messages/chat.db", NSUserName()]] && ![pathToDB isEqualToString:pathToDevelopmentDB]) {
+    if(![pathToDB isEqualToString:[NSString stringWithFormat:@"%@/Library/Messages/chat.db", NSHomeDirectory()]] && ![pathToDB isEqualToString:pathToDevelopmentDB]) {
         NSFileManager *fileManager = [NSFileManager defaultManager];
         [fileManager removeItemAtPath:pathToDB error:NULL];
         NSLog(@"Temporary database deleted");
