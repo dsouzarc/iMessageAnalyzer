@@ -98,7 +98,7 @@
         self.databaseManager = databaseManager;
 
         self.dateFormatter = [[NSDateFormatter alloc] init];
-        [self.dateFormatter setDateFormat:@"MM/dd/yyyy"];
+        [self.dateFormatter setDateFormat:@"MM/dd/yy"];
 
         if(self.messagesToDisplay.count > 0) {
             self.calendarChosenDate = ((Message*) self.messagesToDisplay[0]).dateSent;
