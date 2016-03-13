@@ -50,6 +50,9 @@
 		94A9924A1BBDC734003BA1D5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 94A992481BBDC734003BA1D5 /* Main.storyboard */; };
 		94A992551BBDC734003BA1D5 /* iMessageAnalyzerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A992541BBDC734003BA1D5 /* iMessageAnalyzerTests.m */; };
 		94A992601BBDC734003BA1D5 /* iMessageAnalyzerUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A9925F1BBDC734003BA1D5 /* iMessageAnalyzerUITests.m */; };
+		94D71AE31C95ED1A00E71D6D /* CorePlot.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94D71AE21C95ED1A00E71D6D /* CorePlot.framework */; };
+		94D71AE41C95ED6300E71D6D /* CorePlot.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94D71AE21C95ED1A00E71D6D /* CorePlot.framework */; };
+		94D71AE51C95ED6300E71D6D /* CorePlot.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 94D71AE21C95ED1A00E71D6D /* CorePlot.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		94DAC4A51BE7DAF90016ED35 /* calendar-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 94DAC4A41BE7DAF90016ED35 /* calendar-icon.png */; };
 		94E70EB41BF9C80A00653F94 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94E70EB31BF9C80A00653F94 /* QuartzCore.framework */; };
 		94F01DDD1BE852CF00B47D9D /* CalendarPopUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94F01DDB1BE852CF00B47D9D /* CalendarPopUpViewController.m */; };
@@ -129,6 +132,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				94D71AE51C95ED6300E71D6D /* CorePlot.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -208,6 +212,7 @@
 		94A9925B1BBDC734003BA1D5 /* iMessageAnalyzerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iMessageAnalyzerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		94A9925F1BBDC734003BA1D5 /* iMessageAnalyzerUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = iMessageAnalyzerUITests.m; sourceTree = "<group>"; };
 		94A992611BBDC734003BA1D5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		94D71AE21C95ED1A00E71D6D /* CorePlot.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CorePlot.framework; sourceTree = "<group>"; };
 		94DAC4A41BE7DAF90016ED35 /* calendar-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "calendar-icon.png"; sourceTree = "<group>"; };
 		94E70EB31BF9C80A00653F94 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		94F01DDA1BE852CF00B47D9D /* CalendarPopUpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalendarPopUpViewController.h; sourceTree = "<group>"; };
@@ -234,6 +239,8 @@
 			files = (
 				94E70EB41BF9C80A00653F94 /* QuartzCore.framework in Frameworks */,
 				94F3AC371BC1D9C600948A23 /* libsqlite3.0.tbd in Frameworks */,
+				94D71AE31C95ED1A00E71D6D /* CorePlot.framework in Frameworks */,
+				94D71AE41C95ED6300E71D6D /* CorePlot.framework in Frameworks */,
 				94F3AC381BC1D9C600948A23 /* libsqlite3.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -574,6 +581,7 @@
 		94A992311BBDC733003BA1D5 = {
 			isa = PBXGroup;
 			children = (
+				94D71AE21C95ED1A00E71D6D /* CorePlot.framework */,
 				94A9923C1BBDC733003BA1D5 /* iMessageAnalyzer */,
 				94DD099E1C432C63004FA62D /* Frameworks */,
 				94A992531BBDC734003BA1D5 /* iMessageAnalyzerTests */,
@@ -1082,6 +1090,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = iMessageAnalyzer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
@@ -1095,6 +1107,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = iMessageAnalyzer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
