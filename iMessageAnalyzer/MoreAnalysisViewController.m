@@ -344,6 +344,14 @@
     self.friendWordsAndFrequencies = [friendWords getAllWordsAndFrequencies];
     self.friendWordsAndFrequenciesSearch = self.friendWordsAndFrequencies;
     
+    [self setTextFieldLong:self.myDoubleMessage forTag:36];
+    [self setTextFieldLong:self.friendDoubleMessage forTag:37];
+    [self setTextFieldLong:(self.myDoubleMessage + self.friendDoubleMessage) forTag:38];
+    
+    [self setTextFieldLong:self.myConversationStarter forTag:39];
+    [self setTextFieldLong:self.friendConversationStarter forTag:40];
+    [self setTextFieldLong:(self.myDoubleMessage + self.friendDoubleMessage) forTag:41];
+    
     NSLog(@"MY DOUBLE: %d", self.myDoubleMessage);
     NSLog(@"FRIEND DOUBLE: %d", self.friendDoubleMessage);
     
