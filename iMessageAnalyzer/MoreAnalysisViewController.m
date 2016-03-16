@@ -351,12 +351,6 @@
     [self setTextFieldLong:self.myConversationStarter forTag:39];
     [self setTextFieldLong:self.friendConversationStarter forTag:40];
     [self setTextFieldLong:(self.myDoubleMessage + self.friendDoubleMessage) forTag:41];
-    
-    NSLog(@"MY DOUBLE: %d", self.myDoubleMessage);
-    NSLog(@"FRIEND DOUBLE: %d", self.friendDoubleMessage);
-    
-    NSLog(@"MY CONVERSATION STARTER: %d", self.myConversationStarter);
-    NSLog(@"FRIEND CONVERSATION STARTER: %d", self.friendConversationStarter);
 }
 
 
