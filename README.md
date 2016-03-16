@@ -18,6 +18,12 @@ Adds some unique functionality from Messages.app that provides a better experien
 [Download .app](https://www.dropbox.com/sh/804msuitbz47gjm/AAAaR5QTdVv8pIRsO9NHZtI7a?dl=0)
 
 
+######Newest features
+
+- Double messages: See who sends the most followup messages; defined as successive messages sent by the same person within 3 minutes to 8 hours of the last message send time
+- Conversation starters: See who starts the most conversations; defined as who messages first after 8 hours of the last message in the conversation
+
+
 ####Current Features:
 
 - Looks like iMessage
@@ -60,6 +66,8 @@ Adds some unique functionality from Messages.app that provides a better experien
         - Average word per message sent and received
         - Date selected from calendar view on bottom left
         - The actual messages sent and received
+        - The number of double messages for each conversant: defined as two successive messages sent by the same person between 3 minutes and 8 hours of the last message sent
+        - The number of times each conversant started a conversation: defined by who sends the first message at least 8 hours after the last message was sent/received
 
 - **Graphs and charts**
   + **Line graph** of messages with that person since your first message
