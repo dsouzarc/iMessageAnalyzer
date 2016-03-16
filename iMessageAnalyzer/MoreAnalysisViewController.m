@@ -98,7 +98,7 @@
         self.databaseManager = databaseManager;
 
         self.dateFormatter = [[NSDateFormatter alloc] init];
-        [self.dateFormatter setDateFormat:@"MM/dd/yyyy"];
+        [self.dateFormatter setDateFormat:@"MM/dd/yy"];
 
         if(self.messagesToDisplay.count > 0) {
             self.calendarChosenDate = ((Message*) self.messagesToDisplay[0]).dateSent;
@@ -344,11 +344,13 @@
     self.friendWordsAndFrequencies = [friendWords getAllWordsAndFrequencies];
     self.friendWordsAndFrequenciesSearch = self.friendWordsAndFrequencies;
     
-    NSLog(@"MY DOUBLE: %d", self.myDoubleMessage);
-    NSLog(@"FRIEND DOUBLE: %d", self.friendDoubleMessage);
+    [self setTextFieldLong:self.myDoubleMessage forTag:36];
+    [self setTextFieldLong:self.friendDoubleMessage forTag:37];
+    [self setTextFieldLong:(self.myDoubleMessage + self.friendDoubleMessage) forTag:38];
     
-    NSLog(@"MY CONVERSATION STARTER: %d", self.myConversationStarter);
-    NSLog(@"FRIEND CONVERSATION STARTER: %d", self.friendConversationStarter);
+    [self setTextFieldLong:self.myConversationStarter forTag:39];
+    [self setTextFieldLong:self.friendConversationStarter forTag:40];
+    [self setTextFieldLong:(self.myDoubleMessage + self.friendDoubleMessage) forTag:41];
 }
 
 
@@ -771,12 +773,16 @@ int tempCounter = 2;
 
 - (void) setTextFieldDouble:(double)value forTag:(NSInteger)tag
 {
-    [self setTextFieldText:[NSString stringWithFormat:@"%.2lf", value] forTag:tag];
+    NSString *text = [NSNumberFormatter localizedStringFromNumber:@(value) numberStyle:NSNumberFormatterDecimalStyle];
+    [self setTextFieldText:text forTag:tag];
+    //[self setTextFieldText:[NSString stringWithFormat:@"%.2lf", value] forTag:tag];
 }
 
 - (void) setTextFieldLong:(long)value forTag:(NSInteger)tag
 {
-    [self setTextFieldText:[NSString stringWithFormat:@"%ld", value] forTag:tag];
+    NSString *text = [NSNumberFormatter localizedStringFromNumber:@(value) numberStyle:NSNumberFormatterDecimalStyle];
+    [self setTextFieldText:text forTag:tag];
+    //[self setTextFieldText:[NSString stringWithFormat:@"%ld", value] forTag:tag];
 }
 
 - (void) setTextFieldText:(NSString*)text forTag:(NSInteger)tag
