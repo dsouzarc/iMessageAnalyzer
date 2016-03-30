@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9531" systemVersion="14F27" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9532" systemVersion="14F1605" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9531"/>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9532"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="MainViewController">
@@ -29,7 +30,7 @@
                             <autoresizingMask key="autoresizingMask"/>
                             <subviews>
                                 <searchField wantsLayer="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Kpw-Oj-Sda">
-                                    <rect key="frame" x="0.0" y="679" width="219" height="22"/>
+                                    <rect key="frame" x="0.0" y="653" width="219" height="22"/>
                                     <searchFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" usesSingleLineMode="YES" bezelStyle="round" id="Lca-Nf-RM7">
                                         <font key="font" metaFont="system"/>
                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -40,13 +41,13 @@
                                     </connections>
                                 </searchField>
                                 <scrollView autohidesScrollers="YES" horizontalLineScroll="92" horizontalPageScroll="10" verticalLineScroll="92" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wz5-YH-6OO">
-                                    <rect key="frame" x="0.0" y="0.0" width="219" height="681"/>
+                                    <rect key="frame" x="0.0" y="9" width="219" height="645"/>
                                     <clipView key="contentView" id="K04-yK-RYh">
-                                        <rect key="frame" x="1" y="17" width="217" height="663"/>
+                                        <rect key="frame" x="1" y="17" width="217" height="627"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <subviews>
                                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="90" rowSizeStyle="automatic" headerView="bSy-gm-tsh" viewBased="YES" id="S3H-Yk-c4c">
-                                                <rect key="frame" x="0.0" y="0.0" width="217" height="0.0"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="217" height="627"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <size key="intercellSpacing" width="3" height="2"/>
                                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -89,10 +90,18 @@
                                         <autoresizingMask key="autoresizingMask"/>
                                     </tableHeaderView>
                                 </scrollView>
+                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8S9-nW-NBc">
+                                    <rect key="frame" x="4" y="674" width="104" height="21"/>
+                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Sort By" id="1CQ-iO-Cef">
+                                        <font key="font" metaFont="system"/>
+                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                </textField>
                                 <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="iOq-0G-jae">
-                                    <rect key="frame" x="148" y="660" width="74" height="22"/>
+                                    <rect key="frame" x="111" y="674" width="106" height="22"/>
                                     <constraints>
-                                        <constraint firstAttribute="width" constant="68" id="kzC-2K-h5J"/>
+                                        <constraint firstAttribute="width" constant="100" id="kzC-2K-h5J"/>
                                     </constraints>
                                     <popUpButtonCell key="cell" type="push" title="Item 3" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="XtO-BZ-KRT" id="oM0-t9-IFU">
                                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -111,15 +120,15 @@
                                 </popUpButton>
                             </subviews>
                             <constraints>
-                                <constraint firstItem="Kpw-Oj-Sda" firstAttribute="top" secondItem="jQ9-qK-j6u" secondAttribute="top" id="0uW-VM-jA2"/>
-                                <constraint firstItem="wz5-YH-6OO" firstAttribute="top" secondItem="iOq-0G-jae" secondAttribute="top" id="8yb-pz-V0g"/>
-                                <constraint firstItem="iOq-0G-jae" firstAttribute="trailing" secondItem="Kpw-Oj-Sda" secondAttribute="trailing" id="FMg-kU-RcN"/>
-                                <constraint firstItem="wz5-YH-6OO" firstAttribute="trailing" secondItem="iOq-0G-jae" secondAttribute="trailing" id="G9d-oK-2Uf"/>
+                                <constraint firstItem="Kpw-Oj-Sda" firstAttribute="top" secondItem="jQ9-qK-j6u" secondAttribute="top" constant="26" id="0uW-VM-jA2"/>
+                                <constraint firstItem="wz5-YH-6OO" firstAttribute="top" secondItem="iOq-0G-jae" secondAttribute="top" constant="41" id="8yb-pz-V0g"/>
+                                <constraint firstItem="iOq-0G-jae" firstAttribute="trailing" secondItem="Kpw-Oj-Sda" secondAttribute="trailing" constant="-5" id="FMg-kU-RcN"/>
+                                <constraint firstItem="wz5-YH-6OO" firstAttribute="trailing" secondItem="iOq-0G-jae" secondAttribute="trailing" constant="5" id="G9d-oK-2Uf"/>
                                 <constraint firstItem="Kpw-Oj-Sda" firstAttribute="leading" secondItem="jQ9-qK-j6u" secondAttribute="leading" id="NX6-cB-L4e"/>
                                 <constraint firstAttribute="trailing" secondItem="wz5-YH-6OO" secondAttribute="trailing" id="gAX-8t-68O"/>
                                 <constraint firstItem="Kpw-Oj-Sda" firstAttribute="leading" secondItem="wz5-YH-6OO" secondAttribute="leading" id="knc-P4-6nI"/>
-                                <constraint firstAttribute="bottom" secondItem="wz5-YH-6OO" secondAttribute="bottom" id="rga-k8-Jgv"/>
-                                <constraint firstItem="wz5-YH-6OO" firstAttribute="top" secondItem="jQ9-qK-j6u" secondAttribute="top" constant="20" symbolic="YES" id="xED-3r-feb"/>
+                                <constraint firstAttribute="bottom" secondItem="wz5-YH-6OO" secondAttribute="bottom" constant="9" id="rga-k8-Jgv"/>
+                                <constraint firstItem="wz5-YH-6OO" firstAttribute="top" secondItem="jQ9-qK-j6u" secondAttribute="top" constant="47" id="xED-3r-feb"/>
                             </constraints>
                         </customView>
                         <customView id="aRx-wX-QTg">

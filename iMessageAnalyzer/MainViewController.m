@@ -132,7 +132,7 @@ static NSString *orderByMostMessages = @"Most messages";
     [self.contactsTableView setDoubleAction:@selector(doubleClickedContactCell:)];
     
     //TODO: UNHIDE AND IMPLEMENT
-    [self.orderByPopUpButton setHidden:YES];
+    [self.orderByPopUpButton setHidden:NO];
     [self.orderByPopUpButton removeAllItems];
     [self.orderByPopUpButton addItemWithTitle:orderByRecent];
     [self.orderByPopUpButton addItemWithTitle:orderByMostMessages];

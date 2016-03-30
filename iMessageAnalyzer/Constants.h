@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-const static BOOL DEVELOPMENT = NO;
+const static BOOL DEVELOPMENT = YES;
 const static NSString *pathToDevelopmentDB = @"/Users/Ryan/FLV MP4/iMessage/iphone_chat.db";
 
 //Range for a message to be considered a double message - 3min to 11 hours
