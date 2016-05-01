@@ -27,15 +27,15 @@
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Y0R-UN-1SQ">
                     <rect key="frame" x="91" y="33" width="274" height="22"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Contact Number" id="p8Q-Jv-fdB">
-                        <font key="font" metaFont="system"/>
+                        <font key="font" metaFont="system" size="11"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MQQ-po-lK1">
-                    <rect key="frame" x="91" y="5" width="274" height="22"/>
+                    <rect key="frame" x="91" y="9" width="274" height="22"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Never Messaged" id="XBu-2d-a93">
-                        <font key="font" metaFont="system"/>
+                        <font key="font" metaFont="system" size="11"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>

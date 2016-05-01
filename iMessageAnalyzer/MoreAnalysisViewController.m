@@ -272,22 +272,18 @@
             if([Constants isDoubleMessage:timeDiscrepancy]) {
                 if(message.isFromMe) {
                     self.myDoubleMessage++;
-                    NSLog(@"MY DOUBLE: %@\t%@", lastMessageDoubleMessage.messageText, message.messageText);
                 }
                 else {
                     self.friendDoubleMessage++;
-                    NSLog(@"FRIEND DOUBLE: %@\t%@", lastMessageDoubleMessage.messageText, message.messageText);
                 }
             }
             
             else if([Constants isConversationStarter:timeDiscrepancy]) {
                 if(message.isFromMe) {
                     self.myConversationStarter++;
-                    NSLog(@"MY STARTER: %@\t%@", lastMessageConversationStarter.messageText, message.messageText);
                 }
                 else {
                     self.friendConversationStarter++;
-                    NSLog(@"FRIEND STARTER: %@\t%@", lastMessageConversationStarter.messageText, message.messageText);
                 }
             }
         }
@@ -401,6 +397,10 @@
         [timeField setBordered:NO];
         
         NSTextField_Messages *messageField = [[NSTextField_Messages alloc] initWithFrame:frame];
+        
+        RSVerticallyCenteredTextFieldCell *verticleCenterCell = [[RSVerticallyCenteredTextFieldCell alloc] initTextCell:@""];
+        [messageField setCell:verticleCenterCell];
+
         [messageField setDrawsBackground:YES];
         [messageField setWantsLayer:YES];
         [messageField setTextFieldNumber:row];
@@ -441,7 +441,16 @@
             [messageField setAttributedStringValue:attributedString];
         }
         else {
-            [messageField setStringValue:[NSString stringWithFormat:@"  %@", message.messageText]];
+            NSFont *customFont = [NSFont fontWithName:@"Helvetica Neue" size:13.0];
+            NSMutableAttributedString *customString;
+            if(message.messageText.length < 55) {
+                customString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"  %@", message.messageText]];
+            }
+            else {
+                customString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@", message.messageText]];
+            }
+            [customString addAttribute:NSFontNameAttribute value:customFont range:NSMakeRange(0, customString.length)];
+            [messageField setAttributedStringValue:customString];
         }
 
         NSSize goodFrame = [messageField.cell cellSizeForBounds:frame];
@@ -475,7 +484,7 @@
         }
     
         [messageField setWantsLayer:YES];
-        [messageField.layer setCornerRadius:10.0f];
+        [messageField.layer setCornerRadius:8.0f];
         [messageField setFocusRingType:NSFocusRingTypeNone];
         [messageField setBordered:NO];
         

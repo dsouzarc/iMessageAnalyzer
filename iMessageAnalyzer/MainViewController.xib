@@ -40,9 +40,9 @@
                                         <outlet property="delegate" destination="-2" id="Md1-F8-JXt"/>
                                     </connections>
                                 </searchField>
-                                <scrollView autohidesScrollers="YES" horizontalLineScroll="92" horizontalPageScroll="10" verticalLineScroll="92" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wz5-YH-6OO">
+                                <scrollView horizontalLineScroll="92" horizontalPageScroll="10" verticalLineScroll="92" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wz5-YH-6OO">
                                     <rect key="frame" x="0.0" y="9" width="219" height="645"/>
-                                    <clipView key="contentView" id="K04-yK-RYh">
+                                    <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="K04-yK-RYh">
                                         <rect key="frame" x="1" y="0.0" width="217" height="644"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <subviews>
@@ -54,7 +54,7 @@
                                                 <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                                 <tableColumns>
                                                     <tableColumn identifier="chatsIdentifier" width="214" minWidth="40" maxWidth="1000" id="0CW-xy-QTL">
-                                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border">
+                                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Conversations">
                                                             <font key="font" metaFont="smallSystem"/>
                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -77,15 +77,15 @@
                                         </subviews>
                                         <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     </clipView>
-                                    <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="zhX-71-Agt">
-                                        <rect key="frame" x="1" y="1" width="0.0" height="16"/>
+                                    <scroller key="horizontalScroller" verticalHuggingPriority="750" horizontal="YES" id="zhX-71-Agt">
+                                        <rect key="frame" x="1" y="628" width="217" height="16"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                     </scroller>
-                                    <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="GQV-Gx-nE0">
-                                        <rect key="frame" x="-15" y="17" width="16" height="0.0"/>
+                                    <scroller key="verticalScroller" verticalHuggingPriority="750" horizontal="NO" id="GQV-Gx-nE0">
+                                        <rect key="frame" x="202" y="23" width="16" height="621"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                     </scroller>
-                                    <tableHeaderView key="headerView" id="bSy-gm-tsh">
+                                    <tableHeaderView key="headerView" focusRingType="exterior" id="bSy-gm-tsh">
                                         <rect key="frame" x="0.0" y="0.0" width="217" height="23"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                     </tableHeaderView>
@@ -170,7 +170,7 @@
                                                                         <constraints>
                                                                             <constraint firstAttribute="width" constant="96" id="8KS-ra-bm7"/>
                                                                         </constraints>
-                                                                        <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="pzF-1H-wju">
+                                                                        <textFieldCell key="cell" lineBreakMode="truncatingTail" selectable="YES" sendsActionOnEndEditing="YES" title="Table View Cell" id="pzF-1H-wju">
                                                                             <font key="font" metaFont="system"/>
                                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>

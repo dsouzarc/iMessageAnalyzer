@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9531" systemVersion="14F27" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9531"/>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="10116"/>
+        <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
+        <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="StartupViewController">
@@ -19,23 +22,29 @@
             <rect key="frame" x="0.0" y="0.0" width="544" height="491"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="whF-Eo-R3o">
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="whF-Eo-R3o">
                     <rect key="frame" x="296" y="458" width="230" height="17"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="226" id="QqA-nb-1Od"/>
+                    </constraints>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="iMessage Analyzer" id="OEK-z9-WWS">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VwF-bk-sCt">
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="VwF-bk-sCt">
                     <rect key="frame" x="14" y="458" width="183" height="17"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="179" id="tgj-2p-zGo"/>
+                    </constraints>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="left" title="Title" id="7uV-hf-0pF">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="d7a-Zy-47v">
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="d7a-Zy-47v">
                     <rect key="frame" x="201" y="425" width="325" height="17"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Ryan D'souza" id="Wbp-h0-cXV">
                         <font key="font" metaFont="system"/>
@@ -43,7 +52,7 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Hg0-Eg-0qT">
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Hg0-Eg-0qT">
                     <rect key="frame" x="14" y="425" width="183" height="17"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="left" title="Created by" id="hbN-NW-q6K">
                         <font key="font" metaFont="system"/>
@@ -51,7 +60,7 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TwG-fo-eNV">
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="TwG-fo-eNV">
                     <rect key="frame" x="14" y="384" width="183" height="17"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="left" title="Description" id="sZ6-wU-cSW">
                         <font key="font" metaFont="system"/>
@@ -59,7 +68,7 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4W9-bg-lnz">
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4W9-bg-lnz">
                     <rect key="frame" x="14" y="103" width="183" height="17"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="left" title="Source code" id="HR5-bm-b5f">
                         <font key="font" metaFont="system"/>
@@ -67,8 +76,11 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ruv-yG-mLM">
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="ruv-yG-mLM">
                     <rect key="frame" x="213" y="144" width="317" height="257"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="257" id="g7A-1G-kaK"/>
+                    </constraints>
                     <textFieldCell key="cell" alignment="center" allowsEditingTextAttributes="YES" id="j3j-eA-em0">
                         <font key="font" size="13" name=".HelveticaNeueDeskInterface-Regular"/>
                         <string key="title">Functions like Messages.app but includes an improved search and various features like viewing messages on any day, viewing the first messages of the conversation, and graphing and statistical analysis of all messages.                                    All calculations and analysis are performed locally, and nothing is upload to any server</string>
@@ -76,7 +88,7 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7Od-mP-wts">
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="7Od-mP-wts">
                     <rect key="frame" x="209" y="103" width="317" height="17"/>
                     <textFieldCell key="cell" alignment="right" title="github.com/dsouzarc" allowsEditingTextAttributes="YES" id="Zcz-Kh-rsQ">
                         <font key="font" size="13" name=".HelveticaNeueDeskInterface-Regular"/>
@@ -84,7 +96,7 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Cwt-LQ-yGz">
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Cwt-LQ-yGz">
                     <rect key="frame" x="14" y="70" width="183" height="17"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="left" title="Contact developer" id="etm-MG-PvW">
                         <font key="font" metaFont="system"/>
@@ -92,7 +104,7 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6OI-o1-wWR">
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="6OI-o1-wWR">
                     <rect key="frame" x="209" y="70" width="317" height="17"/>
                     <textFieldCell key="cell" alignment="right" title="dsouzarc@gmail.com" allowsEditingTextAttributes="YES" id="abn-lz-O1a">
                         <font key="font" size="13" name=".HelveticaNeueDeskInterface-Regular"/>
@@ -100,8 +112,11 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6pv-Vh-wNc">
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6pv-Vh-wNc">
                     <rect key="frame" x="383" y="9" width="153" height="32"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="141" id="nck-2e-QDB"/>
+                    </constraints>
                     <buttonCell key="cell" type="push" title="Continue" bezelStyle="rounded" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="8KL-y8-kKW">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
@@ -110,8 +125,11 @@
                         <action selector="continueButton:" target="-2" id="cMQ-JP-ySs"/>
                     </connections>
                 </button>
-                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cmI-P8-car">
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cmI-P8-car">
                     <rect key="frame" x="10" y="13" width="141" height="32"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="129" id="dEl-c2-Yv6"/>
+                    </constraints>
                     <buttonCell key="cell" type="push" title="Exit" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="6kD-fg-DsE">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
@@ -121,6 +139,42 @@
                     </connections>
                 </button>
             </subviews>
+            <constraints>
+                <constraint firstItem="4W9-bg-lnz" firstAttribute="leading" secondItem="Cwt-LQ-yGz" secondAttribute="leading" id="0pX-WJ-h4O"/>
+                <constraint firstItem="d7a-Zy-47v" firstAttribute="leading" secondItem="Hg0-Eg-0qT" secondAttribute="trailing" constant="8" symbolic="YES" id="29t-uC-T54"/>
+                <constraint firstItem="d7a-Zy-47v" firstAttribute="trailing" secondItem="7Od-mP-wts" secondAttribute="trailing" id="2dx-nG-TWF"/>
+                <constraint firstItem="4W9-bg-lnz" firstAttribute="baseline" secondItem="7Od-mP-wts" secondAttribute="baseline" id="9TJ-mX-tMO"/>
+                <constraint firstItem="VwF-bk-sCt" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="16" id="AU5-ks-Fvl"/>
+                <constraint firstItem="cmI-P8-car" firstAttribute="top" secondItem="Cwt-LQ-yGz" secondAttribute="bottom" constant="29" id="Fdb-9a-0aN"/>
+                <constraint firstItem="7Od-mP-wts" firstAttribute="leading" secondItem="4W9-bg-lnz" secondAttribute="trailing" constant="16" id="Gk0-vY-igz"/>
+                <constraint firstItem="7Od-mP-wts" firstAttribute="top" secondItem="ruv-yG-mLM" secondAttribute="bottom" constant="24" id="H9r-gT-v8P"/>
+                <constraint firstAttribute="trailing" secondItem="whF-Eo-R3o" secondAttribute="trailing" constant="20" symbolic="YES" id="I95-g0-HLh"/>
+                <constraint firstItem="VwF-bk-sCt" firstAttribute="leading" secondItem="Hg0-Eg-0qT" secondAttribute="leading" id="Jo0-5M-3aa"/>
+                <constraint firstItem="VwF-bk-sCt" firstAttribute="trailing" secondItem="Hg0-Eg-0qT" secondAttribute="trailing" id="KEt-Ai-0uG"/>
+                <constraint firstAttribute="trailing" secondItem="6pv-Vh-wNc" secondAttribute="trailing" constant="14" id="MAw-Ho-aSz"/>
+                <constraint firstItem="4W9-bg-lnz" firstAttribute="trailing" secondItem="Cwt-LQ-yGz" secondAttribute="trailing" id="Mif-Tv-O2W"/>
+                <constraint firstAttribute="trailing" secondItem="ruv-yG-mLM" secondAttribute="trailing" constant="16" id="O2y-TP-vfx"/>
+                <constraint firstItem="Hg0-Eg-0qT" firstAttribute="leading" secondItem="TwG-fo-eNV" secondAttribute="leading" id="OmQ-kJ-0gI"/>
+                <constraint firstItem="ruv-yG-mLM" firstAttribute="leading" secondItem="TwG-fo-eNV" secondAttribute="trailing" constant="20" id="Plx-b3-GdS"/>
+                <constraint firstItem="whF-Eo-R3o" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="16" id="Q4T-ZT-pvI"/>
+                <constraint firstItem="TwG-fo-eNV" firstAttribute="baseline" secondItem="ruv-yG-mLM" secondAttribute="firstBaseline" id="Rwg-P5-2Dl"/>
+                <constraint firstItem="TwG-fo-eNV" firstAttribute="trailing" secondItem="4W9-bg-lnz" secondAttribute="trailing" id="SZK-oF-hhA"/>
+                <constraint firstItem="TwG-fo-eNV" firstAttribute="top" secondItem="Hg0-Eg-0qT" secondAttribute="bottom" constant="24" id="UHg-d6-4My"/>
+                <constraint firstItem="Cwt-LQ-yGz" firstAttribute="leading" secondItem="cmI-P8-car" secondAttribute="leading" id="Zk6-2c-3aF"/>
+                <constraint firstItem="VwF-bk-sCt" firstAttribute="baseline" secondItem="whF-Eo-R3o" secondAttribute="baseline" id="aXA-ff-hrd"/>
+                <constraint firstItem="7Od-mP-wts" firstAttribute="leading" secondItem="6OI-o1-wWR" secondAttribute="leading" id="cXJ-Mv-AdE"/>
+                <constraint firstItem="whF-Eo-R3o" firstAttribute="trailing" secondItem="d7a-Zy-47v" secondAttribute="trailing" id="dVY-sd-uA4"/>
+                <constraint firstItem="7Od-mP-wts" firstAttribute="trailing" secondItem="6OI-o1-wWR" secondAttribute="trailing" id="fT7-tx-whW"/>
+                <constraint firstItem="Cwt-LQ-yGz" firstAttribute="top" secondItem="4W9-bg-lnz" secondAttribute="bottom" constant="16" id="faS-YG-nmn"/>
+                <constraint firstItem="Hg0-Eg-0qT" firstAttribute="top" secondItem="VwF-bk-sCt" secondAttribute="bottom" constant="16" id="lDP-t2-ASW"/>
+                <constraint firstItem="Cwt-LQ-yGz" firstAttribute="baseline" secondItem="6OI-o1-wWR" secondAttribute="baseline" id="o7d-ez-fm5"/>
+                <constraint firstItem="Hg0-Eg-0qT" firstAttribute="trailing" secondItem="TwG-fo-eNV" secondAttribute="trailing" id="ogD-zL-a3b"/>
+                <constraint firstItem="VwF-bk-sCt" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="16" id="pMS-mE-dSB"/>
+                <constraint firstItem="6pv-Vh-wNc" firstAttribute="top" secondItem="6OI-o1-wWR" secondAttribute="bottom" constant="33" id="uBh-zQ-RK3"/>
+                <constraint firstAttribute="bottom" secondItem="cmI-P8-car" secondAttribute="bottom" constant="20" symbolic="YES" id="uXT-3N-zlk"/>
+                <constraint firstItem="TwG-fo-eNV" firstAttribute="leading" secondItem="4W9-bg-lnz" secondAttribute="leading" id="wRd-LK-orL"/>
+                <constraint firstItem="Hg0-Eg-0qT" firstAttribute="baseline" secondItem="d7a-Zy-47v" secondAttribute="baseline" id="wsx-Mf-kBx"/>
+            </constraints>
             <point key="canvasLocation" x="507" y="346"/>
         </customView>
     </objects>

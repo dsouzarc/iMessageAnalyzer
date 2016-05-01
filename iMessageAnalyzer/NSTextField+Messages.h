@@ -7,7 +7,7 @@
 //
 
 #import <Cocoa/Cocoa.h>
-
+#import "RSVerticallyCenteredTextFieldCell.h"
 @protocol NSTextField_MessagesDelegate <NSObject>
 
 - (void) clickedOnTextField:(int32_t)textFieldNumber;

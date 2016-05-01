@@ -19,6 +19,6 @@
 
 @interface StartupViewController : NSViewController
 
-@property (weak, nonatomic) id<StartupViewControllerDelegate> delegate;
+@property (weak, nonatomic) id<StartupViewControllerDelegate, NSWindowDelegate> delegate;
 
 @end

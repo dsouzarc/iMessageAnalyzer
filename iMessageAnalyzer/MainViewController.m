@@ -125,7 +125,8 @@ static NSString *orderByMostMessages = @"Most messages";
         self.lastChosenPerson = self.searchConversationChats[0];
         self.currentConversationChats = [self.messageManager getAllMessagesForPerson:self.lastChosenPerson];
         [self.messagesTableView reloadData];
-        [self.contactNameTextField setStringValue:[NSString stringWithFormat:@"%@ %@", self.lastChosenPerson.personName, self.lastChosenPerson.number]];
+        
+        [self updateContactNameTextField];
     }
     
     [self.messagesTableView setSelectionHighlightStyle:NSTableViewSelectionHighlightStyleNone];
@@ -136,6 +137,31 @@ static NSString *orderByMostMessages = @"Most messages";
     [self.orderByPopUpButton removeAllItems];
     [self.orderByPopUpButton addItemWithTitle:orderByRecent];
     //[self.orderByPopUpButton addItemWithTitle:orderByMostMessages];
+    
+    [self.contactsTableView setHeaderView:nil];
+}
+
+- (void) updateContactNameTextField
+{
+    NSString *name = self.lastChosenPerson.personName;
+    NSCharacterSet* notDigits = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
+    if ([name rangeOfCharacterFromSet:notDigits].location == NSNotFound) {
+        ECPhoneNumberFormatter *formatter = [[ECPhoneNumberFormatter alloc] init];
+        name = [formatter stringForObjectValue:name];
+    }
+    
+    NSString *number = self.lastChosenPerson.number;
+    if ([number rangeOfCharacterFromSet:notDigits].location == NSNotFound) {
+        ECPhoneNumberFormatter *formatter = [[ECPhoneNumberFormatter alloc] init];
+        number = [formatter stringForObjectValue:number];
+    }
+    
+    if([name isEqualToString:number]) {
+        [self.contactNameTextField setStringValue:name];
+    }
+    else {
+        [self.contactNameTextField setStringValue:[NSString stringWithFormat:@"%@ %@", name, number]];
+    }
 }
 
 
@@ -167,9 +193,13 @@ static NSString *orderByMostMessages = @"Most messages";
         int totalSent = (int) statistics.numberOfSentMessages; // + statistics.numberOfSentAttachments;
         int totalReceived = (int) statistics.numberOfReceivedMessages; // + statistics.numberOfReceivedAttachments;
         
-        [self.simpleAnalyticsViewController.numberOfSentMessages setStringValue:[NSString stringWithFormat:@"%d", totalSent]];
-        [self.simpleAnalyticsViewController.numberOfReceivedMessages setStringValue:[NSString stringWithFormat:@"%d", totalReceived]];
-        [self.simpleAnalyticsViewController.totalNumberOfMessages setStringValue:[NSString stringWithFormat:@"%d", totalReceived + totalSent]];
+        NSString *totalSentText = [NSNumberFormatter localizedStringFromNumber:@(totalSent) numberStyle:NSNumberFormatterDecimalStyle];
+        NSString *totalReceivedText = [NSNumberFormatter localizedStringFromNumber:@(totalReceived) numberStyle:NSNumberFormatterDecimalStyle];
+        NSString *totalText = [NSNumberFormatter localizedStringFromNumber:@(totalSent + totalReceived) numberStyle:NSNumberFormatterDecimalStyle];
+        
+        [self.simpleAnalyticsViewController.numberOfSentMessages setStringValue:totalSentText];
+        [self.simpleAnalyticsViewController.numberOfReceivedMessages setStringValue:totalReceivedText];
+        [self.simpleAnalyticsViewController.totalNumberOfMessages setStringValue:totalText];
     }
     
     NSView *selectedView = [self.contactsTableView viewAtColumn:0 row:self.lastChosenPersonIndex makeIfNecessary:YES];
@@ -327,6 +357,10 @@ static NSString *orderByMostMessages = @"Most messages";
         [timeField setBordered:NO];
         
         NSTextField_Messages *messageField = [[NSTextField_Messages alloc] initWithFrame:frame];
+        
+        RSVerticallyCenteredTextFieldCell *verticleCenterCell = [[RSVerticallyCenteredTextFieldCell alloc] initTextCell:@""];
+        [messageField setCell:verticleCenterCell];
+        
         [messageField setTextFieldNumber:(int)row];
         [messageField setTag:100];
         [messageField setDelegate:self];
@@ -371,7 +405,16 @@ static NSString *orderByMostMessages = @"Most messages";
             [messageField setAttributedStringValue:attributedString];
         }
         else {
-            [messageField setStringValue:[NSString stringWithFormat:@"  %@", message.messageText]];
+            NSFont *customFont = [NSFont fontWithName:@"Helvetica Neue" size:13.0];
+            NSMutableAttributedString *customString;
+            if(message.messageText.length < 55) {
+                customString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"  %@", message.messageText]];
+            }
+            else {
+                customString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@", message.messageText]];
+            }
+            [customString addAttribute:NSFontNameAttribute value:customFont range:NSMakeRange(0, customString.length)];
+            [messageField setAttributedStringValue:customString];
         }
 
         NSSize goodFrame = [messageField.cell cellSizeForBounds:frame];
@@ -404,9 +447,11 @@ static NSString *orderByMostMessages = @"Most messages";
         }
         
         [messageField setWantsLayer:YES];
-        [messageField.layer setCornerRadius:12.0f];
+        [messageField.layer setCornerRadius:8.0f];
         [messageField setFocusRingType:NSFocusRingTypeNone];
         [messageField setBordered:NO];
+        
+        [messageField setSelectable:YES];
 
         [encompassingView addSubview:messageField];
         [encompassingView addSubview:timeField];
@@ -419,13 +464,29 @@ static NSString *orderByMostMessages = @"Most messages";
         Person *person = self.searchConversationChats[row];
         
         if(person.personName.length > 0) {
-            [cell.contactName setStringValue:person.personName];
+            NSCharacterSet* notDigits = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
+            if ([person.personName rangeOfCharacterFromSet:notDigits].location == NSNotFound) {
+                ECPhoneNumberFormatter *formatter = [[ECPhoneNumberFormatter alloc] init];
+                [cell.contactName setStringValue:[formatter stringForObjectValue:person.personName]];
+            }
+            else {
+                [cell.contactName setStringValue:person.personName];
+            }
         }
         else {
+
             [cell.contactName setStringValue:person.number];
         }
-        [cell.contactNumber setStringValue:person.number];
-
+        
+        NSCharacterSet* notDigits = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
+        if ([person.number rangeOfCharacterFromSet:notDigits].location == NSNotFound) {
+            ECPhoneNumberFormatter *formatter = [[ECPhoneNumberFormatter alloc] init];
+            [cell.contactNumber setStringValue:[formatter stringForObjectValue:person.number]];
+        }
+        else {
+            [cell.contactNumber setStringValue:person.number];
+        }
+        
         NSMutableArray *messages = [self.messageManager getAllMessagesForPerson:person];
         if(messages && messages.count > 0) {
             Message *lastMessage = messages[messages.count - 1];
@@ -485,7 +546,7 @@ static NSString *orderByMostMessages = @"Most messages";
         self.lastChosenPerson = self.searchConversationChats[row];
         self.currentConversationChats = [self.messageManager getAllMessagesForPerson:self.lastChosenPerson];
         
-        [self.contactNameTextField setStringValue:[NSString stringWithFormat:@"%@ %@", self.lastChosenPerson.personName, self.lastChosenPerson.number]];
+        [self updateContactNameTextField];
         
         [self.messagesTableView reloadData];
         
@@ -631,7 +692,8 @@ static NSString *orderByMostMessages = @"Most messages";
     if(self.searchConversationChats.count > 0 && self.searchConversationChats[0] != self.lastChosenPerson) {
         self.lastChosenPerson = self.searchConversationChats[0];
         self.currentConversationChats = [self.messageManager getAllMessagesForPerson:self.lastChosenPerson];
-        [self.contactNameTextField setStringValue:[NSString stringWithFormat:@"%@ %@", self.lastChosenPerson.personName, self.lastChosenPerson.number]];
+        
+        [self updateContactNameTextField];
         [self.messagesTableView reloadData];
     }
     else if(self.searchConversationChats.count == 0) {

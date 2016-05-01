@@ -36,6 +36,7 @@
 		946D2A6C1BE55BF900270BF0 /* Statistics.m in Sources */ = {isa = PBXBuildFile; fileRef = 946D2A6B1BE55BF900270BF0 /* Statistics.m */; };
 		946D2A6F1BE5DBC800270BF0 /* TextTableCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 946D2A6E1BE5DBC800270BF0 /* TextTableCellView.m */; };
 		946D2A711BE5EAA700270BF0 /* TextTableCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 946D2A701BE5EAA700270BF0 /* TextTableCellView.xib */; };
+		9479353F1CD6A51600A96EA0 /* RSVerticallyCenteredTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9479353D1CD6A51600A96EA0 /* RSVerticallyCenteredTextFieldCell.m */; };
 		947B53CB1BE1AA2700484D66 /* ChatTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 947B53C81BE1AA2700484D66 /* ChatTableViewCell.xib */; };
 		947B53CC1BE1AA2700484D66 /* ChatTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 947B53CA1BE1AA2700484D66 /* ChatTableViewCell.m */; };
 		9480B1601BF7B48900ECDE38 /* more_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 9480B15F1BF7B48900ECDE38 /* more_icon.png */; };
@@ -44,6 +45,9 @@
 		9480B1691BF7B60700ECDE38 /* MoreAnalysisViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9480B1671BF7B60700ECDE38 /* MoreAnalysisViewController.m */; };
 		9480B16A1BF7B60700ECDE38 /* MoreAnalysisViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9480B1681BF7B60700ECDE38 /* MoreAnalysisViewController.xib */; };
 		948AE96A1BF976170031D97C /* WordFrequencyHeapDataStructure.m in Sources */ = {isa = PBXBuildFile; fileRef = 948AE9691BF976170031D97C /* WordFrequencyHeapDataStructure.m */; };
+		94A433781CD6BF1600F7D536 /* ECPhoneNumberFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A433771CD6BF1600F7D536 /* ECPhoneNumberFormatter.m */; };
+		94A433791CD6BF1600F7D536 /* ECPhoneNumberFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A433771CD6BF1600F7D536 /* ECPhoneNumberFormatter.m */; };
+		94A4337A1CD6BF1600F7D536 /* ECPhoneNumberFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A433771CD6BF1600F7D536 /* ECPhoneNumberFormatter.m */; };
 		94A9923F1BBDC733003BA1D5 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A9923E1BBDC733003BA1D5 /* AppDelegate.m */; };
 		94A992451BBDC733003BA1D5 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A992441BBDC733003BA1D5 /* ViewController.m */; };
 		94A992471BBDC733003BA1D5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 94A992461BBDC733003BA1D5 /* Assets.xcassets */; };
@@ -186,6 +190,8 @@
 		946D2A6D1BE5DBC800270BF0 /* TextTableCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextTableCellView.h; sourceTree = "<group>"; };
 		946D2A6E1BE5DBC800270BF0 /* TextTableCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextTableCellView.m; sourceTree = "<group>"; };
 		946D2A701BE5EAA700270BF0 /* TextTableCellView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TextTableCellView.xib; sourceTree = "<group>"; };
+		9479353D1CD6A51600A96EA0 /* RSVerticallyCenteredTextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSVerticallyCenteredTextFieldCell.m; sourceTree = "<group>"; };
+		9479353E1CD6A51600A96EA0 /* RSVerticallyCenteredTextFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSVerticallyCenteredTextFieldCell.h; sourceTree = "<group>"; };
 		947B53C81BE1AA2700484D66 /* ChatTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChatTableViewCell.xib; sourceTree = "<group>"; };
 		947B53C91BE1AA2700484D66 /* ChatTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatTableViewCell.h; sourceTree = "<group>"; };
 		947B53CA1BE1AA2700484D66 /* ChatTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatTableViewCell.m; sourceTree = "<group>"; };
@@ -198,6 +204,8 @@
 		9480B1681BF7B60700ECDE38 /* MoreAnalysisViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MoreAnalysisViewController.xib; sourceTree = "<group>"; };
 		948AE9681BF976170031D97C /* WordFrequencyHeapDataStructure.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WordFrequencyHeapDataStructure.h; sourceTree = "<group>"; };
 		948AE9691BF976170031D97C /* WordFrequencyHeapDataStructure.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WordFrequencyHeapDataStructure.m; sourceTree = "<group>"; };
+		94A433761CD6BF1600F7D536 /* ECPhoneNumberFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECPhoneNumberFormatter.h; sourceTree = "<group>"; };
+		94A433771CD6BF1600F7D536 /* ECPhoneNumberFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ECPhoneNumberFormatter.m; sourceTree = "<group>"; };
 		94A9923A1BBDC733003BA1D5 /* iMessageAnalyzer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iMessageAnalyzer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		94A9923D1BBDC733003BA1D5 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		94A9923E1BBDC733003BA1D5 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -285,6 +293,8 @@
 		941C04F91C030086002E2FAB /* NSTextField for Messages */ = {
 			isa = PBXGroup;
 			children = (
+				9479353D1CD6A51600A96EA0 /* RSVerticallyCenteredTextFieldCell.m */,
+				9479353E1CD6A51600A96EA0 /* RSVerticallyCenteredTextFieldCell.h */,
 				941C04F11C028B12002E2FAB /* NSTextField+Messages.h */,
 				941C04F21C028B12002E2FAB /* NSTextField+Messages.m */,
 			);
@@ -541,6 +551,8 @@
 		947B53DB1BE53F6500484D66 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				94A433761CD6BF1600F7D536 /* ECPhoneNumberFormatter.h */,
+				94A433771CD6BF1600F7D536 /* ECPhoneNumberFormatter.m */,
 				94DAC4A41BE7DAF90016ED35 /* calendar-icon.png */,
 				944E19571BE540E9005132E1 /* blank_profile_outline.png */,
 				9480B15F1BF7B48900ECDE38 /* more_icon.png */,
@@ -812,7 +824,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 94A992351BBDC733003BA1D5 /* Build configuration list for PBXProject "iMessageAnalyzer" */;
+			buildConfigurationList = 94A992351BBDC733003BA1D5 /* Build configuration list for PBXProject "Ryan Dsouza" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -935,6 +947,7 @@
 				941C04F71C02C586002E2FAB /* ViewAttachmentsViewController.m in Sources */,
 				940136D81C05C7CF003AF393 /* TemporaryDatabaseManager.m in Sources */,
 				9438FD111BE07D2600B239BE /* MainViewController.m in Sources */,
+				9479353F1CD6A51600A96EA0 /* RSVerticallyCenteredTextFieldCell.m in Sources */,
 				94F01DDD1BE852CF00B47D9D /* CalendarPopUpViewController.m in Sources */,
 				946D2A6C1BE55BF900270BF0 /* Statistics.m in Sources */,
 				942A0B471C37069A00C89982 /* Constants.m in Sources */,
@@ -950,6 +963,7 @@
 				94F3AC411BC481B900948A23 /* Message.m in Sources */,
 				947B53CC1BE1AA2700484D66 /* ChatTableViewCell.m in Sources */,
 				9480B1691BF7B60700ECDE38 /* MoreAnalysisViewController.m in Sources */,
+				94A433781CD6BF1600F7D536 /* ECPhoneNumberFormatter.m in Sources */,
 				9455450B1C423FA10099CF3A /* StartupViewController.m in Sources */,
 				941C04F31C028B12002E2FAB /* NSTextField+Messages.m in Sources */,
 				94F3AC471BC7282A00948A23 /* DatabaseManager.m in Sources */,
@@ -968,6 +982,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				94A433791CD6BF1600F7D536 /* ECPhoneNumberFormatter.m in Sources */,
 				94A992551BBDC734003BA1D5 /* iMessageAnalyzerTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -976,6 +991,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				94A4337A1CD6BF1600F7D536 /* ECPhoneNumberFormatter.m in Sources */,
 				94A992601BBDC734003BA1D5 /* iMessageAnalyzerUITests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1177,7 +1193,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		94A992351BBDC733003BA1D5 /* Build configuration list for PBXProject "iMessageAnalyzer" */ = {
+		94A992351BBDC733003BA1D5 /* Build configuration list for PBXProject "Ryan Dsouza" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				94A992621BBDC734003BA1D5 /* Debug */,

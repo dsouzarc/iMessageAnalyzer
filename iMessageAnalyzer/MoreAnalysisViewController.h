@@ -21,6 +21,7 @@
 #import "Statistics.h"
 #import "Message.h"
 
+#import "RSVerticallyCenteredTextFieldCell.h"
 
 /** Shows more analysis screen that includes graph */
 

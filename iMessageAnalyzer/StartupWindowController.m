@@ -44,7 +44,10 @@
 }
 
 - (void)windowDidLoad {
+    
     [super windowDidLoad];
+    //[self.window setContentSize:NSMakeSize(544, 650)];
+    //[self.window setMaxSize:NSMakeSize(544, 650)];
     
     [self.window setShowsResizeIndicator:NO];
     [self.window setTitle:@"iMessage Analyzer"];
