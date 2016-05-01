@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9532" systemVersion="14F1605" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9532"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="10116"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="MainViewController">
@@ -43,18 +43,18 @@
                                 <scrollView autohidesScrollers="YES" horizontalLineScroll="92" horizontalPageScroll="10" verticalLineScroll="92" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wz5-YH-6OO">
                                     <rect key="frame" x="0.0" y="9" width="219" height="645"/>
                                     <clipView key="contentView" id="K04-yK-RYh">
-                                        <rect key="frame" x="1" y="17" width="217" height="627"/>
+                                        <rect key="frame" x="1" y="0.0" width="217" height="644"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <subviews>
                                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="90" rowSizeStyle="automatic" headerView="bSy-gm-tsh" viewBased="YES" id="S3H-Yk-c4c">
-                                                <rect key="frame" x="0.0" y="0.0" width="217" height="627"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="217" height="621"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <size key="intercellSpacing" width="3" height="2"/>
                                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                                 <tableColumns>
                                                     <tableColumn identifier="chatsIdentifier" width="214" minWidth="40" maxWidth="1000" id="0CW-xy-QTL">
-                                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Chats">
+                                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border">
                                                             <font key="font" metaFont="smallSystem"/>
                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -77,16 +77,16 @@
                                         </subviews>
                                         <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     </clipView>
-                                    <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="zhX-71-Agt">
+                                    <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="zhX-71-Agt">
                                         <rect key="frame" x="1" y="1" width="0.0" height="16"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                     </scroller>
-                                    <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="GQV-Gx-nE0">
+                                    <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="GQV-Gx-nE0">
                                         <rect key="frame" x="-15" y="17" width="16" height="0.0"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                     </scroller>
                                     <tableHeaderView key="headerView" id="bSy-gm-tsh">
-                                        <rect key="frame" x="0.0" y="0.0" width="217" height="17"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="217" height="23"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                     </tableHeaderView>
                                 </scrollView>
@@ -196,11 +196,11 @@
                                         </subviews>
                                         <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     </clipView>
-                                    <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="PfC-Z1-Uxq">
+                                    <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="PfC-Z1-Uxq">
                                         <rect key="frame" x="1" y="-15" width="0.0" height="16"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                     </scroller>
-                                    <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="NZa-nT-qO8">
+                                    <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="NZa-nT-qO8">
                                         <rect key="frame" x="224" y="17" width="15" height="102"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                     </scroller>

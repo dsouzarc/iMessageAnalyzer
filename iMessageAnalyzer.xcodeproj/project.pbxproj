@@ -800,6 +800,7 @@
 				TargetAttributes = {
 					94A992391BBDC733003BA1D5 = {
 						CreatedOnToolsVersion = 7.0.1;
+						DevelopmentTeam = Q7N3L673D8;
 					};
 					94A9924F1BBDC734003BA1D5 = {
 						CreatedOnToolsVersion = 7.0.1;
@@ -1089,6 +1090,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Developer ID Application";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1096,7 +1098,7 @@
 				);
 				INFOPLIST_FILE = iMessageAnalyzer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ryan.iMessageAnalyzer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -1106,6 +1108,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Developer ID Application";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1113,7 +1116,7 @@
 				);
 				INFOPLIST_FILE = iMessageAnalyzer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ryan.iMessageAnalyzer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

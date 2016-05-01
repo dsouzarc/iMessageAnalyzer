@@ -135,7 +135,7 @@ static NSString *orderByMostMessages = @"Most messages";
     [self.orderByPopUpButton setHidden:NO];
     [self.orderByPopUpButton removeAllItems];
     [self.orderByPopUpButton addItemWithTitle:orderByRecent];
-    [self.orderByPopUpButton addItemWithTitle:orderByMostMessages];
+    //[self.orderByPopUpButton addItemWithTitle:orderByMostMessages];
 }
 
 
@@ -297,7 +297,7 @@ static NSString *orderByMostMessages = @"Most messages";
         }
         
         [self.sizingField setStringValue:text];
-        return [self.sizingField.cell cellSizeForBounds:self.sizingField.frame].height + 30;
+        return [self.sizingField.cell cellSizeForBounds:self.sizingField.frame].height + 40;
     
         /*[self.sizingView setString:text];
         [self.sizingView sizeToFit];
@@ -384,10 +384,12 @@ static NSString *orderByMostMessages = @"Most messages";
             [messageField setFrameOrigin:CGPointMake(tableColumn.width - messageField.frame.size.width, 15)];
             
             if(message.isIMessage) {
-                [messageField setBackgroundColor:[NSColor blueColor]];
+                [messageField setBackgroundColor:[NSColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0]];
+                //[messageField setBackgroundColor:[NSColor blueColor]];
             }
             else {
-                [messageField setBackgroundColor:[NSColor greenColor]];
+                [messageField setBackgroundColor:[NSColor colorWithRed:90.0/255.0 green:212/255.0 blue:39.0/255.0 alpha:1.0]];
+                //[messageField setBackgroundColor:[NSColor greenColor]];
             }
             [messageField setTextColor:[NSColor whiteColor]];
             
@@ -395,13 +397,14 @@ static NSString *orderByMostMessages = @"Most messages";
         }
         else {
             [messageField setFrameOrigin:CGPointMake(0, 15)];
-            [messageField setBackgroundColor:[NSColor lightGrayColor]];
+            [messageField setBackgroundColor:[NSColor colorWithRed:199.0/255.0 green:199.0/255.0 blue:204/255.0 alpha:1.0]];
+            //[messageField setBackgroundColor:[NSColor lightGrayColor]];
             [messageField setTextColor:[NSColor blackColor]];
             [timeField setFrameOrigin:CGPointMake(2, 0)];
         }
         
         [messageField setWantsLayer:YES];
-        [messageField.layer setCornerRadius:14.0f];
+        [messageField.layer setCornerRadius:12.0f];
         [messageField setFocusRingType:NSFocusRingTypeNone];
         [messageField setBordered:NO];
 
@@ -487,6 +490,9 @@ static NSString *orderByMostMessages = @"Most messages";
         [self.messagesTableView reloadData];
         
         self.lastSearchIndex = -1;
+        
+        [self doubleClickedContactCell:nil];
+        
         return YES;
     }
     
