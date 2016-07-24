@@ -66,6 +66,28 @@ static Constants *constants;
 
 # pragma mark DATE FROM INFORMATION
 
+- (NSDate*) dateAtBeginningOfDay:(NSDate*)date
+{
+    NSDateComponents *components = [self dateComponentsForDay:date];
+    [components setHour:0];
+    [components setHour:0];
+    [components setSecond:1];
+    
+    return [self.calendar dateFromComponents:components];
+}
+
+- (NSDate*) dateAtEndOfDay:(NSDate*)date
+{
+    NSDateComponents *components = [self dateComponentsForDay:date];
+    [components setHour:23];
+    [components setHour:59];
+    [components setSecond:59];
+    
+    [components setDay:[components day] - 2];
+    
+    return [self.calendar dateFromComponents:components];
+}
+
 - (NSDate*) dateAtEndOfMonth:(NSDate*)date
 {
     NSDateComponents *components = [self dateComponentsForDay:date];
@@ -310,6 +332,12 @@ static Constants *constants;
 + (BOOL) isConversationStarter:(int)timeDifference
 {
     return timeDifference >= MIN_CONVERSATION_STARTER;
+}
+
++ (NSDictionary*) getMessageWithAttachmentAttributes
+{
+    return [NSDictionary dictionaryWithObjectsAndKeys:[NSColor yellowColor], NSForegroundColorAttributeName,
+            [NSNumber numberWithInt:NSUnderlineStyleSingle], NSUnderlineStyleAttributeName, nil];
 }
 
 @end

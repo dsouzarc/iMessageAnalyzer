@@ -7,8 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <Cocoa/Cocoa.h>
 
-const static BOOL DEVELOPMENT = NO;
+const static BOOL DEVELOPMENT = YES;
 const static NSString *pathToDevelopmentDB = @"/Users/Ryan/FLV MP4/iMessage/iphone_chat.db";
 
 //Range for a message to be considered a double message - 3min to 11 hours
@@ -44,6 +45,9 @@ const static int MIN_CONVERSATION_STARTER = MAX_DOUBLE_MESSAGE + 1;
 
 #pragma mark DATE FROM INFORMATION
 
+- (NSDate*) dateAtBeginningOfDay:(NSDate*)date;
+- (NSDate*) dateAtEndOfDay:(NSDate*)date;
+
 - (NSDate*) getDateAtBeginningOfYear:(NSDate*)inputDate;
 - (NSDate*) getDateAtEndOfYear:(NSDate*)inputDate;
 
@@ -72,5 +76,7 @@ const static int MIN_CONVERSATION_STARTER = MAX_DOUBLE_MESSAGE + 1;
 + (NSString*) getStrippedWord:(NSString*)original;
 + (BOOL) isDoubleMessage:(int)timeDifference;
 + (BOOL) isConversationStarter:(int)timeDifference;
+
++ (NSDictionary*) getMessageWithAttachmentAttributes;
 
 @end
