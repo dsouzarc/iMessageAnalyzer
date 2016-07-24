@@ -261,23 +261,27 @@ static NSString *orderByMostMessages = @"Most messages";
     }
 }
 
-- (void) dateChosen:(NSDate *)chosenDate
+- (void) resetToAll:(BOOL)resetToAll
 {
-    self.calendarChosenDate = chosenDate;
+    if(resetToAll) {
+        [self.calendarPopover performClose:@"close"];
+    }
+}
+
+- (void) fromDayChosen:(NSDate *)fromDayChosen toDayChosen:(NSDate *)toDayChosen
+{
+    self.calendarChosenDate = fromDayChosen;
     
     //Reset to show all messages
     if(!self.calendarChosenDate) {
         self.currentConversationChats = [self.messageManager getAllMessagesForPerson:self.lastChosenPerson];
+        [self.calendarPopover performClose:@"close"];
     }
     else {
-        self.currentConversationChats = [self.messageManager getAllMessagesForPerson:self.lastChosenPerson onDay:self.calendarChosenDate];
+        self.currentConversationChats = [self.messageManager getAllMessagesForPerson:self.lastChosenPerson fromDay:fromDayChosen toDay:toDayChosen];
     }
     
     [self.messagesTableView reloadData];
-    
-    if(!chosenDate) {
-        [self.calendarPopover performClose:@"close"];
-    }
 }
 
 - (void) wantsMoreAnalysis
