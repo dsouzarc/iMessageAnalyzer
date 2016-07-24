@@ -33,6 +33,8 @@
 
 - (NSMutableArray*) getAllMessagesForPerson:(Person*)person;
 - (NSMutableArray*) getAllMessagesForPerson:(Person*)person onDay:(NSDate*)day;
+- (NSMutableArray*) getAllMessagesForPerson:(Person *)person fromDay:(NSDate *)fromDay toDay:(NSDate *)toDay;
+- (NSMutableArray*) getAllMessagesForPerson:(Person *)person startTime:(long)startTime endTime:(long)endTime;
 
 - (int32_t) getMessageCountWithPersonOnDate:(NSDate*)date person:(Person*)person;
 - (int32_t) getMessageCountOnDate:(NSDate*)date;
