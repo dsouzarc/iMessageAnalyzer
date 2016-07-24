@@ -93,7 +93,6 @@
     if(self) {
         self.person = person;
         self.messages = messages;
-        
         self.messagesToDisplay = messages;
         self.databaseManager = databaseManager;
 
@@ -113,8 +112,7 @@
         self.friendWordsAndFrequencies = [[NSMutableArray alloc] init];
         self.friendWordsAndFrequenciesSearch = [[NSMutableArray alloc] init];
         
-        self.messageWithAttachmentAttributes = [NSDictionary dictionaryWithObjectsAndKeys:[NSColor yellowColor], NSForegroundColorAttributeName,
-                                                [NSNumber numberWithInt:NSUnderlineStyleSingle], NSUnderlineStyleAttributeName, nil];
+        self.messageWithAttachmentAttributes = [Constants getMessageWithAttachmentAttributes];
     }
     
     return self;
@@ -179,6 +177,8 @@
             
             //First time it's run
             if(self.messagesToDisplay.count == self.messages.count) {
+                
+                NSLog(@"HERE NOW");
                 [self setTextFieldLong:self.myWordCount forTag:12];
                 [self setTextFieldLong:self.friendCount forTag:16];
                 [self setTextFieldLong:(self.myWordCount + self.friendCount) forTag:20];
@@ -196,7 +196,6 @@
                     [self setTextFieldDouble:self.friendAverageWordCountPerMessage forTag:31];
                     [self setTextFieldDouble:average forTag:32];
                 }
-                
             }
             else {
                 [self setTextFieldText:[NSString stringWithFormat:@"Words on %@", [self.dateFormatter stringFromDate:self.calendarChosenDate]] forTag:2];
@@ -403,7 +402,7 @@
 
         [messageField setDrawsBackground:YES];
         [messageField setWantsLayer:YES];
-        [messageField setTextFieldNumber:row];
+        [messageField setTextFieldNumber:(int)row];
         [messageField setTag:100];
         [messageField setDelegate:self];
         
@@ -626,6 +625,49 @@
     return NO;
 }
 
+- (NSMutableArray*) getMessagesBetweenDateRange:(NSDate*)startDate endDate:(NSDate*)endDate
+{
+    NSMutableArray *messages = [[NSMutableArray alloc] init];
+    
+    self.person.secondaryStatistics = [[Statistics alloc] init];
+    
+    for(Message *message in self.messages) {
+        NSComparisonResult compareStart = [startDate compare:message.dateSent];
+        
+        //message.dateSent came before
+        if(compareStart == NSOrderedDescending) {
+            continue;
+        }
+        
+        NSComparisonResult compareEnd = [endDate compare:message.dateSent];
+        if(compareEnd == NSOrderedAscending) {
+            return messages;
+        }
+        
+        NSArray *words = [message.messageText componentsSeparatedByString:@" "];
+        
+        if(message.isFromMe) {
+            self.person.secondaryStatistics.numberOfSentMessages++;
+            self.person.secondaryStatistics.numberOfSentWords += words.count;
+            
+            if(message.hasAttachment) {
+                self.person.secondaryStatistics.numberOfSentAttachments++;
+            }
+        }
+        else {
+            self.person.secondaryStatistics.numberOfReceivedMessages++;
+            self.person.secondaryStatistics.numberOfReceivedWords += words.count;
+            
+            if(message.hasAttachment) {
+                self.person.secondaryStatistics.numberOfReceivedAttachments++;
+            }
+        }
+        
+        [messages addObject:message];
+    }
+    
+    return messages;
+}
 
 /****************************************************************
  *
@@ -639,13 +681,23 @@ int tempCounter = 2;
 
 - (void) datePickerCell:(NSDatePickerCell *)aDatePickerCell validateProposedDateValue:(NSDate *__autoreleasing  _Nonnull *)proposedDateValue timeInterval:(NSTimeInterval *)proposedTimeInterval
 {
-    if(self.calendarChosenDate == *proposedDateValue) {
+    NSDate *startDay = *proposedDateValue;
+    NSDate *endDay = [startDay dateByAddingTimeInterval:*proposedTimeInterval];
+    
+    //If the date chosen is the same day (not a range) and it's already displayed, don't do anything
+    if(self.calendarChosenDate == startDay) { //TODO: Store end date so we can do an "and and" check
         return;
     }
     
-    self.calendarChosenDate = *proposedDateValue;
+    //TODO: For loop through all messages between startDay and endDay
+    self.calendarChosenDate = startDay;
     
-    self.messagesToDisplay = [self.databaseManager getAllMessagesForPerson:self.person onDay:self.calendarChosenDate];
+    //self.messagesToDisplay = [self.databaseManager getAllMessagesForPerson:self.person onDay:self.calendarChosenDate];
+    startDay = [[Constants instance] dateAtBeginningOfDay:startDay];
+    endDay = [[Constants instance] dateAtEndOfDay:endDay];
+    self.messagesToDisplay = [self getMessagesBetweenDateRange:startDay endDate:endDay];
+    
+    NSLog(@"ANALYZING: %@\t%@", [self.dateFormatter stringFromDate:startDay], [self.dateFormatter stringFromDate:endDay]);
     
     [self dealWithWordFrequencies];
     [self.messagesTableView reloadData];
@@ -664,6 +716,8 @@ int tempCounter = 2;
     }
     
     else if(self.person.secondaryStatistics) {
+        
+        //HERE
         Statistics *stat = self.person.secondaryStatistics;
         long totalSent = stat.numberOfSentMessages; //+ stat.numberOfSentAttachments;
         long totalReceived = stat.numberOfReceivedMessages;// + stat.numberOfReceivedAttachments;
@@ -672,8 +726,8 @@ int tempCounter = 2;
         [self setTextFieldLong:totalReceived forTag:15];
         [self setTextFieldLong:(totalSent + totalReceived) forTag:19];
         
-        self.myAverageWordCountPerMessage = (double) self.myWordCount / totalSent;
-        self.friendAverageWordCountPerMessage = (double) self.friendCount / totalReceived;
+        self.myAverageWordCountPerMessage = (double) stat.numberOfSentWords / stat.numberOfSentMessages;
+        self.friendAverageWordCountPerMessage = (double) stat.numberOfReceivedWords / stat.numberOfReceivedMessages;
         double average = (self.myAverageWordCountPerMessage + self.friendAverageWordCountPerMessage) / 2;
         
         [self setTextFieldDouble:self.myAverageWordCountPerMessage forTag:33];
