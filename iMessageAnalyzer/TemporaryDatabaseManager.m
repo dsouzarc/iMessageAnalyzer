@@ -201,6 +201,13 @@ static TemporaryDatabaseManager *databaseManager;
 
 # pragma mark Get my messages
 
+- (NSMutableArray*) getAllMessagesForPerson:(Person *)person fromDay:(NSDate *)fromDay toDay:(NSDate*)toDay
+{
+    long startTime = [[Constants instance] timeAtBeginningOfDayForDate:fromDay];
+    long endTime = [[Constants instance] timeAtEndOfDayForDate:toDay];
+    return [self getAllMessagesForPerson:person startTimeInSeconds:startTime endTimeInSeconds:endTime];
+}
+
 - (NSMutableArray*) getAllMessagesForPerson:(Person *)person onDay:(NSDate *)day
 {
     long startTime = [[Constants instance] timeAtBeginningOfDayForDate:day];
