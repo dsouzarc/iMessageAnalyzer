@@ -96,8 +96,7 @@ static NSString *orderByMostMessages = @"Most messages";
         self.dateFormatter = [[NSDateFormatter alloc] init];
         [self.dateFormatter setDateFormat:@"MM/dd/yyyy"];
         
-        self.messageWithAttachmentAttributes = [NSDictionary dictionaryWithObjectsAndKeys:[NSColor yellowColor], NSForegroundColorAttributeName,
-                                                [NSNumber numberWithInt:NSUnderlineStyleSingle], NSUnderlineStyleAttributeName, nil];
+        self.messageWithAttachmentAttributes = [Constants getMessageWithAttachmentAttributes];
     }
     
     return self;
