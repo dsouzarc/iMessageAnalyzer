@@ -188,9 +188,27 @@
                     long totalSent = stat.numberOfSentMessages; //+ stat.numberOfSentAttachments;
                     long totalReceived = stat.numberOfReceivedMessages;// + stat.numberOfReceivedAttachments;
                     
-                    self.myAverageWordCountPerMessage = (double) self.myWordCount / totalSent;
-                    self.friendAverageWordCountPerMessage = (double) self.friendCount / totalReceived;
-                    double average = (self.myAverageWordCountPerMessage + self.friendAverageWordCountPerMessage) / 2;
+                    if(self.myWordCount == 0 || totalSent == 0) {
+                        self.myAverageWordCountPerMessage = 0.0;
+                    }
+                    else {
+                        self.myAverageWordCountPerMessage = (double) self.myWordCount / totalSent;
+                    }
+                    
+                    if(self.friendCount == 0 || totalReceived == 0) {
+                        self.friendAverageWordCountPerMessage = 0.0;
+                    }
+                    else {
+                        self.friendAverageWordCountPerMessage = (double) self.friendCount / totalReceived;
+                    }
+                    
+                    double average;
+                    if(self.myAverageWordCountPerMessage == 0 || self.friendAverageWordCountPerMessage == 0) {
+                        average = 0.0;
+                    }
+                    else {
+                        average = (self.myAverageWordCountPerMessage + self.friendAverageWordCountPerMessage) / 2;
+                    }
                     
                     [self setTextFieldDouble:self.myAverageWordCountPerMessage forTag:30];
                     [self setTextFieldDouble:self.friendAverageWordCountPerMessage forTag:31];
@@ -726,9 +744,27 @@ int tempCounter = 2;
         [self setTextFieldLong:totalReceived forTag:15];
         [self setTextFieldLong:(totalSent + totalReceived) forTag:19];
         
-        self.myAverageWordCountPerMessage = (double) stat.numberOfSentWords / stat.numberOfSentMessages;
-        self.friendAverageWordCountPerMessage = (double) stat.numberOfReceivedWords / stat.numberOfReceivedMessages;
-        double average = (self.myAverageWordCountPerMessage + self.friendAverageWordCountPerMessage) / 2;
+        if(stat.numberOfSentWords == 0 || stat.numberOfSentMessages == 0) {
+            self.myAverageWordCountPerMessage = 0.0;
+        }
+        else {
+            self.myAverageWordCountPerMessage = (double) stat.numberOfSentWords / stat.numberOfSentMessages;
+        }
+        
+        if(stat.numberOfReceivedWords == 0 || stat.numberOfReceivedMessages == 0) {
+            self.friendAverageWordCountPerMessage = 0.0;
+        }
+        else {
+            self.friendAverageWordCountPerMessage = (double) stat.numberOfReceivedWords / stat.numberOfReceivedMessages;
+        }
+        
+        double average;
+        if(self.myAverageWordCountPerMessage == 0 || self.friendAverageWordCountPerMessage == 0) {
+            average = 0.0;
+        }
+        else {
+            average = (self.myAverageWordCountPerMessage + self.friendAverageWordCountPerMessage) / 2;
+        }
         
         [self setTextFieldDouble:self.myAverageWordCountPerMessage forTag:33];
         [self setTextFieldDouble:self.friendAverageWordCountPerMessage forTag:34];
