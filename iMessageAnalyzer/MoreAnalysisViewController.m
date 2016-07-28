@@ -35,6 +35,7 @@
 
 @property (strong, nonatomic) NSDateFormatter *dateFormatter;
 @property (strong, nonatomic) NSDate *calendarChosenDate;
+@property (strong, nonnull) NSDate *calendarChosenDateTo;
 
 
 #pragma mark View Controllers
@@ -105,6 +106,7 @@
         else {
             self.calendarChosenDate = [[NSDate alloc] init];
         }
+        self.calendarChosenDateTo = self.calendarChosenDate;
         
         self.myWordsAndFrequencies = [[NSMutableArray alloc] init];
         self.myWordsAndFrequenciesSearch = [[NSMutableArray alloc] init];
@@ -216,7 +218,17 @@
                 }
             }
             else {
-                [self setTextFieldText:[NSString stringWithFormat:@"Words on %@", [self.dateFormatter stringFromDate:self.calendarChosenDate]] forTag:2];
+                int daysBetween = [[Constants instance] daysBetweenDates:self.calendarChosenDate endDate:self.calendarChosenDateTo] + 1;
+                
+                NSString *wordsOnText;
+                if(daysBetween == 0) {
+                    wordsOnText = [NSString stringWithFormat:@"Words on %@", [self.dateFormatter stringFromDate:self.calendarChosenDate]];
+                }
+                else {
+                    wordsOnText = [NSString stringWithFormat:@"Words over %d days", daysBetween];
+                }
+                [self setTextFieldText:wordsOnText forTag:2];
+                
                 [self setTextFieldLong:self.myWordCount forTag:13];
                 [self setTextFieldLong:self.friendCount forTag:17];
                 [self setTextFieldLong:(self.myWordCount + self.friendCount) forTag:21];
@@ -701,26 +713,33 @@ int tempCounter = 2;
 {
     NSDate *startDay = *proposedDateValue;
     NSDate *endDay = [startDay dateByAddingTimeInterval:*proposedTimeInterval];
-    
+
     //If the date chosen is the same day (not a range) and it's already displayed, don't do anything
-    if(self.calendarChosenDate == startDay) { //TODO: Store end date so we can do an "and and" check
+    if(self.calendarChosenDate == startDay) {
         return;
     }
-    
-    //TODO: For loop through all messages between startDay and endDay
-    self.calendarChosenDate = startDay;
-    
-    //self.messagesToDisplay = [self.databaseManager getAllMessagesForPerson:self.person onDay:self.calendarChosenDate];
+
     startDay = [[Constants instance] dateAtBeginningOfDay:startDay];
     endDay = [[Constants instance] dateAtEndOfDay:endDay];
-    self.messagesToDisplay = [self getMessagesBetweenDateRange:startDay endDate:endDay];
+   
+    self.calendarChosenDate = startDay;
+    self.calendarChosenDateTo = endDay;
+    self.messagesToDisplay = [self getMessagesBetweenDateRange:self.calendarChosenDate endDate:self.calendarChosenDateTo];
     
     NSLog(@"ANALYZING: %@\t%@", [self.dateFormatter stringFromDate:startDay], [self.dateFormatter stringFromDate:endDay]);
     
     [self dealWithWordFrequencies];
     [self.messagesTableView reloadData];
     
-    [self setTextFieldText:[NSString stringWithFormat:@"Messages on %@", [self.dateFormatter stringFromDate:self.calendarChosenDate]] forTag:1];
+    NSString *messagesOn;
+    int daysBetween = [[Constants instance] daysBetweenDates:startDay endDate:endDay] + 1;
+    if(daysBetween == 0) {
+        messagesOn = [NSString stringWithFormat:@"Messages on %@", [self.dateFormatter stringFromDate:self.calendarChosenDate]];
+    }
+    else {
+        messagesOn = [NSString stringWithFormat:@"Messages over %d days", daysBetween];
+    }
+    [self setTextFieldText:messagesOn forTag:1];
     tempCounter++;
     
     if(self.messagesToDisplay.count == 0 || !self.person.secondaryStatistics) {
