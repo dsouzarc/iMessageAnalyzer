@@ -263,7 +263,9 @@ static NSString *orderByMostMessages = @"Most messages";
 - (void) resetToAll:(BOOL)resetToAll
 {
     if(resetToAll) {
-        [self.calendarPopover performClose:@"close"];
+        [self.calendarPopover performClose:@"close"]; //TODO: Reset the messages
+        self.currentConversationChats = [self.messageManager getAllMessagesForPerson:self.lastChosenPerson];
+        [self.messagesTableView reloadData];
     }
 }
 
