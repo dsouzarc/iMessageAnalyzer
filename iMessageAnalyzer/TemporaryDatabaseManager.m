@@ -529,9 +529,10 @@ static TemporaryDatabaseManager *databaseManager;
         while(sqlite3_step(statement) == SQLITE_ROW) {
             result = sqlite3_column_int(statement, 0);
         }
+        
+        sqlite3_finalize(statement);
     }
-    
-    sqlite3_finalize(statement);
+    //HERE
     return result;
 }
 

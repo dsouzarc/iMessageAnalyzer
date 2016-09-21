@@ -408,14 +408,23 @@ static NSString *pathToDB;
     const char *query = [queryString UTF8String];
     sqlite3_stmt *statement;
     
+    if(sqlite3_open([pathToDevelopmentDB UTF8String], &_database) == SQLITE_OK){
+        //Temporary fix - need to do this for OSX Sierra for some reason
+    } else {
+        NSLog(@"Error opening database");
+    }
+    
     if(sqlite3_prepare(_database, query, -1, &statement, NULL) == SQLITE_OK) {
         while(sqlite3_step(statement) == SQLITE_ROW) {
             int rowID = sqlite3_column_int(statement, 0);
             int date = sqlite3_column_int(statement, 1);
             NSString *text = @"";
-            if(sqlite3_column_text(statement, 2)) {
-                text = [NSString stringWithUTF8String:sqlite3_column_text(statement, 2)];
+            
+            const char *messageTextChar = (const char *)sqlite3_column_text(statement, 2);
+            if(messageTextChar != NULL) {
+                text = [NSString stringWithUTF8String:messageTextChar];
             }
+            
             int wordCount = (int) [text componentsSeparatedByString:@" "].count;
             int isFromMe = sqlite3_column_int(statement, 3);
             int hasAttachments = sqlite3_column_int(statement, 4);
@@ -504,6 +513,12 @@ static NSString *pathToDB;
 
     const char *query = [queryString UTF8String];
     sqlite3_stmt *statement;
+    
+    if(sqlite3_open([pathToDevelopmentDB UTF8String], &_database) == SQLITE_OK){
+        //Temporary fix - need to do this for OSX Sierra for some reason
+    } else {
+        NSLog(@"ERROR OPENING DATABASE");
+    }
     
     if(sqlite3_prepare(_database, query, -1, &statement, NULL) == SQLITE_OK) {
         while(sqlite3_step(statement) == SQLITE_ROW) {
