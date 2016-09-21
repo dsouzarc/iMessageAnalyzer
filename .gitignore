@@ -2,6 +2,9 @@
 #
 # gitignore contributors: remember to update Global/Xcode.gitignore, Objective-C.gitignore & Swift.gitignore
 
+iMessageAnalyzer.xcodeproj/project.xcworkspace/contents.xcworkspacedata
+iMessageAnalyzer.xcodeproj/project.xcworkspace/xcuserdata/Ryan.xcuserdatad/UserInterfaceState.xcuserstate
+
 #Database files
 *.db
 
@@ -44,3 +47,4 @@ xcuserdata
 #
 # Add this line if you want to avoid checking in source code from Carthage dependencies.
 # Carthage/Checkouts
+
