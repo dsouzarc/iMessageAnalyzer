@@ -35,7 +35,7 @@ static MessageManager *messageInstance;
  *
  *              Constructor
  *
-*****************************************************************/
+ *****************************************************************/
 
 # pragma mark Constructor
 
@@ -102,7 +102,7 @@ static MessageManager *messageInstance;
  *
  *              Getting information
  *
-*****************************************************************/
+ *****************************************************************/
 
 # pragma mark Getting information
 
@@ -136,16 +136,22 @@ static MessageManager *messageInstance;
     return [results allObjects];
 }
 
+- (NSMutableArray*) getAllMessagesForPerson:(Person *)person fromDay:(NSDate *)fromDay toDay:(NSDate *)toDay
+{
+    long startTime = [[Constants instance] timeAtBeginningOfDayForDate:fromDay];
+    long endTime = [[Constants instance] timeAtEndOfDayForDate:toDay];
+    return [self getAllMessagesForPerson:person startTime:startTime endTime:endTime];
+}
+
 - (NSMutableArray*) getAllMessagesForPerson:(Person *)person onDay:(NSDate *)day
 {
     long startTime = [[Constants instance] timeAtBeginningOfDayForDate:day];
     long endTime = [[Constants instance] timeAtEndOfDayForDate:day];
-    
-    /*NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"MM/dd/yyyy HH:mm"];
-    NSLog(@"IN HERE: %@\t%@", [formatter stringFromDate:[[NSDate alloc] initWithTimeIntervalSinceReferenceDate:startTime]], [formatter stringFromDate:[[NSDate alloc] initWithTimeIntervalSinceReferenceDate:endTime]]);
-    NSLog(@"time: %ld\t%ld\t%d", startTime, endTime, person.handleID);*/
-    
+    return [self getAllMessagesForPerson:person startTime:startTime endTime:endTime];
+}
+
+- (NSMutableArray*) getAllMessagesForPerson:(Person *)person startTime:(long)startTime endTime:(long)endTime
+{
     NSMutableArray *messages = [self.databaseManager getAllMessagesForPerson:person startTimeInSeconds:startTime endTimeInSeconds:endTime];
     [self updateMessagesWithAttachments:messages person:person];
     

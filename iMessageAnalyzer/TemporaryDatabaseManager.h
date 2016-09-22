@@ -33,8 +33,9 @@
 #pragma mark Get messages
 
 - (NSMutableArray*) getAllMessagesForPerson:(Person *)person;
-- (NSMutableArray*) getAllMessagesForPerson:(Person *)person startTimeInSeconds:(long)startTimeInSeconds endTimeInSeconds:(long)endTimeInSeconds;
 - (NSMutableArray*) getAllMessagesForPerson:(Person*)person onDay:(NSDate*)day;
+- (NSMutableArray*) getAllMessagesForPerson:(Person *)person fromDay:(NSDate *)fromDay toDay:(NSDate*)toDay;
+- (NSMutableArray*) getAllMessagesForPerson:(Person *)person startTimeInSeconds:(long)startTimeInSeconds endTimeInSeconds:(long)endTimeInSeconds;
 - (NSMutableArray*) getAllOtherMessagesFromStartTime:(int)startTime endTime:(int)endTime;
 
 - (NSMutableArray*) getAllMessageTimingsInConversation;

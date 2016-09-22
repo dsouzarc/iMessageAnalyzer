@@ -10,7 +10,8 @@
 
 @protocol CalendarPopUpViewControllerDelegate <NSObject>
 
-- (void) dateChosen:(NSDate*)chosenDate;
+- (void) resetToAll:(BOOL)resetToAll;
+- (void) fromDayChosen:(NSDate*)fromDayChosen toDayChosen:(NSDate*)toDayChosen;
 
 @end
 

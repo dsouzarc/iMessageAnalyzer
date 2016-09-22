@@ -21,13 +21,14 @@
 #import "Statistics.h"
 #import "Message.h"
 
+#import "RSVerticallyCenteredTextFieldCell.h"
 
 /** Shows more analysis screen that includes graph */
 
 @interface MoreAnalysisViewController : NSViewController <NSTextFieldDelegate, NSTableViewDataSource, NSTableViewDelegate, NSDatePickerCellDelegate, NSPopoverDelegate, NSTextField_MessagesDelegate>
 
 
-#pragma mark Constructor 
+#pragma mark Constructor
 
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil person:(Person*)person messages:(NSMutableArray*)messages databaseManager:(TemporaryDatabaseManager*)databaseManager;
 

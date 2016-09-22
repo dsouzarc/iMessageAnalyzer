@@ -35,7 +35,7 @@ static TemporaryDatabaseManager *databaseManager;
  *
  *              Constructor
  *
-*****************************************************************/
+ *****************************************************************/
 
 # pragma mark Constructor
 
@@ -74,15 +74,16 @@ static TemporaryDatabaseManager *databaseManager;
         
         if(sqlite3_open(filePath, &_database) == SQLITE_OK) {
             printf("OPENED TEMPORARY DATABASE\n");
-
+            
             [self createMyMessagesTable];
             [self createOtherMessagesTable];
             [self addPragmas];
             
             [self addMessagesToDatabase:messages];
             
+            [self addOtherMessagesToDatabase:[[DatabaseManager getInstance] getTemporaryInformationForAllConversationsExceptWith:person]];
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-                [self addOtherMessagesToDatabase:[[DatabaseManager getInstance] getTemporaryInformationForAllConversationsExceptWith:person]];
+                //TODO: HERE [self addOtherMessagesToDatabase:[[DatabaseManager getInstance] getTemporaryInformationForAllConversationsExceptWith:person]];
             });
             
         }
@@ -109,7 +110,7 @@ static TemporaryDatabaseManager *databaseManager;
  *
  *              Insert into my messages
  *
-*****************************************************************/
+ *****************************************************************/
 
 # pragma mark Insert into my messages
 
@@ -200,6 +201,13 @@ static TemporaryDatabaseManager *databaseManager;
  *****************************************************************/
 
 # pragma mark Get my messages
+
+- (NSMutableArray*) getAllMessagesForPerson:(Person *)person fromDay:(NSDate *)fromDay toDay:(NSDate*)toDay
+{
+    long startTime = [[Constants instance] timeAtBeginningOfDayForDate:fromDay];
+    long endTime = [[Constants instance] timeAtEndOfDayForDate:toDay];
+    return [self getAllMessagesForPerson:person startTimeInSeconds:startTime endTimeInSeconds:endTime];
+}
 
 - (NSMutableArray*) getAllMessagesForPerson:(Person *)person onDay:(NSDate *)day
 {
@@ -308,7 +316,7 @@ static TemporaryDatabaseManager *databaseManager;
     NSMutableArray *allOtherMessages = [[NSMutableArray alloc] init];
     
     const char *query = [[NSString stringWithFormat:@"SELECT ROWID, date, wordCount, is_from_me, cache_has_attachments FROM %@ WHERE (date > %d AND date < %d) ORDER BY date", otherMessagesTable, startTime, endTime] UTF8String];
-
+    
     sqlite3_stmt *statement;
     
     if(sqlite3_prepare_v2(_database, query, -1, &statement, NULL) == SQLITE_OK) {
@@ -326,14 +334,14 @@ static TemporaryDatabaseManager *databaseManager;
             [message setObject:[NSNumber numberWithInt:wordCount] forKey:@"wordCount"];
             [message setObject:[NSNumber numberWithBool:isFromMe] forKey:@"isFromMe"];
             [message setObject:[NSNumber numberWithBool:hasAttachment] forKey:@"hasAttachment"];
-
+            
             [allOtherMessages addObject:message];
         }
     }
     else {
         NSLog(@"ERROR COMPILING ALL MESSAGES QUERY: %s", sqlite3_errmsg(_database));
     }
-
+    
     sqlite3_finalize(statement);
     
     return allOtherMessages;
@@ -344,7 +352,7 @@ static TemporaryDatabaseManager *databaseManager;
  *
  *              Get dates for messages
  *
-*****************************************************************/
+ *****************************************************************/
 
 # pragma mark Get dates for messages
 
@@ -365,7 +373,7 @@ static TemporaryDatabaseManager *databaseManager;
  *
  *              Get counts
  *
-*****************************************************************/
+ *****************************************************************/
 
 # pragma mark Get counts
 
@@ -410,7 +418,7 @@ static TemporaryDatabaseManager *databaseManager;
     NSString *query = [NSString stringWithFormat:@"SELECT COUNT(*) FROM myMessagesTable WHERE (date > %d AND date < %d) UNION ALL SELECT COUNT(*) FROM otherMessagesTable WHERE (date > %d AND date < %d)", startTime, endTime, startTime, endTime];
     
     NSMutableArray *counters = [[NSMutableArray alloc] init];
-
+    
     sqlite3_stmt *statement;
     
     if(sqlite3_prepare(_database, [query UTF8String], -1, &statement, NULL) == SQLITE_OK) {
@@ -430,7 +438,7 @@ static TemporaryDatabaseManager *databaseManager;
  *
  *              Get counts organized by hours
  *
-*****************************************************************/
+ *****************************************************************/
 
 # pragma mark Get counts organized by hours
 
@@ -475,7 +483,7 @@ static TemporaryDatabaseManager *databaseManager;
  *
  *              Get counts (sums)
  *
-*****************************************************************/
+ *****************************************************************/
 
 # pragma mark Get counts (sums)
 
@@ -508,7 +516,7 @@ static TemporaryDatabaseManager *databaseManager;
  *
  *              Helpers to get data from queryString
  *
-*****************************************************************/
+ *****************************************************************/
 
 # pragma mark Helpers to get data from queryString
 
@@ -522,9 +530,10 @@ static TemporaryDatabaseManager *databaseManager;
         while(sqlite3_step(statement) == SQLITE_ROW) {
             result = sqlite3_column_int(statement, 0);
         }
+        
+        sqlite3_finalize(statement);
     }
-    
-    sqlite3_finalize(statement);
+    //HERE
     return result;
 }
 
@@ -547,7 +556,7 @@ static TemporaryDatabaseManager *databaseManager;
  *
  *              Helpers to organize by hours or days
  *
-*****************************************************************/
+ *****************************************************************/
 
 # pragma mark Helpers to organize by hours
 
@@ -659,7 +668,7 @@ static TemporaryDatabaseManager *databaseManager;
  *
  *              SQLite Helpers
  *
-*****************************************************************/
+ *****************************************************************/
 
 # pragma mark SQLite Helpers
 

@@ -11,7 +11,6 @@
 
 #include <string.h>
 #import <sqlite3.h>
-
 #import "Contact.h"
 #import "Constants.h"
 #import "Message.h"
@@ -19,6 +18,7 @@
 #import "Person.h"
 #import "Statistics.h" 
 
+#import "FMDatabase.h"
 
 /** Manages the user's messages database */
 

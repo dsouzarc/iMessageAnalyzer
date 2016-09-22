@@ -35,6 +35,7 @@
 
 @property (strong, nonatomic) NSDateFormatter *dateFormatter;
 @property (strong, nonatomic) NSDate *calendarChosenDate;
+@property (strong, nonnull) NSDate *calendarChosenDateTo;
 
 
 #pragma mark View Controllers
@@ -82,7 +83,7 @@
  *
  *              Constructor
  *
-*****************************************************************/
+ *****************************************************************/
 
 # pragma mark Constructor
 
@@ -93,19 +94,19 @@
     if(self) {
         self.person = person;
         self.messages = messages;
-        
         self.messagesToDisplay = messages;
         self.databaseManager = databaseManager;
-
+        
         self.dateFormatter = [[NSDateFormatter alloc] init];
         [self.dateFormatter setDateFormat:@"MM/dd/yy"];
-
+        
         if(self.messagesToDisplay.count > 0) {
             self.calendarChosenDate = ((Message*) self.messagesToDisplay[0]).dateSent;
         }
         else {
             self.calendarChosenDate = [[NSDate alloc] init];
         }
+        self.calendarChosenDateTo = self.calendarChosenDate;
         
         self.myWordsAndFrequencies = [[NSMutableArray alloc] init];
         self.myWordsAndFrequenciesSearch = [[NSMutableArray alloc] init];
@@ -113,8 +114,7 @@
         self.friendWordsAndFrequencies = [[NSMutableArray alloc] init];
         self.friendWordsAndFrequenciesSearch = [[NSMutableArray alloc] init];
         
-        self.messageWithAttachmentAttributes = [NSDictionary dictionaryWithObjectsAndKeys:[NSColor yellowColor], NSForegroundColorAttributeName,
-                                                [NSNumber numberWithInt:NSUnderlineStyleSingle], NSUnderlineStyleAttributeName, nil];
+        self.messageWithAttachmentAttributes = [Constants getMessageWithAttachmentAttributes];
     }
     
     return self;
@@ -164,7 +164,7 @@
  *
  *              Word Frequencies
  *
-*****************************************************************/
+ *****************************************************************/
 
 # pragma mark Word Frequencies
 
@@ -179,6 +179,8 @@
             
             //First time it's run
             if(self.messagesToDisplay.count == self.messages.count) {
+                
+                NSLog(@"HERE NOW");
                 [self setTextFieldLong:self.myWordCount forTag:12];
                 [self setTextFieldLong:self.friendCount forTag:16];
                 [self setTextFieldLong:(self.myWordCount + self.friendCount) forTag:20];
@@ -188,18 +190,45 @@
                     long totalSent = stat.numberOfSentMessages; //+ stat.numberOfSentAttachments;
                     long totalReceived = stat.numberOfReceivedMessages;// + stat.numberOfReceivedAttachments;
                     
-                    self.myAverageWordCountPerMessage = (double) self.myWordCount / totalSent;
-                    self.friendAverageWordCountPerMessage = (double) self.friendCount / totalReceived;
-                    double average = (self.myAverageWordCountPerMessage + self.friendAverageWordCountPerMessage) / 2;
+                    if(self.myWordCount == 0 || totalSent == 0) {
+                        self.myAverageWordCountPerMessage = 0.0;
+                    }
+                    else {
+                        self.myAverageWordCountPerMessage = (double) self.myWordCount / totalSent;
+                    }
+                    
+                    if(self.friendCount == 0 || totalReceived == 0) {
+                        self.friendAverageWordCountPerMessage = 0.0;
+                    }
+                    else {
+                        self.friendAverageWordCountPerMessage = (double) self.friendCount / totalReceived;
+                    }
+                    
+                    double average;
+                    if(self.myAverageWordCountPerMessage == 0 || self.friendAverageWordCountPerMessage == 0) {
+                        average = 0.0;
+                    }
+                    else {
+                        average = (self.myAverageWordCountPerMessage + self.friendAverageWordCountPerMessage) / 2;
+                    }
                     
                     [self setTextFieldDouble:self.myAverageWordCountPerMessage forTag:30];
                     [self setTextFieldDouble:self.friendAverageWordCountPerMessage forTag:31];
                     [self setTextFieldDouble:average forTag:32];
                 }
-                
             }
             else {
-                [self setTextFieldText:[NSString stringWithFormat:@"Words on %@", [self.dateFormatter stringFromDate:self.calendarChosenDate]] forTag:2];
+                int daysBetween = [[Constants instance] daysBetweenDates:self.calendarChosenDate endDate:self.calendarChosenDateTo] + 1;
+                
+                NSString *wordsOnText;
+                if(daysBetween == 0) {
+                    wordsOnText = [NSString stringWithFormat:@"Words on %@", [self.dateFormatter stringFromDate:self.calendarChosenDate]];
+                }
+                else {
+                    wordsOnText = [NSString stringWithFormat:@"Words over %d days", daysBetween];
+                }
+                [self setTextFieldText:wordsOnText forTag:2];
+                
                 [self setTextFieldLong:self.myWordCount forTag:13];
                 [self setTextFieldLong:self.friendCount forTag:17];
                 [self setTextFieldLong:(self.myWordCount + self.friendCount) forTag:21];
@@ -244,7 +273,7 @@
     else {
         lastFromMeDoubleMessage = NO;
         lastMessageTimeDoubleMessage = (int)[[NSDate date] timeIntervalSinceReferenceDate];
-    
+        
         lastFromMeConversationStarter = NO;
         lastMessageTimeConversationStarter = (int) [[NSDate date] timeIntervalSinceReferenceDate];
     }
@@ -272,22 +301,18 @@
             if([Constants isDoubleMessage:timeDiscrepancy]) {
                 if(message.isFromMe) {
                     self.myDoubleMessage++;
-                    NSLog(@"MY DOUBLE: %@\t%@", lastMessageDoubleMessage.messageText, message.messageText);
                 }
                 else {
                     self.friendDoubleMessage++;
-                    NSLog(@"FRIEND DOUBLE: %@\t%@", lastMessageDoubleMessage.messageText, message.messageText);
                 }
             }
             
             else if([Constants isConversationStarter:timeDiscrepancy]) {
                 if(message.isFromMe) {
                     self.myConversationStarter++;
-                    NSLog(@"MY STARTER: %@\t%@", lastMessageConversationStarter.messageText, message.messageText);
                 }
                 else {
                     self.friendConversationStarter++;
-                    NSLog(@"FRIEND STARTER: %@\t%@", lastMessageConversationStarter.messageText, message.messageText);
                 }
             }
         }
@@ -326,7 +351,7 @@
             }
         }
     }
-
+    
     WordFrequencyHeapDataStructure *myWords = [[WordFrequencyHeapDataStructure alloc] initWithSize:myWordFrequencies.count];
     WordFrequencyHeapDataStructure *friendWords = [[WordFrequencyHeapDataStructure alloc] initWithSize:myWordFrequencies.count];
     
@@ -358,7 +383,7 @@
  *
  *              NSTableView Delegate
  *
-*****************************************************************/
+ *****************************************************************/
 
 # pragma mark NSTableView Delegate
 
@@ -401,9 +426,13 @@
         [timeField setBordered:NO];
         
         NSTextField_Messages *messageField = [[NSTextField_Messages alloc] initWithFrame:frame];
+        
+        RSVerticallyCenteredTextFieldCell *verticleCenterCell = [[RSVerticallyCenteredTextFieldCell alloc] initTextCell:@""];
+        [messageField setCell:verticleCenterCell];
+        
         [messageField setDrawsBackground:YES];
         [messageField setWantsLayer:YES];
-        [messageField setTextFieldNumber:row];
+        [messageField setTextFieldNumber:(int)row];
         [messageField setTag:100];
         [messageField setDelegate:self];
         
@@ -441,9 +470,18 @@
             [messageField setAttributedStringValue:attributedString];
         }
         else {
-            [messageField setStringValue:[NSString stringWithFormat:@"  %@", message.messageText]];
+            NSFont *customFont = [NSFont fontWithName:@"Helvetica Neue" size:13.0];
+            NSMutableAttributedString *customString;
+            if(message.messageText.length < 55) {
+                customString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"  %@", message.messageText]];
+            }
+            else {
+                customString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@", message.messageText]];
+            }
+            [customString addAttribute:NSFontNameAttribute value:customFont range:NSMakeRange(0, customString.length)];
+            [messageField setAttributedStringValue:customString];
         }
-
+        
         NSSize goodFrame = [messageField.cell cellSizeForBounds:frame];
         [messageField setFrameSize:CGSizeMake(goodFrame.width + 10, goodFrame.height + 4)];
         
@@ -454,10 +492,13 @@
             [messageField setFrameOrigin:CGPointMake(tableColumn.width - messageField.frame.size.width, 15)];
             
             if(message.isIMessage) {
-                [messageField setBackgroundColor:[NSColor blueColor]];
+                [messageField setBackgroundColor:[NSColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0]];
+                //[messageField setBackgroundColor:[NSColor blueColor]];
             }
             else {
-                [messageField setBackgroundColor:[NSColor greenColor]];
+                [messageField setBackgroundColor:[NSColor colorWithRed:90.0/255.0 green:212/255.0 blue:39.0/255.0 alpha:1.0]];
+                //[messageField setBackgroundColor:[NSColor greenColor]];
+                
             }
             [messageField setTextColor:[NSColor whiteColor]];
             
@@ -465,13 +506,14 @@
         }
         else {
             [messageField setFrameOrigin:CGPointMake(0, 15)];
-            [messageField setBackgroundColor:[NSColor lightGrayColor]];
+            [messageField setBackgroundColor:[NSColor colorWithRed:199.0/255.0 green:199.0/255.0 blue:204/255.0 alpha:1.0]];
+            //[messageField setBackgroundColor:[NSColor lightGrayColor]];
             [messageField setTextColor:[NSColor blackColor]];
             [timeField setFrameOrigin:CGPointMake(2, 0)];
         }
-    
+        
         [messageField setWantsLayer:YES];
-        [messageField.layer setCornerRadius:14.0f];
+        [messageField.layer setCornerRadius:8.0f];
         [messageField setFocusRingType:NSFocusRingTypeNone];
         [messageField setBordered:NO];
         
@@ -485,7 +527,7 @@
     
     [textField setFocusRingType:NSFocusRingTypeNone];
     //[textField setBordered:NO];
-
+    
     if(tableView == self.myWordFrequenciesTableView) {
         return textField;
     }
@@ -546,7 +588,7 @@
         if(!self.messagesToDisplay || self.messagesToDisplay.count == 0) {
             return 80.0;
         }
-
+        
         Message *message = self.messagesToDisplay[row];
         NSString *text = message.messageText;
         
@@ -613,6 +655,49 @@
     return NO;
 }
 
+- (NSMutableArray*) getMessagesBetweenDateRange:(NSDate*)startDate endDate:(NSDate*)endDate
+{
+    NSMutableArray *messages = [[NSMutableArray alloc] init];
+    
+    self.person.secondaryStatistics = [[Statistics alloc] init];
+    
+    for(Message *message in self.messages) {
+        NSComparisonResult compareStart = [startDate compare:message.dateSent];
+        
+        //message.dateSent came before
+        if(compareStart == NSOrderedDescending) {
+            continue;
+        }
+        
+        NSComparisonResult compareEnd = [endDate compare:message.dateSent];
+        if(compareEnd == NSOrderedAscending) {
+            return messages;
+        }
+        
+        NSArray *words = [message.messageText componentsSeparatedByString:@" "];
+        
+        if(message.isFromMe) {
+            self.person.secondaryStatistics.numberOfSentMessages++;
+            self.person.secondaryStatistics.numberOfSentWords += words.count;
+            
+            if(message.hasAttachment) {
+                self.person.secondaryStatistics.numberOfSentAttachments++;
+            }
+        }
+        else {
+            self.person.secondaryStatistics.numberOfReceivedMessages++;
+            self.person.secondaryStatistics.numberOfReceivedWords += words.count;
+            
+            if(message.hasAttachment) {
+                self.person.secondaryStatistics.numberOfReceivedAttachments++;
+            }
+        }
+        
+        [messages addObject:message];
+    }
+    
+    return messages;
+}
 
 /****************************************************************
  *
@@ -626,18 +711,35 @@ int tempCounter = 2;
 
 - (void) datePickerCell:(NSDatePickerCell *)aDatePickerCell validateProposedDateValue:(NSDate *__autoreleasing  _Nonnull *)proposedDateValue timeInterval:(NSTimeInterval *)proposedTimeInterval
 {
-    if(self.calendarChosenDate == *proposedDateValue) {
+    NSDate *startDay = *proposedDateValue;
+    NSDate *endDay = [startDay dateByAddingTimeInterval:*proposedTimeInterval];
+    
+    //If the date chosen is the same day (not a range) and it's already displayed, don't do anything
+    if(self.calendarChosenDate == startDay) {
         return;
     }
     
-    self.calendarChosenDate = *proposedDateValue;
+    startDay = [[Constants instance] dateAtBeginningOfDay:startDay];
+    endDay = [[Constants instance] dateAtEndOfDay:endDay];
     
-    self.messagesToDisplay = [self.databaseManager getAllMessagesForPerson:self.person onDay:self.calendarChosenDate];
+    self.calendarChosenDate = startDay;
+    self.calendarChosenDateTo = endDay;
+    self.messagesToDisplay = [self getMessagesBetweenDateRange:self.calendarChosenDate endDate:self.calendarChosenDateTo];
+    
+    NSLog(@"ANALYZING: %@\t%@", [self.dateFormatter stringFromDate:startDay], [self.dateFormatter stringFromDate:endDay]);
     
     [self dealWithWordFrequencies];
     [self.messagesTableView reloadData];
     
-    [self setTextFieldText:[NSString stringWithFormat:@"Messages on %@", [self.dateFormatter stringFromDate:self.calendarChosenDate]] forTag:1];
+    NSString *messagesOn;
+    int daysBetween = [[Constants instance] daysBetweenDates:startDay endDate:endDay] + 1;
+    if(daysBetween == 0) {
+        messagesOn = [NSString stringWithFormat:@"Messages on %@", [self.dateFormatter stringFromDate:self.calendarChosenDate]];
+    }
+    else {
+        messagesOn = [NSString stringWithFormat:@"Messages over %d days", daysBetween];
+    }
+    [self setTextFieldText:messagesOn forTag:1];
     tempCounter++;
     
     if(self.messagesToDisplay.count == 0 || !self.person.secondaryStatistics) {
@@ -651,6 +753,8 @@ int tempCounter = 2;
     }
     
     else if(self.person.secondaryStatistics) {
+        
+        //HERE
         Statistics *stat = self.person.secondaryStatistics;
         long totalSent = stat.numberOfSentMessages; //+ stat.numberOfSentAttachments;
         long totalReceived = stat.numberOfReceivedMessages;// + stat.numberOfReceivedAttachments;
@@ -659,9 +763,27 @@ int tempCounter = 2;
         [self setTextFieldLong:totalReceived forTag:15];
         [self setTextFieldLong:(totalSent + totalReceived) forTag:19];
         
-        self.myAverageWordCountPerMessage = (double) self.myWordCount / totalSent;
-        self.friendAverageWordCountPerMessage = (double) self.friendCount / totalReceived;
-        double average = (self.myAverageWordCountPerMessage + self.friendAverageWordCountPerMessage) / 2;
+        if(stat.numberOfSentWords == 0 || stat.numberOfSentMessages == 0) {
+            self.myAverageWordCountPerMessage = 0.0;
+        }
+        else {
+            self.myAverageWordCountPerMessage = (double) stat.numberOfSentWords / stat.numberOfSentMessages;
+        }
+        
+        if(stat.numberOfReceivedWords == 0 || stat.numberOfReceivedMessages == 0) {
+            self.friendAverageWordCountPerMessage = 0.0;
+        }
+        else {
+            self.friendAverageWordCountPerMessage = (double) stat.numberOfReceivedWords / stat.numberOfReceivedMessages;
+        }
+        
+        double average;
+        if(self.myAverageWordCountPerMessage == 0 || self.friendAverageWordCountPerMessage == 0) {
+            average = 0.0;
+        }
+        else {
+            average = (self.myAverageWordCountPerMessage + self.friendAverageWordCountPerMessage) / 2;
+        }
         
         [self setTextFieldDouble:self.myAverageWordCountPerMessage forTag:33];
         [self setTextFieldDouble:self.friendAverageWordCountPerMessage forTag:34];
@@ -674,7 +796,7 @@ int tempCounter = 2;
  *
  *              NSTextField Delegate
  *
-*****************************************************************/
+ *****************************************************************/
 
 # pragma mark NSTextField
 
@@ -760,7 +882,7 @@ int tempCounter = 2;
  *
  *              Auxillary Methods
  *
-*****************************************************************/
+ *****************************************************************/
 
 # pragma mark Auxillary Methods
 

@@ -1,13 +1,17 @@
 //
 //  RSVerticallyCenteredTextFieldCell.h
-//  iMessageAnalyzer
+//  RSCommon
 //
-//  Created by Ryan D'souza on 9/21/16.
-//  Copyright © 2016 Ryan D'souza. All rights reserved.
+//  Created by Daniel Jalkut on 6/17/06.
+//  Copyright 2006 Red Sweater Software. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <Cocoa/Cocoa.h>
 
-@interface RSVerticallyCenteredTextFieldCell : NSObject
+
+@interface RSVerticallyCenteredTextFieldCell : NSTextFieldCell
+{
+    BOOL mIsEditingOrSelecting;
+}
 
 @end

@@ -25,6 +25,9 @@
 #import "Attachment.h"
 #import "Person.h"
 
+#import "RSVerticallyCenteredTextFieldCell.h"
+#import "ECPhoneNumberFormatter.h"
+
 /** Shows all conversations and all messages. Central to everything */
 
 @interface MainViewController : NSViewController <NSTableViewDataSource, NSTableViewDelegate, NSSearchFieldDelegate, CalendarPopUpViewControllerDelegate, NSPopoverDelegate, SimpleAnalyticsPopUpViewControllerDelegate, MoreAnalysisWindowControllerDelegate, NSTextField_MessagesDelegate>

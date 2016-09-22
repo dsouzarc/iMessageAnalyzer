@@ -25,7 +25,7 @@
  *
  *              Constructor
  *
-*****************************************************************/
+ *****************************************************************/
 
 # pragma mark Constructor
 
@@ -44,7 +44,10 @@
 }
 
 - (void)windowDidLoad {
+    
     [super windowDidLoad];
+    //[self.window setContentSize:NSMakeSize(544, 650)];
+    //[self.window setMaxSize:NSMakeSize(544, 650)];
     
     [self.window setShowsResizeIndicator:NO];
     [self.window setTitle:@"iMessage Analyzer"];
@@ -59,7 +62,7 @@
  *
  *              StartupViewController Delegate
  *
-*****************************************************************/
+ *****************************************************************/
 
 # pragma mark StartupViewController Delegate
 
@@ -98,7 +101,7 @@
  *
  *              Auxillary methods
  *
-*****************************************************************/
+ *****************************************************************/
 
 # pragma mark Auxillary methods
 
@@ -109,7 +112,7 @@
     NSString *pathForFile = [NSString stringWithFormat:@"%@/chat.db", self.messagesPath];
     
     if ([fileManager fileExistsAtPath:pathForFile]){
-        
+        self.messagesPath = NSHomeDirectory();
         NSString *newFileLocation = [NSString stringWithFormat:@"%@/chat_on_%f.db", self.messagesPath, [[NSDate date] timeIntervalSinceReferenceDate]];
         
         NSError *error;

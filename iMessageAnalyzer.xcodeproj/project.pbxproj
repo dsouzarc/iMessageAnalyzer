@@ -44,6 +44,16 @@
 		9480B1691BF7B60700ECDE38 /* MoreAnalysisViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9480B1671BF7B60700ECDE38 /* MoreAnalysisViewController.m */; };
 		9480B16A1BF7B60700ECDE38 /* MoreAnalysisViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9480B1681BF7B60700ECDE38 /* MoreAnalysisViewController.xib */; };
 		948AE96A1BF976170031D97C /* WordFrequencyHeapDataStructure.m in Sources */ = {isa = PBXBuildFile; fileRef = 948AE9691BF976170031D97C /* WordFrequencyHeapDataStructure.m */; };
+		949A17901D9363C300DBD1DE /* ECPhoneNumberFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 949A178F1D9363C300DBD1DE /* ECPhoneNumberFormatter.m */; };
+		949A17931D93644300DBD1DE /* RSVerticallyCenteredTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 949A17921D93644300DBD1DE /* RSVerticallyCenteredTextFieldCell.m */; };
+		949A17BE1D936B7D00DBD1DE /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 949A17AD1D936B7D00DBD1DE /* FMDatabase.m */; };
+		949A17BF1D936B7D00DBD1DE /* FMDatabase+FTS3.m in Sources */ = {isa = PBXBuildFile; fileRef = 949A17AF1D936B7D00DBD1DE /* FMDatabase+FTS3.m */; };
+		949A17C01D936B7D00DBD1DE /* FMDatabase+InMemoryOnDiskIO.m in Sources */ = {isa = PBXBuildFile; fileRef = 949A17B11D936B7D00DBD1DE /* FMDatabase+InMemoryOnDiskIO.m */; };
+		949A17C11D936B7D00DBD1DE /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 949A17B31D936B7D00DBD1DE /* FMDatabaseAdditions.m */; };
+		949A17C21D936B7D00DBD1DE /* FMDatabasePool.m in Sources */ = {isa = PBXBuildFile; fileRef = 949A17B51D936B7D00DBD1DE /* FMDatabasePool.m */; };
+		949A17C31D936B7D00DBD1DE /* FMDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 949A17B71D936B7D00DBD1DE /* FMDatabaseQueue.m */; };
+		949A17C41D936B7D00DBD1DE /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 949A17BA1D936B7D00DBD1DE /* FMResultSet.m */; };
+		949A17C51D936B7D00DBD1DE /* FMTokenizers.m in Sources */ = {isa = PBXBuildFile; fileRef = 949A17BC1D936B7D00DBD1DE /* FMTokenizers.m */; };
 		94A69D9F1C92B2A00076C55E /* CorePlot.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94206D101C9123CB00DD47CD /* CorePlot.framework */; };
 		94A9923F1BBDC733003BA1D5 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A9923E1BBDC733003BA1D5 /* AppDelegate.m */; };
 		94A992451BBDC733003BA1D5 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A992441BBDC733003BA1D5 /* ViewController.m */; };
@@ -206,6 +216,28 @@
 		9480B1681BF7B60700ECDE38 /* MoreAnalysisViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MoreAnalysisViewController.xib; sourceTree = "<group>"; };
 		948AE9681BF976170031D97C /* WordFrequencyHeapDataStructure.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WordFrequencyHeapDataStructure.h; sourceTree = "<group>"; };
 		948AE9691BF976170031D97C /* WordFrequencyHeapDataStructure.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WordFrequencyHeapDataStructure.m; sourceTree = "<group>"; };
+		949A178E1D9363C300DBD1DE /* ECPhoneNumberFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECPhoneNumberFormatter.h; sourceTree = "<group>"; };
+		949A178F1D9363C300DBD1DE /* ECPhoneNumberFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ECPhoneNumberFormatter.m; sourceTree = "<group>"; };
+		949A17911D93644300DBD1DE /* RSVerticallyCenteredTextFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSVerticallyCenteredTextFieldCell.h; sourceTree = "<group>"; };
+		949A17921D93644300DBD1DE /* RSVerticallyCenteredTextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSVerticallyCenteredTextFieldCell.m; sourceTree = "<group>"; };
+		949A17AC1D936B7D00DBD1DE /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabase.h; sourceTree = "<group>"; };
+		949A17AD1D936B7D00DBD1DE /* FMDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabase.m; sourceTree = "<group>"; };
+		949A17AE1D936B7D00DBD1DE /* FMDatabase+FTS3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "FMDatabase+FTS3.h"; sourceTree = "<group>"; };
+		949A17AF1D936B7D00DBD1DE /* FMDatabase+FTS3.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "FMDatabase+FTS3.m"; sourceTree = "<group>"; };
+		949A17B01D936B7D00DBD1DE /* FMDatabase+InMemoryOnDiskIO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "FMDatabase+InMemoryOnDiskIO.h"; sourceTree = "<group>"; };
+		949A17B11D936B7D00DBD1DE /* FMDatabase+InMemoryOnDiskIO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "FMDatabase+InMemoryOnDiskIO.m"; sourceTree = "<group>"; };
+		949A17B21D936B7D00DBD1DE /* FMDatabaseAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabaseAdditions.h; sourceTree = "<group>"; };
+		949A17B31D936B7D00DBD1DE /* FMDatabaseAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabaseAdditions.m; sourceTree = "<group>"; };
+		949A17B41D936B7D00DBD1DE /* FMDatabasePool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabasePool.h; sourceTree = "<group>"; };
+		949A17B51D936B7D00DBD1DE /* FMDatabasePool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabasePool.m; sourceTree = "<group>"; };
+		949A17B61D936B7D00DBD1DE /* FMDatabaseQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabaseQueue.h; sourceTree = "<group>"; };
+		949A17B71D936B7D00DBD1DE /* FMDatabaseQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabaseQueue.m; sourceTree = "<group>"; };
+		949A17B81D936B7D00DBD1DE /* FMDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDB.h; sourceTree = "<group>"; };
+		949A17B91D936B7D00DBD1DE /* FMResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMResultSet.h; sourceTree = "<group>"; };
+		949A17BA1D936B7D00DBD1DE /* FMResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMResultSet.m; sourceTree = "<group>"; };
+		949A17BB1D936B7D00DBD1DE /* FMTokenizers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMTokenizers.h; sourceTree = "<group>"; };
+		949A17BC1D936B7D00DBD1DE /* FMTokenizers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMTokenizers.m; sourceTree = "<group>"; };
+		949A17BD1D936B7D00DBD1DE /* fts3_tokenizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fts3_tokenizer.h; sourceTree = "<group>"; };
 		94A9923A1BBDC733003BA1D5 /* iMessageAnalyzer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iMessageAnalyzer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		94A9923D1BBDC733003BA1D5 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		94A9923E1BBDC733003BA1D5 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -495,6 +527,10 @@
 				94F8CDB31C3B39F500E58BB3 /* Constants */,
 				941C04FB1C0300AB002E2FAB /* Message Manager */,
 				94DD09BB1C432CC8004FA62D /* Database Manager */,
+				949A178E1D9363C300DBD1DE /* ECPhoneNumberFormatter.h */,
+				949A178F1D9363C300DBD1DE /* ECPhoneNumberFormatter.m */,
+				949A17911D93644300DBD1DE /* RSVerticallyCenteredTextFieldCell.h */,
+				949A17921D93644300DBD1DE /* RSVerticallyCenteredTextFieldCell.m */,
 			);
 			name = Managers;
 			sourceTree = "<group>";
@@ -737,6 +773,24 @@
 			children = (
 				942A0B451C37069A00C89982 /* Constants.h */,
 				942A0B461C37069A00C89982 /* Constants.m */,
+				949A17AC1D936B7D00DBD1DE /* FMDatabase.h */,
+				949A17AD1D936B7D00DBD1DE /* FMDatabase.m */,
+				949A17AE1D936B7D00DBD1DE /* FMDatabase+FTS3.h */,
+				949A17AF1D936B7D00DBD1DE /* FMDatabase+FTS3.m */,
+				949A17B01D936B7D00DBD1DE /* FMDatabase+InMemoryOnDiskIO.h */,
+				949A17B11D936B7D00DBD1DE /* FMDatabase+InMemoryOnDiskIO.m */,
+				949A17B21D936B7D00DBD1DE /* FMDatabaseAdditions.h */,
+				949A17B31D936B7D00DBD1DE /* FMDatabaseAdditions.m */,
+				949A17B41D936B7D00DBD1DE /* FMDatabasePool.h */,
+				949A17B51D936B7D00DBD1DE /* FMDatabasePool.m */,
+				949A17B61D936B7D00DBD1DE /* FMDatabaseQueue.h */,
+				949A17B71D936B7D00DBD1DE /* FMDatabaseQueue.m */,
+				949A17B81D936B7D00DBD1DE /* FMDB.h */,
+				949A17B91D936B7D00DBD1DE /* FMResultSet.h */,
+				949A17BA1D936B7D00DBD1DE /* FMResultSet.m */,
+				949A17BB1D936B7D00DBD1DE /* FMTokenizers.h */,
+				949A17BC1D936B7D00DBD1DE /* FMTokenizers.m */,
+				949A17BD1D936B7D00DBD1DE /* fts3_tokenizer.h */,
 			);
 			name = Constants;
 			sourceTree = "<group>";
@@ -810,6 +864,7 @@
 				TargetAttributes = {
 					94A992391BBDC733003BA1D5 = {
 						CreatedOnToolsVersion = 7.0.1;
+						DevelopmentTeam = Q7N3L673D8;
 					};
 					94A9924F1BBDC734003BA1D5 = {
 						CreatedOnToolsVersion = 7.0.1;
@@ -944,19 +999,29 @@
 				941C04F71C02C586002E2FAB /* ViewAttachmentsViewController.m in Sources */,
 				940136D81C05C7CF003AF393 /* TemporaryDatabaseManager.m in Sources */,
 				9438FD111BE07D2600B239BE /* MainViewController.m in Sources */,
+				949A17C01D936B7D00DBD1DE /* FMDatabase+InMemoryOnDiskIO.m in Sources */,
 				94F01DDD1BE852CF00B47D9D /* CalendarPopUpViewController.m in Sources */,
 				946D2A6C1BE55BF900270BF0 /* Statistics.m in Sources */,
 				942A0B471C37069A00C89982 /* Constants.m in Sources */,
+				949A17901D9363C300DBD1DE /* ECPhoneNumberFormatter.m in Sources */,
 				9408790A1C403819006F6C87 /* BarPlotViewController.m in Sources */,
 				940136CB1C0585A7003AF393 /* DropPlotMessageAnalyzerViewController.m in Sources */,
 				9438FD071BE07CFF00B239BE /* MainWindowController.m in Sources */,
 				940878FA1C40158D006F6C87 /* PieChartViewController.m in Sources */,
+				949A17C31D936B7D00DBD1DE /* FMDatabaseQueue.m in Sources */,
+				949A17931D93644300DBD1DE /* RSVerticallyCenteredTextFieldCell.m in Sources */,
+				949A17C21D936B7D00DBD1DE /* FMDatabasePool.m in Sources */,
 				948AE96A1BF976170031D97C /* WordFrequencyHeapDataStructure.m in Sources */,
+				949A17C51D936B7D00DBD1DE /* FMTokenizers.m in Sources */,
 				945544FC1C423DA80099CF3A /* StartupWindowController.m in Sources */,
 				945037121BF59F4700F995E7 /* SimpleAnalyticsPopUpViewController.m in Sources */,
+				949A17BE1D936B7D00DBD1DE /* FMDatabase.m in Sources */,
 				94A992451BBDC733003BA1D5 /* ViewController.m in Sources */,
 				94F3AC441BC727BE00948A23 /* MessageManager.m in Sources */,
+				949A17C11D936B7D00DBD1DE /* FMDatabaseAdditions.m in Sources */,
+				949A17BF1D936B7D00DBD1DE /* FMDatabase+FTS3.m in Sources */,
 				94F3AC411BC481B900948A23 /* Message.m in Sources */,
+				949A17C41D936B7D00DBD1DE /* FMResultSet.m in Sources */,
 				947B53CC1BE1AA2700484D66 /* ChatTableViewCell.m in Sources */,
 				9480B1691BF7B60700ECDE38 /* MoreAnalysisViewController.m in Sources */,
 				9455450B1C423FA10099CF3A /* StartupViewController.m in Sources */,
@@ -1104,6 +1169,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Developer ID Application";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1121,6 +1187,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Developer ID Application";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
