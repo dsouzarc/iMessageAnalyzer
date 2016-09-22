@@ -26,7 +26,7 @@ static Constants *constants;
  *
  *              CONSTRUCTORS
  *
-*****************************************************************/
+ *****************************************************************/
 
 # pragma mark CONSTRUCTORS
 
@@ -65,6 +65,28 @@ static Constants *constants;
  *****************************************************************/
 
 # pragma mark DATE FROM INFORMATION
+
+- (NSDate*) dateAtBeginningOfDay:(NSDate*)date
+{
+    NSDateComponents *components = [self dateComponentsForDay:date];
+    [components setHour:0];
+    [components setHour:0];
+    [components setSecond:1];
+    
+    return [self.calendar dateFromComponents:components];
+}
+
+- (NSDate*) dateAtEndOfDay:(NSDate*)date
+{
+    NSDateComponents *components = [self dateComponentsForDay:date];
+    [components setHour:23];
+    [components setHour:59];
+    [components setSecond:59];
+    
+    [components setDay:[components day] - 2];
+    
+    return [self.calendar dateFromComponents:components];
+}
 
 - (NSDate*) dateAtEndOfMonth:(NSDate*)date
 {
@@ -144,7 +166,7 @@ static Constants *constants;
  *
  *              NUMBERS FROM INFORMATION
  *
-*****************************************************************/
+ *****************************************************************/
 
 # pragma mark SEARCHFIELD_DELEGATE
 
@@ -206,7 +228,7 @@ static Constants *constants;
  *
  *              BOOLS FROM INFORMATION
  *
-*****************************************************************/
+ *****************************************************************/
 
 # pragma mark BOOLS FROM INFORMATION
 
@@ -227,7 +249,7 @@ static Constants *constants;
  *
  *              STRING FROM DATE INFORMATION
  *
-*****************************************************************/
+ *****************************************************************/
 
 # pragma mark SEARCHFIELD_DELEGATE
 
@@ -270,7 +292,7 @@ static Constants *constants;
  *
  *              Miscellaneous
  *
-*****************************************************************/
+ *****************************************************************/
 
 # pragma mark Miscellaneous
 
@@ -288,7 +310,7 @@ static Constants *constants;
  *
  *              AUXILLARY
  *
-*****************************************************************/
+ *****************************************************************/
 
 # pragma mark AUXILLARY
 
@@ -310,6 +332,12 @@ static Constants *constants;
 + (BOOL) isConversationStarter:(int)timeDifference
 {
     return timeDifference >= MIN_CONVERSATION_STARTER;
+}
+
++ (NSDictionary*) getMessageWithAttachmentAttributes
+{
+    return [NSDictionary dictionaryWithObjectsAndKeys:[NSColor yellowColor], NSForegroundColorAttributeName,
+            [NSNumber numberWithInt:NSUnderlineStyleSingle], NSUnderlineStyleAttributeName, nil];
 }
 
 @end
