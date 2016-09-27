@@ -16,6 +16,8 @@ static Constants *constants;
 @property (strong, nonatomic) NSCalendar *calendar;
 @property (strong, nonatomic) NSDateFormatter *monthDateYearFormatter;
 @property (strong, nonatomic) NSDateFormatter *shortMonthYearFormatter;
+@property (strong, nonatomic) NSDateFormatter *yearMonthDayFormatter;
+@property (strong, nonatomic) NSDateFormatter *timeFormatter;
 
 @end
 
@@ -42,6 +44,12 @@ static Constants *constants;
         
         self.shortMonthYearFormatter = [[NSDateFormatter alloc] init];
         [self.shortMonthYearFormatter setDateFormat:@"MMM yy"];
+        
+        self.yearMonthDayFormatter = [[NSDateFormatter alloc] init];
+        [self.yearMonthDayFormatter setDateFormat:@"yyyy-MM-dd"];
+        
+        self.timeFormatter = [[NSDateFormatter alloc] init];
+        [self.timeFormatter setDateFormat:@"hh.mm.ss"];
     }
     
     return self;
@@ -244,6 +252,14 @@ static Constants *constants;
     return strcmp(text, "iMessage") == 0;
 }
 
+- (BOOL) isDateOnSameDay:(NSDate*)firstDate secondDate:(NSDate*)secondDate
+{
+    NSDateComponents *day1 = [self dateComponentsForDay:firstDate];
+    NSDateComponents *day2 = [self dateComponentsForDay:secondDate];
+    
+    return (day1.day == day2.day) && (day1.month == day2.month) && (day1.year == day2.year);
+}
+
 
 /****************************************************************
  *
@@ -287,6 +303,18 @@ static Constants *constants;
     return [self.monthDateYearFormatter stringFromDate:beginningOfYear];
 }
 
+//EX: 2016-09-27
+- (NSString*) yearMonthDayFormatter:(NSDate*)date
+{
+    return [self.yearMonthDayFormatter stringFromDate:date];
+}
+
+//EX: 08.45.26 OR 17.51.45
+- (NSString*) timeFormatter:(NSDate*)date
+{
+    return [self.timeFormatter stringFromDate:date];
+}
+
 
 /****************************************************************
  *
@@ -317,6 +345,11 @@ static Constants *constants;
 - (NSDateComponents*) dateComponentsForDay:(NSDate*)date
 {
     return [self.calendar components:NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay fromDate:date];
+}
+
+- (NSDateComponents*) timeComponentsForDay:(NSDate*)date
+{
+    return [self.calendar components:NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay|NSCalendarUnitHour|NSCalendarUnitMinute|NSCalendarUnitSecond fromDate:date];
 }
 
 + (BOOL) isDevelopmentMode
