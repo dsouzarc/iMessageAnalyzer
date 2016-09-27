@@ -19,6 +19,7 @@
 #import "NSTextField+Messages.h"
 
 #import "MessageManager.h"
+#import "OpenConversation.h"
 
 #import "Contact.h"
 #import "Message.h"

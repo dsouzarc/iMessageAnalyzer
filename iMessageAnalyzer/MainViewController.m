@@ -186,7 +186,6 @@ static NSString *orderByMostMessages = @"Most messages";
         [self.calendarPopover setContentViewController:self.calendarPopUpViewController];
         [self.calendarPopover setAnimates:YES];
         [self.calendarPopover setBehavior:NSPopoverBehaviorTransient];
-        self.calendarPopover.delegate = self;
     }
     
     NSDate *lastDate = [NSDate date];
@@ -252,9 +251,15 @@ static NSString *orderByMostMessages = @"Most messages";
 
 - (void) wantsMoreAnalysis
 {
-    self.moreAnalysisWindowController = [[MoreAnalysisWindowController alloc] initWithWindowNibName:@"MoreAnalysisWindowController" person:self.lastChosenPerson messages:[self.messageManager getAllMessagesForPerson:self.lastChosenPerson]];
+    NSMutableArray *allMessagesForLastSelectedPerson = [self.messageManager getAllMessagesForPerson:self.lastChosenPerson];
+    
+    self.moreAnalysisWindowController = [[MoreAnalysisWindowController alloc] initWithWindowNibName:@"MoreAnalysisWindowController" person:self.lastChosenPerson messages:allMessagesForLastSelectedPerson];
     [self.moreAnalysisWindowController showWindow:self];
     self.moreAnalysisWindowController.delegate = self;
+    
+    NSString *personNumber = self.lastChosenPerson.number;
+    
+    [OpenConversation executeWithPhoneNumber:personNumber];
 }
 
 - (void) moreAnalysisWindowControllerDidClose
@@ -681,6 +686,25 @@ static NSString *orderByMostMessages = @"Most messages";
         self.viewAttachmentsPopover = nil;
         self.viewAttachmentsViewController = nil;
     }
+}
+
+
+/****************************************************************
+ *
+ *              CalendarPopUpViewController Delegate
+ *
+ *****************************************************************/
+
+# pragma mark CalendarPopUpViewController Delegate
+
+- (void) resetToAll:(BOOL)resetToAll
+{
+    //Unimplemented for now
+}
+
+- (void) fromDayChosen:(NSDate *)fromDayChosen toDayChosen:(NSDate *)toDayChosen
+{
+    //Unimplemented for now    
 }
 
 
