@@ -61,10 +61,15 @@
 		94A9924A1BBDC734003BA1D5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 94A992481BBDC734003BA1D5 /* Main.storyboard */; };
 		94A992551BBDC734003BA1D5 /* iMessageAnalyzerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A992541BBDC734003BA1D5 /* iMessageAnalyzerTests.m */; };
 		94A992601BBDC734003BA1D5 /* iMessageAnalyzerUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A9925F1BBDC734003BA1D5 /* iMessageAnalyzerUITests.m */; };
+		94D18FC61D9A253300E9C501 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94D18FC51D9A253300E9C501 /* QTKit.framework */; };
+		94D18FC71D9A254800E9C501 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94D18FC51D9A253300E9C501 /* QTKit.framework */; };
+		94D18FC81D9A254800E9C501 /* QTKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 94D18FC51D9A253300E9C501 /* QTKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		94D71AE31C95ED1A00E71D6D /* CorePlot.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94D71AE21C95ED1A00E71D6D /* CorePlot.framework */; };
 		94D71AE41C95ED6300E71D6D /* CorePlot.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94D71AE21C95ED1A00E71D6D /* CorePlot.framework */; };
 		94D71AE51C95ED6300E71D6D /* CorePlot.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 94D71AE21C95ED1A00E71D6D /* CorePlot.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		94DAC4A51BE7DAF90016ED35 /* calendar-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 94DAC4A41BE7DAF90016ED35 /* calendar-icon.png */; };
+		94E6A2A41D9B2025009FA362 /* OpenConversation.m in Sources */ = {isa = PBXBuildFile; fileRef = 94E6A2A31D9B2025009FA362 /* OpenConversation.m */; };
+		94E6A2A51D9B22B8009FA362 /* OpenConversation.applescript in Resources */ = {isa = PBXBuildFile; fileRef = 94E6A29B1D9B1F82009FA362 /* OpenConversation.applescript */; };
 		94E70EB41BF9C80A00653F94 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94E70EB31BF9C80A00653F94 /* QuartzCore.framework */; };
 		94F01DDD1BE852CF00B47D9D /* CalendarPopUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94F01DDB1BE852CF00B47D9D /* CalendarPopUpViewController.m */; };
 		94F01DDE1BE852CF00B47D9D /* CalendarPopUpViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94F01DDC1BE852CF00B47D9D /* CalendarPopUpViewController.xib */; };
@@ -150,6 +155,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				94D18FC81D9A254800E9C501 /* QTKit.framework in Embed Frameworks */,
 				94D71AE51C95ED6300E71D6D /* CorePlot.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -252,8 +258,12 @@
 		94A9925B1BBDC734003BA1D5 /* iMessageAnalyzerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iMessageAnalyzerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		94A9925F1BBDC734003BA1D5 /* iMessageAnalyzerUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = iMessageAnalyzerUITests.m; sourceTree = "<group>"; };
 		94A992611BBDC734003BA1D5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		94D18FC51D9A253300E9C501 /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = System/Library/Frameworks/QTKit.framework; sourceTree = SDKROOT; };
 		94D71AE21C95ED1A00E71D6D /* CorePlot.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CorePlot.framework; sourceTree = "<group>"; };
 		94DAC4A41BE7DAF90016ED35 /* calendar-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "calendar-icon.png"; sourceTree = "<group>"; };
+		94E6A29B1D9B1F82009FA362 /* OpenConversation.applescript */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.applescript; path = OpenConversation.applescript; sourceTree = "<group>"; };
+		94E6A2A21D9B2025009FA362 /* OpenConversation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenConversation.h; sourceTree = "<group>"; };
+		94E6A2A31D9B2025009FA362 /* OpenConversation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenConversation.m; sourceTree = "<group>"; };
 		94E70EB31BF9C80A00653F94 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		94F01DDA1BE852CF00B47D9D /* CalendarPopUpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalendarPopUpViewController.h; sourceTree = "<group>"; };
 		94F01DDB1BE852CF00B47D9D /* CalendarPopUpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalendarPopUpViewController.m; sourceTree = "<group>"; };
@@ -277,6 +287,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				94D18FC71D9A254800E9C501 /* QTKit.framework in Frameworks */,
+				94D18FC61D9A253300E9C501 /* QTKit.framework in Frameworks */,
 				94A69D9F1C92B2A00076C55E /* CorePlot.framework in Frameworks */,
 				94E70EB41BF9C80A00653F94 /* QuartzCore.framework in Frameworks */,
 				94F3AC371BC1D9C600948A23 /* libsqlite3.0.tbd in Frameworks */,
@@ -648,6 +660,10 @@
 		94A9923C1BBDC733003BA1D5 /* iMessageAnalyzer */ = {
 			isa = PBXGroup;
 			children = (
+				94E6A29B1D9B1F82009FA362 /* OpenConversation.applescript */,
+				94E6A2A21D9B2025009FA362 /* OpenConversation.h */,
+				94E6A2A31D9B2025009FA362 /* OpenConversation.m */,
+				94BEFCD41D99E70E00E4244F /* FMDatabase */,
 				947B53D11BE1AE0D00484D66 /* Managers */,
 				9459C0021C4466A500F66B98 /* More Analysis View and Window */,
 				9459C0011C44669200F66B98 /* Main View and Window */,
@@ -694,9 +710,35 @@
 			path = iMessageAnalyzerUITests;
 			sourceTree = "<group>";
 		};
+		94BEFCD41D99E70E00E4244F /* FMDatabase */ = {
+			isa = PBXGroup;
+			children = (
+				949A17AC1D936B7D00DBD1DE /* FMDatabase.h */,
+				949A17AD1D936B7D00DBD1DE /* FMDatabase.m */,
+				949A17AE1D936B7D00DBD1DE /* FMDatabase+FTS3.h */,
+				949A17AF1D936B7D00DBD1DE /* FMDatabase+FTS3.m */,
+				949A17B01D936B7D00DBD1DE /* FMDatabase+InMemoryOnDiskIO.h */,
+				949A17B11D936B7D00DBD1DE /* FMDatabase+InMemoryOnDiskIO.m */,
+				949A17B21D936B7D00DBD1DE /* FMDatabaseAdditions.h */,
+				949A17B31D936B7D00DBD1DE /* FMDatabaseAdditions.m */,
+				949A17B41D936B7D00DBD1DE /* FMDatabasePool.h */,
+				949A17B51D936B7D00DBD1DE /* FMDatabasePool.m */,
+				949A17B61D936B7D00DBD1DE /* FMDatabaseQueue.h */,
+				949A17B71D936B7D00DBD1DE /* FMDatabaseQueue.m */,
+				949A17B81D936B7D00DBD1DE /* FMDB.h */,
+				949A17B91D936B7D00DBD1DE /* FMResultSet.h */,
+				949A17BA1D936B7D00DBD1DE /* FMResultSet.m */,
+				949A17BB1D936B7D00DBD1DE /* FMTokenizers.h */,
+				949A17BC1D936B7D00DBD1DE /* FMTokenizers.m */,
+				949A17BD1D936B7D00DBD1DE /* fts3_tokenizer.h */,
+			);
+			name = FMDatabase;
+			sourceTree = "<group>";
+		};
 		94DD099E1C432C63004FA62D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				94D18FC51D9A253300E9C501 /* QTKit.framework */,
 				94206D021C9123CB00DD47CD /* CorePlot.xcodeproj */,
 				94E70EB31BF9C80A00653F94 /* QuartzCore.framework */,
 			);
@@ -773,24 +815,6 @@
 			children = (
 				942A0B451C37069A00C89982 /* Constants.h */,
 				942A0B461C37069A00C89982 /* Constants.m */,
-				949A17AC1D936B7D00DBD1DE /* FMDatabase.h */,
-				949A17AD1D936B7D00DBD1DE /* FMDatabase.m */,
-				949A17AE1D936B7D00DBD1DE /* FMDatabase+FTS3.h */,
-				949A17AF1D936B7D00DBD1DE /* FMDatabase+FTS3.m */,
-				949A17B01D936B7D00DBD1DE /* FMDatabase+InMemoryOnDiskIO.h */,
-				949A17B11D936B7D00DBD1DE /* FMDatabase+InMemoryOnDiskIO.m */,
-				949A17B21D936B7D00DBD1DE /* FMDatabaseAdditions.h */,
-				949A17B31D936B7D00DBD1DE /* FMDatabaseAdditions.m */,
-				949A17B41D936B7D00DBD1DE /* FMDatabasePool.h */,
-				949A17B51D936B7D00DBD1DE /* FMDatabasePool.m */,
-				949A17B61D936B7D00DBD1DE /* FMDatabaseQueue.h */,
-				949A17B71D936B7D00DBD1DE /* FMDatabaseQueue.m */,
-				949A17B81D936B7D00DBD1DE /* FMDB.h */,
-				949A17B91D936B7D00DBD1DE /* FMResultSet.h */,
-				949A17BA1D936B7D00DBD1DE /* FMResultSet.m */,
-				949A17BB1D936B7D00DBD1DE /* FMTokenizers.h */,
-				949A17BC1D936B7D00DBD1DE /* FMTokenizers.m */,
-				949A17BD1D936B7D00DBD1DE /* fts3_tokenizer.h */,
 			);
 			name = Constants;
 			sourceTree = "<group>";
@@ -865,6 +889,7 @@
 					94A992391BBDC733003BA1D5 = {
 						CreatedOnToolsVersion = 7.0.1;
 						DevelopmentTeam = Q7N3L673D8;
+						ProvisioningStyle = Manual;
 					};
 					94A9924F1BBDC734003BA1D5 = {
 						CreatedOnToolsVersion = 7.0.1;
@@ -952,6 +977,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				94E6A2A51D9B22B8009FA362 /* OpenConversation.applescript in Resources */,
 				9455450C1C423FA10099CF3A /* StartupViewController.xib in Resources */,
 				9480B1651BF7B5F300ECDE38 /* MoreAnalysisWindowController.xib in Resources */,
 				940878FB1C40158D006F6C87 /* PieChartViewController.xib in Resources */,
@@ -1006,6 +1032,7 @@
 				949A17901D9363C300DBD1DE /* ECPhoneNumberFormatter.m in Sources */,
 				9408790A1C403819006F6C87 /* BarPlotViewController.m in Sources */,
 				940136CB1C0585A7003AF393 /* DropPlotMessageAnalyzerViewController.m in Sources */,
+				94E6A2A41D9B2025009FA362 /* OpenConversation.m in Sources */,
 				9438FD071BE07CFF00B239BE /* MainWindowController.m in Sources */,
 				940878FA1C40158D006F6C87 /* PieChartViewController.m in Sources */,
 				949A17C31D936B7D00DBD1DE /* FMDatabaseQueue.m in Sources */,
@@ -1169,8 +1196,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "Developer ID Application";
+				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = Q7N3L673D8;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -1180,6 +1208,9 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ryan.iMessageAnalyzer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = macosx10.11;
 			};
 			name = Debug;
 		};
@@ -1187,8 +1218,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "Developer ID Application";
+				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = Q7N3L673D8;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -1198,6 +1230,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ryan.iMessageAnalyzer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx10.11;
 			};
 			name = Release;
 		};
