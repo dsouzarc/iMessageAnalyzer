@@ -8,6 +8,39 @@
 
 #import "OpenConversation.h"
 
+static NSString *scriptName = @"OpenConversation";
+static NSString *scriptType = @"applescript";
+
+@interface OpenConversation ()
+
+@end
+
 @implementation OpenConversation
+
++ (void) executeWithPhoneNumber:(NSString*)phoneNumber
+{
+    NSError *error;
+    
+    NSString *path = [[NSBundle mainBundle] pathForResource:scriptName ofType:scriptType];
+    NSString *appleScriptCode = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:&error];
+    
+    if(error) {
+        NSLog(@"ERROR OPENING %@.%@", scriptName, scriptType);
+    } else {
+        
+        appleScriptCode = [appleScriptCode stringByReplacingOccurrencesOfString:@"{phoneNumber}" withString:phoneNumber];
+        
+        NSLog(@"NEW CODE: %@", appleScriptCode);
+        
+        NSAppleScript *appleScript = [[NSAppleScript alloc] initWithSource:appleScriptCode];
+        
+        NSDictionary *errors = [[NSDictionary alloc] init];
+        [appleScript executeAndReturnError:&errors];
+        
+        if(errors && errors.count > 0) {
+            NSLog(@"ERROR EXECUTING CODE: %@", errors);
+        }
+    }
+}
 
 @end

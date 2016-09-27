@@ -10,4 +10,6 @@
 
 @interface OpenConversation : NSObject
 
++ (void) executeWithPhoneNumber:(NSString*)phoneNumber;
+
 @end
