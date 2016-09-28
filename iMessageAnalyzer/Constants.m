@@ -247,10 +247,10 @@ static Constants *constants;
     return  day <= 7;
 }
 
-- (BOOL) isIMessage:(char*)text
-{
-    return strcmp(text, "iMessage") == 0;
++ (BOOL) isIMessage:(NSString*) text{
+    return [text isEqualToString:@"iMessage"];
 }
+
 
 - (BOOL) isDateOnSameDay:(NSDate*)firstDate secondDate:(NSDate*)secondDate
 {

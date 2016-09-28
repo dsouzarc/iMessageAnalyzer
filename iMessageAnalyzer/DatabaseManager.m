@@ -167,7 +167,7 @@ static NSString *pathToDB;
         NSString *number = [self cleanNumber:chatIdentifier];
         
         NSString *iMessageText = [result stringForColumnIndex:4];
-        BOOL isIMessage = [self isIMessage:iMessageText];
+        BOOL isIMessage = [Constants isIMessage:iMessageText];
         
         NSString *groupID = [result stringForColumnIndex:5];
         NSString *chatName = [result stringForColumnIndex:6];
@@ -329,7 +329,7 @@ static NSString *pathToDB;
         }
         
         NSString *iMessageText = [result stringForColumnIndex:3];
-        BOOL isIMessage = [self isIMessage:iMessageText];
+        BOOL isIMessage = [Constants isIMessage:iMessageText];
         
         NSString *accountGUID = [result stringForColumnIndex:4];
         int32_t dateInt = [result intForColumnIndex:5];
@@ -418,7 +418,7 @@ static NSString *pathToDB;
         NSString *guid = [queryResult stringForColumnIndex:1];
         NSString *text =  [queryResult stringForColumnIndex:2];
         int handleId = [queryResult intForColumnIndex:3];
-        BOOL isIMessage = [self isIMessage:[queryResult stringForColumnIndex:4]];
+        BOOL isIMessage = [Constants isIMessage:[queryResult stringForColumnIndex:4]];
         int dateInt = [queryResult intForColumnIndex:5];
         int date_readInt = [queryResult intForColumnIndex:6];
         BOOL isFromMe = [queryResult intForColumnIndex:7] == 1;
@@ -556,10 +556,6 @@ static NSString *pathToDB;
     else {
         return @"";
     }
-}
-
-- (BOOL) isIMessage:(NSString*)text{
-    return [text isEqualToString:@"iMessage"];
 }
 
 - (NSMutableArray*) getAllChats

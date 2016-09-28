@@ -16,6 +16,8 @@
 #import "Person.h"
 #import "Statistics.h"
 
+#import "FMDatabase.h"
+
 
 /** Manages a temporary database for MoreAnalysisViewController */
 

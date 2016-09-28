@@ -41,7 +41,7 @@ const static int MIN_CONVERSATION_STARTER = MAX_DOUBLE_MESSAGE + 1;
 
 #pragma mark BOOL FROM INFORMATION
 
-- (BOOL) isIMessage:(char*)text;
++ (BOOL) isIMessage:(NSString*)text;
 - (BOOL) isBeginningOfMonth:(NSDate*)date;
 - (BOOL) isDateOnSameDay:(NSDate*)firstDate secondDate:(NSDate*)secondDate;
 
