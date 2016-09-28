@@ -9,6 +9,7 @@
 #import "TemporaryDatabaseManager.h"
 
 #pragma mark Static variables
+
 #define MAX_DB_TRIES 40
 
 static NSString *myMessagesTable = @"myMessagesTable";
@@ -25,8 +26,6 @@ static TemporaryDatabaseManager *databaseManager;
 @property (strong, nonatomic) NSCalendar *calendar;
 
 @property sqlite3 *database;
-
-@property (strong, nonatomic) FMDatabase *fmDatabase;
 
 @end
 
@@ -72,11 +71,10 @@ static TemporaryDatabaseManager *databaseManager;
         self.calendar = [NSCalendar currentCalendar];
         [self.calendar setTimeZone:[NSTimeZone systemTimeZone]];
         
-        self.fmDatabase = [FMDatabase databaseWithPath:nil];
+        const char *filePath = ":memory:"; //[self filePath]; //
         
-        if([self.fmDatabase open]) {
-            
-            NSLog(@"OPENED TEMPORARY DATABASE");
+        if(sqlite3_open(filePath, &_database) == SQLITE_OK) {
+            printf("OPENED TEMPORARY DATABASE\n");
             
             [self createMyMessagesTable];
             [self createOtherMessagesTable];
@@ -84,19 +82,22 @@ static TemporaryDatabaseManager *databaseManager;
             
             [self addMessagesToDatabase:messages];
             
+            
+            
+            
             //[self addOtherMessagesToDatabase:[[DatabaseManager getInstance] getTemporaryInformationForAllConversationsExceptWith:person]];
-            
-            NSMutableArray *others = [NSMutableArray arrayWithArray:[[DatabaseManager getInstance] getTemporaryInformationForAllConversationsExceptWith:person]];
-            
-            [self addOtherMessagesToDatabase:others];
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-                //TODO: HERE
-
-                //[self addOtherMessagesToDatabase:[[DatabaseManager getInstance] getTemporaryInformationForAllConversationsExceptWith:person]];
+                //TODO: HERE [self addOtherMessagesToDatabase:[[DatabaseManager getInstance] getTemporaryInformationForAllConversationsExceptWith:person]];
+                NSMutableArray *tempMessages = [NSMutableArray arrayWithArray:[[DatabaseManager getInstance] getTemporaryInformationForAllConversationsExceptWith:person]];
+                
+                [self addOtherMessagesToDatabase:tempMessages];
+                
+                
             });
             
-        } else {
-            NSLog(@"ERROR OPENING TEMPORARY DATABASE");
+        }
+        else {
+            printf("ERROR OPENING TEMPORARY DATABASE: %s\n", sqlite3_errmsg(_database));
         }
     }
     
@@ -107,7 +108,7 @@ static TemporaryDatabaseManager *databaseManager;
 {
     if(databaseManager) {
         databaseManager.person = nil;
-        [databaseManager.fmDatabase close];
+        sqlite3_close(databaseManager.database);
     }
     
     databaseManager = nil;
@@ -131,43 +132,21 @@ static TemporaryDatabaseManager *databaseManager;
     int cache_has_attachments = message.hasAttachment || message.attachments ? 1 : 0;
     int wordCount = (int)[message.messageText componentsSeparatedByString:@" "].count;
     NSString *text = [message.messageText stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
-    return [NSString stringWithFormat:@"INSERT INTO %@(ROWID, guid, text, handle_id, service, date, date_read, is_from_me, cache_has_attachments, wordCount) VALUES ('%d', '%@', '%@', '%d', '%@', '%d', '%d', '%d', '%d', '%d');", myMessagesTable, (int)message.messageId, message.messageGUID, text, (int) message.handleId, service, date, dateRead, isFromMe, cache_has_attachments, wordCount];
+    return [NSString stringWithFormat:@"INSERT INTO %@(ROWID, guid, text, handle_id, service, date, date_read, is_from_me, cache_has_attachments, wordCount) VALUES ('%d', '%@', '%@', '%d', '%@', '%d', '%d', '%d', '%d', '%d')", myMessagesTable, (int)message.messageId, message.messageGUID, text, (int) message.handleId, service, date, dateRead, isFromMe, cache_has_attachments, wordCount];
 }
 
 - (void) addMessagesToDatabase:(NSMutableArray*)messages
 {
+    char *errorMessage;
     
-    CFTimeInterval startTime = CACurrentMediaTime();
-
-    NSMutableString *insertStatements = [[NSMutableString alloc] init];
-    int messageCounter = 0;
-    
-    [self.fmDatabase executeQuery:@"BEGIN TRANSACTION"];
+    sqlite3_exec(_database, "BEGIN TRANSACTION", NULL, NULL, &errorMessage);
     
     for(Message *message in messages) {
-        NSString *insertStatement = [self insertMessageQuery:message];
-        [insertStatements appendString:insertStatement];
-        messageCounter++;
-        
-        if(messageCounter % 50 == 0) {
-            [self.fmDatabase executeStatements:insertStatements];
-            
-            messageCounter = 0;
-            [insertStatements setString:@""];
-        }
+        NSString *query = [self insertMessageQuery:message];
+        [self executeSQLStatement:[query UTF8String] errorMessage:errorMessage];
     }
     
-    if(messageCounter > 0) {
-        [self.fmDatabase executeStatements:insertStatements];
-        [insertStatements setString:@""];
-    }
-    
-    insertStatements = nil;
-    
-    [self.fmDatabase executeQuery:@"COMMIT TRANSACTION"];
-    
-    CFTimeInterval endTime = CACurrentMediaTime();
-    NSLog(@"EXECUTION TIME FOR ADDING MESSAGES TO TEMP DB: %f", (endTime - startTime));
+    sqlite3_exec(_database, "COMMIT TRANSACTION", NULL, NULL, &errorMessage);
 }
 
 
@@ -179,6 +158,40 @@ static TemporaryDatabaseManager *databaseManager;
 
 # pragma mark Insert into other messages
 
+- (void) addOtherMessagesToDatabase:(NSMutableArray*)otherMessages
+{
+    char *errorMessage;
+    
+    CFTimeInterval startTime = CACurrentMediaTime();
+    
+    sqlite3_exec(_database, "BEGIN TRANSACTION", NULL, NULL, &errorMessage);
+    
+    char buffer[] = "INSERT INTO otherMessagesTable VALUES (?1, ?2, ?3, ?4, ?5)";
+    sqlite3_stmt* stmt;
+    sqlite3_prepare_v2(_database, buffer, (int)strlen(buffer), &stmt, NULL);
+    
+    for(NSDictionary *otherMessage in otherMessages) {
+        //NSString *query = [self insertOtherMessageQuery:otherMessage];
+        //[self executeSQLStatement:[query UTF8String] errorMessage:errorMessage];
+        
+        sqlite3_bind_int(stmt, 1, [otherMessage[@"ROWID"] intValue]);
+        sqlite3_bind_int(stmt, 2, [otherMessage[@"date"] intValue]);
+        sqlite3_bind_int(stmt, 3, [otherMessage[@"wordCount"] intValue]);
+        sqlite3_bind_int(stmt, 4, [otherMessage[@"is_from_me"] intValue]);
+        sqlite3_bind_int(stmt, 5, [otherMessage[@"cache_has_attachments"] intValue]);
+        if (sqlite3_step(stmt) != SQLITE_DONE) {
+            //Left Blank
+        }
+        sqlite3_reset(stmt);
+    }
+    
+    sqlite3_exec(_database, "COMMIT TRANSACTION", NULL, NULL, &errorMessage);
+    sqlite3_finalize(stmt);
+    
+    NSLog(@"FINISHED ADDING ALL OTHER MESSAGES TO DB: %f", (CACurrentMediaTime() - startTime));
+    self.finishedAddingEntries = YES;
+}
+
 - (NSString*) insertOtherMessageQuery:(NSDictionary*)otherMessage
 {
     int rowID = [otherMessage[@"ROWID"] intValue];
@@ -187,46 +200,6 @@ static TemporaryDatabaseManager *databaseManager;
     int isFromMe = [otherMessage[@"is_from_me"] intValue];
     int hasAttachment = [otherMessage[@"cache_has_attachments"] intValue];
     return [NSString stringWithFormat:@"INSERT INTO %@(ROWID, date, wordCount, is_from_me, cache_has_attachments) VALUES (%d, %d, %d, %d, %d)", otherMessagesTable, rowID, date, wordCount, isFromMe, hasAttachment];
-}
-
-- (void) addOtherMessagesToDatabase:(NSMutableArray*)otherMessages
-{
-    
-    CFTimeInterval startTime = CACurrentMediaTime();
-    
-    NSMutableString *insertStatements = [[NSMutableString alloc] init];
-    int messageCounter = 0;
-    
-    [self.fmDatabase executeQuery:@"BEGIN TRANSACTION"];
-    
-    for(NSDictionary *message in otherMessages) {
-        NSString *insertStatement = [self insertOtherMessageQuery:message];
-        
-        [insertStatements appendString:insertStatement];
-        messageCounter++;
-        
-        if(messageCounter % 150 == 0) {
-            [self.fmDatabase executeStatements:insertStatements];
-            
-            messageCounter = 0;
-            [insertStatements setString:@""];
-        }
-    }
-    
-    if(messageCounter > 0) {
-        [self.fmDatabase executeStatements:insertStatements];
-        [insertStatements setString:@""];
-    }
-    
-    insertStatements = nil;
-    
-    [self.fmDatabase executeQuery:@"COMMIT TRANSACTION"];
-    
-    
-    CFTimeInterval endTime = CACurrentMediaTime();
-    NSLog(@"EXECUTION TIME FOR ADDING OTHER MESSAGES TO TEMP DB: %f", (endTime - startTime));
-
-    self.finishedAddingEntries = YES;
 }
 
 
@@ -286,49 +259,54 @@ static TemporaryDatabaseManager *databaseManager;
     
     Statistics *statistics = *statisticsPointer;
     
-    NSString *query = [NSString stringWithFormat:@"SELECT ROWID, guid, text, service, date, date_read, is_from_me, cache_has_attachments, handle_id FROM %@ WHERE (date > %ld AND date < %ld) ORDER BY date", myMessagesTable, startTimeInSeconds, endTimeInSeconds];
+    const char *query = [[NSString stringWithFormat:@"SELECT ROWID, guid, text, service, date, date_read, is_from_me, cache_has_attachments, handle_id FROM %@ WHERE (date > %ld AND date < %ld) ORDER BY date", myMessagesTable, startTimeInSeconds, endTimeInSeconds] UTF8String];
     
-    FMResultSet *result = [self.fmDatabase executeQuery:query];
+    sqlite3_stmt *statement;
     
-    while([result next]) {
-        int messageID = [result intForColumnIndex:0];
-        NSString *guid = [result stringForColumnIndex:1];
-        
-        NSString *text = [result stringForColumnIndex:2];
-        if(text) {
-            text = [text stringByReplacingOccurrencesOfString:@"''" withString:@"'"];
-        } else {
-            text = @"";
-        }
-        
-        BOOL isIMessage = [Constants isIMessage:[result stringForColumnIndex:3]];
-        int dateInt = [result intForColumnIndex:4];
-        int32_t dateReadInt = [result intForColumnIndex:5];
-        
-        BOOL isFromMe = [result intForColumnIndex:6] == 1 ? YES : NO;
-        BOOL hasAttachment = [result intForColumnIndex:7] == 1 ? YES: NO;
-        int32_t handleID = [result intForColumnIndex:8];
-        
-        if(isFromMe) {
-            statistics.numberOfSentMessages++;
-            if(hasAttachment) {
-                statistics.numberOfSentAttachments++;
+    if(sqlite3_prepare_v2(_database, query, -1, &statement, NULL) == SQLITE_OK) {
+        while(sqlite3_step(statement) == SQLITE_ROW) {
+            int32_t messageID = sqlite3_column_int(statement, 0);
+            NSString *guid = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 1)];
+            
+            NSString *text = @"";
+            if(sqlite3_column_text(statement, 2)) {
+                text = [NSString stringWithUTF8String:sqlite3_column_text(statement, 2)];
+                text = [text stringByReplacingOccurrencesOfString:@"''" withString:@"'"];
             }
-        }
-        else {
-            statistics.numberOfReceivedMessages++;
-            if(hasAttachment) {
-                statistics.numberOfReceivedAttachments++;
+            
+            BOOL isIMessage = [Constants isIMessage:[NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 3)]];
+            int32_t dateInt = sqlite3_column_int(statement, 4);
+            int32_t dateReadInt = sqlite3_column_int(statement, 5);
+            
+            BOOL isFromMe = sqlite3_column_int(statement, 6) == 1 ? YES : NO;
+            BOOL hasAttachment = sqlite3_column_int(statement, 7) == 1 ? YES: NO;
+            int32_t handleID = sqlite3_column_int(statement, 8);
+            
+            if(isFromMe) {
+                statistics.numberOfSentMessages++;
+                if(hasAttachment) {
+                    statistics.numberOfSentAttachments++;
+                }
             }
+            else {
+                statistics.numberOfReceivedMessages++;
+                if(hasAttachment) {
+                    statistics.numberOfReceivedAttachments++;
+                }
+            }
+            
+            NSDate *date = [NSDate dateWithTimeIntervalSinceReferenceDate:dateInt];
+            NSDate *dateRead = dateReadInt == 0 ? nil : [NSDate dateWithTimeIntervalSinceReferenceDate:dateReadInt];
+            
+            Message *message = [[Message alloc] initWithMessageId:messageID handleId:handleID messageGUID:guid messageText:text dateSent:date dateRead:dateRead isIMessage:isIMessage isFromMe:isFromMe hasAttachment:hasAttachment];
+            [allMessagesForChat addObject:message];
         }
-        
-        NSDate *date = [NSDate dateWithTimeIntervalSinceReferenceDate:dateInt];
-        NSDate *dateRead = dateReadInt == 0 ? nil : [NSDate dateWithTimeIntervalSinceReferenceDate:dateReadInt];
-        
-        Message *message = [[Message alloc] initWithMessageId:messageID handleId:handleID messageGUID:guid messageText:text dateSent:date dateRead:dateRead isIMessage:isIMessage isFromMe:isFromMe hasAttachment:hasAttachment];
-        [allMessagesForChat addObject:message];
+    }
+    else {
+        NSLog(@"ERROR COMPILING ALL MESSAGES QUERY: %s", sqlite3_errmsg(_database));
     }
     
+    sqlite3_finalize(statement);
     
     return allMessagesForChat;
 }
@@ -346,28 +324,34 @@ static TemporaryDatabaseManager *databaseManager;
 {
     NSMutableArray *allOtherMessages = [[NSMutableArray alloc] init];
     
-    NSString *query = [NSString stringWithFormat:@"SELECT ROWID, date, wordCount, is_from_me, cache_has_attachments FROM %@ WHERE (date > %d AND date < %d) ORDER BY date", otherMessagesTable, startTime, endTime];
+    const char *query = [[NSString stringWithFormat:@"SELECT ROWID, date, wordCount, is_from_me, cache_has_attachments FROM %@ WHERE (date > %d AND date < %d) ORDER BY date", otherMessagesTable, startTime, endTime] UTF8String];
     
-    FMResultSet *result = [self.fmDatabase executeQuery:query];
+    sqlite3_stmt *statement;
     
-    while([result next]) {
-        
-        int ROW_ID = [result intForColumnIndex:0];
-        int dateInt =  [result intForColumnIndex:1];
-        int wordCount =  [result intForColumnIndex:2];
-        BOOL isFromMe =  [result intForColumnIndex:3] == 1;
-        BOOL hasAttachment =  [result intForColumnIndex:4] == 1;
-        
-        NSMutableDictionary *message = [[NSMutableDictionary alloc] init];
-        [message setObject:[NSNumber numberWithInt:ROW_ID] forKey:@"ROW_ID"];
-        [message setObject:[NSNumber numberWithInt:dateInt] forKey:@"date"];
-        [message setObject:[NSNumber numberWithInt:wordCount] forKey:@"wordCount"];
-        [message setObject:[NSNumber numberWithBool:isFromMe] forKey:@"isFromMe"];
-        [message setObject:[NSNumber numberWithBool:hasAttachment] forKey:@"hasAttachment"];
-        
-        [allOtherMessages addObject:message];
+    if(sqlite3_prepare_v2(_database, query, -1, &statement, NULL) == SQLITE_OK) {
+        while(sqlite3_step(statement) == SQLITE_ROW) {
+            
+            int ROW_ID = sqlite3_column_int(statement, 0);
+            int dateInt = sqlite3_column_int(statement, 1);
+            int wordCount = sqlite3_column_int(statement, 2);
+            BOOL isFromMe = sqlite3_column_int(statement, 3) == 1;
+            BOOL hasAttachment = sqlite3_column_int(statement, 4) == 1;
+            
+            NSMutableDictionary *message = [[NSMutableDictionary alloc] init];
+            [message setObject:[NSNumber numberWithInt:ROW_ID] forKey:@"ROW_ID"];
+            [message setObject:[NSNumber numberWithInt:dateInt] forKey:@"date"];
+            [message setObject:[NSNumber numberWithInt:wordCount] forKey:@"wordCount"];
+            [message setObject:[NSNumber numberWithBool:isFromMe] forKey:@"isFromMe"];
+            [message setObject:[NSNumber numberWithBool:hasAttachment] forKey:@"hasAttachment"];
+            
+            [allOtherMessages addObject:message];
+        }
+    }
+    else {
+        NSLog(@"ERROR COMPILING ALL MESSAGES QUERY: %s", sqlite3_errmsg(_database));
     }
     
+    sqlite3_finalize(statement);
     
     return allOtherMessages;
 }
@@ -444,12 +428,16 @@ static TemporaryDatabaseManager *databaseManager;
     
     NSMutableArray *counters = [[NSMutableArray alloc] init];
     
-    FMResultSet *result = [self.fmDatabase executeQuery:query];
+    sqlite3_stmt *statement;
     
-    while([result next]) {
-        int count = [result intForColumnIndex:0];
-        [counters addObject:@(count)];
+    if(sqlite3_prepare(_database, [query UTF8String], -1, &statement, NULL) == SQLITE_OK) {
+        while(sqlite3_step(statement) == SQLITE_ROW) {
+            int count = sqlite3_column_int(statement, 0);
+            [counters addObject:[NSNumber numberWithInt:count]];
+        }
     }
+    
+    sqlite3_finalize(statement);
     
     return counters;
 }
@@ -543,27 +531,32 @@ static TemporaryDatabaseManager *databaseManager;
 
 - (int) getSimpleCountFromQuery:(NSString*)queryString
 {
+    const char *query = [queryString UTF8String];
     int result = 0;
+    sqlite3_stmt *statement;
     
-    FMResultSet *resultSet = [self.fmDatabase executeQuery:queryString];
-    
-    while([resultSet next]) {
-        result = [resultSet intForColumnIndex:0];
+    if(sqlite3_prepare(_database, query, -1, &statement, NULL) == SQLITE_OK) {
+        while(sqlite3_step(statement) == SQLITE_ROW) {
+            result = sqlite3_column_int(statement, 0);
+        }
+        
+        sqlite3_finalize(statement);
     }
-
+    //HERE
     return result;
 }
 
 - (NSMutableArray*) getAllMessageTimingsQuery:(NSString*)query
 {
     NSMutableArray *results = [[NSMutableArray alloc] init];
-    FMResultSet *result = [self.fmDatabase executeQuery:query];
+    sqlite3_stmt *statement;
     
-    while([result next]) {
-        int timing = [result intForColumnIndex:0];
-        [results addObject:@(timing)];
+    if(sqlite3_prepare(_database, [query UTF8String], -1, &statement, NULL) == SQLITE_ROW) {
+        while(sqlite3_step(statement) == SQLITE_ROW) {
+            [results addObject:[NSNumber numberWithInt:sqlite3_column_int(statement, 0)]];
+        }
     }
-
+    sqlite3_finalize(statement);
     return results;
 }
 
@@ -584,17 +577,19 @@ static TemporaryDatabaseManager *databaseManager;
         [mySentMessages addObject:@(0)];
     }
     
-    FMResultSet *result = [self.fmDatabase executeQuery:query];
-    
-    while([result next]) {
-        int dateInSeconds = [result intForColumnIndex:0];
-        int hour = [[Constants instance] getDateHourFromDateInSeconds:dateInSeconds];
-        
-        int wordCount = [result intForColumnIndex:1];
-        int newValue = [mySentMessages[hour] intValue] + wordCount;
-        mySentMessages[hour] = @(newValue);
+    sqlite3_stmt *statement;
+    if(sqlite3_prepare(_database, [query UTF8String], -1, &statement, NULL) == SQLITE_OK) {
+        while(sqlite3_step(statement) == SQLITE_ROW) {
+            int dateInSeconds = sqlite3_column_int(statement, 0);
+            int hour = [[Constants instance] getDateHourFromDateInSeconds:dateInSeconds];
+            
+            int wordCount = sqlite3_column_int(statement, 1);
+            int newValue = [mySentMessages[hour] intValue] + wordCount;
+            mySentMessages[hour] = @(newValue);
+        }
     }
-
+    
+    sqlite3_finalize(statement);
     return mySentMessages;
 }
 
@@ -606,15 +601,17 @@ static TemporaryDatabaseManager *databaseManager;
         [mySentMessages addObject:@(0)];
     }
     
-    FMResultSet *result = [self.fmDatabase executeQuery:query];
-    
-    while([result next]) {
-        int dateInSeconds = [result intForColumnIndex:0];
-        int hour = [[Constants instance] getDateHourFromDateInSeconds:dateInSeconds];
-        int newValue = [mySentMessages[hour] intValue] + 1;
-        mySentMessages[hour] = @(newValue);
+    sqlite3_stmt *statement;
+    if(sqlite3_prepare(_database, [query UTF8String], -1, &statement, NULL) == SQLITE_OK) {
+        while(sqlite3_step(statement) == SQLITE_ROW) {
+            int dateInSeconds = sqlite3_column_int(statement, 0);
+            int hour = [[Constants instance] getDateHourFromDateInSeconds:dateInSeconds];
+            int newValue = [mySentMessages[hour] intValue] + 1;
+            mySentMessages[hour] = @(newValue);
+        }
     }
-
+    
+    sqlite3_finalize(statement);
     return mySentMessages;
 }
 
@@ -684,9 +681,34 @@ static TemporaryDatabaseManager *databaseManager;
 
 # pragma mark SQLite Helpers
 
-- (BOOL) executeSQLStatement:(NSString*)sqlStatement errorMessage:(char*)errorMessage
+- (BOOL) executeSQLStatement:(const char *)sqlStatement errorMessage:(char*)errorMessage
 {
-    return [self.fmDatabase executeStatements:sqlStatement];
+    int counter = 0;
+    while(counter < MAX_DB_TRIES) {
+        int result = sqlite3_exec(_database, sqlStatement, NULL, NULL, &errorMessage);
+        if(result != SQLITE_OK) {
+            counter++;
+            if(result == SQLITE_BUSY || result == SQLITE_LOCKED) {
+                printf("SQLITE_BUSY/LOCKED ERROR IN EXEC: %s\t%s\n", sqlStatement, sqlite3_errmsg(_database));
+                [NSThread sleepForTimeInterval:0.01];
+            }
+            else {
+                if(result == SQLITE_CONSTRAINT) {
+                    printf("Duplicate ROWID for insert: %s\n", sqlStatement);
+                    return YES;
+                }
+                else {
+                    printf("IN EXEC, ERROR: %s\t%d\t%s\t\n", sqlite3_errmsg(_database), result, sqlStatement);
+                }
+                return NO;
+            }
+        }
+        else {
+            return YES;
+        }
+    }
+    printf("LEFT EXEC SQL STATEMENT AT MAX DB TRIES: %s\n", sqlStatement);
+    return NO;
 }
 
 
@@ -707,10 +729,12 @@ static TemporaryDatabaseManager *databaseManager;
 
 - (void) createTable:(NSString*)tableName createTableStatement:(NSString*)createTableStatement
 {
-    if([self.fmDatabase executeStatements:createTableStatement]) {
+    char *errorMessage;
+    if(sqlite3_exec(_database, [createTableStatement UTF8String], NULL, NULL, &errorMessage) == SQLITE_OK) {
         NSLog(@"SUCCESSFULLY CREATED %@", tableName);
-    } else {
-        NSLog(@"ERROR CREATING TABLE: %@", tableName);
+    }
+    else {
+        printf("ERROR CREATING TABLE: %s\t%s\n", [tableName UTF8String], sqlite3_errmsg(_database));
     }
 }
 
@@ -720,8 +744,8 @@ static TemporaryDatabaseManager *databaseManager;
 - (void) addPragmas
 {
     char *errorMessage;
-    [self executeSQLStatement:@"PRAGMA journal_mode = MEMORY" errorMessage:errorMessage];
-    [self executeSQLStatement:@"PRAGMA synchronous = OFF" errorMessage:errorMessage];
+    [self executeSQLStatement:"PRAGMA journal_mode = MEMORY" errorMessage:errorMessage];
+    [self executeSQLStatement:"PRAGMA synchronous = OFF" errorMessage:errorMessage];
 }
 
 - (const char *)filePath
