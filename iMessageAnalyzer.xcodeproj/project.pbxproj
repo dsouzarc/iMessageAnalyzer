@@ -442,6 +442,7 @@
 		9459C0001C44665500F66B98 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				94E6A2FD1D9B636D009FA362 /* Vertically Centered TextField */,
 				941C04F91C030086002E2FAB /* NSTextField for Messages */,
 				947B53D21BE1AE1F00484D66 /* Chats Cell */,
 				947549681BF207B2006CD211 /* iMessage Text Table Cell View */,
@@ -539,10 +540,6 @@
 				94F8CDB31C3B39F500E58BB3 /* Constants */,
 				941C04FB1C0300AB002E2FAB /* Message Manager */,
 				94DD09BB1C432CC8004FA62D /* Database Manager */,
-				949A178E1D9363C300DBD1DE /* ECPhoneNumberFormatter.h */,
-				949A178F1D9363C300DBD1DE /* ECPhoneNumberFormatter.m */,
-				949A17911D93644300DBD1DE /* RSVerticallyCenteredTextFieldCell.h */,
-				949A17921D93644300DBD1DE /* RSVerticallyCenteredTextFieldCell.m */,
 			);
 			name = Managers;
 			sourceTree = "<group>";
@@ -660,10 +657,7 @@
 		94A9923C1BBDC733003BA1D5 /* iMessageAnalyzer */ = {
 			isa = PBXGroup;
 			children = (
-				94E6A29B1D9B1F82009FA362 /* OpenConversation.applescript */,
-				94E6A2A21D9B2025009FA362 /* OpenConversation.h */,
-				94E6A2A31D9B2025009FA362 /* OpenConversation.m */,
-				94BEFCD41D99E70E00E4244F /* FMDatabase */,
+				94E6A2FE1D9B639D009FA362 /* Open Conversation */,
 				947B53D11BE1AE0D00484D66 /* Managers */,
 				9459C0021C4466A500F66B98 /* More Analysis View and Window */,
 				9459C0011C44669200F66B98 /* Main View and Window */,
@@ -671,6 +665,7 @@
 				9459C0031C4466C000F66B98 /* Popup View Controllers */,
 				9459C0001C44665500F66B98 /* Cells */,
 				9438FD021BE077E400B239BE /* Objects */,
+				94E6A2FC1D9B635E009FA362 /* Phone Number Formatter */,
 				94DD09B91C432CA5004FA62D /* Startup Screen */,
 				947B53D31BE1AE2E00484D66 /* App Delegate */,
 				947B53D41BE1AE3B00484D66 /* VIew Controller - Default */,
@@ -786,10 +781,39 @@
 		94DD09BB1C432CC8004FA62D /* Database Manager */ = {
 			isa = PBXGroup;
 			children = (
+				94BEFCD41D99E70E00E4244F /* FMDatabase */,
 				941C04FC1C0300B3002E2FAB /* Database Manager */,
 				94DD09BA1C432CBC004FA62D /* Temporary Database Manager */,
 			);
 			name = "Database Manager";
+			sourceTree = "<group>";
+		};
+		94E6A2FC1D9B635E009FA362 /* Phone Number Formatter */ = {
+			isa = PBXGroup;
+			children = (
+				949A178E1D9363C300DBD1DE /* ECPhoneNumberFormatter.h */,
+				949A178F1D9363C300DBD1DE /* ECPhoneNumberFormatter.m */,
+			);
+			name = "Phone Number Formatter";
+			sourceTree = "<group>";
+		};
+		94E6A2FD1D9B636D009FA362 /* Vertically Centered TextField */ = {
+			isa = PBXGroup;
+			children = (
+				949A17911D93644300DBD1DE /* RSVerticallyCenteredTextFieldCell.h */,
+				949A17921D93644300DBD1DE /* RSVerticallyCenteredTextFieldCell.m */,
+			);
+			name = "Vertically Centered TextField";
+			sourceTree = "<group>";
+		};
+		94E6A2FE1D9B639D009FA362 /* Open Conversation */ = {
+			isa = PBXGroup;
+			children = (
+				94E6A29B1D9B1F82009FA362 /* OpenConversation.applescript */,
+				94E6A2A21D9B2025009FA362 /* OpenConversation.h */,
+				94E6A2A31D9B2025009FA362 /* OpenConversation.m */,
+			);
+			name = "Open Conversation";
 			sourceTree = "<group>";
 		};
 		94E70EA91BF9BF1E00653F94 /* Data Structures */ = {

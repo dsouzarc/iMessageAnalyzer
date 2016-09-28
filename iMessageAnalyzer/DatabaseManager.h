@@ -20,6 +20,7 @@
 
 #import "FMDatabase.h"
 
+
 /** Manages the user's messages database */
 
 @interface DatabaseManager : NSObject
