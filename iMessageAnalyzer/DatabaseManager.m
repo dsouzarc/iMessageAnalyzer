@@ -81,9 +81,9 @@ static NSString *pathToDB;
         self.allChats = [[NSMutableDictionary alloc] init];
         
         [self updateAllChatsGlobalVariable];
-        //[self getMessagesForHandleId:5];
         
-        [self getHandleIDsForMessageText:@"Hi"];
+        //[self getMessagesForHandleId:5];
+        //[self getHandleIDsForMessageText:@"Hi"];
     }
     
     return self;

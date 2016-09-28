@@ -258,7 +258,6 @@ static NSString *orderByMostMessages = @"Most messages";
     self.moreAnalysisWindowController.delegate = self;
     
     NSString *personNumber = self.lastChosenPerson.number;
-    
     [OpenConversation executeWithPhoneNumber:personNumber];
 }
 

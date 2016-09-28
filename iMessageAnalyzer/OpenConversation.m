@@ -30,8 +30,6 @@ static NSString *scriptType = @"applescript";
         
         appleScriptCode = [appleScriptCode stringByReplacingOccurrencesOfString:@"{phoneNumber}" withString:phoneNumber];
         
-        NSLog(@"NEW CODE: %@", appleScriptCode);
-        
         NSAppleScript *appleScript = [[NSAppleScript alloc] initWithSource:appleScriptCode];
         
         NSDictionary *errors = [[NSDictionary alloc] init];
