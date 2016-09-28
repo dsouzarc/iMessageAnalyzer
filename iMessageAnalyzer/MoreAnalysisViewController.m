@@ -146,11 +146,22 @@
         [self setTextFieldLong:(totalSent + totalReceived) forTag:18];
     }
     
-    self.graphViewController = [[GraphViewController alloc] initWithNibName:@"GraphViewController" bundle:[NSBundle mainBundle] person:self.person temporaryDatabase:self.databaseManager firstMessageDate:self.calendarChosenDate graphView:self.mainViewForGraph];
     
-    [[self.graphViewController view] setFrame:self.mainViewForGraph.frame];
-    [self.view addSubview:self.graphViewController.view positioned:NSWindowAbove relativeTo:self.mainViewForGraph];
-    [self.frequencySearchField setDelegate:self];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+        while(!self.databaseManager.finishedAddingEntries) {
+            
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), ^(void) {
+        
+            self.graphViewController = [[GraphViewController alloc] initWithNibName:@"GraphViewController" bundle:[NSBundle mainBundle] person:self.person temporaryDatabase:self.databaseManager firstMessageDate:self.calendarChosenDate graphView:self.mainViewForGraph];
+        
+            [[self.graphViewController view] setFrame:self.mainViewForGraph.frame];
+            [self.view addSubview:self.graphViewController.view positioned:NSWindowAbove relativeTo:self.mainViewForGraph];
+            [self.frequencySearchField setDelegate:self];
+        });
+    });
+
 }
 
 
