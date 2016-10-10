@@ -36,9 +36,10 @@
     [self.window setTitle:@"iMessage Analyzer"];
 }
 
-/*- (NSSize) windowWillResize:(NSWindow *)sender toSize:(NSSize)frameSize
+- (NSSize) windowWillResize:(NSWindow *)sender toSize:(NSSize)frameSize
 {
-    return self.window.frame.size;
-}*/
+    return frameSize;
+    //return self.window.frame.size;
+}
 
 @end

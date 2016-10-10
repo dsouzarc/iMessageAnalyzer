@@ -121,6 +121,7 @@
 }
 
 - (void)viewDidLoad {
+    
     [super viewDidLoad];
     
     [self.messagesTableView setSelectionHighlightStyle:NSTableViewSelectionHighlightStyleNone];
@@ -146,24 +147,37 @@
         [self setTextFieldLong:(totalSent + totalReceived) forTag:18];
     }
     
+    NSProgressIndicator *progressIndicator = [[NSProgressIndicator alloc] initWithFrame:self.mainViewForGraph.frame];
+    [self.view addSubview:progressIndicator];
+    [progressIndicator setStyle:NSProgressIndicatorBarStyle];
+    [progressIndicator setIndeterminate:NO];
+    [progressIndicator setMinValue:0];
+    [progressIndicator setMaxValue:100];
+    [progressIndicator setDoubleValue:25];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+        
         while(!self.databaseManager.finishedAddingEntries) {
-            
+            //Do nothing while we're waiting for the DB to finish inserting
         }
         
         dispatch_async(dispatch_get_main_queue(), ^(void) {
         
-            self.graphViewController = [[GraphViewController alloc] initWithNibName:@"GraphViewController" bundle:[NSBundle mainBundle] person:self.person temporaryDatabase:self.databaseManager firstMessageDate:self.calendarChosenDate graphView:self.mainViewForGraph];
+            self.graphViewController = [[GraphViewController alloc] initWithNibName:@"GraphViewController" bundle:[NSBundle mainBundle]
+                                                                             person:self.person temporaryDatabase:self.databaseManager
+                                                                   firstMessageDate:self.calendarChosenDate
+                                                                          graphView:self.mainViewForGraph];
         
             [[self.graphViewController view] setFrame:self.mainViewForGraph.frame];
             [self.view addSubview:self.graphViewController.view positioned:NSWindowAbove relativeTo:self.mainViewForGraph];
             [self.frequencySearchField setDelegate:self];
+            
+            [progressIndicator setHidden:YES];
+            
         });
     });
 
 }
-
 
 - (void) viewDidAppear
 {
@@ -342,10 +356,10 @@
             NSNumber *frequency = message.isFromMe ? [myWordFrequencies objectForKey:wordToUse] : [friendWordFrequencies objectForKey:wordToUse];
             
             if(frequency) {
-                frequency = [NSNumber numberWithInt:([frequency intValue] + 1)];
+                frequency = @([frequency intValue] + 1);
             }
             else {
-                frequency = [NSNumber numberWithInt:1];
+                frequency = @(1);
             }
             
             if(word.length == 0) {
@@ -403,7 +417,8 @@
     if(tableView == self.messagesTableView) {
         
         if(row > self.messagesToDisplay.count || self.messagesToDisplay.count == 0) {
-            self.noMessagesField = [[NSTextField alloc] initWithFrame:CGRectMake(0, 0, self.messagesTableView.bounds.size.width, self.messagesTableView.bounds.size.height)];
+            CGRect noMessageRect = CGRectMake(0, 0, self.messagesTableView.bounds.size.width, self.messagesTableView.bounds.size.height);
+            self.noMessagesField = [[NSTextField alloc] initWithFrame:noMessageRect];
             
             NSString *text;
             
@@ -452,10 +467,14 @@
             NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:message.messageText];
             
             if(message.isFromMe) {
-                [attributedString addAttribute:NSForegroundColorAttributeName value:[NSColor whiteColor] range:NSMakeRange(0, message.messageText.length)];
+                [attributedString addAttribute:NSForegroundColorAttributeName
+                                         value:[NSColor whiteColor]
+                                         range:NSMakeRange(0, message.messageText.length)];
             }
             else {
-                [attributedString addAttribute:NSForegroundColorAttributeName value:[NSColor blackColor] range:NSMakeRange(0, message.messageText.length)];
+                [attributedString addAttribute:NSForegroundColorAttributeName
+                                         value:[NSColor blackColor]
+                                         range:NSMakeRange(0, message.messageText.length)];
             }
             
             if(message.attachments) {

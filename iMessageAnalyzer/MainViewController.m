@@ -96,8 +96,10 @@ static NSString *orderByMostMessages = @"Most messages";
         self.dateFormatter = [[NSDateFormatter alloc] init];
         [self.dateFormatter setDateFormat:@"MM/dd/yyyy"];
         
-        self.messageWithAttachmentAttributes = [NSDictionary dictionaryWithObjectsAndKeys:[NSColor yellowColor], NSForegroundColorAttributeName,
-                                                [NSNumber numberWithInt:NSUnderlineStyleSingle], NSUnderlineStyleAttributeName, nil];
+        self.messageWithAttachmentAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
+                                                [NSColor yellowColor], NSForegroundColorAttributeName,
+                                                [NSNumber numberWithInt:NSUnderlineStyleSingle], NSUnderlineStyleAttributeName,
+                                                nil];
     }
     
     return self;
@@ -258,7 +260,10 @@ static NSString *orderByMostMessages = @"Most messages";
     self.moreAnalysisWindowController.delegate = self;
     
     NSString *personNumber = self.lastChosenPerson.number;
-    [OpenConversation executeWithPhoneNumber:personNumber];
+    
+    if(![Constants isDevelopmentMode]) {
+        [OpenConversation executeWithPhoneNumber:personNumber];
+    }
 }
 
 - (void) moreAnalysisWindowControllerDidClose
