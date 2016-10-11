@@ -232,25 +232,6 @@ static NSString *orderByMostMessages = @"Most messages";
     }
 }
 
-- (void) dateChosen:(NSDate *)chosenDate
-{
-    self.calendarChosenDate = chosenDate;
-    
-    //Reset to show all messages
-    if(!self.calendarChosenDate) {
-        self.currentConversationChats = [self.messageManager getAllMessagesForPerson:self.lastChosenPerson];
-    }
-    else {
-        self.currentConversationChats = [self.messageManager getAllMessagesForPerson:self.lastChosenPerson onDay:self.calendarChosenDate];
-    }
-    
-    [self.messagesTableView reloadData];
-    
-    if(!chosenDate) {
-        [self.calendarPopover performClose:@"close"];
-    }
-}
-
 - (void) wantsMoreAnalysis
 {
     NSMutableArray *allMessagesForLastSelectedPerson = [self.messageManager getAllMessagesForPerson:self.lastChosenPerson];
@@ -703,12 +684,24 @@ static NSString *orderByMostMessages = @"Most messages";
 
 - (void) resetToAll:(BOOL)resetToAll
 {
-    //Unimplemented for now
+    if(resetToAll) {
+        self.currentConversationChats = [self.messageManager getAllMessagesForPerson:self.lastChosenPerson];
+        [self.calendarPopover performClose:@"close"];
+        [self.messagesTableView reloadData];
+    }
 }
 
 - (void) fromDayChosen:(NSDate *)fromDayChosen toDayChosen:(NSDate *)toDayChosen
 {
-    //Unimplemented for now    
+    //Reset to show all messages
+    if(!fromDayChosen) {
+        return;
+    }
+    
+    self.calendarChosenDate = fromDayChosen;
+    self.currentConversationChats = [self.messageManager getAllMessagesForPerson:self.lastChosenPerson fromDay:fromDayChosen toDay:toDayChosen];
+    
+    [self.messagesTableView reloadData];
 }
 
 
