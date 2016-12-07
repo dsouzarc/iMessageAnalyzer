@@ -175,6 +175,7 @@
 		940879071C403819006F6C87 /* BarPlotViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BarPlotViewController.h; sourceTree = "<group>"; };
 		940879081C403819006F6C87 /* BarPlotViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BarPlotViewController.m; sourceTree = "<group>"; };
 		940879091C403819006F6C87 /* BarPlotViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BarPlotViewController.xib; sourceTree = "<group>"; };
+		940F3E231DB4809400862AD7 /* iMessageAnalyzer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = iMessageAnalyzer.entitlements; sourceTree = "<group>"; };
 		941C04F11C028B12002E2FAB /* NSTextField+Messages.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSTextField+Messages.h"; sourceTree = "<group>"; };
 		941C04F21C028B12002E2FAB /* NSTextField+Messages.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSTextField+Messages.m"; sourceTree = "<group>"; };
 		941C04F41C02C586002E2FAB /* ViewAttachmentsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewAttachmentsViewController.h; sourceTree = "<group>"; };
@@ -657,6 +658,7 @@
 		94A9923C1BBDC733003BA1D5 /* iMessageAnalyzer */ = {
 			isa = PBXGroup;
 			children = (
+				940F3E231DB4809400862AD7 /* iMessageAnalyzer.entitlements */,
 				94E6A2FE1D9B639D009FA362 /* Open Conversation */,
 				947B53D11BE1AE0D00484D66 /* Managers */,
 				9459C0021C4466A500F66B98 /* More Analysis View and Window */,
@@ -913,7 +915,12 @@
 					94A992391BBDC733003BA1D5 = {
 						CreatedOnToolsVersion = 7.0.1;
 						DevelopmentTeam = Q7N3L673D8;
-						ProvisioningStyle = Manual;
+						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.Sandbox = {
+								enabled = 1;
+							};
+						};
 					};
 					94A9924F1BBDC734003BA1D5 = {
 						CreatedOnToolsVersion = 7.0.1;
@@ -1220,7 +1227,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_ENTITLEMENTS = iMessageAnalyzer/iMessageAnalyzer.entitlements;
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = Q7N3L673D8;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1242,7 +1250,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_ENTITLEMENTS = iMessageAnalyzer/iMessageAnalyzer.entitlements;
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = Q7N3L673D8;
 				FRAMEWORK_SEARCH_PATHS = (
