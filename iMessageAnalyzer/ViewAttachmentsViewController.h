@@ -8,7 +8,7 @@
 
 #import <AVFoundation/AVFoundation.h>
 #import <Cocoa/Cocoa.h>
-#import <QTKit/QTKit.h>
+
 #import <Quartz/Quartz.h>
 
 #import "Attachment.h"
