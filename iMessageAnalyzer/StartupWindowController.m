@@ -159,7 +159,14 @@
             return;
         }
         
-        NSString *iPhoneBackup = [NSString stringWithFormat:@"%@/%@", filePath, fileName];
+        //iOS 10 backup - the default
+        NSString *iPhoneBackup = [NSString stringWithFormat:@"%@/backup_directory/3d/%@", filePath, fileName];
+        
+        //Is this not an iOS 10 backup?
+        if(![fileManager fileExistsAtPath:iPhoneBackup]) {
+            iPhoneBackup = [NSString stringWithFormat:@"%@/%@", filePath, fileName];
+        }
+    
         if([fileManager fileExistsAtPath:iPhoneBackup]) {
             NSString *newFileLocation = [NSString stringWithFormat:@"%@/chat_on_%f.db", self.iPhonePath, [[NSDate date] timeIntervalSinceReferenceDate]];
             
