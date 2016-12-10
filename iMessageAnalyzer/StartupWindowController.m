@@ -122,6 +122,7 @@
             [self showErrorPrompt:@"Error making a backup of chat.db" informationText:[NSString stringWithFormat:@"We were not able to make a backup of your Messages.db\n%@", [error description]]];
         }
         else {
+            NSLog(@"Made copy of DB: %@", newFileLocation);
             [self showMainWindow:newFileLocation];
         }
         
@@ -138,6 +139,7 @@
     
     NSOpenPanel *directoryPanel = [NSOpenPanel openPanel];
     [directoryPanel setCanChooseDirectories:YES];
+    
     [directoryPanel setCanChooseFiles:NO];
     [directoryPanel setCanHide:NO];
     [directoryPanel setCanCreateDirectories:NO];
@@ -160,7 +162,7 @@
         }
         
         //iOS 10 backup - the default
-        NSString *iPhoneBackup = [NSString stringWithFormat:@"%@/backup_directory/3d/%@", filePath, fileName];
+        NSString *iPhoneBackup = [NSString stringWithFormat:@"%@/3d/%@", filePath, fileName];
         
         //Is this not an iOS 10 backup?
         if(![fileManager fileExistsAtPath:iPhoneBackup]) {

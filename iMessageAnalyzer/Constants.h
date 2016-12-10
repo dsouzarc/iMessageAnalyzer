@@ -10,7 +10,7 @@
 #import <Cocoa/Cocoa.h>
 
 const static BOOL DEVELOPMENT = NO;
-const static NSString *pathToDevelopmentDB = @"/Users/Ryan/FLV MP4/iMessage/iphone_chat.db";
+const static NSString *pathToDevelopmentDB = @"/Users/Ryan/FLV MP4/iMessage/chat.db"; //iphone_chat.db";
 
 //Range for a message to be considered a double message - 3min to 11 hours
 const static int MIN_DOUBLE_MESSAGE = 180;
