@@ -15,6 +15,7 @@
 
 @property (strong, nonatomic) NSString *messagesPath;
 @property (strong, nonatomic) NSString *iPhonePath;
+@property (strong, nonatomic) NSString *backupLocation;
 
 @end
 
@@ -38,6 +39,10 @@
         
         self.messagesPath = [NSString stringWithFormat:@"%@/Library/Messages", NSHomeDirectory()];
         self.iPhonePath = [NSString stringWithFormat:@"%@/Library/Application Support/MobileSync/Backup", NSHomeDirectory()];
+        
+        //Ex: /var/folders/yj/79s69tld3hq8fqs7j_yqbpg00000gn/T//imessage_analyzer_copy_on_504626384.439504.db
+        NSString *backupName = [NSString stringWithFormat:@"imessage_analyzer_copy_on_%f.db", [[NSDate date] timeIntervalSinceReferenceDate]];
+        self.backupLocation = [NSString stringWithFormat:@"%@%@", NSTemporaryDirectory(), backupName];
     }
     
     return self;
@@ -113,17 +118,17 @@
     
     if ([fileManager fileExistsAtPath:pathForFile]){
         
-        NSString *newFileLocation = [NSString stringWithFormat:@"%@/chat_on_%f.db", self.messagesPath, [[NSDate date] timeIntervalSinceReferenceDate]];
+        //NSString *newFileLocation = [NSString stringWithFormat:@"%@/chat_on_%f.db", self.messagesPath, [[NSDate date] timeIntervalSinceReferenceDate]];
         
         NSError *error;
-        [fileManager copyItemAtPath:pathForFile toPath:newFileLocation error:&error];
+        [fileManager copyItemAtPath:pathForFile toPath:self.backupLocation error:&error];
         
         if(error) {
             [self showErrorPrompt:@"Error making a backup of chat.db" informationText:[NSString stringWithFormat:@"We were not able to make a backup of your Messages.db\n%@", [error description]]];
         }
         else {
-            NSLog(@"Made copy of DB: %@", newFileLocation);
-            [self showMainWindow:newFileLocation];
+            NSLog(@"Made copy of DB: %@", self.backupLocation);
+            [self showMainWindow:self.backupLocation];
         }
         
     }
