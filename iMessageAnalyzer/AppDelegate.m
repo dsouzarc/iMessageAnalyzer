@@ -32,6 +32,11 @@
     [self.startupWindowController.window makeKeyAndOrderFront:self];
 }
 
+- (IBAction)exportConversationAsTextFile:(id)sender {
+    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+    [defaultCenter postNotificationName:@"exportConversationAsTextFile" object:@"exportConversationAsTextFile"];
+}
+
 - (void)applicationWillTerminate:(NSNotification *)aNotification {
     [[DatabaseManager getInstance] deleteDatabase];
 }
