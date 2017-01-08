@@ -105,6 +105,10 @@ static NSString *orderByMostMessages = @"Most messages";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    //Add notification listeners for when the export menu is used
+    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+    [defaultCenter addObserver:self selector:@selector(handleExportAsTextFileNotification:) name:@"exportConversationAsTextFile" object:nil];
+    
     NSRect frame = NSMakeRect(0, 0, 400, MAXFLOAT);
     self.sizingView = [[NSTextView alloc] initWithFrame:frame];
     self.sizingField = [[NSTextField alloc] initWithFrame:frame];
@@ -126,6 +130,7 @@ static NSString *orderByMostMessages = @"Most messages";
         [self.messagesTableView reloadData];
         
         [self updateContactNameTextField];
+        [self.contactsTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:0] byExtendingSelection:NO];
     }
     
     [self.messagesTableView setSelectionHighlightStyle:NSTableViewSelectionHighlightStyleNone];
@@ -138,6 +143,86 @@ static NSString *orderByMostMessages = @"Most messages";
     //[self.orderByPopUpButton addItemWithTitle:orderByMostMessages];
     
     [self.contactsTableView setHeaderView:nil];
+}
+
+- (void) handleExportAsTextFileNotification:(NSNotification*)notification
+{
+    if(self.lastChosenPerson == nil && self.currentConversationChats.count == 0) {
+        return;
+    }
+    NSSavePanel *savePanel = [NSSavePanel savePanel];
+    NSString *personName = [self.lastChosenPerson.personName stringByReplacingOccurrencesOfString:@" " withString:@"_"];
+    NSString *defaultFileName = [NSString stringWithFormat:@"Conversation_with_%@.txt", personName];
+    NSURL *defaultLocation = [NSURL fileURLWithPath:NSHomeDirectory() isDirectory:YES];
+    
+    [savePanel setTitle:[NSString stringWithFormat:@"Export location for your conversation with %@", self.lastChosenPerson.personName]];
+    [savePanel setTitle:[NSString stringWithFormat:@"Please select a location to export your conversation with %@", self.lastChosenPerson.personName]];
+    
+    [savePanel setAllowsOtherFileTypes:YES];
+    [savePanel setExtensionHidden:YES];
+    [savePanel setCanCreateDirectories:YES];
+    [savePanel setNameFieldStringValue:defaultFileName];
+    [savePanel setDirectoryURL:defaultLocation];
+    
+    NSInteger result = [savePanel runModal];
+    NSError *error = nil;
+    
+    CFTimeInterval startTime = CACurrentMediaTime();
+    
+    if (result == NSFileHandlingPanelOKButton) {
+        
+        if (error) {
+            [NSApp presentError:error];
+        }
+        
+        if(![savePanel URL]) {
+            return;
+        }
+        
+        NSString *myName = NSFullUserName();
+        NSString *personName = self.lastChosenPerson.personName;
+        
+        //Pads the name so that both names have the same length --> results in neater columns when printing
+        int namePadding = myName.length >= personName.length ? (int)myName.length : (int)personName.length;
+        namePadding += 4;
+        
+        myName = [myName stringByPaddingToLength:namePadding withString:@" " startingAtIndex:0];
+        personName = [personName stringByPaddingToLength:namePadding withString:@" " startingAtIndex:0];
+        
+        
+        NSMutableString *allTextToSave = [[NSMutableString alloc] init];
+        for(Message *message in self.currentConversationChats) {
+            NSString *text = message.messageText;
+            
+            if(!text || text.length == 0) {
+                if(message.hasAttachment) {
+                    text = @"ATTACHMENT";
+                }
+                else {
+                    text = @"";
+                }
+            }
+            
+            if(message.attachments) {
+                text = [NSString stringWithFormat:@"%d ATTACHMENTS", (int) message.attachments.count];
+            }
+            
+            NSString *name = message.isFromMe ? myName : personName;
+            NSString *textToSave = [NSString stringWithFormat:@"%@\t\t%@\t%@\n", name, message.dateSent, text];
+            [allTextToSave appendString:textToSave];
+        }
+        
+        NSLog(@"GENERATED TEXT TO SAVE IN: %f", (CACurrentMediaTime() - startTime));
+        
+        [allTextToSave writeToFile:[[savePanel URL] path] atomically:NO encoding:NSUTF8StringEncoding error:&error];
+        
+        if(error) {
+            NSLog(@"ERROR SAVING: %@", error.description);
+        }
+        
+        NSLog(@"SAVED IN: %f", (CACurrentMediaTime() - startTime));
+        NSLog(@"SAVED TO: %@", [[savePanel URL] absoluteString]);
+    }
 }
 
 - (void) updateContactNameTextField
