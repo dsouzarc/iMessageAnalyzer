@@ -118,8 +118,6 @@
     
     if ([fileManager fileExistsAtPath:pathForFile]){
         
-        //NSString *newFileLocation = [NSString stringWithFormat:@"%@/chat_on_%f.db", self.messagesPath, [[NSDate date] timeIntervalSinceReferenceDate]];
-        
         NSError *error;
         [fileManager copyItemAtPath:pathForFile toPath:self.backupLocation error:&error];
         
@@ -175,15 +173,14 @@
         }
     
         if([fileManager fileExistsAtPath:iPhoneBackup]) {
-            NSString *newFileLocation = [NSString stringWithFormat:@"%@/chat_on_%f.db", self.iPhonePath, [[NSDate date] timeIntervalSinceReferenceDate]];
             
             NSError *error;
-            [fileManager copyItemAtPath:iPhoneBackup toPath:newFileLocation error:&error];
+            [fileManager copyItemAtPath:iPhoneBackup toPath:self.backupLocation error:&error];
             if(error) {
                 [self showErrorPrompt:@"Error making a backup of iPhone chat" informationText:[NSString stringWithFormat:@"We were not able to make a backup of your Messages.db\n%@", [error description]]];
             }
             else {
-                [self showMainWindow:newFileLocation];
+                [self showMainWindow:self.backupLocation];
             }
         }
         else {
