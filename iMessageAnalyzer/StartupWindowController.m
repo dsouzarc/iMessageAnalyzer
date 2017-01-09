@@ -181,6 +181,7 @@
                 [self showErrorPrompt:@"Error making a backup of iPhone chat" informationText:[NSString stringWithFormat:@"We were not able to make a backup of your Messages.db\n%@", [error description]]];
             }
             else {
+                NSLog(@"Copied DB\nFROM: %@\nTO: %@\n", iPhoneBackup, self.backupLocation);
                 [self showMainWindow:self.backupLocation];
             }
         }
