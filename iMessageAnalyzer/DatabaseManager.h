@@ -43,6 +43,7 @@
 
 - (int32_t) messageCountForPerson:(Person*)person startTimeInSeconds:(long)startTimeInSeconds endTimeInSeconds:(long)endTimeInSeconds;
 - (int32_t) totalMessagesForStartTime:(long)startTimeInSeconds endTimeInSeconds:(long)endTimeInSeconds;
+- (int32_t) getTotalMessageCount;
 
 
 #pragma mark Getting attachments

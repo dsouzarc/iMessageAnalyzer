@@ -66,8 +66,8 @@ static NSString *pathToDB;
     if(!databaseInstance) {
         databaseInstance = [super init];
         
-        if(sqlite3_open([path cStringUsingEncoding:NSASCIIStringEncoding], &_database) == SQLITE_OK) {
-            printf("DATABASE SUCCESSFULLY OPENED\n");
+        if(sqlite3_open([path UTF8String], &_database) == SQLITE_OK) {
+            printf("DATABASE SUCCESSFULLY OPENED: %s\n", [path UTF8String]);
         }
         else {
             printf("ERROR OPENING DB: %s", sqlite3_errmsg(_database));
@@ -104,13 +104,11 @@ static NSString *pathToDB;
     NSString *query = [NSString stringWithFormat:@"SELECT handle_id from message WHERE text like '%%%@%%' GROUP BY handle_id", messageText];
     
     sqlite3_stmt *statement;
-    int counter = 0;
     
     if(sqlite3_prepare(_database, [query UTF8String], -1, &statement, NULL) == SQLITE_OK) {
         while(sqlite3_step(statement) == SQLITE_ROW) {
             int32_t handle_id = sqlite3_column_int(statement, 0);
             [handle_ids addObject:[NSNumber numberWithInt:handle_id]];
-            counter++;
         }
     }
     else {
@@ -339,6 +337,7 @@ static NSString *pathToDB;
     
     if(sqlite3_prepare_v2(_database, query, -1, &statement, NULL) == SQLITE_OK) {
         while(sqlite3_step(statement) == SQLITE_ROW) {
+            
             int32_t messageID = sqlite3_column_int(statement, 0);
             NSString *guid = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 1)];
             
@@ -384,7 +383,7 @@ static NSString *pathToDB;
     else {
         NSLog(@"ERROR COMPILING ALL MESSAGES QUERY: %s", sqlite3_errmsg(_database));
     }
-    
+
     sqlite3_finalize(statement);
     
     return allMessagesForChat;
@@ -408,7 +407,7 @@ static NSString *pathToDB;
     const char *query = [queryString UTF8String];
     sqlite3_stmt *statement;
     
-    if(sqlite3_open([pathToDevelopmentDB UTF8String], &_database) == SQLITE_OK){
+    if(sqlite3_open([pathToDB UTF8String], &_database) == SQLITE_OK){
         //Temporary fix - need to do this for OSX Sierra for some reason
     } else {
         NSLog(@"Error opening database");
@@ -492,6 +491,21 @@ static NSString *pathToDB;
     return result;
 }
 
+- (int32_t) getTotalMessageCount
+{
+    const char *query2 = "SELECT count(*) from message";
+    sqlite3_stmt *statement;
+    int32_t totalMessageCount = 0;
+    
+    if(sqlite3_prepare(_database, query2, -1, &statement, NULL) == SQLITE_OK) {
+        while(sqlite3_step(statement) == SQLITE_ROW) {
+            totalMessageCount = sqlite3_column_int(statement, 0);
+        }
+    }
+    sqlite3_finalize(statement);
+    return totalMessageCount;
+}
+
 
 /****************************************************************
  *
@@ -514,11 +528,11 @@ static NSString *pathToDB;
     const char *query = [queryString UTF8String];
     sqlite3_stmt *statement;
     
-    if(sqlite3_open([pathToDevelopmentDB UTF8String], &_database) == SQLITE_OK){
+    /*if(sqlite3_open([pathToDB UTF8String], &_database) == SQLITE_OK){
         //Temporary fix - need to do this for OSX Sierra for some reason
     } else {
         NSLog(@"ERROR OPENING DATABASE");
-    }
+    }*/
     
     if(sqlite3_prepare(_database, query, -1, &statement, NULL) == SQLITE_OK) {
         while(sqlite3_step(statement) == SQLITE_ROW) {
