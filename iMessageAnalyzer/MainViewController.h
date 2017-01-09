@@ -27,6 +27,7 @@
 
 #import "RSVerticallyCenteredTextFieldCell.h"
 #import "ECPhoneNumberFormatter.h"
+#import "CHCSVParser.h"
 
 /** Shows all conversations and all messages. Central to everything */
 

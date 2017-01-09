@@ -108,6 +108,7 @@ static NSString *orderByMostMessages = @"Most messages";
     //Add notification listeners for when the export menu is used
     NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
     [defaultCenter addObserver:self selector:@selector(handleExportAsTextFileNotification:) name:@"exportConversationAsTextFile" object:nil];
+    [defaultCenter addObserver:self selector:@selector(handleExportAsCSVFileNotification:) name:@"exportConversationAsCSV" object:nil];
     
     NSRect frame = NSMakeRect(0, 0, 400, MAXFLOAT);
     self.sizingView = [[NSTextView alloc] initWithFrame:frame];
@@ -145,14 +146,11 @@ static NSString *orderByMostMessages = @"Most messages";
     [self.contactsTableView setHeaderView:nil];
 }
 
-- (void) handleExportAsTextFileNotification:(NSNotification*)notification
+- (NSSavePanel*) getDefaultSavePanelForExporting:(NSString*)fileExtension
 {
-    if(self.lastChosenPerson == nil && self.currentConversationChats.count == 0) {
-        return;
-    }
     NSSavePanel *savePanel = [NSSavePanel savePanel];
     NSString *personName = [self.lastChosenPerson.personName stringByReplacingOccurrencesOfString:@" " withString:@"_"];
-    NSString *defaultFileName = [NSString stringWithFormat:@"Conversation_with_%@.txt", personName];
+    NSString *defaultFileName = [NSString stringWithFormat:@"Conversation_with_%@.%@", personName, fileExtension];
     NSURL *defaultLocation = [NSURL fileURLWithPath:NSHomeDirectory() isDirectory:YES];
     
     [savePanel setTitle:[NSString stringWithFormat:@"Export location for your conversation with %@", self.lastChosenPerson.personName]];
@@ -164,10 +162,72 @@ static NSString *orderByMostMessages = @"Most messages";
     [savePanel setNameFieldStringValue:defaultFileName];
     [savePanel setDirectoryURL:defaultLocation];
     
+    return savePanel;
+}
+
+- (void) handleExportAsCSVFileNotification:(NSNotification*)notification
+{
+    if(self.lastChosenPerson == nil && self.currentConversationChats.count == 0) {
+        return;
+    }
+    
+    NSSavePanel *savePanel = [self getDefaultSavePanelForExporting:@"csv"];
+    
     NSInteger result = [savePanel runModal];
     NSError *error = nil;
     
-    CFTimeInterval startTime = CACurrentMediaTime();
+    if (result == NSFileHandlingPanelOKButton) {
+        
+        if (error) {
+            [NSApp presentError:error];
+        }
+        
+        if(![savePanel URL]) {
+            return;
+        }
+        
+        NSString *myName = NSFullUserName();
+        NSString *personName = self.lastChosenPerson.personName;
+        
+        CHCSVWriter *writer = [[CHCSVWriter alloc] initForWritingToCSVFile:[[savePanel URL] path]];
+        
+        for(Message *message in self.currentConversationChats) {
+            NSString *text = message.messageText;
+            
+            if(!text || text.length == 0) {
+                if(message.hasAttachment) {
+                    text = @"ATTACHMENT";
+                }
+                else {
+                    text = @"";
+                }
+            }
+            
+            if(message.attachments) {
+                text = [NSString stringWithFormat:@"%d ATTACHMENTS", (int) message.attachments.count];
+            }
+            
+            NSString *name = message.isFromMe ? myName : personName;
+            NSArray *lineOfFields = [NSArray arrayWithObjects:name, message.dateSent, text, nil];
+            [writer writeLineOfFields:lineOfFields];
+        }
+        
+        if(error) {
+            NSLog(@"ERROR SAVING: %@", error.description);
+        }
+    }
+}
+
+- (void) handleExportAsTextFileNotification:(NSNotification*)notification
+{
+    if(self.lastChosenPerson == nil && self.currentConversationChats.count == 0) {
+        return;
+    }
+    
+    NSSavePanel *savePanel = [self getDefaultSavePanelForExporting:@"txt"];
+    
+    NSInteger result = [savePanel runModal];
+    NSError *error = nil;
     
     if (result == NSFileHandlingPanelOKButton) {
         
@@ -208,20 +268,15 @@ static NSString *orderByMostMessages = @"Most messages";
             }
             
             NSString *name = message.isFromMe ? myName : personName;
-            NSString *textToSave = [NSString stringWithFormat:@"%@\t\t%@\t%@\n", name, message.dateSent, text];
+            NSString *textToSave = [NSString stringWithFormat:@"%@\t%@\t%@\n", name, message.dateSent, text];
             [allTextToSave appendString:textToSave];
         }
-        
-        NSLog(@"GENERATED TEXT TO SAVE IN: %f", (CACurrentMediaTime() - startTime));
         
         [allTextToSave writeToFile:[[savePanel URL] path] atomically:NO encoding:NSUTF8StringEncoding error:&error];
         
         if(error) {
             NSLog(@"ERROR SAVING: %@", error.description);
         }
-        
-        NSLog(@"SAVED IN: %f", (CACurrentMediaTime() - startTime));
-        NSLog(@"SAVED TO: %@", [[savePanel URL] absoluteString]);
     }
 }
 
