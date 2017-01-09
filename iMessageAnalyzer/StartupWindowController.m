@@ -123,9 +123,10 @@
         
         if(error) {
             [self showErrorPrompt:@"Error making a backup of chat.db" informationText:[NSString stringWithFormat:@"We were not able to make a backup of your Messages.db\n%@", [error description]]];
+            NSLog(@"ERROR COPYING FILE: %@", error.description);
         }
         else {
-            NSLog(@"Made copy of DB: %@", self.backupLocation);
+            NSLog(@"Copied DB\nFROM: %@\nTO: %@\n", pathForFile, self.backupLocation);
             [self showMainWindow:self.backupLocation];
         }
         

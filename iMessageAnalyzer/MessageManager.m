@@ -90,7 +90,7 @@ static MessageManager *messageInstance;
         
         self.calendar = [NSCalendar currentCalendar];
         [self.calendar setTimeZone:[NSTimeZone systemTimeZone]];
-        self.allChats = [self sortChatsByLastMessageSent:self.allChats];
+        self.allChats = [[NSMutableArray alloc] initWithArray:[self sortChatsByLastMessageSent:self.allChats]];
         
     }
     
@@ -133,7 +133,7 @@ static MessageManager *messageInstance;
         }
     }
     
-    return [results allObjects];
+    return [[NSMutableArray alloc] initWithArray:[results allObjects]];
 }
 
 - (NSMutableArray*) getAllMessagesForPerson:(Person *)person fromDay:(NSDate *)fromDay toDay:(NSDate *)toDay
