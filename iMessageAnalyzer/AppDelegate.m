@@ -17,7 +17,8 @@
 
 @implementation AppDelegate
 
-- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification
+{
     
     if([Constants isDevelopmentMode]) {
         self.mainWindowController = [[MainWindowController alloc] initWithWindowNibName:@"MainWindowController" databasePath:pathToDevelopmentDB];
@@ -32,13 +33,21 @@
     [self.startupWindowController.window makeKeyAndOrderFront:self];
 }
 
-- (IBAction)exportConversationAsTextFile:(id)sender {
+- (void)applicationWillTerminate:(NSNotification *)aNotification
+{
+    [[DatabaseManager getInstance] deleteDatabase];
+}
+
+- (IBAction)exportConversationAsTextFile:(id)sender
+{
     NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
     [defaultCenter postNotificationName:@"exportConversationAsTextFile" object:@"exportConversationAsTextFile"];
 }
 
-- (void)applicationWillTerminate:(NSNotification *)aNotification {
-    [[DatabaseManager getInstance] deleteDatabase];
+- (IBAction)exportConversationsAsCSV:(id)sender
+{
+    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+    [defaultCenter postNotificationName:@"exportConversationAsCSV" object:@"exportConversationAsCSV"];
 }
 
 @end
