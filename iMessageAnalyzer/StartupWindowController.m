@@ -89,7 +89,7 @@
             return;
         }
         
-        const NSNumber *myVersion = [NSNumber numberWithDouble:[[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"] doubleValue]];
+        const NSNumber *myVersion = [NSNumber numberWithDouble:[[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"] doubleValue]];
         
         //For keeping track of the greatest version number
         NSNumber *latestVersionNumber = [NSNumber numberWithDouble:0.0];
@@ -104,20 +104,21 @@
 
             }
         }
-        
+    
         //If there's a later version, prompt for update
         if([latestVersionNumber isGreaterThan:myVersion] && latestVersion) {
             
             NSString *informativeText = [NSString stringWithFormat:@"There is a newer version of the iMessage Analyzer Available\nChanges include: %@", latestVersion[@"changes"]];
             
-            NSAlert *prompt = [[NSAlert alloc] init];
-            [prompt setAlertStyle:NSWarningAlertStyle];
-            [prompt setMessageText:@"Update available"];
-            [prompt setInformativeText:informativeText];
-            [prompt addButtonWithTitle:@"Download the new version"];
-            [prompt addButtonWithTitle:@"Continue with the old version"];
-            
             dispatch_async(dispatch_get_main_queue(), ^(void) {
+                
+                NSAlert *prompt = [[NSAlert alloc] init];
+                [prompt setAlertStyle:NSWarningAlertStyle];
+                [prompt setMessageText:@"Update available"];
+                [prompt setInformativeText:informativeText];
+                [prompt addButtonWithTitle:@"Download the new version"];
+                [prompt addButtonWithTitle:@"Continue with the old version"];
+                
                 [prompt beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse response) {
                     switch (response) {
                         case NSAlertFirstButtonReturn:
