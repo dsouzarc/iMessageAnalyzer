@@ -12,6 +12,9 @@
 const static BOOL DEVELOPMENT = NO;
 const static NSString *pathToDevelopmentDB = @"/Users/Ryan/FLV MP4/iMessage/Current Backups/mac_chat.db"; //"chat.db"; //iphone_chat.db";
 
+const static NSString *versionInfoURL = @"https://raw.githubusercontent.com/dsouzarc/iMessageAnalyzer/master/version_info.json";
+const static NSString *versionLatestURL = @"https://www.dropbox.com/sh/804msuitbz47gjm/AAAaR5QTdVv8pIRsO9NHZtI7a?dl=0";
+
 //Range for a message to be considered a double message - 3min to 11 hours
 const static int MIN_DOUBLE_MESSAGE = 180;
 const static int MAX_DOUBLE_MESSAGE = 39600;
