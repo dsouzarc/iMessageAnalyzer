@@ -826,7 +826,7 @@
 					94A992391BBDC733003BA1D5 = {
 						CreatedOnToolsVersion = 7.0.1;
 						DevelopmentTeam = Q7N3L673D8;
-						ProvisioningStyle = Manual;
+						ProvisioningStyle = Automatic;
 					};
 					94A9924F1BBDC734003BA1D5 = {
 						CreatedOnToolsVersion = 7.0.1;
@@ -1121,7 +1121,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "Developer ID Application";
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = Q7N3L673D8;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1142,7 +1142,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "Developer ID Application";
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = Q7N3L673D8;
 				FRAMEWORK_SEARCH_PATHS = (

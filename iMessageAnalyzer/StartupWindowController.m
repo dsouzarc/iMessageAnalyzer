@@ -43,13 +43,14 @@
         //Ex: /var/folders/yj/79s69tld3hq8fqs7j_yqbpg00000gn/T//imessage_analyzer_copy_on_504626384.439504.db
         NSString *backupName = [NSString stringWithFormat:@"imessage_analyzer_copy_on_%f.db", [[NSDate date] timeIntervalSinceReferenceDate]];
         self.backupLocation = [NSString stringWithFormat:@"%@%@", NSTemporaryDirectory(), backupName];
+        
     }
     
     return self;
 }
 
-- (void)windowDidLoad {
-    
+- (void)windowDidLoad
+{
     [super windowDidLoad];
     //[self.window setContentSize:NSMakeSize(544, 650)];
     //[self.window setMaxSize:NSMakeSize(544, 650)];
@@ -60,6 +61,79 @@
     
     [self.startupViewController setDelegate:self];
     [self.window setContentViewController:self.startupViewController];
+    
+    [self checkForLatestVersion];
+}
+
+- (void) checkForLatestVersion
+{
+    //Check if we should update the app
+    NSURL *updateUrl = [NSURL URLWithString:(NSString*)versionInfoURL];
+    NSURLSession *session = [NSURLSession sharedSession];
+    
+    NSURLSessionDataTask *dataTask = [session dataTaskWithURL:updateUrl completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        
+        if(error) {
+            NSLog(@"Error checking for latest version: %@", [error description]);
+            return;
+        }
+        
+        NSDictionary *jsonResponse = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+        if(error) {
+            NSLog(@"Error parsing JSON response: %@", jsonResponse);
+            return;
+        }
+        
+        NSArray *versions = jsonResponse[@"versionInfo"];
+        if(!versions || versions.count == 0) {
+            return;
+        }
+        
+        const NSNumber *myVersion = [NSNumber numberWithDouble:[[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"] doubleValue]];
+        
+        //For keeping track of the greatest version number
+        NSNumber *latestVersionNumber = [NSNumber numberWithDouble:0.0];
+        NSDictionary *latestVersion = nil;
+        
+        for(NSDictionary *version in versions) {
+            NSNumber *versionNumber = [NSNumber numberWithDouble:[version[@"version"] doubleValue]];
+            
+            if([versionNumber isGreaterThan:latestVersionNumber]) {
+                latestVersionNumber = versionNumber;
+                latestVersion = version;
+
+            }
+        }
+        
+        //If there's a later version, prompt for update
+        if([latestVersionNumber isGreaterThan:myVersion] && latestVersion) {
+            
+            NSString *informativeText = [NSString stringWithFormat:@"There is a newer version of the iMessage Analyzer Available\nChanges include: %@", latestVersion[@"changes"]];
+            
+            NSAlert *prompt = [[NSAlert alloc] init];
+            [prompt setAlertStyle:NSWarningAlertStyle];
+            [prompt setMessageText:@"Update available"];
+            [prompt setInformativeText:informativeText];
+            [prompt addButtonWithTitle:@"Download the new version"];
+            [prompt addButtonWithTitle:@"Continue with the old version"];
+            
+            dispatch_async(dispatch_get_main_queue(), ^(void) {
+                [prompt beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse response) {
+                    switch (response) {
+                        case NSAlertFirstButtonReturn:
+                            [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:(NSString*)versionLatestURL]];
+                            break;
+                        case NSAlertSecondButtonReturn:
+                            break;
+                        default:
+                            break;
+                    }
+                }];
+            });
+        }
+        
+    }];
+    [dataTask resume];
 }
 
 
