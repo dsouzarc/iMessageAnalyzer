@@ -9,8 +9,8 @@
          "changes":"Fixed a lot of bugs + added support for iOS 10 + added support for exporting to txt and csv"
       },
       {
-         "version":1.13,
-         "changes":"Added support for autonomous updates"
+         "version":1.15,
+         "changes":"TESTING Added support for autonomous updates"
       }
    ]
 }
