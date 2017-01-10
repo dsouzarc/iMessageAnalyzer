@@ -1,0 +1,14 @@
+[
+    {
+        "version":1.0,
+        "changes":"Initial version"
+    },
+    {
+        "version": 1.10,
+        "changes": "Fixed a lot of bugs + added support for iOS 10 + added support for exporting to txt and csv"
+    },
+    {
+        "version":1.11,
+        "changes":"Added support for autonomous updates"
+    }
+]
