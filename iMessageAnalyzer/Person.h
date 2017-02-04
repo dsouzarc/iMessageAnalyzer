@@ -6,9 +6,8 @@
 //  Copyright © 2015 Ryan D'souza. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-
 #import <AddressBook/AddressBook.h>
+#import <Foundation/Foundation.h>
 
 #include "Statistics.h"
 

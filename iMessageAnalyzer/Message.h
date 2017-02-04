@@ -10,14 +10,16 @@
 
 #import <Realm/Realm.h>
 
-@interface Message : NSObject
+#import "Attachment.h"
+
+@interface Message : RLMObject
 
 - (instancetype) initWithMessageId:(NSInteger)messageId handleId:(NSInteger)handleId messageGUID:(NSString*)messageGUID messageText:(NSString*)messageText dateSent:(NSDate*)dateSent dateRead:(NSDate*)dateRead isIMessage:(BOOL)isIMessage isFromMe:(BOOL)isFromMe hasAttachment:(BOOL)hasAttachment;
 
 @property (strong, nonatomic) NSString *messageText;
 @property (strong, nonatomic) NSString *messageGUID;
 
-@property (strong, nonatomic) NSMutableArray *attachments;
+@property (strong, nonatomic) RLMArray<Attachment*><Attachment> *attachments;
 
 @property (strong, nonatomic) NSDate *dateSent;
 @property (strong, nonatomic) NSDate *dateRead;
@@ -33,3 +35,5 @@
 - (NSString*) lastMessagedOn;
 
 @end
+
+RLM_ARRAY_TYPE(Message)

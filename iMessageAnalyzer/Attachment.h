@@ -8,7 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
-@interface Attachment : NSObject
+#import <Realm/Realm.h>
+
+@interface Attachment : RLMObject
 
 - (instancetype) initWithAttachmentID:(int32_t)attachmentID attachmentGUID:(NSString*)guid filePath:(NSString*)filePath fileType:(NSString*)fileType sentDate:(NSDate*)sentDate attachmentSize:(long)attachmentSize messageID:(int32_t)messageID fileName:(NSString*)fileName;
 
@@ -24,3 +26,5 @@
 @property long size;
 
 @end
+
+RLM_ARRAY_TYPE(Attachment)
