@@ -70,10 +70,10 @@ static TemporaryDatabaseManager *databaseManager;
         self.calendar = [NSCalendar currentCalendar];
         [self.calendar setTimeZone:[NSTimeZone systemTimeZone]];
         
-        const char *filePath = ":memory:"; //[self filePath]; //
+        const char *filePath = ":memory:";  //[self temporaryFilePath]; //
         
         if(sqlite3_open(filePath, &_database) == SQLITE_OK) {
-            printf("OPENED TEMPORARY DATABASE\n");
+            printf("OPENED TEMPORARY DATABASE AT: %s\n", filePath);
 
             [self createMyMessagesTable];
             [self createOtherMessagesTable];
@@ -81,10 +81,8 @@ static TemporaryDatabaseManager *databaseManager;
             
             [self addMessagesToDatabase:messages];
             
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-                [self addOtherMessagesToDatabase:[[DatabaseManager getInstance] getTemporaryInformationForAllConversationsExceptWith:person]];
-            });
-            
+            //TODO: Put this in another thread
+            [self addOtherMessagesToDatabase:[[DatabaseManager getInstance] getTemporaryInformationForAllConversationsExceptWith:person]];
         }
         else {
             printf("ERROR OPENING TEMPORARY DATABASE: %s\n", sqlite3_errmsg(_database));
@@ -169,6 +167,7 @@ static TemporaryDatabaseManager *databaseManager;
         sqlite3_bind_int(stmt, 3, [otherMessage[@"wordCount"] intValue]);
         sqlite3_bind_int(stmt, 4, [otherMessage[@"is_from_me"] intValue]);
         sqlite3_bind_int(stmt, 5, [otherMessage[@"cache_has_attachments"] intValue]);
+        
         if (sqlite3_step(stmt) != SQLITE_DONE) {
             //Left Blank
         }
@@ -738,11 +737,11 @@ static TemporaryDatabaseManager *databaseManager;
     [self executeSQLStatement:"PRAGMA synchronous = OFF" errorMessage:errorMessage];
 }
 
-- (const char *)filePath
+- (const char *) temporaryFilePath
 {
-    NSArray *paths=NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentDirectory=[paths objectAtIndex:0];
-    return [[documentDirectory stringByAppendingPathComponent:@"LoginDatabase.db"] UTF8String];
+    NSString *tempCopyName = [NSString stringWithFormat:@"imessage_analyzer_temporary_copy_on_%f.db", [[NSDate date] timeIntervalSinceReferenceDate]];
+    NSString *tempCopyLocation = [NSString stringWithFormat:@"%@%@", NSTemporaryDirectory(), tempCopyName];
+    return [tempCopyLocation UTF8String];
 }
 
 @end

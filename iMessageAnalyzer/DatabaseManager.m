@@ -407,11 +407,11 @@ static NSString *pathToDB;
     const char *query = [queryString UTF8String];
     sqlite3_stmt *statement;
     
-    if(sqlite3_open([pathToDB UTF8String], &_database) == SQLITE_OK){
+    /*if(sqlite3_open([pathToDB UTF8String], &_database) == SQLITE_OK){
         //Temporary fix - need to do this for OSX Sierra for some reason
     } else {
         NSLog(@"Error opening database");
-    }
+    } */
     
     if(sqlite3_prepare(_database, query, -1, &statement, NULL) == SQLITE_OK) {
         while(sqlite3_step(statement) == SQLITE_ROW) {
