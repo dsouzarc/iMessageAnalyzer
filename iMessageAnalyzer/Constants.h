@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <Cocoa/Cocoa.h>
 
-const static BOOL DEVELOPMENT = NO;
+const static BOOL DEVELOPMENT = YES;
 const static NSString *pathToDevelopmentDB = @"/Users/Ryan/FLV MP4/iMessage/Current Backups/mac_chat.db"; //"chat.db"; //iphone_chat.db";
 
 const static NSString *versionInfoURL = @"https://raw.githubusercontent.com/dsouzarc/iMessageAnalyzer/master/version_info.json";

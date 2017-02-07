@@ -792,9 +792,11 @@ static NSString *orderByMostMessages = @"Most messages";
             int i;
             for(i = self.lastSearchIndex + 1; i < self.currentConversationChats.count; i++) {
                 Message *message = self.currentConversationChats[i];
-                if([message.messageText rangeOfString:searchText options:NSCaseInsensitiveSearch].location != NSNotFound) {
-                    self.lastSearchIndex = i;
-                    i = INT16_MAX;
+                if(message.messageText && [message.messageText length] > 0) {
+                    if([message.messageText rangeOfString:searchText options:NSCaseInsensitiveSearch].location != NSNotFound) {
+                        self.lastSearchIndex = i;
+                        i = INT16_MAX;
+                    }
                 }
             }
             
@@ -802,9 +804,11 @@ static NSString *orderByMostMessages = @"Most messages";
             if(i == self.currentConversationChats.count) {
                 for(i = 0; i < self.currentConversationChats.count; i++) {
                     Message *message = self.currentConversationChats[i];
-                    if([message.messageText rangeOfString:searchText options:NSCaseInsensitiveSearch].location != NSNotFound) {
-                        self.lastSearchIndex = i;
-                        i = INT16_MAX;
+                    if(message.messageText && [message.messageText length] > 0) {
+                        if([message.messageText rangeOfString:searchText options:NSCaseInsensitiveSearch].location != NSNotFound) {
+                            self.lastSearchIndex = i;
+                            i = INT16_MAX;
+                        }
                     }
                 }
             }
