@@ -102,7 +102,8 @@ static NSString *orderByMostMessages = @"Most messages";
     return self;
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     
     //Add notification listeners for when the export menu is used
@@ -780,45 +781,60 @@ static NSString *orderByMostMessages = @"Most messages";
 - (void) controlTextDidEndEditing:(NSNotification *)obj
 {
     if(self.searchField.stringValue.length == 0) {
-        self.searchConversationChats = [[NSMutableArray alloc] initWithArray:self.chats];
+        self.searchConversationChats = [NSMutableArray arrayWithArray:self.chats];
         [self.contactsTableView reloadData];
     }
+    
     else {
-        NSString *searchText = [self.searchField stringValue];
         if([[[obj userInfo] objectForKey:@"NSTextMovement"] intValue] == NSReturnTextMovement) {
-            if(self.lastSearchIndex >= self.currentConversationChats.count) {
-                self.lastSearchIndex = -1;
-            }
-            int i;
-            for(i = self.lastSearchIndex + 1; i < self.currentConversationChats.count; i++) {
-                Message *message = self.currentConversationChats[i];
-                if(message.messageText && [message.messageText length] > 0) {
-                    if([message.messageText rangeOfString:searchText options:NSCaseInsensitiveSearch].location != NSNotFound) {
+            
+            int i = 0;
+            NSString *searchText = [self.searchField stringValue];
+            
+            //Let's search from the beginning
+            if(self.lastSearchIndex >= self.currentConversationChats.count || self.lastSearchIndex < 0) {
+                for(Message *message in self.currentConversationChats) {
+                    if([message messageText] && [message.messageText rangeOfString:searchText options:NSCaseInsensitiveSearch].location != NSNotFound) {
                         self.lastSearchIndex = i;
-                        i = INT16_MAX;
+                        break;
                     }
+                    i++;
                 }
             }
             
-            //We reached the end without finding anything, so start from the beginning
-            if(i == self.currentConversationChats.count) {
-                for(i = 0; i < self.currentConversationChats.count; i++) {
+            //Otherwise, let's resume searching from before
+            else {
+                for(i = self.lastSearchIndex + 1; i < self.currentConversationChats.count; i++) {
+                    
                     Message *message = self.currentConversationChats[i];
-                    if(message.messageText && [message.messageText length] > 0) {
+                    if([message messageText]) {
                         if([message.messageText rangeOfString:searchText options:NSCaseInsensitiveSearch].location != NSNotFound) {
                             self.lastSearchIndex = i;
-                            i = INT16_MAX;
+                            break;
                         }
+                    }
+                }
+                
+                //We reached the end without finding anything, so start from the beginning
+                if(i >= self.currentConversationChats.count || i < 0) {
+                    i = 0;
+                    
+                    for(Message *message in self.currentConversationChats) {
+                        if([message messageText] && [message.messageText rangeOfString:searchText options:NSCaseInsensitiveSearch].location != NSNotFound) {
+                            self.lastSearchIndex = i;
+                            break;
+                        }
+                        i++;
                     }
                 }
             }
             
             [self.messagesTableView reloadDataForRowIndexes:[NSIndexSet indexSetWithIndex:self.lastSearchIndex] columnIndexes:[NSIndexSet indexSetWithIndex:0]];
+            
             //Results in a smoother scroll
             [[NSOperationQueue mainQueue] addOperationWithBlock:^{
                 [self.messagesTableView scrollRowToVisible:self.lastSearchIndex];
             }];
-
         }
     }
 }
@@ -828,11 +844,11 @@ static NSString *orderByMostMessages = @"Most messages";
     if(self.searchField.stringValue.length == 0) {
         self.searchConversationChats = [[NSMutableArray alloc] initWithArray:self.chats];
     }
+    
     else {
         [self.searchConversationChats removeAllObjects];
         
         NSString *searchText = self.searchField.stringValue;
-        
         [self.searchConversationChats addObjectsFromArray:[self.messageManager peopleForSearchCriteria:searchText]];
     }
     
@@ -845,6 +861,7 @@ static NSString *orderByMostMessages = @"Most messages";
         [self updateContactNameTextField];
         [self.messagesTableView reloadData];
     }
+    
     else if(self.searchConversationChats.count == 0) {
         self.lastChosenPerson = nil;
         self.currentConversationChats = [[NSMutableArray alloc] init];
