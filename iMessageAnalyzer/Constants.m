@@ -28,7 +28,7 @@ static Constants *constants;
  *
 *****************************************************************/
 
-# pragma mark CONSTRUCTORS
+# pragma mark - CONSTRUCTORS
 
 - (instancetype) init
 {
@@ -64,7 +64,7 @@ static Constants *constants;
  *
  *****************************************************************/
 
-# pragma mark DATE FROM INFORMATION
+# pragma mark - DATE FROM INFORMATION
 
 - (NSDate*) dateAtBeginningOfDay:(NSDate*)date
 {
@@ -168,7 +168,7 @@ static Constants *constants;
  *
 *****************************************************************/
 
-# pragma mark SEARCHFIELD_DELEGATE
+# pragma mark - SEARCHFIELD_DELEGATE
 
 - (int) daysInMonthForDate:(NSDate *)date
 {
@@ -230,7 +230,7 @@ static Constants *constants;
  *
 *****************************************************************/
 
-# pragma mark BOOLS FROM INFORMATION
+# pragma mark - BOOLS FROM INFORMATION
 
 - (BOOL) isBeginningOfMonth:(NSDate *)date
 {
@@ -251,7 +251,7 @@ static Constants *constants;
  *
 *****************************************************************/
 
-# pragma mark SEARCHFIELD_DELEGATE
+# pragma mark - SEARCHFIELD_DELEGATE
 
 - (NSString*) dayMonthYearString:(NSDate*)date
 {
@@ -294,7 +294,7 @@ static Constants *constants;
  *
 *****************************************************************/
 
-# pragma mark Miscellaneous
+# pragma mark - Miscellaneous
 
 + (NSString*) getStrippedWord:(NSString*)original
 {
@@ -312,7 +312,7 @@ static Constants *constants;
  *
 *****************************************************************/
 
-# pragma mark AUXILLARY
+# pragma mark - AUXILLARY
 
 - (NSDateComponents*) dateComponentsForDay:(NSDate*)date
 {

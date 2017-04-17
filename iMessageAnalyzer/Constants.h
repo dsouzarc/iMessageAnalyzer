@@ -26,13 +26,13 @@ const static int MIN_CONVERSATION_STARTER = MAX_DOUBLE_MESSAGE + 1;
 
 @interface Constants : NSObject
 
-#pragma mark CONSTRUCTORS
+# pragma mark - CONSTRUCTORS
 
 + (instancetype) instance;
 + (BOOL) isDevelopmentMode;
 @property (readonly) Constants *instance;
 
-#pragma mark STRING FROM INFORMATION
+# pragma mark - STRING FROM INFORMATION
 
 - (NSString*) MonthNameString:(int)monthNumber;
 - (NSString*) dayMonthYearString:(NSDate*)date;
@@ -40,13 +40,13 @@ const static int MIN_CONVERSATION_STARTER = MAX_DOUBLE_MESSAGE + 1;
 - (NSString*) stringForDateAfterStart:(int)startDay;
 
 
-#pragma mark BOOL FROM INFORMATION
+# pragma mark - BOOL FROM INFORMATION
 
 - (BOOL) isIMessage:(char*)text;
 - (BOOL) isBeginningOfMonth:(NSDate*)date;
 
 
-#pragma mark DATE FROM INFORMATION
+# pragma mark - DATE FROM INFORMATION
 
 - (NSDate*) dateAtBeginningOfDay:(NSDate*)date;
 - (NSDate*) dateAtEndOfDay:(NSDate*)date;
@@ -62,7 +62,7 @@ const static int MIN_CONVERSATION_STARTER = MAX_DOUBLE_MESSAGE + 1;
 - (NSDate*) dateByAddingMonths:(NSDate*)date months:(int)months;
 - (NSDate*) dateByAddingDays:(NSDate*)date days:(int)days;
 
-#pragma mark NUMBERS FROM INFORMATION
+# pragma mark - NUMBERS FROM INFORMATION
 
 - (int) daysBetweenDates:(NSDate*)startDate endDate:(NSDate*)endDate;
 - (int) daysInMonthForDate:(NSDate*)date;
@@ -74,7 +74,7 @@ const static int MIN_CONVERSATION_STARTER = MAX_DOUBLE_MESSAGE + 1;
 - (int) getDateHour:(NSDate*)date;
 - (int) getDateHourFromDateInSeconds:(int)dateInSeconds;
 
-#pragma mark Miscellaneous
+# pragma mark - Miscellaneous
 
 + (NSString*) getStrippedWord:(NSString*)original;
 + (BOOL) isDoubleMessage:(int)timeDifference;

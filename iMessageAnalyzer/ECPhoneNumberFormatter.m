@@ -38,7 +38,7 @@
 
 @implementation ECPhoneNumberFormatter
 
-#pragma mark - NSFormatter
+# pragma mark - - NSFormatter
 
 - (NSString *)stringForObjectValue:(id)anObject {
     if (![anObject isKindOfClass:[NSString class]]) return nil;
@@ -87,7 +87,7 @@
     return NO;
 }
 
-#pragma mark - Private
+# pragma mark - - Private
 
 - (NSString *)stripNonDigits:(NSString *)input {
     NSCharacterSet *doNotWant = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];

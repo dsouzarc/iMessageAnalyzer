@@ -21,11 +21,11 @@
 
 @interface DropPlotMessageAnalyzerViewController : NSViewController <CPTPlotDataSource, CPTPlotSpaceDelegate, CPTScatterPlotDelegate, CPTLegendDelegate>
 
-#pragma mark Constructor
+# pragma mark - Constructor
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil person:(Person*)person temporaryDatabase:(TemporaryDatabaseManager*)temporaryDatabase firstMessageDate:(NSDate*)firstMessage;
 
 
-#pragma mark Modify graph data
+# pragma mark - Modify graph data
 
 - (void) showThisConversationSentAndReceivedWords;
 - (void) showThisConversationSentAndReceivedMessages;

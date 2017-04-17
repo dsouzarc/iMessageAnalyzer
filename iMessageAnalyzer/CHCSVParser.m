@@ -128,7 +128,7 @@ NSString *const CHCSVErrorDomain = @"com.davedelong.csv";
     [_stream close];
 }
 
-#pragma mark -
+# pragma mark - -
 
 - (void)setRecognizesBackslashesAsEscapes:(BOOL)recognizesBackslashesAsEscapes {
     _recognizesBackslashesAsEscapes = recognizesBackslashesAsEscapes;
@@ -151,7 +151,7 @@ NSString *const CHCSVErrorDomain = @"com.davedelong.csv";
     }
 }
 
-#pragma mark -
+# pragma mark - -
 
 - (void)_sniffEncoding {
     NSStringEncoding encoding = NSUTF8StringEncoding;
@@ -260,7 +260,7 @@ NSString *const CHCSVErrorDomain = @"com.davedelong.csv";
     return [_string characterAtIndex:nextNextIndex];
 }
 
-#pragma mark -
+# pragma mark - -
 
 - (void)parse {
     @autoreleasepool {
@@ -713,7 +713,7 @@ NSString *const CHCSVErrorDomain = @"com.davedelong.csv";
 
 @end
 
-#pragma mark - Convenience Categories
+# pragma mark - - Convenience Categories
 
 @interface _CHCSVAggregator : NSObject <CHCSVParserDelegate>
 
@@ -946,7 +946,7 @@ NSArray *_CHCSVParserParse(NSInputStream *inputStream, CHCSVParserOptions option
 
 @end
 
-#pragma mark - Deprecated methods
+# pragma mark - - Deprecated methods
 
 @implementation CHCSVParser (Deprecated)
 

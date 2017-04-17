@@ -17,7 +17,7 @@
 
 @interface ViewAttachmentsViewController : NSViewController <NSTableViewDataSource, NSTableViewDelegate>
 
-#pragma mark Constructor
+# pragma mark - Constructor
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil attachments:(NSMutableArray*)attachments;
 
 @end

@@ -11,7 +11,7 @@
 @interface MoreAnalysisViewController ()
 
 
-#pragma mark UI Variables
+# pragma mark - UI Variables
 
 @property (strong) IBOutlet NSView *mainViewForGraph;
 
@@ -38,14 +38,14 @@
 @property (strong, nonnull) NSDate *calendarChosenDateTo;
 
 
-#pragma mark View Controllers
+# pragma mark - View Controllers
 
 @property (strong, nonatomic) NSPopover *viewAttachmentsPopover;
 @property (strong, nonatomic) ViewAttachmentsViewController *viewAttachmentsViewController;
 @property (strong, nonatomic) GraphViewController *graphViewController;
 
 
-#pragma mark Arrays for messages and frequencies
+# pragma mark - Arrays for messages and frequencies
 
 @property (strong, nonatomic) NSMutableArray *messages;
 @property (strong, nonatomic) NSMutableArray *messagesToDisplay;
@@ -57,7 +57,7 @@
 @property (strong, nonatomic) NSMutableArray<NSDictionary*> *friendWordsAndFrequenciesSearch;
 
 
-#pragma mark Person information
+# pragma mark - Person information
 
 @property (strong, nonatomic) Person *person;
 @property (strong, nonatomic) TemporaryDatabaseManager *databaseManager;
@@ -85,7 +85,7 @@
  *
 *****************************************************************/
 
-# pragma mark Constructor
+# pragma mark - Constructor
 
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil person:(Person *)person messages:(NSMutableArray *)messages databaseManager:(TemporaryDatabaseManager *)databaseManager
 {
@@ -166,7 +166,7 @@
  *
 *****************************************************************/
 
-# pragma mark Word Frequencies
+# pragma mark - Word Frequencies
 
 - (void) dealWithWordFrequencies
 {
@@ -385,7 +385,7 @@
  *
 *****************************************************************/
 
-# pragma mark NSTableView Delegate
+# pragma mark - NSTableView Delegate
 
 - (NSView*) tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
@@ -707,7 +707,7 @@
 
 int tempCounter = 2;
 
-# pragma mark DatePickerCell Delegate
+# pragma mark - DatePickerCell Delegate
 
 - (void) datePickerCell:(NSDatePickerCell *)aDatePickerCell validateProposedDateValue:(NSDate *__autoreleasing  _Nonnull *)proposedDateValue timeInterval:(NSTimeInterval *)proposedTimeInterval
 {
@@ -798,7 +798,7 @@ int tempCounter = 2;
  *
 *****************************************************************/
 
-# pragma mark NSTextField
+# pragma mark - NSTextField
 
 - (void) controlTextDidChange:(NSNotification *)obj
 {
@@ -840,7 +840,7 @@ int tempCounter = 2;
  *
  *****************************************************************/
 
-# pragma mark TextField Delegate
+# pragma mark - TextField Delegate
 
 - (void) clickedOnTextField:(int32_t)textFieldNumber
 {
@@ -869,7 +869,7 @@ int tempCounter = 2;
  *
  *****************************************************************/
 
-# pragma mark NSPopOver Delegate
+# pragma mark - NSPopOver Delegate
 
 - (void) popoverDidClose:(NSNotification *)notification
 {
@@ -884,7 +884,7 @@ int tempCounter = 2;
  *
 *****************************************************************/
 
-# pragma mark Auxillary Methods
+# pragma mark - Auxillary Methods
 
 - (IBAction)clearCalendarButton:(id)sender {
     self.messagesToDisplay = self.messages;

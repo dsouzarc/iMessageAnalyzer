@@ -316,7 +316,7 @@ typedef NS_ENUM(NSInteger, CHCSVErrorCode) {
 
 @end
 
-#pragma mark - Convenience Categories
+# pragma mark - - Convenience Categories
 
 typedef NS_OPTIONS(NSUInteger, CHCSVParserOptions) {
     /**
@@ -482,7 +482,7 @@ typedef NS_OPTIONS(NSUInteger, CHCSVParserOptions) {
 
 @end
 
-#pragma mark - Deprecated stuff
+# pragma mark - - Deprecated stuff
 
 /**
  * These methods have been deprecated, but are preserved here for source compatibility.

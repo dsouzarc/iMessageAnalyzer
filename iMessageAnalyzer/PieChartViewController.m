@@ -8,7 +8,7 @@
 
 #import "PieChartViewController.h"
 
-#pragma mark Graph type identifiers
+# pragma mark - Graph type identifiers
 
 typedef enum {
     sentAndReceivedMessages,
@@ -19,7 +19,7 @@ typedef enum {
 
 @interface PieChartViewController ()
 
-#pragma mark Private variables
+# pragma mark - Private variables
 
 @property (strong) IBOutlet CPTGraphHostingView *graphHostingView;
 @property (strong, nonatomic) CPTGraph *graph;
@@ -40,7 +40,7 @@ typedef enum {
  *
 *****************************************************************/
 
-# pragma mark Constructor
+# pragma mark - Constructor
 
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil person:(Person *)person temporaryDatabase:(TemporaryDatabaseManager *)temporaryDatabase
 {
@@ -62,7 +62,7 @@ typedef enum {
  *
  *****************************************************************/
 
-# pragma mark Graph setup
+# pragma mark - Graph setup
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -111,7 +111,7 @@ typedef enum {
  *
 *****************************************************************/
 
-# pragma mark CPTPieChart Data Source
+# pragma mark - CPTPieChart Data Source
 
 - (NSString*) legendTitleForPieChart:(CPTPieChart *)pieChart recordIndex:(NSUInteger)idx
 {
@@ -174,7 +174,7 @@ typedef enum {
  *
 *****************************************************************/
 
-# pragma mark Data modification
+# pragma mark - Data modification
 
 - (void) showSentAndReceivedMessages
 {

@@ -8,7 +8,7 @@
 
 #import "TemporaryDatabaseManager.h"
 
-#pragma mark Static variables
+# pragma mark - Static variables
 #define MAX_DB_TRIES 40
 
 static NSString *myMessagesTable = @"myMessagesTable";
@@ -19,7 +19,7 @@ static TemporaryDatabaseManager *databaseManager;
 
 @interface TemporaryDatabaseManager ()
 
-#pragma mark Private variables
+# pragma mark - Private variables
 
 @property (strong, nonatomic) Person *person;
 @property (strong, nonatomic) NSCalendar *calendar;
@@ -37,7 +37,7 @@ static TemporaryDatabaseManager *databaseManager;
  *
 *****************************************************************/
 
-# pragma mark Constructor
+# pragma mark - Constructor
 
 + (instancetype) getInstanceWithperson:(Person *)person messages:(NSMutableArray *)messages
 {
@@ -109,7 +109,7 @@ static TemporaryDatabaseManager *databaseManager;
  *
 *****************************************************************/
 
-# pragma mark Insert into my messages
+# pragma mark - Insert into my messages
 
 - (NSString*) insertMessageQuery:(Message*)message
 {
@@ -144,7 +144,7 @@ static TemporaryDatabaseManager *databaseManager;
  *
  *****************************************************************/
 
-# pragma mark Insert into other messages
+# pragma mark - Insert into other messages
 
 - (void) addOtherMessagesToDatabase:(NSMutableArray*)otherMessages
 {
@@ -198,7 +198,7 @@ static TemporaryDatabaseManager *databaseManager;
  *
  *****************************************************************/
 
-# pragma mark Get my messages
+# pragma mark - Get my messages
 
 - (NSMutableArray*) getAllMessagesForPerson:(Person *)person fromDay:(NSDate *)fromDay toDay:(NSDate*)toDay
 {
@@ -307,7 +307,7 @@ static TemporaryDatabaseManager *databaseManager;
  *
  *****************************************************************/
 
-# pragma mark Get other messages
+# pragma mark - Get other messages
 
 - (NSMutableArray*) getAllOtherMessagesFromStartTime:(int)startTime endTime:(int)endTime
 {
@@ -352,7 +352,7 @@ static TemporaryDatabaseManager *databaseManager;
  *
 *****************************************************************/
 
-# pragma mark Get dates for messages
+# pragma mark - Get dates for messages
 
 - (NSMutableArray*) getAllMessageTimingsForAll
 {
@@ -373,7 +373,7 @@ static TemporaryDatabaseManager *databaseManager;
  *
 *****************************************************************/
 
-# pragma mark Get counts
+# pragma mark - Get counts
 
 - (int) getConversationMessageCountStartTime:(int)startTime endTime:(int)endTime
 {
@@ -438,7 +438,7 @@ static TemporaryDatabaseManager *databaseManager;
  *
 *****************************************************************/
 
-# pragma mark Get counts organized by hours
+# pragma mark - Get counts organized by hours
 
 - (NSMutableArray*) getMySentWordsInConversationOverHoursInDay:(int)startTime endTime:(int)endTime
 {
@@ -483,7 +483,7 @@ static TemporaryDatabaseManager *databaseManager;
  *
 *****************************************************************/
 
-# pragma mark Get counts (sums)
+# pragma mark - Get counts (sums)
 
 - (int) getMySentMessagesWordCountInConversation:(int)startTime endTime:(int)endTime
 {
@@ -516,7 +516,7 @@ static TemporaryDatabaseManager *databaseManager;
  *
 *****************************************************************/
 
-# pragma mark Helpers to get data from queryString
+# pragma mark - Helpers to get data from queryString
 
 - (int) getSimpleCountFromQuery:(NSString*)queryString
 {
@@ -556,7 +556,7 @@ static TemporaryDatabaseManager *databaseManager;
  *
 *****************************************************************/
 
-# pragma mark Helpers to organize by hours
+# pragma mark - Helpers to organize by hours
 
 - (NSMutableArray*) getSumsOrganizedByHours:(NSString*)query
 {
@@ -668,7 +668,7 @@ static TemporaryDatabaseManager *databaseManager;
  *
 *****************************************************************/
 
-# pragma mark SQLite Helpers
+# pragma mark - SQLite Helpers
 
 - (BOOL) executeSQLStatement:(const char *)sqlStatement errorMessage:(char*)errorMessage
 {
@@ -701,7 +701,7 @@ static TemporaryDatabaseManager *databaseManager;
 }
 
 
-#pragma mark Create tables
+# pragma mark - Create tables
 
 - (void) createOtherMessagesTable
 {
@@ -728,7 +728,7 @@ static TemporaryDatabaseManager *databaseManager;
 }
 
 
-#pragma mark Misc. SQLite helpers
+# pragma mark - Misc. SQLite helpers
 
 - (void) addPragmas
 {

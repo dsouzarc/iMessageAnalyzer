@@ -8,7 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-#pragma mark Delegate
+# pragma mark - Delegate
 
 @protocol StartupViewControllerDelegate <NSObject>
 

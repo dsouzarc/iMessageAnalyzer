@@ -14,14 +14,14 @@ static MessageManager *messageInstance;
 
 @property (strong, nonatomic) DatabaseManager *databaseManager;
 
-#pragma mark Variables for holding all information
+# pragma mark - Variables for holding all information
 
 @property (strong, nonatomic) NSMutableDictionary* allChatsAndConversations;
 @property (strong, nonatomic) NSMutableDictionary *allPeople;
 @property (strong, nonatomic) NSMutableArray *allChats;
 
 
-#pragma mark Auxillary variables
+# pragma mark - Auxillary variables
 
 @property (strong, nonatomic) NSCalendar *calendar;
 @property (strong, nonatomic) NSSortDescriptor *lastMessageSentDescriptor;
@@ -37,7 +37,7 @@ static MessageManager *messageInstance;
  *
 *****************************************************************/
 
-# pragma mark Constructor
+# pragma mark - Constructor
 
 + (instancetype) getInstance
 {
@@ -104,7 +104,7 @@ static MessageManager *messageInstance;
  *
 *****************************************************************/
 
-# pragma mark Getting information
+# pragma mark - Getting information
 
 - (NSMutableArray*) getAllNumbersForSearchText:(NSString *)text
 {
@@ -181,7 +181,7 @@ static MessageManager *messageInstance;
     return self.allChatsAndConversations;
 }
 
-#pragma mark Get people
+# pragma mark - Get people
 
 - (NSArray*) peopleForSearchCriteria:(NSString*)searchText
 {
@@ -211,7 +211,7 @@ static MessageManager *messageInstance;
 }
 
 
-#pragma mark Get counts
+# pragma mark - Get counts
 
 - (int32_t) getMessageCountWithPerson:(Person *)person
 {
@@ -235,7 +235,7 @@ static MessageManager *messageInstance;
 }
 
 
-#pragma mark Update messages
+# pragma mark - Update messages
 
 - (void) updateMessagesWithAttachments:(NSMutableArray*)messages person:(Person*)person
 {

@@ -28,7 +28,7 @@
  *
 *****************************************************************/
 
-# pragma mark Constructor
+# pragma mark - Constructor
 
 - (instancetype) initWithWindowNibName:(NSString *)windowNibName
 {
@@ -144,7 +144,7 @@
  *
 *****************************************************************/
 
-# pragma mark StartupViewController Delegate
+# pragma mark - StartupViewController Delegate
 
 - (void) didWishToContinue
 {
@@ -183,7 +183,7 @@
  *
 *****************************************************************/
 
-# pragma mark Auxillary methods
+# pragma mark - Auxillary methods
 
 - (void) messagesDataSource
 {
@@ -292,7 +292,7 @@
  *
  *****************************************************************/
 
-# pragma mark NSWindow Delegate
+# pragma mark - NSWindow Delegate
 
 - (NSSize) windowWillResize:(NSWindow *)sender toSize:(NSSize)frameSize
 {

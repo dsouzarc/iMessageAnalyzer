@@ -8,7 +8,7 @@
 
 #import "DropPlotMessageAnalyzerViewController.h"
 
-#pragma mark Graph and plot type identifiers
+# pragma mark - Graph and plot type identifiers
 
 static NSString *mainPlotId = @"Your Messages";
 static NSString *secondPlotId = @"Other Messages";
@@ -22,7 +22,7 @@ typedef enum {
 
 @interface DropPlotMessageAnalyzerViewController ()
 
-#pragma mark CPTGraph variables
+# pragma mark - CPTGraph variables
 
 @property (strong) IBOutlet CPTGraphHostingView *graphHostingView;
 @property (strong, nonatomic) CPTXYGraph *graph;
@@ -33,7 +33,7 @@ typedef enum {
 @property (strong, nonatomic) CPTPlotSpaceAnnotation *yValueAnnotation;
 
 
-#pragma mark Zoom variables
+# pragma mark - Zoom variables
 
 @property (nonatomic, readwrite, assign) double minimumValueForXAxis;
 @property (nonatomic, readwrite, assign) double maximumValueForXAxis;
@@ -51,7 +51,7 @@ typedef enum {
 @property BOOL isZoomedOut;
 
 
-#pragma mark Constant variables
+# pragma mark - Constant variables
 
 @property (strong, nonatomic) TemporaryDatabaseManager *messageManager;
 @property (strong, nonatomic) Person *person;
@@ -61,7 +61,7 @@ typedef enum {
 @property (strong, nonatomic) NSDate *endDate;
 
 
-#pragma mark Data variables
+# pragma mark - Data variables
 
 @property (nonatomic, readwrite, strong) NSArray<NSDictionary*> *mainDataPoints;
 @property (strong, nonatomic) NSArray<NSDictionary*> *secondDataPoints;
@@ -240,7 +240,7 @@ typedef enum {
  *
  *****************************************************************/
 
-# pragma mark CPTPlot Data Source
+# pragma mark - CPTPlot Data Source
 
 - (id) numberForPlot:(CPTPlot *)plot field:(NSUInteger)fieldEnum recordIndex:(NSUInteger)index
 {
@@ -308,7 +308,7 @@ typedef enum {
  *
  *****************************************************************/
 
-# pragma mark CPTPlot Delegate
+# pragma mark - CPTPlot Delegate
 
 - (BOOL)plotSpace:(CPTPlotSpace *)space shouldHandlePointingDeviceDownEvent:(id)event atPoint:(CGPoint)interactionPoint
 {
@@ -495,7 +495,7 @@ typedef enum {
  *
  *****************************************************************/
 
-# pragma mark Zoom methods
+# pragma mark - Zoom methods
 
 - (IBAction)zoomIn
 {
@@ -585,7 +585,7 @@ typedef enum {
  *
 *****************************************************************/
 
-# pragma mark Data modification
+# pragma mark - Data modification
 
 - (void) hideSecondGraph
 {
@@ -732,7 +732,7 @@ typedef enum {
  *
 *****************************************************************/
 
-# pragma mark Get locations and labels
+# pragma mark - Get locations and labels
 
 - (NSDictionary*) getTickLocationsAndLabelsForMonths
 {
@@ -812,7 +812,7 @@ typedef enum {
  *
 *****************************************************************/
 
-# pragma mark Calculate maximum values and points
+# pragma mark - Calculate maximum values and points
 
 - (NSDictionary*) getMaxYAndPointsForMessages:(NSMutableArray<NSMutableArray*>*)daysMessages countWords:(BOOL)countWords
 {
@@ -926,7 +926,7 @@ typedef enum {
  *
 *****************************************************************/
 
-# pragma mark Auxillary Methods
+# pragma mark - Auxillary Methods
 
 - (void) thisConversationSentAndReceivedMessages:(NSDictionary*)results
 {
@@ -1043,7 +1043,7 @@ typedef enum {
  *
  *****************************************************************/
 
-# pragma mark Export methods
+# pragma mark - Export methods
 
 - (IBAction)exportToPDF:(id)sender
 {

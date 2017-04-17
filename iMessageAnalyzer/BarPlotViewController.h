@@ -21,12 +21,12 @@
 
 @interface BarPlotViewController : NSViewController <CPTBarPlotDataSource, CPTBarPlotDelegate, CPTLegendDelegate>
 
-#pragma mark Constructor
+# pragma mark - Constructor
 
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil person:(Person *)person temporaryDatabase:(TemporaryDatabaseManager *)temporaryDatabase;
 
 
-#pragma mark Updating displayed data
+# pragma mark - Updating displayed data
 
 - (void) showSentAndReceivedMessages;
 - (void) showSentAndReceivedWords;

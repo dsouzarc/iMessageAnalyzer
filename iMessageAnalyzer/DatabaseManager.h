@@ -24,18 +24,18 @@
 
 @interface DatabaseManager : NSObject
 
-#pragma mark Singleton constructor
+# pragma mark - Singleton constructor
 
 + (instancetype) getInstance;
 + (instancetype) getInstanceForDatabasePath:(NSString*)path;
 - (void) deleteDatabase;
 
-#pragma mark Getting chats
+# pragma mark - Getting chats
 
 - (NSMutableArray*) getAllChats;
 
 
-#pragma mark Getting messages and counts
+# pragma mark - Getting messages and counts
 
 - (NSMutableArray*) getAllMessagesForPerson:(Person*)person;
 - (NSMutableArray*) getAllMessagesForPerson:(Person *)person startTimeInSeconds:(long)startTimeInSeconds endTimeInSeconds:(long)endTimeInSeconds;
@@ -46,13 +46,13 @@
 - (int32_t) getTotalMessageCount;
 
 
-#pragma mark Getting attachments
+# pragma mark - Getting attachments
 
 - (NSMutableArray*) getAttachmentsForMessageID:(int32_t)messageID;
 - (NSMutableDictionary*) getAllAttachmentsForPerson:(Person*)person;
 
 
-#pragma mark Get handle ids
+# pragma mark - Get handle ids
 
 - (NSMutableSet*) getHandleIDsForMessageText:(NSString*)messageText;
 - (int32_t) getHandleForChatID:(int32_t)chatID;

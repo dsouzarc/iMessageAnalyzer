@@ -20,13 +20,13 @@
 
 @interface MessageManager : NSObject
 
-#pragma mark Singleton
+# pragma mark - Singleton
 
 + (instancetype) getInstance;
 + (instancetype) getInstanceForDatabase:(NSString*)databasePath;
 
 
-#pragma mark Getting information
+# pragma mark - Getting information
 
 - (NSMutableArray*) getAllChats;
 - (NSMutableDictionary*) getAllChatsAndConversations;
@@ -44,7 +44,7 @@
 - (Person*) personForPhoneNumber:(NSString*)number;
 
 
-#pragma mark Auxillary methods
+# pragma mark - Auxillary methods
 
 - (void) updateMessagesWithAttachments:(NSMutableArray*)messages person:(Person*)person;
 

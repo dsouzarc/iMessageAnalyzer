@@ -13,7 +13,7 @@ static NSString *pathToDB;
 
 @interface DatabaseManager ()
 
-#pragma mark Private variables
+# pragma mark - Private variables
 
 @property sqlite3 *database;
 
@@ -31,7 +31,7 @@ static NSString *pathToDB;
  *
 *****************************************************************/
 
-# pragma mark Constructor
+# pragma mark - Constructor
 
 + (instancetype) getInstance
 {
@@ -94,7 +94,7 @@ static NSString *pathToDB;
  *
 *****************************************************************/
 
-# pragma mark Handle IDs
+# pragma mark - Handle IDs
 
 - (NSMutableSet*) getHandleIDsForMessageText:(NSString*)messageText
 {
@@ -159,7 +159,7 @@ static NSString *pathToDB;
  *
 *****************************************************************/
 
-# pragma mark Chats
+# pragma mark - Chats
 
 - (void) updateAllChatsGlobalVariable
 {
@@ -215,7 +215,7 @@ static NSString *pathToDB;
  *
 *****************************************************************/
 
-# pragma mark Contacts
+# pragma mark - Contacts
 
 - (void) getAllContacts
 {
@@ -294,7 +294,7 @@ static NSString *pathToDB;
  *
 *****************************************************************/
 
-# pragma mark Messages
+# pragma mark - Messages
 
 - (int32_t) totalMessagesForStartTime:(long)startTimeInSeconds endTimeInSeconds:(long)endTimeInSeconds
 {
@@ -513,7 +513,7 @@ static NSString *pathToDB;
  *
 *****************************************************************/
 
-# pragma mark Attachments
+# pragma mark - Attachments
 
 - (NSMutableDictionary*) getAllAttachmentsForPerson:(Person*)person
 {
@@ -603,7 +603,7 @@ static NSString *pathToDB;
  *
 *****************************************************************/
 
-# pragma mark Helper methods
+# pragma mark - Helper methods
 
 - (NSString*) cleanNumber:(NSString*)originalNumber
 {

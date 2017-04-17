@@ -13,7 +13,7 @@
 @property (strong, nonatomic) NSView *graphView;
 
 
-#pragma mark Buttons for graph displaying options 
+# pragma mark - Buttons for graph displaying options 
 
 @property (strong) IBOutlet NSButton *lineGraphAllTimeButton;
 @property (strong) IBOutlet NSButton *lineGraphMessagesButton;
@@ -30,14 +30,14 @@
 @property (strong) IBOutlet NSButton *barChartTotalMessagesAsPercent;
 
 
-#pragma mark Graph ViewControllers
+# pragma mark - Graph ViewControllers
 
 @property (strong, nonatomic) DropPlotMessageAnalyzerViewController *dropPlotViewController;
 @property (strong, nonatomic) PieChartViewController *pieChartViewController;
 @property (strong, nonatomic) BarPlotViewController *barPlotViewController;
 
 
-#pragma mark Analysis data
+# pragma mark - Analysis data
 
 @property (strong, nonatomic) Person *person;
 @property (strong, nonatomic) TemporaryDatabaseManager *database;
@@ -54,7 +54,7 @@
  *
 *****************************************************************/
 
-# pragma mark Constructor
+# pragma mark - Constructor
 
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil person:(Person *)person temporaryDatabase:(TemporaryDatabaseManager *)temporaryDatabase firstMessageDate:(NSDate *)firstMessage graphView:(NSView *)graphView
 {
@@ -97,7 +97,7 @@
  *
 *****************************************************************/
 
-# pragma mark Show certain view controllers
+# pragma mark - Show certain view controllers
 
 - (void) showPieChart
 {
@@ -132,7 +132,7 @@
  *
 *****************************************************************/
 
-# pragma mark Handle an option click
+# pragma mark - Handle an option click
 
 - (IBAction)buttonClick:(id)sender {
     

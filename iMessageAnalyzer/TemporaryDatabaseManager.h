@@ -21,7 +21,7 @@
 
 @interface TemporaryDatabaseManager : NSObject
 
-#pragma mark Constructors and Misc.
+# pragma mark - Constructors and Misc.
 
 + (instancetype) getInstance;
 + (instancetype) getInstanceWithperson:(Person*)person messages:(NSMutableArray*)messages;
@@ -30,7 +30,7 @@
 @property (nonatomic) BOOL finishedAddingEntries;
 
 
-#pragma mark Get messages
+# pragma mark - Get messages
 
 - (NSMutableArray*) getAllMessagesForPerson:(Person *)person;
 - (NSMutableArray*) getAllMessagesForPerson:(Person*)person onDay:(NSDate*)day;
@@ -64,7 +64,7 @@
 - (int) getMyReceivedOtherMessagesWordCount:(int)startTime endTime:(int)endTime;
 
 
-#pragma mark Get counts organized by hours
+# pragma mark - Get counts organized by hours
 
 - (NSMutableArray*) getMySentWordsInConversationOverHoursInDay:(int)startTime endTime:(int)endTime;
 - (NSMutableArray*) getReceivedWordsInConversationOverHoursInDay:(int)startTime endTime:(int)endTime;

@@ -14,7 +14,7 @@ static NSString *orderByMostMessages = @"Most messages";
 @interface MainViewController ()
 
 
-#pragma mark UI Elements
+# pragma mark - UI Elements
 
 @property (strong) IBOutlet NSTableView *contactsTableView;
 @property (strong) IBOutlet NSTableView *messagesTableView;
@@ -33,7 +33,7 @@ static NSString *orderByMostMessages = @"Most messages";
 @property NSRect timeStampRect;
 
 
-#pragma mark View Controllers and Popovers
+# pragma mark - View Controllers and Popovers
 
 @property (strong, nonatomic) NSPopover *calendarPopover;
 @property (strong, nonatomic) CalendarPopUpViewController *calendarPopUpViewController;
@@ -47,20 +47,20 @@ static NSString *orderByMostMessages = @"Most messages";
 @property (strong, nonatomic) MoreAnalysisWindowController *moreAnalysisWindowController;
 
 
-#pragma mark Date formatters
+# pragma mark - Date formatters
 
 @property (strong, nonatomic) NSDateFormatter *dateFormatter;
 @property (strong, nonatomic) NSDate *calendarChosenDate;
 
 
-#pragma mark Chat and conversation variables
+# pragma mark - Chat and conversation variables
 
 @property (strong, nonatomic) NSMutableArray *chats;
 @property (strong, nonatomic) NSMutableArray *searchConversationChats;
 @property (strong, nonatomic) NSMutableArray *currentConversationChats;
 
 
-#pragma mark Managers and last chosen person
+# pragma mark - Managers and last chosen person
 
 @property (strong, nonatomic) MessageManager *messageManager;
 @property (strong, nonatomic) NSDictionary *messageWithAttachmentAttributes;
@@ -80,7 +80,7 @@ static NSString *orderByMostMessages = @"Most messages";
  *
 *****************************************************************/
 
-# pragma mark Constructor
+# pragma mark - Constructor
 
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil databasePath:(NSString *)databasePath
 {
@@ -311,7 +311,7 @@ static NSString *orderByMostMessages = @"Most messages";
  *
 *****************************************************************/
 
-# pragma mark Click handlers
+# pragma mark - Click handlers
 
 - (void) doubleClickedContactCell:(id)object
 {
@@ -445,7 +445,7 @@ static NSString *orderByMostMessages = @"Most messages";
  *
  *****************************************************************/
 
-# pragma mark NSTableView Delegate
+# pragma mark - NSTableView Delegate
 
 - (CGFloat) tableView:(NSTableView *)tableView heightOfRow:(NSInteger)row
 {
@@ -776,7 +776,7 @@ static NSString *orderByMostMessages = @"Most messages";
  *
  *****************************************************************/
 
-# pragma mark SEARCHFIELD_DELEGATE
+# pragma mark - SEARCHFIELD_DELEGATE
 
 - (void) controlTextDidEndEditing:(NSNotification *)obj
 {
@@ -877,7 +877,7 @@ static NSString *orderByMostMessages = @"Most messages";
  *
  *****************************************************************/
 
-# pragma mark NSTextField Delegate
+# pragma mark - NSTextField Delegate
 
 - (void) clickedOnTextField:(int32_t)textFieldNumber
 {
@@ -907,7 +907,7 @@ static NSString *orderByMostMessages = @"Most messages";
  *
  *****************************************************************/
 
-# pragma mark NSPopover Delegate
+# pragma mark - NSPopover Delegate
 
 - (void) popoverDidClose:(NSNotification *)notification
 {
@@ -924,7 +924,7 @@ static NSString *orderByMostMessages = @"Most messages";
  *
  *****************************************************************/
 
-# pragma mark Helper Methods
+# pragma mark - Helper Methods
 
 /** Deprecated */
 - (BOOL) conversationMatchesRequirement:(Person*)person searchText:(NSString*)searchText {

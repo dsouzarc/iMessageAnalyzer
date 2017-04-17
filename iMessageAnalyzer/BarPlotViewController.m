@@ -9,7 +9,7 @@
 #import "BarPlotViewController.h"
 
 
-#pragma mark Plot and graph type identifiers 
+# pragma mark - Plot and graph type identifiers 
 
 static NSString *mainPlotId = @"mainPlot";
 static NSString *secondPlotId = @"secondPlot";
@@ -36,7 +36,7 @@ typedef enum {
  *
 *****************************************************************/
 
-#pragma mark CPTGraph Variables
+# pragma mark - CPTGraph Variables
 
 @property (strong) IBOutlet CPTGraphHostingView *graphHostingView;
 @property (strong, nonatomic) CPTGraph *graph;
@@ -47,14 +47,14 @@ typedef enum {
 @property (strong, nonatomic) NSNumber *barWidth;
 
 
-#pragma mark Data variables
+# pragma mark - Data variables
 
 @property (strong, nonatomic) NSMutableArray *mainData;
 @property (strong, nonatomic) NSMutableArray *secondData;
 @property BarPlotType barPlotType;
 
 
-#pragma mark Person variables
+# pragma mark - Person variables
 
 @property (strong, nonatomic) TemporaryDatabaseManager *messageManager;
 @property (strong, nonatomic) Person *person;
@@ -70,7 +70,7 @@ typedef enum {
  *
 *****************************************************************/
 
-# pragma mark Constructor
+# pragma mark - Constructor
 
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil person:(Person *)person temporaryDatabase:(TemporaryDatabaseManager *)temporaryDatabase
 {
@@ -124,7 +124,7 @@ typedef enum {
  *
 *****************************************************************/
 
-# pragma mark Set Graph Properties
+# pragma mark - Set Graph Properties
 
 - (void) setLegendAndTitle
 {
@@ -223,7 +223,7 @@ typedef enum {
  *
 *****************************************************************/
 
-# pragma mark Modify graph data
+# pragma mark - Modify graph data
 
 - (void) showSentAndReceivedMessages
 {
@@ -312,7 +312,7 @@ typedef enum {
  *
 *****************************************************************/
 
-# pragma mark CPTBarPlot Delegate
+# pragma mark - CPTBarPlot Delegate
 
 - (void) barPlot:(CPTBarPlot *)plot barWasSelectedAtRecordIndex:(NSUInteger)idx
 {
@@ -359,7 +359,7 @@ typedef enum {
  *
 *****************************************************************/
 
-# pragma mark CPTBarPlot Data Source
+# pragma mark - CPTBarPlot Data Source
 
 - (NSUInteger) numberOfRecordsForPlot:(CPTPlot *)plot
 {
@@ -387,7 +387,7 @@ typedef enum {
  *
 *****************************************************************/
 
-# pragma mark Auxillary methods
+# pragma mark - Auxillary methods
 
 - (void) setGraphTitle:(NSString*)graphTitle mainPlotTitle:(NSString*)mainPlotTitle secondPlotTitle:(NSString*)secondPlotTitle
 {

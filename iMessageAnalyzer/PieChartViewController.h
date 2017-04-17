@@ -21,12 +21,12 @@
 
 @interface PieChartViewController : NSViewController <CPTPieChartDataSource, CPTPieChartDelegate>
 
-#pragma mark Constructor
+# pragma mark - Constructor
 
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil person:(Person *)person temporaryDatabase:(TemporaryDatabaseManager *)temporaryDatabase;
 
 
-#pragma mark Modifying data shown
+# pragma mark - Modifying data shown
 
 - (void) showSentAndReceivedMessages;
 - (void) showSentAndReceivedWords;

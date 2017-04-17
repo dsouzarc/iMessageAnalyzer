@@ -10,14 +10,14 @@
 
 @interface StartupViewController ()
 
-#pragma mark UI Elements
+# pragma mark - UI Elements
 
 @property (strong) IBOutlet NSTextField *sourceCodeTextField;
 @property (strong) IBOutlet NSTextField *emailTextField;
 @property (strong) IBOutlet NSTextField *descriptionTextField;
 @property (strong) IBOutlet NSButton *continueButton;
 
-#pragma mark Private variables
+# pragma mark - Private variables
 
 @property (strong, nonatomic) NSDictionary *fontAttributes;
 
@@ -32,7 +32,7 @@
  *
 *****************************************************************/
 
-# pragma mark Constructor
+# pragma mark - Constructor
 
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -74,7 +74,7 @@
  *
 *****************************************************************/
 
-# pragma mark Auxillary methods
+# pragma mark - Auxillary methods
 
 - (NSMutableAttributedString*) getEmailTextFieldAsString
 {
@@ -131,7 +131,7 @@
  *
 *****************************************************************/
 
-# pragma mark Button clicks
+# pragma mark - Button clicks
 
 - (IBAction)continueButton:(id)sender {
     [self.delegate didWishToContinue];

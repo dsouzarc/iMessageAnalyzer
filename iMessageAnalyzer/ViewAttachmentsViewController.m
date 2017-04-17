@@ -10,7 +10,7 @@
 
 @interface ViewAttachmentsViewController ()
 
-#pragma mark Private variables
+# pragma mark - Private variables
 
 @property (strong) IBOutlet NSTableView *mainTableView;
 
@@ -30,7 +30,7 @@
  *
 *****************************************************************/
 
-# pragma mark Constructor
+# pragma mark - Constructor
 
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil attachments:(NSMutableArray *)attachments
 {
@@ -139,7 +139,7 @@
  *
 *****************************************************************/
 
-# pragma mark NSTableView Data Source and Delegate
+# pragma mark - NSTableView Data Source and Delegate
 
 - (CGFloat) tableView:(NSTableView *)tableView heightOfRow:(NSInteger)row
 {
@@ -238,7 +238,7 @@
  *
 *****************************************************************/
 
-# pragma mark Auxillary Methods
+# pragma mark - Auxillary Methods
 
 - (BOOL) isIdentifiableMedia:(NSString*)fileType
 {
