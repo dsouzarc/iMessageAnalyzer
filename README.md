@@ -1,8 +1,8 @@
-#Written by Ryan D'souza
+# Written by Ryan D'souza
 
-##iMessage Analyzer - Mac App
+## iMessage Analyzer - Mac App
 
-###Analyzes a user's iMessages while providing cool functionality
+### Analyzes a user's iMessages while providing cool functionality
 
 Analyzes a user's iMessage database (chat.db*) to understand a user and their friends' messaging habits by graphing (and calculating statistics) on those characteristics.
 
@@ -18,13 +18,13 @@ Adds some unique functionality from Messages.app that provides a better experien
 [Download .app](https://www.dropbox.com/sh/804msuitbz47gjm/AAAaR5QTdVv8pIRsO9NHZtI7a?dl=0)
 
 
-######Newest features
+###### Newest features
 
 - Double messages: See who sends the most followup messages; defined as successive messages sent by the same person within 3 minutes to 8 hours of the last message send time
 - Conversation starters: See who starts the most conversations; defined as who messages first after 8 hours of the last message in the conversation
 
 
-####Current Features:
+#### Current Features:
 
 - Looks like iMessage
   + Contacts tableview on left side with contact name + profile picture
@@ -33,7 +33,7 @@ Adds some unique functionality from Messages.app that provides a better experien
   + iMessages you received are in gray on the left side of messages panel
   + Shows each message's date/time and read receipts
 
-#####Unique from iMessage Features
+##### Unique from iMessage Features
 
 - **Loads all of a user's messages** (as opposed to scrolling up forever to see the first few messages) 
     + Still memory efficient and quick for large conversations 
@@ -88,7 +88,7 @@ Adds some unique functionality from Messages.app that provides a better experien
 
 ---
 
-####Features in implementation:
+#### Features in implementation:
 - Statistics on actual messaging habits
     + Average reply time over the course of a day
 - Autoreply based on replies to certain messages --> Machine Learning
@@ -96,7 +96,7 @@ Adds some unique functionality from Messages.app that provides a better experien
 
 ---
 
-##Screenshots
+## Screenshots
 - Scroll to the bottom to see beginning flow
 
 
