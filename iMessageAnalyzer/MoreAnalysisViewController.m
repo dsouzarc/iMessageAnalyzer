@@ -909,13 +909,15 @@ int tempCounter = 2;
 
 - (void) setTextFieldText:(NSString*)text forTag:(NSInteger)tag
 {
-    NSTextField *field = [self.view viewWithTag:tag];
-    if(field) {
-        [field setStringValue:text];
-    }
-    else {
-        NSLog(@"Error getting view for: %ld", tag);
-    }
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
+        NSTextField *field = [self.view viewWithTag:tag];
+        if(field) {
+            [field setStringValue:text];
+        }
+        else {
+            NSLog(@"Error getting view for: %ld", tag);
+        }
+    });
 }
 
 @end
