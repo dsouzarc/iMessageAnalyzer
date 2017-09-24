@@ -10,12 +10,14 @@
 
 @implementation Person
 
-- (instancetype) initWithChatId:(NSInteger)chatId guid:(NSString *)guid accountId:(NSString *)accountId chatIdentifier:(NSString *)chatIdentifier groupId:(NSString *)groupId isIMessage:(bool)isImessage personName:(NSString *)personName
+- (instancetype) initWithChatId:(NSInteger)chatId guid:(NSString *)guid
+                      accountId:(NSString *)accountId chatIdentifier:(NSString *)chatIdentifier
+                        groupId:(NSString *)groupId isIMessage:(bool)isImessage
+                     personName:(NSString *)personName
 {
     self = [super init];
     
     if(self) {
-        self.chatId = chatId;
         self.guid = guid;
         self.accountId = accountId;
         self.chatIdentifier = chatIdentifier;
@@ -24,9 +26,9 @@
         
         self.personName = personName;
         
-        self.secondaryChatId = -1;
-        self.handleID = -1;
-        self.secondaryHandleId = -1;
+        self.handleIDs = [[NSMutableSet alloc] init];
+        self.chatIDs = [[NSMutableSet alloc] init];
+        [self.chatIDs addObject:[NSNumber numberWithInteger:chatId]];
         
         self.timeOfLastMessage = 0;
         self.messagesWithPerson = INT_MIN;
@@ -35,6 +37,11 @@
     }
     
     return self;
+}
+
+- (NSString*) getChatIDsString
+{
+    return [[self.chatIDs allObjects] componentsJoinedByString:@","];
 }
 
 @end

@@ -29,15 +29,14 @@
 @property (strong, nonatomic) Statistics *statistics;
 @property (strong, nonatomic) Statistics *secondaryStatistics;
 
-@property NSInteger chatId;
-@property NSInteger secondaryChatId;
-
-@property int32_t handleID;
-@property int32_t secondaryHandleId;
+@property NSMutableSet<NSNumber*> *handleIDs;
+@property NSMutableSet<NSNumber*> *chatIDs;
 
 @property BOOL isIMessage;
 
 @property long timeOfLastMessage;
 @property int messagesWithPerson;
+
+- (NSString*) getChatIDsString;
 
 @end
