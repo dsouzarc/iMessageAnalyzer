@@ -41,6 +41,7 @@
 - (int32_t) getMessageCountWithPerson:(Person*)person;
 
 - (NSArray*) peopleForSearchCriteria:(NSString*)searchText;
+- (NSMutableArray*) getMessageGUIDsForText:(NSString*)searchText handleIDs:(NSMutableSet*)handleIDs;
 - (Person*) personForPhoneNumber:(NSString*)number;
 
 

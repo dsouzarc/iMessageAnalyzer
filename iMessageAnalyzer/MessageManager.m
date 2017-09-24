@@ -16,7 +16,7 @@ static MessageManager *messageInstance;
 
 # pragma mark - Variables for holding all information
 
-@property (strong, nonatomic) NSMutableDictionary* allChatsAndConversations;
+@property (strong, nonatomic) NSMutableDictionary *allChatsAndConversations;
 @property (strong, nonatomic) NSMutableDictionary *allPeople;
 @property (strong, nonatomic) NSMutableArray *allChats;
 
@@ -91,7 +91,6 @@ static MessageManager *messageInstance;
         self.calendar = [NSCalendar currentCalendar];
         [self.calendar setTimeZone:[NSTimeZone systemTimeZone]];
         self.allChats = [[NSMutableArray alloc] initWithArray:[self sortChatsByLastMessageSent:self.allChats]];
-        
     }
     
     return self;
@@ -186,6 +185,12 @@ static MessageManager *messageInstance;
 {
     return self.allChatsAndConversations;
 }
+
+- (NSMutableArray*) getMessageGUIDsForText:(NSString*)searchText handleIDs:(NSMutableSet*)handleIDs
+{
+    return [self.databaseManager getMessageGUIDsForText:searchText handleIDs:handleIDs];
+}
+
 
 # pragma mark - Get people
 

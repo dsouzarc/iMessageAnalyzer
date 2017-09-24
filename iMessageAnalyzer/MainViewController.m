@@ -67,7 +67,10 @@ static NSString *orderByMostMessages = @"Most messages";
 
 @property (strong, nonatomic) Person *lastChosenPerson;
 @property (nonatomic) NSInteger lastChosenPersonIndex;
+
+@property (strong, nonatomic) NSMutableArray *lastSearchGUIDs;
 @property int lastSearchIndex;
+@property int lastSearchMappingIndex;
 
 @end
 
@@ -697,6 +700,7 @@ static NSString *orderByMostMessages = @"Most messages";
         [self.messagesTableView reloadData];
         
         self.lastSearchIndex = -1;
+        self.lastSearchMappingIndex = -1;
         
         [self doubleClickedContactCell:nil];
         
@@ -780,19 +784,39 @@ static NSString *orderByMostMessages = @"Most messages";
 
 - (void) controlTextDidEndEditing:(NSNotification *)obj
 {
-    if(self.searchField.stringValue.length == 0) {
+    if([[self.searchField stringValue] length] == 0) {
         self.searchConversationChats = [NSMutableArray arrayWithArray:self.chats];
         [self.contactsTableView reloadData];
     }
     
     else {
+        NSString *searchText = [self.searchField stringValue];
+        
         if([[[obj userInfo] objectForKey:@"NSTextMovement"] intValue] == NSReturnTextMovement) {
             
-            int i = 0;
-            NSString *searchText = [self.searchField stringValue];
+            self.lastSearchGUIDs = [self.messageManager getMessageGUIDsForText:searchText handleIDs:self.lastChosenPerson.handleIDs];
             
-            //Let's search from the beginning
-            if(self.lastSearchIndex >= self.currentConversationChats.count || self.lastSearchIndex < 0) {
+            if([self.lastSearchGUIDs count] > 0) {
+                
+                //If we reached the end of our results, reset at 0
+                if(self.lastSearchMappingIndex + 1 >= [self.lastSearchGUIDs count] || self.lastSearchMappingIndex < 0) {
+                    self.lastSearchMappingIndex = 0;
+                }
+                
+                //Continue to the next GUID that contains our text
+                else {
+                    self.lastSearchMappingIndex += 1;
+                }
+                
+                //Get the array index for this conversation that corresponds to the GUID
+                NSNumber *searchRowNumber = [self.lastChosenPerson.messageIDToIndexMapping
+                                                 objectForKey:[self.lastSearchGUIDs objectAtIndex:self.lastSearchMappingIndex]];
+                self.lastSearchIndex = [searchRowNumber intValue];
+            }
+            
+            //LEGACY CODE - much slower in larger conversations. Let's search from the beginning
+            /* int i = 0;
+             if(self.lastSearchIndex >= self.currentConversationChats.count || self.lastSearchIndex < 0) {
                 for(Message *message in self.currentConversationChats) {
                     if([message messageText] && [message.messageText rangeOfString:searchText options:NSCaseInsensitiveSearch].location != NSNotFound) {
                         self.lastSearchIndex = i;
@@ -827,9 +851,12 @@ static NSString *orderByMostMessages = @"Most messages";
                         i++;
                     }
                 }
-            }
+            }*/
             
-            [self.messagesTableView reloadDataForRowIndexes:[NSIndexSet indexSetWithIndex:self.lastSearchIndex] columnIndexes:[NSIndexSet indexSetWithIndex:0]];
+            //Scroll to this search point in the conversation. Add some distance so it's not at the bottom of the screen
+            int conversationContext = self.lastSearchIndex + 5 >= [self.currentConversationChats count] ? self.lastSearchIndex : self.lastSearchIndex + 5;
+            [self.messagesTableView reloadDataForRowIndexes:[NSIndexSet indexSetWithIndex:conversationContext]
+                                              columnIndexes:[NSIndexSet indexSetWithIndex:0]];
             
             //Results in a smoother scroll
             [[NSOperationQueue mainQueue] addOperationWithBlock:^{
@@ -841,14 +868,13 @@ static NSString *orderByMostMessages = @"Most messages";
 
 - (void) controlTextDidChange:(NSNotification *)obj
 {
-    if(self.searchField.stringValue.length == 0) {
+    NSString *searchText = [self.searchField stringValue];
+    if([searchText length] == 0) {
         self.searchConversationChats = [[NSMutableArray alloc] initWithArray:self.chats];
     }
     
     else {
         [self.searchConversationChats removeAllObjects];
-        
-        NSString *searchText = self.searchField.stringValue;
         [self.searchConversationChats addObjectsFromArray:[self.messageManager peopleForSearchCriteria:searchText]];
     }
     
