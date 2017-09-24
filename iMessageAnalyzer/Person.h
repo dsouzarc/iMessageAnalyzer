@@ -14,7 +14,13 @@
 
 @interface Person : NSObject
 
-- (instancetype) initWithChatId:(NSInteger)chatId guid:(NSString*)guid accountId:(NSString*)accountId chatIdentifier:(NSString*)chatIdentifier groupId:(NSString*)groupId isIMessage:(bool)isImessage personName:(NSString*)personName;
+- (instancetype) initWithChatId:(NSInteger)chatId
+                           guid:(NSString*)guid
+                      accountId:(NSString*)accountId
+                 chatIdentifier:(NSString*)chatIdentifier
+                        groupId:(NSString*)groupId
+                     isIMessage:(bool)isImessage
+                     personName:(NSString*)personName;
 
 @property (strong, nonatomic) NSString *personName;
 @property (strong, nonatomic) NSString *guid;
@@ -31,6 +37,8 @@
 
 @property NSMutableSet<NSNumber*> *handleIDs;
 @property NSMutableSet<NSNumber*> *chatIDs;
+
+@property NSMutableDictionary *messageIDToIndexMapping;
 
 @property BOOL isIMessage;
 
