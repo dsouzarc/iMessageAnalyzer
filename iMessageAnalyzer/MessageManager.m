@@ -116,9 +116,15 @@ static MessageManager *messageInstance;
     for(Person *person in self.allChats) {
         
         //If the person sent text that contains the text (from handle_ids method), save them
-        NSNumber *handleID = [NSNumber numberWithInt:person.handleID];
-        NSNumber *handleID2 = [NSNumber numberWithInt:person.secondaryHandleId];
-        if([handle_ids containsObject:handleID] || [handle_ids containsObject:handleID2]) {
+        BOOL hasAdded = false;
+        for(NSNumber *personHandleID in person.handleIDs) {
+            if([handle_ids containsObject:personHandleID]) {
+                hasAdded = true;
+                break;
+            }
+        }
+
+        if(hasAdded) {
             [results addObject:person.number];
         }
         
