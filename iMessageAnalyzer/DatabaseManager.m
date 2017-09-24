@@ -81,7 +81,7 @@ static NSString *pathToDB;
         [self updateAllChatsGlobalVariable];
         //[self getMessagesForHandleId:5];
         
-        [self getHandleIDsForMessageText:@"Hi"];
+        //[self getHandleIDsForMessageText:@"Hi"];
     }
     
     return self;
@@ -256,7 +256,6 @@ static NSString *pathToDB;
     }
 }
 
-
 - (NSMutableArray*) getAllNumbersForSearchText:(NSString*)text
 {
     NSMutableArray *numbers = [[NSMutableArray alloc] init];
@@ -309,19 +308,28 @@ static NSString *pathToDB;
     return result;
 }
 
-- (NSMutableArray*) getAllMessagesForPerson:(Person *)person startTimeInSeconds:(long)startTimeInSeconds endTimeInSeconds:(long)endTimeInSeconds
+- (NSMutableArray*) getAllMessagesForPerson:(Person *)person
+                         startTimeInSeconds:(long)startTimeInSeconds
+                           endTimeInSeconds:(long)endTimeInSeconds
 {
     Statistics *secondaryStatistics = [[Statistics alloc] init];
     
-    NSMutableArray *messages = [self getAllMessagesForPerson:person startTimeInSeconds:startTimeInSeconds endTimeInSeconds:endTimeInSeconds statistics:&secondaryStatistics];
+    NSMutableArray *messages = [self getAllMessagesForPerson:person
+                                          startTimeInSeconds:startTimeInSeconds
+                                            endTimeInSeconds:endTimeInSeconds
+                                                  statistics:&secondaryStatistics];
     person.secondaryStatistics = secondaryStatistics;
 
     return messages;
 }
 
-- (NSMutableArray*) getAllMessagesForPerson:(Person *)person startTimeInSeconds:(long)startTimeInSeconds endTimeInSeconds:(long)endTimeInSeconds statistics:(Statistics**)statisticsPointer
+- (NSMutableArray*) getAllMessagesForPerson:(Person *)person
+                         startTimeInSeconds:(long)startTimeInSeconds
+                           endTimeInSeconds:(long)endTimeInSeconds
+                                 statistics:(Statistics**)statisticsPointer
 {
     NSMutableArray *allMessagesForChat = [[NSMutableArray alloc] init];
+    person.messageIDToIndexMapping = [[NSMutableDictionary alloc] init];
     
     if(*statisticsPointer == nil) {
         *statisticsPointer = [[Statistics alloc] init];
@@ -341,6 +349,7 @@ static NSString *pathToDB;
                                                            chatIDsString, startTimeInSeconds, endTimeInSeconds];
     
     sqlite3_stmt *statement;
+    int counter = 0;
     
     if(sqlite3_prepare_v2(_database, [query UTF8String], -1, &statement, NULL) == SQLITE_OK) {
         while(sqlite3_step(statement) == SQLITE_ROW) {
@@ -383,7 +392,8 @@ static NSString *pathToDB;
             Message *message = [[Message alloc] initWithMessageId:messageID handleId:handleID messageGUID:guid messageText:text dateSent:date dateRead:dateRead isIMessage:isIMessage isFromMe:isFromMe hasAttachment:hasAttachment];
             
             [allMessagesForChat addObject:message];
-            
+            [person.messageIDToIndexMapping setObject:@(counter) forKey:guid];
+            counter += 1;
             //printf("%s\n", [text UTF8String]);
         }
     }
@@ -513,6 +523,26 @@ static NSString *pathToDB;
     
     sqlite3_finalize(statement);
     return result;
+}
+
+- (NSMutableArray*) getMessageGUIDsForText:(NSString*)searchText handleIDs:(NSMutableSet*)handleIDs
+{
+    NSMutableArray *messageGUIDs = [[NSMutableArray alloc] init];
+    
+    NSString *query = [NSString stringWithFormat:@"SELECT guid "
+                                                           "FROM message "
+                                                       "WHERE handle_id IN (%@) AND text LIKE '%%%@%%';",
+                                   [[handleIDs allObjects] componentsJoinedByString:@","], searchText];
+    sqlite3_stmt *statement;
+    
+    if(sqlite3_prepare(_database, [query UTF8String], -1, &statement, NULL) == SQLITE_OK) {
+        while(sqlite3_step(statement) == SQLITE_ROW) {
+            NSString *messageGUID = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 0)];
+            [messageGUIDs addObject:messageGUID];
+        }
+    }
+    
+    return messageGUIDs;
 }
 
 - (int32_t) getTotalMessageCount
@@ -673,7 +703,7 @@ static NSString *pathToDB;
     return [self.allChats allValues];
 }
 
-/** Deperecated */
+/** Deprecated */
 - (void) getSequentialMessagesForChatID:(int32_t)chatID
 {
     NSMutableArray *messageIDs = [[NSMutableArray alloc] init];

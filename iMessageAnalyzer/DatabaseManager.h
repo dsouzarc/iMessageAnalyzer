@@ -40,6 +40,7 @@
 - (NSMutableArray*) getAllMessagesForPerson:(Person*)person;
 - (NSMutableArray*) getAllMessagesForPerson:(Person *)person startTimeInSeconds:(long)startTimeInSeconds endTimeInSeconds:(long)endTimeInSeconds;
 - (NSMutableArray*) getTemporaryInformationForAllConversationsExceptWith:(Person*)person;
+- (NSMutableArray*) getMessageGUIDsForText:(NSString*)searchText handleIDs:(NSMutableSet*)handleIDs;
 
 - (int32_t) messageCountForPerson:(Person*)person startTimeInSeconds:(long)startTimeInSeconds endTimeInSeconds:(long)endTimeInSeconds;
 - (int32_t) totalMessagesForStartTime:(long)startTimeInSeconds endTimeInSeconds:(long)endTimeInSeconds;
