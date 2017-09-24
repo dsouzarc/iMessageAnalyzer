@@ -180,7 +180,6 @@
             //First time it's run
             if(self.messagesToDisplay.count == self.messages.count) {
                 
-                NSLog(@"HERE NOW");
                 [self setTextFieldLong:self.myWordCount forTag:12];
                 [self setTextFieldLong:self.friendCount forTag:16];
                 [self setTextFieldLong:(self.myWordCount + self.friendCount) forTag:20];
