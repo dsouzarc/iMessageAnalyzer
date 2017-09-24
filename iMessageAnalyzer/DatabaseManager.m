@@ -120,35 +120,32 @@ static NSString *pathToDB;
     return handle_ids;
 }
 
-- (int) getHandleForChatID:(int32_t)chatID
+- (NSMutableSet*) getHandleIDsForChatIDs:(NSMutableSet*)chatIDs
 {
-    const char *query = [[NSString stringWithFormat:@"SELECT handle_id FROM chat_handle_join WHERE chat_id=%d", chatID] UTF8String];
+    NSMutableSet *handleIDs = [[NSMutableSet alloc] init];
+    
+    NSString *chatIDsString = [[chatIDs allObjects] componentsJoinedByString:@","];
+    NSString *query = [NSString stringWithFormat:@"SELECT handle_id FROM chat_handle_join WHERE chat_id IN (%@)", chatIDsString];
     sqlite3_stmt *statement;
     
-    int result = -1;
-    
-    if(sqlite3_prepare_v2(_database, query, -1, &statement, NULL) == SQLITE_OK) {
+    if(sqlite3_prepare_v2(_database, [query UTF8String], -1, &statement, NULL) == SQLITE_OK) {
         while(sqlite3_step(statement) == SQLITE_ROW) {
-            result = sqlite3_column_int(statement, 0);
+            int handleID = sqlite3_column_int(statement, 0);
+            [handleIDs addObject:[NSNumber numberWithInt:handleID]];
         }
     }
     
     sqlite3_finalize(statement);
     
-    return result;
+    return handleIDs;
 }
 
 
 - (void) updateHandleIDsForPerson:(Person*)person
 {
     //Uninitialized handleID
-    if(person.handleID < 0) {
-        int handleID = [self getHandleForChatID:person.chatId];
-        person.handleID = handleID;
-        
-        //If there is a secondary chat id, get its handle form
-        int handleID2 = person.secondaryChatId < 0 ? handleID : [self getHandleForChatID:person.secondaryChatId];
-        person.secondaryHandleId = handleID2;
+    if([person.handleIDs count] == 0) {
+        person.handleIDs = [self getHandleIDsForChatIDs:person.chatIDs];
     }
 }
 
@@ -188,7 +185,7 @@ static NSString *pathToDB;
             
             if([self.allChats objectForKey:number]) {
                 Person *person = [self.allChats objectForKey:number];
-                person.secondaryChatId = chatId;
+                [person.chatIDs addObject:[NSNumber numberWithInteger:chatId]];
             }
             else {
                 
@@ -331,11 +328,21 @@ static NSString *pathToDB;
     }
     Statistics *statistics = *statisticsPointer;
     
-    const char *query = [[NSString stringWithFormat:@"SELECT ROWID, guid, text, service, account_guid, date, date_read, is_from_me, cache_has_attachments, handle_id FROM message messageT INNER JOIN chat_message_join chatMessageT ON (chatMessageT.chat_id=%ld OR chatMessageT.chat_id=%ld) AND messageT.ROWID=chatMessageT.message_id AND (messageT.date > %ld AND messageT.date < %ld) ORDER BY messageT.date", person.chatId, person.secondaryChatId, startTimeInSeconds, endTimeInSeconds] UTF8String];
+    NSString *chatIDsString = [[person.chatIDs allObjects] componentsJoinedByString:@","];
+    
+    NSString *query = [NSString stringWithFormat:@"SELECT ROWID, guid, text, service, account_guid, date, date_read, "
+                                                                       "is_from_me, cache_has_attachments, handle_id "
+                                                       "FROM message messageT "
+                                                       "INNER JOIN chat_message_join chatMessageT "
+                                                           "ON chatMessageT.chat_id IN (%@) "
+                                                               "AND messageT.ROWID=chatMessageT.message_id "
+                                                               "AND (messageT.date > %ld AND messageT.date < %ld) "
+                                                       "ORDER BY messageT.date",
+                                                           chatIDsString, startTimeInSeconds, endTimeInSeconds];
     
     sqlite3_stmt *statement;
     
-    if(sqlite3_prepare_v2(_database, query, -1, &statement, NULL) == SQLITE_OK) {
+    if(sqlite3_prepare_v2(_database, [query UTF8String], -1, &statement, NULL) == SQLITE_OK) {
         while(sqlite3_step(statement) == SQLITE_ROW) {
             
             int32_t messageID = sqlite3_column_int(statement, 0);
@@ -403,8 +410,14 @@ static NSString *pathToDB;
 {
     NSMutableArray *temporaryInformation = [[NSMutableArray alloc] init];
     
-    NSString *queryString = [NSString stringWithFormat:@"SELECT messageT.ROWID, messageT.date, messageT.text, messageT.is_from_me, messageT.cache_has_attachments FROM message messageT INNER JOIN chat_message_join chatMessageT ON (chatMessageT.chat_id!=%d AND chatMessageT.chat_id!=%d) AND messageT.ROWID=chatMessageT.message_id ORDER BY messageT.date", (int) person.chatId, (int) person.secondaryChatId];
-    const char *query = [queryString UTF8String];
+    NSString *queryString = [NSString stringWithFormat:@"SELECT messageT.ROWID, messageT.date, messageT.text, messageT.is_from_me, "
+                                                                     "messageT.cache_has_attachments "
+                                                                 "FROM message messageT "
+                                                             "INNER JOIN chat_message_join chatMessageT "
+                                                                 "ON chatMessageT.chat_id NOT IN (%@) "
+                                                                     "AND messageT.ROWID=chatMessageT.message_id "
+                                                             "ORDER BY messageT.date",
+                                                     [person getChatIDsString]];
     sqlite3_stmt *statement;
     
     /*if(sqlite3_open([pathToDB UTF8String], &_database) == SQLITE_OK){
@@ -413,7 +426,7 @@ static NSString *pathToDB;
         NSLog(@"Error opening database");
     } */
     
-    if(sqlite3_prepare(_database, query, -1, &statement, NULL) == SQLITE_OK) {
+    if(sqlite3_prepare(_database, [queryString UTF8String], -1, &statement, NULL) == SQLITE_OK) {
         while(sqlite3_step(statement) == SQLITE_ROW) {
             int rowID = sqlite3_column_int(statement, 0);
             int date = sqlite3_column_int(statement, 1);
@@ -428,7 +441,12 @@ static NSString *pathToDB;
             int isFromMe = sqlite3_column_int(statement, 3);
             int hasAttachments = sqlite3_column_int(statement, 4);
             
-            NSDictionary *items = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:rowID], @"ROWID", [NSNumber numberWithInt:date], @"date", [NSNumber numberWithInt:wordCount], @"wordCount", [NSNumber numberWithInt:isFromMe], @"is_from_me", [NSNumber numberWithInt:hasAttachments], @"cache_has_attachments", nil];
+            NSDictionary *items = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:rowID], @"ROWID",
+                                                                           [NSNumber numberWithInt:date], @"date",
+                                                                           [NSNumber numberWithInt:wordCount], @"wordCount",
+                                                                           [NSNumber numberWithInt:isFromMe], @"is_from_me",
+                                                                           [NSNumber numberWithInt:hasAttachments], @"cache_has_attachments",
+                                                                           nil];
             [temporaryInformation addObject:items];
         }
     }
@@ -477,13 +495,19 @@ static NSString *pathToDB;
 - (int32_t) messageCountForPerson:(Person*)person startTimeInSeconds:(long)startTimeInSeconds endTimeInSeconds:(long)endTimeInSeconds
 {
     //const char *query = [[NSString stringWithFormat:@"SELECT count(*) from message WHERE (handle_id=%d OR handle_id=%d) AND date > %ld AND date < %ld", person.handleID, person.secondaryHandleId, startTimeInSeconds, endTimeInSeconds] UTF8String];
-    const char *query = [[NSString stringWithFormat:@"SELECT count(*) FROM message messageT INNER JOIN chat_message_join chatMessageT ON (chatMessageT.chat_id=%ld OR chatMessageT.chat_id=%ld) AND messageT.ROWID=chatMessageT.message_id AND (messageT.date > %ld AND messageT.date < %ld) ORDER BY messageT.date", person.chatId, person.secondaryChatId, startTimeInSeconds, endTimeInSeconds] UTF8String];
+    NSString *query = [NSString stringWithFormat:@"SELECT count(*) "
+                                                           "FROM message messageT "
+                                                       "INNER JOIN chat_message_join chatMessageT "
+                                                           "ON chatMessageT.chat_id IN (%@) "
+                                                               "AND messageT.ROWID=chatMessageT.message_id "
+                                                               "AND (messageT.date > %ld AND messageT.date < %ld) "
+                                                       "ORDER BY messageT.date",
+                                                   [person getChatIDsString], startTimeInSeconds, endTimeInSeconds];
     
     sqlite3_stmt *statement;
     
     int result = 0;
-    
-    if(sqlite3_prepare_v2(_database, query, -1, &statement, NULL) == SQLITE_OK) {
+    if(sqlite3_prepare_v2(_database, [query UTF8String], -1, &statement, NULL) == SQLITE_OK) {
         result = sqlite3_column_int(statement, 0);
     }
     
@@ -523,9 +547,19 @@ static NSString *pathToDB;
     
     //NSString *queryString = [NSString stringWithFormat:@"SELECT messageT.ROWID, messageT.guid, attachmentT.ROWID, attachmentT.guid, attachmentT.filename, attachmentT.mime_type, attachmentT.start_date, attachmentT.total_bytes, attachmentT.transfer_name FROM message messageT INNER JOIN attachment attachmentT INNER JOIN message_attachment_join meAtJoinT ON attachmentT.ROWID= meAtJoinT.attachment_id WHERE meAtJoinT.message_id=messageT.ROWID AND (messageT.handle_id=%d OR messageT.handle_id=%d) GROUP BY messageT.ROWID", person.handleID, person.secondaryHandleId];
     
-    NSString *queryString = [NSString stringWithFormat:@"SELECT messageT.ROWID, messageT.guid, attachmentT.ROWID, attachmentT.guid, attachmentT.filename, attachmentT.mime_type, attachmentT.start_date, attachmentT.total_bytes, attachmentT.transfer_name FROM message messageT INNER JOIN chat_message_join chatMessageT ON messageT.ROWID=chatMessageT.message_id INNER JOIN attachment attachmentT INNER JOIN message_attachment_join meAtJoinT ON attachmentT.ROWID=meAtJoinT.attachment_id WHERE meAtJoinT.message_id=messageT.ROWID AND (chatMessageT.chat_id=%ld OR chatMessageT.chat_id=%ld)", person.chatId, person.secondaryChatId];
+    NSString *queryString = [NSString stringWithFormat:@"SELECT messageT.ROWID, messageT.guid, attachmentT.ROWID, attachmentT.guid, "
+                                                                     "attachmentT.filename, attachmentT.mime_type, attachmentT.start_date, "
+                                                                     "attachmentT.total_bytes, attachmentT.transfer_name "
+                                                                 "FROM message messageT "
+                                                             "INNER JOIN chat_message_join chatMessageT "
+                                                                 "ON messageT.ROWID=chatMessageT.message_id "
+                                                             "INNER JOIN attachment attachmentT "
+                                                             "INNER JOIN message_attachment_join meAtJoinT "
+                                                                 "ON attachmentT.ROWID = meAtJoinT.attachment_id "
+                                                                     "WHERE meAtJoinT.message_id=messageT.ROWID "
+                                                                     "AND chatMessageT.chat_id IN (%@) ",
+                                                             [person getChatIDsString]];
 
-    const char *query = [queryString UTF8String];
     sqlite3_stmt *statement;
     
     /*if(sqlite3_open([pathToDB UTF8String], &_database) == SQLITE_OK){
@@ -534,7 +568,7 @@ static NSString *pathToDB;
         NSLog(@"ERROR OPENING DATABASE");
     }*/
     
-    if(sqlite3_prepare(_database, query, -1, &statement, NULL) == SQLITE_OK) {
+    if(sqlite3_prepare(_database, [queryString UTF8String], -1, &statement, NULL) == SQLITE_OK) {
         while(sqlite3_step(statement) == SQLITE_ROW) {
             int32_t messageID = sqlite3_column_int(statement, 0);
             NSString *messageGUID = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 1)];

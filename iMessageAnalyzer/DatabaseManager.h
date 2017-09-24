@@ -55,6 +55,5 @@
 # pragma mark - Get handle ids
 
 - (NSMutableSet*) getHandleIDsForMessageText:(NSString*)messageText;
-- (int32_t) getHandleForChatID:(int32_t)chatID;
-
+- (NSMutableSet*) getHandleIDsForChatIDs:(NSMutableSet*)chatIDs;
 @end
