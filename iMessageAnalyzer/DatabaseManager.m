@@ -338,15 +338,19 @@ static NSString *pathToDB;
     
     NSString *chatIDsString = [[person.chatIDs allObjects] componentsJoinedByString:@","];
     
-    NSString *query = [NSString stringWithFormat:@"SELECT ROWID, guid, text, service, account_guid, date, date_read, "
-                                                                       "is_from_me, cache_has_attachments, handle_id "
-                                                       "FROM message messageT "
-                                                       "INNER JOIN chat_message_join chatMessageT "
-                                                           "ON chatMessageT.chat_id IN (%@) "
-                                                               "AND messageT.ROWID=chatMessageT.message_id "
-                                                               "AND (messageT.date > %ld AND messageT.date < %ld) "
-                                                       "ORDER BY messageT.date",
-                                                           chatIDsString, startTimeInSeconds, endTimeInSeconds];
+    NSString *query = [NSString stringWithFormat:@"SELECT ROWID, guid, text, service, account_guid, "
+                                                            //NOTE: This handles the timestamp change (As of Feb 2018, Apple uses 18+ digits)
+                                                            "CASE WHEN LENGTH(date) >= 18 "
+                                                                    "THEN (date / 1000000000) "
+                                                                "ELSE date END, "
+                                                            "date_read, is_from_me, cache_has_attachments, handle_id "
+                                                    "FROM message messageT "
+                                                    "INNER JOIN chat_message_join chatMessageT "
+                                                        "ON chatMessageT.chat_id IN (%@) "
+                                                                "AND messageT.ROWID=chatMessageT.message_id "
+                                                                "AND (messageT.date > %ld AND messageT.date < %ld) "
+                                                    "ORDER BY messageT.date",
+                                                chatIDsString, startTimeInSeconds, endTimeInSeconds];
     
     sqlite3_stmt *statement;
     int counter = 0;
@@ -359,11 +363,12 @@ static NSString *pathToDB;
             
             NSString *text = @"";
             if(sqlite3_column_text(statement, 2)) {
-                text = [NSString stringWithUTF8String:sqlite3_column_text(statement, 2)];//[NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 2)];
+                text = [NSString stringWithUTF8String:sqlite3_column_text(statement, 2)]; //[NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 2)];
             }
             
             BOOL isIMessage = [self isIMessage:sqlite3_column_text(statement, 3)];
             NSString *accountGUID = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 4)];
+            
             int32_t dateInt = sqlite3_column_int(statement, 5);
             int32_t dateReadInt = sqlite3_column_int(statement, 6);
             
@@ -394,7 +399,6 @@ static NSString *pathToDB;
             [allMessagesForChat addObject:message];
             [person.messageIDToIndexMapping setObject:@(counter) forKey:guid];
             counter += 1;
-            //printf("%s\n", [text UTF8String]);
         }
     }
     else {
@@ -420,12 +424,16 @@ static NSString *pathToDB;
 {
     NSMutableArray *temporaryInformation = [[NSMutableArray alloc] init];
     
-    NSString *queryString = [NSString stringWithFormat:@"SELECT messageT.ROWID, messageT.date, messageT.text, messageT.is_from_me, "
-                                                                     "messageT.cache_has_attachments "
-                                                                 "FROM message messageT "
-                                                             "INNER JOIN chat_message_join chatMessageT "
-                                                                 "ON chatMessageT.chat_id NOT IN (%@) "
-                                                                     "AND messageT.ROWID=chatMessageT.message_id "
+    NSString *queryString = [NSString stringWithFormat:@"SELECT messageT.ROWID, "
+                                                                "CASE WHEN LENGTH(messageT.date) >= 18 "
+                                                                    "THEN (messageT.date / 1000000000) "
+                                                                    "ELSE messageT.date END, "
+                                                                "messageT.text, messageT.is_from_me, "
+                                                                "messageT.cache_has_attachments "
+                                                            "FROM message messageT "
+                                                            "INNER JOIN chat_message_join chatMessageT "
+                                                                "ON chatMessageT.chat_id NOT IN (%@) "
+                                                                     "AND messageT.ROWID = chatMessageT.message_id "
                                                              "ORDER BY messageT.date",
                                                      [person getChatIDsString]];
     sqlite3_stmt *statement;
@@ -439,7 +447,7 @@ static NSString *pathToDB;
     if(sqlite3_prepare(_database, [queryString UTF8String], -1, &statement, NULL) == SQLITE_OK) {
         while(sqlite3_step(statement) == SQLITE_ROW) {
             int rowID = sqlite3_column_int(statement, 0);
-            int date = sqlite3_column_int(statement, 1);
+            int date = sqlite3_column_int(statement, 1) / 1000;
             NSString *text = @"";
             
             const char *messageTextChar = (const char *)sqlite3_column_text(statement, 2);
@@ -470,7 +478,13 @@ static NSString *pathToDB;
 {
     NSMutableArray *result = [[NSMutableArray alloc] init];
     
-    const char *query = [[NSString stringWithFormat:@"SELECT ROWID, guid, text, handle_id, service, date, date_read, is_from_me, cache_has_attachments FROM message WHERE handle_id = '%d'", handleId] UTF8String];
+    const char *query = [[NSString stringWithFormat:@"SELECT ROWID, guid, text, handle_id, service, "
+                                                                "CASE WHEN LENGTH(date) >= 18 "
+                                                                    "THEN (date / 1000000000) "
+                                                                    "ELSE date END, "
+                                                                "date_read, is_from_me, cache_has_attachments "
+                                                        "FROM message"
+                                                            "WHERE handle_id = '%d'", handleId] UTF8String];
     
     sqlite3_stmt *statement;
     
@@ -481,13 +495,13 @@ static NSString *pathToDB;
             NSString *text = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 2)];
             int handleId = sqlite3_column_int(statement, 3);
             BOOL isIMessage = [self isIMessage:sqlite3_column_text(statement, 4)];
-            int dateInt = sqlite3_column_int(statement, 5);
-            int date_readInt = sqlite3_column_int(statement, 6);
+            int32_t dateInt = sqlite3_column_int(statement, 5);
+            int32_t dateReadInt = sqlite3_column_int(statement, 6);
             BOOL isFromMe = sqlite3_column_int(statement, 7) == 1;
             BOOL hasAttachment = sqlite3_column_int(statement, 8) == 1 ? YES : NO;
             
             NSDate *date = [NSDate dateWithTimeIntervalSinceReferenceDate:dateInt];
-            NSDate *dateRead = date_readInt == 0 ? nil : [NSDate dateWithTimeIntervalSinceReferenceDate:date_readInt];
+            NSDate *dateRead = dateReadInt == 0 ? nil : [NSDate dateWithTimeIntervalSinceReferenceDate:dateReadInt];
             
             Message *message = [[Message alloc] initWithMessageId:rowID handleId:handleId messageGUID:guid messageText:text dateSent:date dateRead:dateRead isIMessage:isIMessage isFromMe:isFromMe hasAttachment:hasAttachment];
             [result addObject:message];
@@ -513,6 +527,8 @@ static NSString *pathToDB;
                                                                "AND (messageT.date > %ld AND messageT.date < %ld) "
                                                        "ORDER BY messageT.date",
                                                    [person getChatIDsString], startTimeInSeconds, endTimeInSeconds];
+    
+    NSLog(@"%@", query);
     
     sqlite3_stmt *statement;
     
@@ -606,7 +622,10 @@ static NSString *pathToDB;
             NSString *guid = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 3)];
             NSString *filePath = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 4)];
             NSString *fileType = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 5)];
-            NSDate *sentDate = [NSDate dateWithTimeIntervalSinceReferenceDate:sqlite3_column_int(statement, 6)];
+            
+            int32_t sentTimestamp = sqlite3_column_int(statement, 6);
+            NSDate *sentDate = [NSDate dateWithTimeIntervalSinceReferenceDate:sentTimestamp];
+            
             long fileSize = sqlite3_column_int64(statement, 7);
             NSString *fileName = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 8)];
             
@@ -646,7 +665,9 @@ static NSString *pathToDB;
             NSString *guid = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 1)];
             NSString *filePath = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 2)];
             NSString *fileType = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 3)];
-            NSDate *sentDate = [NSDate dateWithTimeIntervalSinceReferenceDate:sqlite3_column_int(statement, 4)];
+            
+            int32_t sentTimestamp = sqlite3_column_int(statement, 4);
+            NSDate *sentDate = [NSDate dateWithTimeIntervalSinceReferenceDate:sentTimestamp];
             long fileSize = sqlite3_column_int64(statement, 5);
             NSString *fileName = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 6)];
             
@@ -674,7 +695,7 @@ static NSString *pathToDB;
     NSCharacterSet *removeChars = [NSCharacterSet characterSetWithCharactersInString:@" ()-+"];
     NSString *newNumber = [[originalNumber componentsSeparatedByCharactersInSet:removeChars] componentsJoinedByString:@""];
     
-    if([newNumber characterAtIndex:0] == '1') {
+    if([newNumber length] > 0 && [newNumber characterAtIndex:0] == '1') {
         newNumber = [newNumber substringFromIndex:1];
     }
     
