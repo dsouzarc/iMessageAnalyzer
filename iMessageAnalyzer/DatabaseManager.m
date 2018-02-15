@@ -193,7 +193,9 @@ static NSString *pathToDB;
                     name = number;
                 }
                 
-                Person *person = [[Person alloc] initWithChatId:chatId guid:guid accountId:accountID chatIdentifier:chatIdentifier groupId:groupID isIMessage:isIMessage personName:name];
+                Person *person = [[Person alloc] initWithChatId:chatId guid:guid accountId:accountID
+                                                 chatIdentifier:chatIdentifier groupId:groupID
+                                                     isIMessage:isIMessage personName:name];
                 person.number = number;
                 person.contact = abPerson;
                 
@@ -235,7 +237,8 @@ static NSString *pathToDB;
             for(int i = 0; i < phoneValues.count; i++) {
                 if([phoneValues valueAtIndex:i]) {
                     NSString *cleanNumber = [self cleanNumber:[phoneValues valueAtIndex:i]];
-                    Contact *contact = [[Contact alloc] initWithFirstName:firstName lastName:lastName number:cleanNumber person:person];
+                    Contact *contact = [[Contact alloc] initWithFirstName:firstName lastName:lastName
+                                                                   number:cleanNumber person:person];
                     [self.allContacts setObject:contact forKey:cleanNumber];
                 }
             }
@@ -248,7 +251,8 @@ static NSString *pathToDB;
                 if([emailValues valueAtIndex:i]) {
                     NSString *email = [emailValues valueAtIndex:i];
                     //Add it to our dictionary
-                    Contact *contact = [[Contact alloc] initWithFirstName:firstName lastName:lastName number:email person:person];
+                    Contact *contact = [[Contact alloc] initWithFirstName:firstName lastName:lastName
+                                                                   number:email person:person];
                     [self.allContacts setObject:contact forKey:email];
                 }
             }
@@ -294,7 +298,8 @@ static NSString *pathToDB;
 
 - (int32_t) totalMessagesForStartTime:(long)startTimeInSeconds endTimeInSeconds:(long)endTimeInSeconds
 {
-    const char *query = [[NSString stringWithFormat:@"SELECT count(*) from message WHERE date > %ld AND date < %ld", startTimeInSeconds, endTimeInSeconds] UTF8String];
+    const char *query = [[NSString stringWithFormat:@"SELECT count(*) from message WHERE date > %ld AND date < %ld",
+                          startTimeInSeconds, endTimeInSeconds] UTF8String];
     
     sqlite3_stmt *statement;
     
@@ -342,18 +347,20 @@ static NSString *pathToDB;
                                                             //NOTE: This handles the timestamp change (As of Feb 2018, Apple uses 18+ digits)
                                                             "CASE WHEN LENGTH(date) >= 18 "
                                                                     "THEN (date / 1000000000) "
-                                                                "ELSE date END, "
+                                                                "ELSE date END AS adjusted_date, "
                                                             "date_read, is_from_me, cache_has_attachments, handle_id "
-                                                    "FROM message messageT "
-                                                    "INNER JOIN chat_message_join chatMessageT "
+                                                    "FROM message AS messageT "
+                                                    "INNER JOIN chat_message_join AS chatMessageT "
                                                         "ON chatMessageT.chat_id IN (%@) "
-                                                                "AND messageT.ROWID=chatMessageT.message_id "
-                                                                "AND (messageT.date > %ld AND messageT.date < %ld) "
-                                                    "ORDER BY messageT.date",
+                                                                "AND messageT.ROWID = chatMessageT.message_id "
+                                                                "AND adjusted_date BETWEEN %ld AND %ld "
+                                                    "ORDER BY adjusted_date",
                                                 chatIDsString, startTimeInSeconds, endTimeInSeconds];
     
     sqlite3_stmt *statement;
     int counter = 0;
+    
+    NSLog(@"%@", query);
     
     if(sqlite3_prepare_v2(_database, [query UTF8String], -1, &statement, NULL) == SQLITE_OK) {
         while(sqlite3_step(statement) == SQLITE_ROW) {
@@ -394,7 +401,10 @@ static NSString *pathToDB;
             NSDate *date = [NSDate dateWithTimeIntervalSinceReferenceDate:dateInt];
             NSDate *dateRead = dateReadInt == 0 ? nil : [NSDate dateWithTimeIntervalSinceReferenceDate:dateReadInt];
             
-            Message *message = [[Message alloc] initWithMessageId:messageID handleId:handleID messageGUID:guid messageText:text dateSent:date dateRead:dateRead isIMessage:isIMessage isFromMe:isFromMe hasAttachment:hasAttachment];
+            Message *message = [[Message alloc] initWithMessageId:messageID handleId:handleID
+                                                      messageGUID:guid messageText:text dateSent:date
+                                                         dateRead:dateRead isIMessage:isIMessage
+                                                         isFromMe:isFromMe hasAttachment:hasAttachment];
             
             [allMessagesForChat addObject:message];
             [person.messageIDToIndexMapping setObject:@(counter) forKey:guid];
@@ -414,7 +424,8 @@ static NSString *pathToDB;
 {
     Statistics *statistics = [[Statistics alloc] init];
     
-    NSMutableArray *allMessagesForChat = [self getAllMessagesForPerson:person startTimeInSeconds:0 endTimeInSeconds:LONG_MAX statistics:&statistics];
+    NSMutableArray *allMessagesForChat = [self getAllMessagesForPerson:person startTimeInSeconds:0 e
+                                                       endTimeInSeconds:LONG_MAX statistics:&statistics];
     person.statistics = statistics;
     
     return allMessagesForChat;
@@ -503,7 +514,9 @@ static NSString *pathToDB;
             NSDate *date = [NSDate dateWithTimeIntervalSinceReferenceDate:dateInt];
             NSDate *dateRead = dateReadInt == 0 ? nil : [NSDate dateWithTimeIntervalSinceReferenceDate:dateReadInt];
             
-            Message *message = [[Message alloc] initWithMessageId:rowID handleId:handleId messageGUID:guid messageText:text dateSent:date dateRead:dateRead isIMessage:isIMessage isFromMe:isFromMe hasAttachment:hasAttachment];
+            Message *message = [[Message alloc] initWithMessageId:rowID handleId:handleId messageGUID:guid
+                                                      messageText:text dateSent:date dateRead:dateRead
+                                                       isIMessage:isIMessage isFromMe:isFromMe hasAttachment:hasAttachment];
             [result addObject:message];
         }
     }
@@ -519,6 +532,8 @@ static NSString *pathToDB;
 - (int32_t) messageCountForPerson:(Person*)person startTimeInSeconds:(long)startTimeInSeconds endTimeInSeconds:(long)endTimeInSeconds
 {
     //const char *query = [[NSString stringWithFormat:@"SELECT count(*) from message WHERE (handle_id=%d OR handle_id=%d) AND date > %ld AND date < %ld", person.handleID, person.secondaryHandleId, startTimeInSeconds, endTimeInSeconds] UTF8String];
+    
+    //TODO: Fix this
     NSString *query = [NSString stringWithFormat:@"SELECT count(*) "
                                                            "FROM message messageT "
                                                        "INNER JOIN chat_message_join chatMessageT "
@@ -527,9 +542,7 @@ static NSString *pathToDB;
                                                                "AND (messageT.date > %ld AND messageT.date < %ld) "
                                                        "ORDER BY messageT.date",
                                                    [person getChatIDsString], startTimeInSeconds, endTimeInSeconds];
-    
-    NSLog(@"%@", query);
-    
+
     sqlite3_stmt *statement;
     
     int result = 0;
@@ -629,7 +642,10 @@ static NSString *pathToDB;
             long fileSize = sqlite3_column_int64(statement, 7);
             NSString *fileName = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 8)];
             
-            Attachment *attachment = [[Attachment alloc] initWithAttachmentID:attachmentID attachmentGUID:guid filePath:filePath fileType:fileType sentDate:sentDate attachmentSize:fileSize messageID:messageID fileName:fileName];
+            Attachment *attachment = [[Attachment alloc] initWithAttachmentID:attachmentID attachmentGUID:guid
+                                                                     filePath:filePath fileType:fileType
+                                                                     sentDate:sentDate attachmentSize:fileSize
+                                                                    messageID:messageID fileName:fileName];
             
             //If we do not have any attachments for this message
             if(![attachments objectForKey:messageGUID]) {
@@ -671,7 +687,10 @@ static NSString *pathToDB;
             long fileSize = sqlite3_column_int64(statement, 5);
             NSString *fileName = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 6)];
             
-            Attachment *attachment = [[Attachment alloc] initWithAttachmentID:attachmentID attachmentGUID:guid filePath:filePath fileType:fileType sentDate:sentDate attachmentSize:fileSize messageID:messageID fileName:fileName];
+            Attachment *attachment = [[Attachment alloc] initWithAttachmentID:attachmentID
+                                                               attachmentGUID:guid filePath:filePath
+                                                                     fileType:fileType sentDate:sentDate
+                                                               attachmentSize:fileSize messageID:messageID fileName:fileName];
             [attachments addObject:attachment];
         }
     }
@@ -760,7 +779,10 @@ static NSString *pathToDB;
                 NSDate *date = [NSDate dateWithTimeIntervalSinceReferenceDate:dateInt];
                 NSDate *dateRead = dateReadInt == 0 ? nil : [NSDate dateWithTimeIntervalSinceReferenceDate:dateReadInt];
                 
-                Message *message = [[Message alloc] initWithMessageId:messageID handleId:handleID messageGUID:guid messageText:text dateSent:date dateRead:dateRead isIMessage:isIMessage isFromMe:isFromMe hasAttachment:hasAttachment];
+                Message *message = [[Message alloc] initWithMessageId:messageID handleId:handleID
+                                                          messageGUID:guid messageText:text dateSent:date
+                                                             dateRead:dateRead isIMessage:isIMessage
+                                                             isFromMe:isFromMe hasAttachment:hasAttachment];
                 //printf("%s\n", [text UTF8String]);
             }
         }
