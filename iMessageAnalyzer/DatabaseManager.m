@@ -424,7 +424,7 @@ static NSString *pathToDB;
 {
     Statistics *statistics = [[Statistics alloc] init];
     
-    NSMutableArray *allMessagesForChat = [self getAllMessagesForPerson:person startTimeInSeconds:0 e
+    NSMutableArray *allMessagesForChat = [self getAllMessagesForPerson:person startTimeInSeconds:0 
                                                        endTimeInSeconds:LONG_MAX statistics:&statistics];
     person.statistics = statistics;
     
