@@ -360,8 +360,6 @@ static NSString *pathToDB;
     sqlite3_stmt *statement;
     int counter = 0;
     
-    NSLog(@"%@", query);
-    
     if(sqlite3_prepare_v2(_database, [query UTF8String], -1, &statement, NULL) == SQLITE_OK) {
         while(sqlite3_step(statement) == SQLITE_ROW) {
             
@@ -424,7 +422,7 @@ static NSString *pathToDB;
 {
     Statistics *statistics = [[Statistics alloc] init];
     
-    NSMutableArray *allMessagesForChat = [self getAllMessagesForPerson:person startTimeInSeconds:0 
+    NSMutableArray *allMessagesForChat = [self getAllMessagesForPerson:person startTimeInSeconds:0
                                                        endTimeInSeconds:LONG_MAX statistics:&statistics];
     person.statistics = statistics;
     
@@ -531,17 +529,19 @@ static NSString *pathToDB;
 
 - (int32_t) messageCountForPerson:(Person*)person startTimeInSeconds:(long)startTimeInSeconds endTimeInSeconds:(long)endTimeInSeconds
 {
-    //const char *query = [[NSString stringWithFormat:@"SELECT count(*) from message WHERE (handle_id=%d OR handle_id=%d) AND date > %ld AND date < %ld", person.handleID, person.secondaryHandleId, startTimeInSeconds, endTimeInSeconds] UTF8String];
-    
-    //TODO: Fix this
-    NSString *query = [NSString stringWithFormat:@"SELECT count(*) "
-                                                           "FROM message messageT "
-                                                       "INNER JOIN chat_message_join chatMessageT "
+    NSString *query = [NSString stringWithFormat:@"SELECT COUNT(ROWID) "
+                                                           "FROM message AS messageT "
+                                                       "INNER JOIN chat_message_join AS chatMessageT "
                                                            "ON chatMessageT.chat_id IN (%@) "
                                                                "AND messageT.ROWID=chatMessageT.message_id "
-                                                               "AND (messageT.date > %ld AND messageT.date < %ld) "
-                                                       "ORDER BY messageT.date",
-                                                   [person getChatIDsString], startTimeInSeconds, endTimeInSeconds];
+                                                               "AND (CASE "
+                                                                    "WHEN LENGTH(date) >= 18 "
+                                                                    "THEN date / 1000000000 "
+                                                                    "ELSE date "
+                                                                "END) "
+                                                                "BETWEEN %ld AND %ld "
+                                                        "ORDER BY date",
+                       [person getChatIDsString], startTimeInSeconds, endTimeInSeconds];
 
     sqlite3_stmt *statement;
     
