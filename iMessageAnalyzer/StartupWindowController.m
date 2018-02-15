@@ -101,7 +101,6 @@
             if([versionNumber isGreaterThan:latestVersionNumber]) {
                 latestVersionNumber = versionNumber;
                 latestVersion = version;
-
             }
         }
     
@@ -148,7 +147,7 @@
 
 - (void) didWishToContinue
 {
-    NSString *description = [NSString stringWithFormat:@"Choose the source from which to analyze your messages:\n\nThe default Mac Messages.app: %@\n\nThe most recent iPhone backup: %@\n\nPlease note the following loading might take some time as the database is being copied to the file's directory so that the original will not be corrupted.\nThat temporary database will be deleted when the app is exited.", self.messagesPath, self.iPhonePath];
+    NSString *description = [NSString stringWithFormat:@"Choose the source from which to analyze your messages:\n\n1. The default Mac Messages.app: %@\n\n2. The most recent iPhone backup: %@\n\n3. A specific database file that you can choose.\n\nPlease note the following loading might take some time as the database is being copied to the file's directory so that the original will not be corrupted.\nThat temporary database will be deleted when the app is exited.", self.messagesPath, self.iPhonePath];
     
     NSAlert *prompt = [[NSAlert alloc] init];
     [prompt setAlertStyle:NSWarningAlertStyle];
@@ -156,6 +155,7 @@
     [prompt setInformativeText:description];
     [prompt addButtonWithTitle:@"Messages.app"];
     [prompt addButtonWithTitle:@"iPhone backup"];
+    [prompt addButtonWithTitle:@"Specify file"];
     
     [prompt beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse response) {
         switch (response) {
@@ -164,6 +164,9 @@
                 break;
             case NSAlertSecondButtonReturn:
                 [self iPhoneDataSource];
+                break;
+            case NSAlertThirdButtonReturn:
+                [self specificFileDataSource];
                 break;
             default:
                 break;
@@ -263,6 +266,51 @@
         else {
             [self showErrorPrompt:@"iPhone backup not found" informationText:@"Either the iPhone's text message backups were not found in this directory or they were encrypted. When syncing or backing up with iTunes, disable encryption"];
             return;
+        }
+    }
+}
+
+- (void) specificFileDataSource
+{
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    
+    NSOpenPanel *directoryPanel = [NSOpenPanel openPanel];
+    [directoryPanel setCanChooseDirectories:YES];
+    
+    [directoryPanel setCanChooseFiles:YES];
+    [directoryPanel setCanChooseDirectories:NO];
+    [directoryPanel setCanCreateDirectories:NO];
+    [directoryPanel setAllowsMultipleSelection:NO];
+    [directoryPanel setCanHide:NO];
+    [directoryPanel setTitle:@"Choose the database file you would like to open"];
+    [directoryPanel setMessage:@"Specify the file of the database you would like to analyze"];
+    [directoryPanel setDirectoryURL:[NSURL fileURLWithPath:NSHomeDirectory()]];
+    
+    if([directoryPanel runModal] == NSModalResponseOK) {
+        NSArray *files = [directoryPanel URLs];
+        
+        if(files.count == 0) {
+            [self showErrorPrompt:@"No backups found" informationText:@"No backups found in this directory"];
+            return;
+        }
+        
+        NSString *databaseFilePath = [((NSURL*) files[0]) path];
+        
+        if(![fileManager fileExistsAtPath:databaseFilePath]) {
+            [self showErrorPrompt:@"Database file not found"
+                  informationText:@"Either the database file was not found in this directory or it is encrypted. When syncing or backing up with iTunes, disable encryption"];
+            return;
+        }
+        
+        NSError *error;
+        [fileManager copyItemAtPath:databaseFilePath toPath:self.backupLocation error:&error];
+        if(error) {
+            [self showErrorPrompt:@"Error making a backup of the database file"
+                  informationText:[NSString stringWithFormat:@"We were unable to make a backup of your Messages database \n%@", [error description]]];
+        }
+        else {
+            NSLog(@"Copied DB\nFROM: %@\nTO: %@\n", databaseFilePath, self.backupLocation);
+            [self showMainWindow:self.backupLocation];
         }
     }
 }
