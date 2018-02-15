@@ -330,6 +330,7 @@ static NSString *orderByMostMessages = @"Most messages";
         [self.simpleAnalyticsPopOver setBehavior:NSPopoverBehaviorTransient];
     }
     
+    
     Statistics *statistics = self.lastChosenPerson.statistics;
     
     if(statistics) {
