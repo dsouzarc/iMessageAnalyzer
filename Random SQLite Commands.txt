@@ -1,3 +1,36 @@
+#Get all messages for a person
+
+SELECT * 
+		FROM chat
+	INNER JOIN handle 
+		ON chat.chat_identifier = handle.id
+	INNER JOIN chat_handle_join 
+		ON  handle.ROWID= chat_handle_join.handle_id 
+	INNER JOIN message
+		ON message.handle_id = chat_handle_join.handle_id
+			WHERE (chat_identifier LIKE '%4930' 
+				OR chat_identifier LIKE '%915%' 
+				OR chat_identifier LIKE '%dsouza%') 
+				AND length(message.text) > 0
+
+
+
+#Get counts for a person
+SELECT COUNT(ROWID)
+	FROM message AS messageT
+	INNER JOIN chat_message_join AS chatMessageT
+			ON chatMessageT.chat_id IN (1650)
+					AND messageT.ROWID=chatMessageT.message_id
+					AND (CASE
+								WHEN LENGTH(date) >= 18
+									THEN date / 1000000000
+								ELSE date
+							END)
+							BETWEEN 0 AND 2147483647
+	ORDER BY messageT.date;
+
+
+
 #GET ALL MESSAGES FOR A PERSON - NO JOIN TABLES, REQUIRES PHONE NUMBER
 
 SELECT * FROM chat WHERE guid LIKE '%7669%'
