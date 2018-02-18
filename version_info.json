@@ -11,6 +11,10 @@
       {
          "version": 1.11,
          "changes": "Added support for autonomous updates"
+      },
+      {
+          "version": 1.13,
+          "changes": "Fixed a couple of bugs resulting from a database change made by Apple. Added a few minor features"
       }
    ]
 }
