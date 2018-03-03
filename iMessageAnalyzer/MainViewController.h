@@ -14,7 +14,7 @@
 #import "CalendarPopUpViewController.h"
 #import "MoreAnalysisWindowController.h"
 #import "ViewAttachmentsViewController.h"
-#import "SimpleAnalyticsPopupViewController.h"
+#import "SimpleAnalyticsPopUpViewController.h"
 
 #import "NSTextField+Messages.h"
 
