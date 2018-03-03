@@ -19,18 +19,19 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
-    
-    if([Constants isDevelopmentMode]) {
-        self.mainWindowController = [[MainWindowController alloc] initWithWindowNibName:@"MainWindowController" databasePath:pathToDevelopmentDB];
+    //Development mode and the development DB exists
+    if([Constants isDevelopmentMode] && [[NSFileManager defaultManager] fileExistsAtPath:pathToDevelopmentDB]) {
+        self.mainWindowController = [[MainWindowController alloc] initWithWindowNibName:@"MainWindowController"
+                                                                           databasePath:pathToDevelopmentDB];
         [self.mainWindowController showWindow:self];
         [self.mainWindowController.window makeKeyAndOrderFront:self];
-        
-        return;
     }
     
-    self.startupWindowController = [[StartupWindowController alloc] initWithWindowNibName:@"StartupWindowController"];
-    [self.startupWindowController showWindow:self];
-    [self.startupWindowController.window makeKeyAndOrderFront:self];
+    else {
+        self.startupWindowController = [[StartupWindowController alloc] initWithWindowNibName:@"StartupWindowController"];
+        [self.startupWindowController showWindow:self];
+        [self.startupWindowController.window makeKeyAndOrderFront:self];
+    }
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification
