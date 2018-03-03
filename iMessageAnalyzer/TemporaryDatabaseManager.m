@@ -238,7 +238,9 @@ static TemporaryDatabaseManager *databaseManager;
     return messages;
 }
 
-- (NSMutableArray*) getAllMessagesForConversationFromTimeInSeconds:(long)startTimeInSeconds endTimeInSeconds:(long)endTimeInSeconds statistics:(Statistics**)statisticsPointer
+- (NSMutableArray*) getAllMessagesForConversationFromTimeInSeconds:(long)startTimeInSeconds
+                                                  endTimeInSeconds:(long)endTimeInSeconds
+                                                        statistics:(Statistics**)statisticsPointer
 {
     NSMutableArray *allMessagesForChat = [[NSMutableArray alloc] init];
     
@@ -247,10 +249,11 @@ static TemporaryDatabaseManager *databaseManager;
     }
     
     Statistics *statistics = *statisticsPointer;
-    
+
     const char *query = [[NSString stringWithFormat:@"SELECT ROWID, guid, text, service, date, date_read, is_from_me, cache_has_attachments, handle_id FROM %@ WHERE (date > %ld AND date < %ld) ORDER BY date", myMessagesTable, startTimeInSeconds, endTimeInSeconds] UTF8String];
     
     sqlite3_stmt *statement;
+    
     
     if(sqlite3_prepare_v2(_database, query, -1, &statement, NULL) == SQLITE_OK) {
         while(sqlite3_step(statement) == SQLITE_ROW) {
@@ -732,7 +735,7 @@ static TemporaryDatabaseManager *databaseManager;
 
 - (void) addPragmas
 {
-    char *errorMessage;
+    char *errorMessage = NULL;
     [self executeSQLStatement:"PRAGMA journal_mode = MEMORY" errorMessage:errorMessage];
     [self executeSQLStatement:"PRAGMA synchronous = OFF" errorMessage:errorMessage];
 }
