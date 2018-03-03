@@ -733,14 +733,15 @@ static NSString *pathToDB;
     }
 }
 
-- (BOOL) isIMessage:(char*)text {
+- (BOOL) isIMessage:(const char*)text
+{
     return [[NSString stringWithFormat:@"%s", text] isEqualToString:@"iMessage"];
-    return strcmp(text, "iMessage") == 0;
+    //return strcmp(text, "iMessage") == 0;
 }
 
 - (NSMutableArray*) getAllChats
 {
-    return [self.allChats allValues];
+    return [NSMutableArray arrayWithArray:[self.allChats allValues]];
 }
 
 /** Deprecated */
@@ -748,7 +749,7 @@ static NSString *pathToDB;
 {
     NSMutableArray *messageIDs = [[NSMutableArray alloc] init];
     
-    char *query = [[NSString stringWithFormat:@"SELECT message_id FROM chat_message_join WHERE chat_id=%d", chatID] UTF8String];
+    const char *query = [[NSString stringWithFormat:@"SELECT message_id FROM chat_message_join WHERE chat_id=%d", chatID] UTF8String];
     sqlite3_stmt *statement;
     
     if(sqlite3_prepare_v2(_database, query, -1, &statement, NULL) == SQLITE_OK) {
@@ -761,7 +762,7 @@ static NSString *pathToDB;
     sqlite3_finalize(statement);
     
     for(NSNumber *message_id in messageIDs) {
-        char *query = [[NSString stringWithFormat:@"SELECT ROWID, guid, text, service, account_guid, date, date_read, is_from_me, handle_id, cache_has_attachments FROM message WHERE ROWID=%d", [message_id intValue]] UTF8String];
+        const char *query = [[NSString stringWithFormat:@"SELECT ROWID, guid, text, service, account_guid, date, date_read, is_from_me, handle_id, cache_has_attachments FROM message WHERE ROWID=%d", [message_id intValue]] UTF8String];
         
         if(sqlite3_prepare_v2(_database, query, -1, &statement, NULL) == SQLITE_OK) {
             while(sqlite3_step(statement) == SQLITE_ROW) {
