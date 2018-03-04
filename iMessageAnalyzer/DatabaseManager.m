@@ -761,6 +761,8 @@ static NSString *pathToDB;
     
     sqlite3_finalize(statement);
     
+    //TODO: Rather than deal with iMessage conversion here (function overcall, do it in constructor of Message 
+    
     for(NSNumber *message_id in messageIDs) {
         const char *query = [[NSString stringWithFormat:@"SELECT ROWID, guid, text, service, account_guid, date, date_read, is_from_me, handle_id, cache_has_attachments FROM message WHERE ROWID=%d", [message_id intValue]] UTF8String];
         
