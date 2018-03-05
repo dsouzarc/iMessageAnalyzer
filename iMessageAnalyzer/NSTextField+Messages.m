@@ -18,7 +18,7 @@
 
 - (void)mouseDown:(NSEvent *)theEvent;
 {
-    [self.delegate clickedOnTextField:self.textFieldNumber];
+    [self.messagesDelegate clickedOnTextField:self.textFieldNumber];
     //[self sendAction:[self action] to:[self delegate]];
 }
 
