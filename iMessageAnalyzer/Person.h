@@ -19,7 +19,7 @@
                       accountId:(NSString*)accountId
                  chatIdentifier:(NSString*)chatIdentifier
                         groupId:(NSString*)groupId
-                     isIMessage:(bool)isImessage
+                     isIMessage:(bool)isIMessage
                      personName:(NSString*)personName;
 
 @property (strong, nonatomic) NSString *personName;

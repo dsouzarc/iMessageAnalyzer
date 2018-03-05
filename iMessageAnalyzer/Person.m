@@ -12,7 +12,7 @@
 
 - (instancetype) initWithChatId:(NSInteger)chatId guid:(NSString *)guid
                       accountId:(NSString *)accountId chatIdentifier:(NSString *)chatIdentifier
-                        groupId:(NSString *)groupId isIMessage:(bool)isImessage
+                        groupId:(NSString *)groupId isIMessage:(bool)isIMessage
                      personName:(NSString *)personName
 {
     self = [super init];
@@ -22,7 +22,7 @@
         self.accountId = accountId;
         self.chatIdentifier = chatIdentifier;
         self.groupId = groupId;
-        self.isIMessage = isImessage;
+        self.isIMessage = isIMessage;
         
         self.personName = personName;
         
