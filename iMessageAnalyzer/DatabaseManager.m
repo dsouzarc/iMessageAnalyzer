@@ -367,8 +367,8 @@ static NSString *pathToDB;
             NSString *guid = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 1)];
             
             NSString *text = @"";
-            if(sqlite3_column_text(statement, 2)) {
-                text = [NSString stringWithUTF8String:sqlite3_column_text(statement, 2)]; //[NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 2)];
+            if(sqlite3_column_text(statement, 2) != NULL) {
+                text = [NSString stringWithUTF8String: (const char*) sqlite3_column_text(statement, 2)];
             }
             
             const unsigned char *isIMessage = sqlite3_column_text(statement, 3);
@@ -383,14 +383,13 @@ static NSString *pathToDB;
             
             if(isFromMe) {
                 statistics.numberOfSentMessages++;
-                
                 if(hasAttachment) {
                     statistics.numberOfSentAttachments++;
                 }
             }
+            
             else {
                 statistics.numberOfReceivedMessages++;
-                
                 if(hasAttachment) {
                     statistics.numberOfReceivedAttachments++;
                 }
@@ -754,8 +753,6 @@ static NSString *pathToDB;
     }
     
     sqlite3_finalize(statement);
-    
-    //TODO: Rather than deal with iMessage conversion here (function overcall, do it in constructor of Message 
     
     for(NSNumber *message_id in messageIDs) {
         const char *query = [[NSString stringWithFormat:@"SELECT ROWID, guid, text, service, account_guid, date, date_read, is_from_me, handle_id, cache_has_attachments FROM message WHERE ROWID=%d", [message_id intValue]] UTF8String];

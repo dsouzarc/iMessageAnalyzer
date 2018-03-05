@@ -262,8 +262,7 @@ static TemporaryDatabaseManager *databaseManager;
             
             NSString *text = @"";
             if(sqlite3_column_text(statement, 2) != NULL) {
-                text = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 2)];
-                //text = [NSString stringWithUTF8String:sqlite3_column_text(statement, 2)];
+                text = [NSString stringWithUTF8String: (const char*) sqlite3_column_text(statement, 2)];
                 text = [text stringByReplacingOccurrencesOfString:@"''" withString:@"'"];
             }
             
