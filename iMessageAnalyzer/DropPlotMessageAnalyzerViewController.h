@@ -19,10 +19,16 @@
 
 /** Controls the line graph for viewing messages/words over time */
 
-@interface DropPlotMessageAnalyzerViewController : NSViewController <CPTPlotDataSource, CPTPlotSpaceDelegate, CPTScatterPlotDelegate, CPTLegendDelegate>
+@interface DropPlotMessageAnalyzerViewController : NSViewController <CALayerDelegate, CPTPlotDataSource,
+                                                                        CPTPlotSpaceDelegate, CPTScatterPlotDelegate,
+                                                                        CPTLegendDelegate>
 
 # pragma mark - Constructor
-- (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil person:(Person*)person temporaryDatabase:(TemporaryDatabaseManager*)temporaryDatabase firstMessageDate:(NSDate*)firstMessage;
+- (instancetype) initWithNibName:(NSString *)nibNameOrNil
+                          bundle:(NSBundle *)nibBundleOrNil
+                          person:(Person*)person
+               temporaryDatabase:(TemporaryDatabaseManager*)temporaryDatabase
+                firstMessageDate:(NSDate*)firstMessage;
 
 
 # pragma mark - Modify graph data

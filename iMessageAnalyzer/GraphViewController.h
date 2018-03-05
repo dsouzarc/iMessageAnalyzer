@@ -26,6 +26,11 @@
 
 # pragma mark - Constructor 
 
-- (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil person:(Person*)person temporaryDatabase:(TemporaryDatabaseManager*)temporaryDatabase firstMessageDate:(NSDate*)firstMessage graphView:(NSView*)graphView;
+- (instancetype) initWithNibName:(NSString *)nibNameOrNil
+                          bundle:(NSBundle *)nibBundleOrNil
+                          person:(Person*)person
+               temporaryDatabase:(TemporaryDatabaseManager*)temporaryDatabase
+                firstMessageDate:(NSDate*)firstMessage
+                       graphView:(NSView*)graphView;
 
 @end

@@ -19,11 +19,14 @@
 
 /** Controls and shows the pie chart for data analysis */
 
-@interface PieChartViewController : NSViewController <CPTPieChartDataSource, CPTPieChartDelegate>
+@interface PieChartViewController : NSViewController <CALayerDelegate, CPTPieChartDataSource, CPTPieChartDelegate>
 
 # pragma mark - Constructor
 
-- (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil person:(Person *)person temporaryDatabase:(TemporaryDatabaseManager *)temporaryDatabase;
+- (instancetype) initWithNibName:(NSString *)nibNameOrNil
+                          bundle:(NSBundle *)nibBundleOrNil
+                          person:(Person *)person
+               temporaryDatabase:(TemporaryDatabaseManager *)temporaryDatabase;
 
 
 # pragma mark - Modifying data shown

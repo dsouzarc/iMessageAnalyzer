@@ -19,11 +19,14 @@
 
 /** Controls barplot for analyzing message frequencies over 24-hours */
 
-@interface BarPlotViewController : NSViewController <CPTBarPlotDataSource, CPTBarPlotDelegate, CPTLegendDelegate>
+@interface BarPlotViewController : NSViewController <CALayerDelegate, CPTBarPlotDataSource, CPTBarPlotDelegate, CPTLegendDelegate>
 
 # pragma mark - Constructor
 
-- (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil person:(Person *)person temporaryDatabase:(TemporaryDatabaseManager *)temporaryDatabase;
+- (instancetype) initWithNibName:(NSString *)nibNameOrNil
+                          bundle:(NSBundle *)nibBundleOrNil
+                          person:(Person *)person
+               temporaryDatabase:(TemporaryDatabaseManager *)temporaryDatabase;
 
 
 # pragma mark - Updating displayed data
