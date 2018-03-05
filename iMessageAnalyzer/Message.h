@@ -16,7 +16,7 @@
                        messageText:(NSString*)messageText
                           dateSent:(NSDate*)dateSent
                           dateRead:(NSDate*)dateRead
-                        isIMessage:(BOOL)isIMessage
+                          isIMessage:(const unsigned char*)isIMessage
                           isFromMe:(BOOL)isFromMe
                      hasAttachment:(BOOL)hasAttachment;
 

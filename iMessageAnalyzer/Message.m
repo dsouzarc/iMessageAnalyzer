@@ -18,7 +18,7 @@ static NSDateFormatter *dateFormatter;
                        messageText:(NSString *)messageText
                           dateSent:(NSDate *)dateSent
                           dateRead:(NSDate *)dateRead
-                        isIMessage:(BOOL)isIMessage
+                        isIMessage:(const unsigned char *)isIMessage
                           isFromMe:(BOOL)isFromMe
                      hasAttachment:(BOOL)hasAttachment
 {
@@ -37,7 +37,7 @@ static NSDateFormatter *dateFormatter;
         self.messageText = messageText;
         self.dateSent = dateSent;
         self.dateRead = dateRead;
-        self.isIMessage = isIMessage;
+        self.isIMessage = isIMessage == NULL ? NO : strcmp((const char*) isIMessage, "iMessage") == 0;
         self.isFromMe = isFromMe;
         self.hasAttachment = hasAttachment;
     }
