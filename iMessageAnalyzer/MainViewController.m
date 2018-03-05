@@ -513,7 +513,7 @@ static NSString *orderByMostMessages = @"Most messages";
         
         [messageField setTextFieldNumber:(int)row];
         [messageField setTag:100];
-        [messageField setDelegate:self];
+        [messageField setMessagesDelegate:self];
         [messageField setDrawsBackground:YES];
         [messageField setWantsLayer:YES];
         
@@ -900,11 +900,11 @@ static NSString *orderByMostMessages = @"Most messages";
 
 /****************************************************************
  *
- *              NSTextField Delegate
+ *              NSTextField_MessagesDelegate
  *
  *****************************************************************/
 
-# pragma mark - NSTextField Delegate
+# pragma mark - NSTextField_MessagesDelegate
 
 - (void) clickedOnTextField:(int32_t)textFieldNumber
 {
