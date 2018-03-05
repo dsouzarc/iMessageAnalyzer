@@ -433,7 +433,7 @@
         [messageField setWantsLayer:YES];
         [messageField setTextFieldNumber:(int)row];
         [messageField setTag:100];
-        [messageField setDelegate:self];
+        [messageField setMessagesDelegate:self];
         
         if(message.attachments) {
             
@@ -835,11 +835,11 @@ int tempCounter = 2;
 
 /****************************************************************
  *
- *              TextField Delegate
+ *              NSTextField_MessagesDelegate
  *
  *****************************************************************/
 
-# pragma mark - TextField Delegate
+# pragma mark - NSTextField_MessagesDelegate
 
 - (void) clickedOnTextField:(int32_t)textFieldNumber
 {
