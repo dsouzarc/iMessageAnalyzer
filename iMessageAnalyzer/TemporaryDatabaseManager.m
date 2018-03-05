@@ -261,12 +261,13 @@ static TemporaryDatabaseManager *databaseManager;
             NSString *guid = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 1)];
             
             NSString *text = @"";
-            if(sqlite3_column_text(statement, 2)) {
-                text = [NSString stringWithUTF8String:sqlite3_column_text(statement, 2)];
+            if(sqlite3_column_text(statement, 2) != NULL) {
+                text = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 2)];
+                //text = [NSString stringWithUTF8String:sqlite3_column_text(statement, 2)];
                 text = [text stringByReplacingOccurrencesOfString:@"''" withString:@"'"];
             }
             
-            BOOL isIMessage = [[Constants instance] isIMessage:sqlite3_column_text(statement, 3)];
+            const unsigned char* isIMessage = sqlite3_column_text(statement, 3);
             int32_t dateInt = sqlite3_column_int(statement, 4);
             int32_t dateReadInt = sqlite3_column_int(statement, 5);
             
@@ -290,7 +291,9 @@ static TemporaryDatabaseManager *databaseManager;
             NSDate *date = [NSDate dateWithTimeIntervalSinceReferenceDate:dateInt];
             NSDate *dateRead = dateReadInt == 0 ? nil : [NSDate dateWithTimeIntervalSinceReferenceDate:dateReadInt];
             
-            Message *message = [[Message alloc] initWithMessageId:messageID handleId:handleID messageGUID:guid messageText:text dateSent:date dateRead:dateRead isIMessage:isIMessage isFromMe:isFromMe hasAttachment:hasAttachment];
+            Message *message = [[Message alloc] initWithMessageId:messageID handleId:handleID messageGUID:guid
+                                                      messageText:text dateSent:date dateRead:dateRead
+                                                       isIMessage:isIMessage isFromMe:isFromMe hasAttachment:hasAttachment];
             [allMessagesForChat addObject:message];
         }
     }
@@ -676,29 +679,32 @@ static TemporaryDatabaseManager *databaseManager;
 - (BOOL) executeSQLStatement:(const char *)sqlStatement errorMessage:(char*)errorMessage
 {
     int counter = 0;
+    int result = 0;
+    
     while(counter < MAX_DB_TRIES) {
-        int result = sqlite3_exec(_database, sqlStatement, NULL, NULL, &errorMessage);
-        if(result != SQLITE_OK) {
-            counter++;
-            if(result == SQLITE_BUSY || result == SQLITE_LOCKED) {
-                printf("SQLITE_BUSY/LOCKED ERROR IN EXEC: %s\t%s\n", sqlStatement, sqlite3_errmsg(_database));
-                [NSThread sleepForTimeInterval:0.01];
-            }
-            else {
-                if(result == SQLITE_CONSTRAINT) {
-                    printf("Duplicate ROWID for insert: %s\n", sqlStatement);
-                    return YES;
-                }
-                else {
-                    printf("IN EXEC, ERROR: %s\t%d\t%s\t\n", sqlite3_errmsg(_database), result, sqlStatement);
-                }
-                return NO;
-            }
-        }
-        else {
+        result = sqlite3_exec(_database, sqlStatement, NULL, NULL, &errorMessage);
+        
+        if(result == SQLITE_OK) {
             return YES;
         }
+        
+        else if(result == SQLITE_CONSTRAINT) {
+            printf("Duplicate ROWID for insert: %s\n", sqlStatement);
+            return YES;
+        }
+        
+        else if(result == SQLITE_BUSY || result == SQLITE_LOCKED) {
+            printf("SQLITE_BUSY/LOCKED ERROR IN EXEC: %s\t%s\n", sqlStatement, sqlite3_errmsg(_database));
+            [NSThread sleepForTimeInterval:0.01];
+        }
+        
+        else {
+            printf("IN EXEC, ERROR: %s\t%d\t%s\t\n", sqlite3_errmsg(_database), result, sqlStatement);
+        }
+        
+        counter += 1;
     }
+    
     printf("LEFT EXEC SQL STATEMENT AT MAX DB TRIES: %s\n", sqlStatement);
     return NO;
 }
