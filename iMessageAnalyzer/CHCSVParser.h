@@ -115,7 +115,12 @@ typedef NS_ENUM(NSInteger, CHCSVErrorCode) {
 
 @end
 
+
 @interface CHCSVParser : NSObject
+
+/** No default constructor */
+- (instancetype)init NS_UNAVAILABLE;
+
 
 /**
  *  The delegate for the @c CHCSVParser
@@ -241,6 +246,9 @@ typedef NS_ENUM(NSInteger, CHCSVErrorCode) {
 @end
 
 @interface CHCSVWriter : NSObject
+
+/** No default constructor */
+- (instancetype)init NS_UNAVAILABLE;
 
 /**
  *  Initializes a @c CHCSVWriter to write to the provided file path. Assumes @c NSUTF8Encoding and the comma delimiter
