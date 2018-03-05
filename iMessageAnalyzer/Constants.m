@@ -241,7 +241,7 @@ static Constants *constants;
 
 - (BOOL) isIMessage:(char*)text
 {
-    return strcmp(text, "iMessage") == 0;
+    return text == NULL ? NO : strcmp((const char*) text, "iMessage") == 0;
 }
 
 
