@@ -170,7 +170,7 @@ static NSString *pathToDB;
             NSString *accountID = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 2)];
             NSString *chatIdentifier = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 3)];
             NSString *number = [self cleanNumber:chatIdentifier];
-            BOOL isIMessage = [self isIMessage:sqlite3_column_text(statement, 4)];
+            const unsigned char *isIMessage = sqlite3_column_text(statement, 4);
             NSString *groupID = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 5)];
             NSString *chatName = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 6)];
             
@@ -371,7 +371,7 @@ static NSString *pathToDB;
                 text = [NSString stringWithUTF8String:sqlite3_column_text(statement, 2)]; //[NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 2)];
             }
             
-            BOOL isIMessage = [self isIMessage:sqlite3_column_text(statement, 3)];
+            const unsigned char *isIMessage = sqlite3_column_text(statement, 3);
             NSString *accountGUID = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 4)];
             
             int32_t dateInt = sqlite3_column_int(statement, 5);
@@ -503,7 +503,7 @@ static NSString *pathToDB;
             NSString *guid = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 1)];
             NSString *text = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 2)];
             int handleId = sqlite3_column_int(statement, 3);
-            BOOL isIMessage = [self isIMessage:sqlite3_column_text(statement, 4)];
+            const unsigned char *isIMessage = sqlite3_column_text(statement, 4);
             int32_t dateInt = sqlite3_column_int(statement, 5);
             int32_t dateReadInt = sqlite3_column_int(statement, 6);
             BOOL isFromMe = sqlite3_column_int(statement, 7) == 1;
@@ -733,12 +733,6 @@ static NSString *pathToDB;
     }
 }
 
-- (BOOL) isIMessage:(const char*)text
-{
-    return [[NSString stringWithFormat:@"%s", text] isEqualToString:@"iMessage"];
-    //return strcmp(text, "iMessage") == 0;
-}
-
 - (NSMutableArray*) getAllChats
 {
     return [NSMutableArray arrayWithArray:[self.allChats allValues]];
@@ -771,7 +765,7 @@ static NSString *pathToDB;
                 int32_t messageID = sqlite3_column_int(statement, 0);
                 NSString *guid = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 1)];
                 NSString *text = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 2)];
-                BOOL isIMessage = [self isIMessage:sqlite3_column_text(statement, 3)];
+                const unsigned char *isIMessage = sqlite3_column_text(statement, 3);
                 NSString *accountGUID = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 4)];
                 int32_t dateInt = sqlite3_column_int(statement, 5);
                 int32_t dateReadInt = sqlite3_column_int(statement, 6);
