@@ -143,10 +143,7 @@ static NSString *pathToDB;
 
 - (void) updateHandleIDsForPerson:(Person*)person
 {
-    //Uninitialized handleID
-    if([person.handleIDs count] == 0) {
-        person.handleIDs = [self getHandleIDsForChatIDs:person.chatIDs];
-    }
+    person.handleIDs = [self getHandleIDsForChatIDs:person.chatIDs];
 }
 
 
@@ -189,7 +186,7 @@ static NSString *pathToDB;
             }
             else {
                 
-                if(!name || name.length == 0) {
+                if(!name || [name length] == 0) {
                     name = number;
                 }
                 
@@ -263,7 +260,6 @@ static NSString *pathToDB;
 - (NSMutableArray*) getAllNumbersForSearchText:(NSString*)text
 {
     NSMutableArray *numbers = [[NSMutableArray alloc] init];
-    
     NSArray *handle_ids = [[self getHandleIDsForMessageText:text] allObjects];
     
     sqlite3_stmt *statement;
@@ -356,7 +352,7 @@ static NSString *pathToDB;
                                                                 "AND adjusted_date BETWEEN %ld AND %ld "
                                                     "ORDER BY adjusted_date",
                                                 chatIDsString, startTimeInSeconds, endTimeInSeconds];
-    
+
     sqlite3_stmt *statement;
     int counter = 0;
     
@@ -599,7 +595,10 @@ static NSString *pathToDB;
 
 - (NSMutableDictionary*) getAllAttachmentsForPerson:(Person*)person
 {
-    [self updateHandleIDsForPerson:person];
+    //Uninitialized handleID
+    if([person.handleIDs count] == 0) {
+        [self updateHandleIDsForPerson:person];
+    }
     
     NSMutableDictionary *attachments = [[NSMutableDictionary alloc] init];
     
@@ -608,14 +607,14 @@ static NSString *pathToDB;
     NSString *queryString = [NSString stringWithFormat:@"SELECT messageT.ROWID, messageT.guid, attachmentT.ROWID, attachmentT.guid, "
                                                                      "attachmentT.filename, attachmentT.mime_type, attachmentT.start_date, "
                                                                      "attachmentT.total_bytes, attachmentT.transfer_name "
-                                                                 "FROM message messageT "
-                                                             "INNER JOIN chat_message_join chatMessageT "
-                                                                 "ON messageT.ROWID=chatMessageT.message_id "
-                                                             "INNER JOIN attachment attachmentT "
-                                                             "INNER JOIN message_attachment_join meAtJoinT "
+                                                                 "FROM message AS messageT "
+                                                             "INNER JOIN chat_message_join AS chatMessageT "
+                                                                 "ON chatMessageT.chat_id IN (%@) "
+                                                                    "AND messageT.ROWID = chatMessageT.message_id "
+                                                             "INNER JOIN attachment AS attachmentT "
+                                                             "INNER JOIN message_attachment_join AS meAtJoinT "
                                                                  "ON attachmentT.ROWID = meAtJoinT.attachment_id "
-                                                                     "WHERE meAtJoinT.message_id=messageT.ROWID "
-                                                                     "AND chatMessageT.chat_id IN (%@) ",
+                                                                     "AND meAtJoinT.message_id = messageT.ROWID ",
                                                              [person getChatIDsString]];
 
     sqlite3_stmt *statement;
@@ -646,18 +645,12 @@ static NSString *pathToDB;
                                                                      sentDate:sentDate attachmentSize:fileSize
                                                                     messageID:messageID fileName:fileName];
             
-            //If we do not have any attachments for this message
-            if(![attachments objectForKey:messageGUID]) {
-                NSMutableArray *attachmentsForMessage = [[NSMutableArray alloc] init];
-                [attachmentsForMessage addObject:attachment];
+            NSMutableArray *attachmentsForMessage = [attachments objectForKey:messageGUID];
+            if(!attachmentsForMessage) {
+                attachmentsForMessage = [[NSMutableArray alloc] init];
                 [attachments setObject:attachmentsForMessage forKey:messageGUID];
             }
-            
-            //We do have attachments for this message
-            else {
-                NSMutableArray *attachmentsForMessage = [attachments objectForKey:messageGUID];
-                [attachmentsForMessage addObject:attachment];
-            }
+            [attachmentsForMessage addObject:attachment];
         }
     }
     
