@@ -66,7 +66,10 @@ static NSString *pathToDB;
     if(!databaseInstance) {
         databaseInstance = [super init];
         
-        if(sqlite3_open([path UTF8String], &_database) == SQLITE_OK) {
+        if(![[NSFileManager defaultManager] fileExistsAtPath:path]) {
+            NSLog(@"ERROR FINDING DATABASE: %@\n", path);
+        }
+        else if(sqlite3_open([path UTF8String], &_database) == SQLITE_OK) {
             printf("DATABASE SUCCESSFULLY OPENED: %s\n", [path UTF8String]);
         }
         else {
@@ -223,8 +226,8 @@ static NSString *pathToDB;
         NSString *lastName = [person valueForProperty:kABLastNameProperty];
         
         
+        //Add the middle name to the first name
         @try {
-            //Add the middle name to the first name
             if([person valueForProperty:kABMiddleNameProperty]) {
                 firstName = [NSString stringWithFormat:@"%@ %@", firstName, [person valueForProperty:kABMiddleNameProperty]];
             }
@@ -807,8 +810,8 @@ static NSString *pathToDB;
         return;
     }
     
-    //If we're not dealing with the original or with my copy of it
-    if(![pathToDB isEqualToString:[NSString stringWithFormat:@"%@/Library/Messages/chat.db", NSHomeDirectory()]] && ![pathToDB isEqualToString:pathToDevelopmentDB]) {
+    //If we're not dealing with the original
+    if(![pathToDB isEqualToString:[NSString stringWithFormat:@"%@/Library/Messages/chat.db", NSHomeDirectory()]]) {
         NSFileManager *fileManager = [NSFileManager defaultManager];
         [fileManager removeItemAtPath:pathToDB error:NULL];
         NSLog(@"Temporary database deleted");
