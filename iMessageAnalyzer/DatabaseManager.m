@@ -220,39 +220,57 @@ static NSString *pathToDB;
     for(ABPerson *person in addressBook.people) {
         
         NSString *firstName = [person valueForProperty:kABFirstNameProperty];
-        
-        //Add the middle name to the first name
-        if([person valueForProperty:kABMiddleNameProperty]) {
-            firstName = [NSString stringWithFormat:@"%@ %@", firstName, [person valueForProperty:kABMiddleNameProperty]];
-        }
-        
         NSString *lastName = [person valueForProperty:kABLastNameProperty];
         
+        
+        @try {
+            //Add the middle name to the first name
+            if([person valueForProperty:kABMiddleNameProperty]) {
+                firstName = [NSString stringWithFormat:@"%@ %@", firstName, [person valueForProperty:kABMiddleNameProperty]];
+            }
+        }
+        @catch(NSException *exception) {
+            //No middle name - not a big deal
+        }
+        
+        
         //Save all the phone numbers
-        ABMultiValue *phoneValues = [person valueForProperty:kABPhoneProperty];
-        if(phoneValues) {
-            for(int i = 0; i < phoneValues.count; i++) {
+        @try {
+            ABMultiValue *phoneValues = [person valueForProperty:kABPhoneProperty];
+            
+            for(int i = 0; i < [phoneValues count]; i++) {
                 if([phoneValues valueAtIndex:i]) {
                     NSString *cleanNumber = [self cleanNumber:[phoneValues valueAtIndex:i]];
-                    Contact *contact = [[Contact alloc] initWithFirstName:firstName lastName:lastName
-                                                                   number:cleanNumber person:person];
+                    Contact *contact = [[Contact alloc] initWithFirstName:firstName
+                                                                 lastName:lastName
+                                                                   number:cleanNumber
+                                                                   person:person];
                     [self.allContacts setObject:contact forKey:cleanNumber];
                 }
             }
         }
+        @catch(NSException *exception) {
+            //No phone numbers - that's fine
+        }
         
+
         //Save all the emails
-        ABMultiValue *emailValues = [person valueForProperty:kABEmailProperty];
-        if(emailValues) {
+        @try {
+            ABMultiValue *emailValues = [person valueForProperty:kABEmailProperty];
+            
             for(int i = 0; i < emailValues.count; i++) {
                 if([emailValues valueAtIndex:i]) {
                     NSString *email = [emailValues valueAtIndex:i];
-                    //Add it to our dictionary
-                    Contact *contact = [[Contact alloc] initWithFirstName:firstName lastName:lastName
-                                                                   number:email person:person];
+                    Contact *contact = [[Contact alloc] initWithFirstName:firstName
+                                                                 lastName:lastName
+                                                                   number:email
+                                                                   person:person];
                     [self.allContacts setObject:contact forKey:email];
                 }
             }
+        }
+        @catch(NSException *exception) {
+            //No email addresses - that's fine
         }
     }
 }
