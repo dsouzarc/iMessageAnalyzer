@@ -250,6 +250,7 @@ static MessageManager *messageInstance;
 
 - (void) updateMessagesWithAttachments:(NSMutableArray*)messages person:(Person*)person
 {
+    //TODO: Make an SQL query that will return attachments as well
     NSMutableDictionary *attachmentsForPerson = [self.databaseManager getAllAttachmentsForPerson:person];
     
     //For each message
