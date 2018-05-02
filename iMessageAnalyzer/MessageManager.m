@@ -261,6 +261,14 @@ static MessageManager *messageInstance;
         if(attachments) {
             message.attachments = attachments;
             
+            //TODO: Fix for attachments that are registered but not found (i.e.: deleted, too old, never downloaded)
+            /*for(Attachment *attachment in attachments) {
+                if(![[NSFileManager defaultManager] fileExistsAtPath:attachment.filePath]) {
+                    //NSLog(@"NO ATTACHMENT: %@\t%@\t%@\t%@", person.personName, message.messageText, attachment.sentDate, attachment.filePath);
+                }
+            }*/
+            
+            
             [attachmentsForPerson removeObjectForKey:message.messageGUID];
             
             //If there aren't any more attachments, we're done here
