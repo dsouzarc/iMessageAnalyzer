@@ -350,10 +350,9 @@ static Constants *constants;
     NSError *error;
     
     NSString *emojiFilePath = [[NSBundle mainBundle] pathForResource:@"AllEmojis"
-                                                              ofType:@"txt"
-                                                         inDirectory:@"Resources"];
+                                                              ofType:@"txt"];
     NSString *allEmojisString = [NSString stringWithContentsOfFile:emojiFilePath
-                                                          encoding:NSUTF32StringEncoding error:&error];
+                                                          encoding:NSUTF8StringEncoding error:&error];
     
     //Go through each emoji in the file, and add it to the Set
     if(!error) {
@@ -370,7 +369,7 @@ static Constants *constants;
     else {
         NSLog(@"ERROR READING ALL EMOJIS FROM: %@\t%@", emojiFilePath, [error description]);
     }
-    
+
     return [[NSSet alloc] initWithSet:allEmojis];
 }
 
