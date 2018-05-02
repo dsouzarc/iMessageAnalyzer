@@ -10,7 +10,14 @@
 
 @implementation Attachment
 
-- (instancetype) initWithAttachmentID:(int32_t)attachmentID attachmentGUID:(NSString *)guid filePath:(NSString *)filePath fileType:(NSString *)fileType sentDate:(NSDate *)sentDate attachmentSize:(long)attachmentSize messageID:(int32_t)messageID fileName:(NSString *)fileName
+- (instancetype) initWithAttachmentID:(int32_t)attachmentID
+                       attachmentGUID:(NSString *)guid
+                             filePath:(NSString *)filePath
+                             fileType:(NSString *)fileType
+                             sentDate:(NSDate *)sentDate
+                       attachmentSize:(long)attachmentSize
+                            messageID:(int32_t)messageID
+                             fileName:(NSString *)fileName
 {
     self = [super init];
     
@@ -22,7 +29,7 @@
         self.sentDate = sentDate;
         self.size = attachmentSize;
         self.fileName = fileName;
-        
+
         //filePath Example: ~/Library/Messages/Attachments/1c/12/FBB3B1E5-9477-4E5F-ADD6-6EE1D3C0F7D0/IMG_0418.JPG
         
         //Now: /Library/Messages/Attachments/1c/12/FBB3B1E5-9477-4E5F-ADD6-6EE1D3C0F7D0/IMG_0418.JPG
