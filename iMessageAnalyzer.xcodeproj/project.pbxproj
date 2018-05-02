@@ -68,6 +68,7 @@
 		94F3AC411BC481B900948A23 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 94F3AC401BC481B900948A23 /* Message.m */; };
 		94F3AC441BC727BE00948A23 /* MessageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 94F3AC431BC727BE00948A23 /* MessageManager.m */; };
 		94F3AC471BC7282A00948A23 /* DatabaseManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 94F3AC461BC7282A00948A23 /* DatabaseManager.m */; };
+		94F7CD41209A72FB00384117 /* AllEmojis.txt in Resources */ = {isa = PBXBuildFile; fileRef = 94F7CD40209A72FB00384117 /* AllEmojis.txt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -240,6 +241,7 @@
 		94F3AC431BC727BE00948A23 /* MessageManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageManager.m; sourceTree = "<group>"; };
 		94F3AC451BC7282A00948A23 /* DatabaseManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatabaseManager.h; sourceTree = "<group>"; };
 		94F3AC461BC7282A00948A23 /* DatabaseManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatabaseManager.m; sourceTree = "<group>"; };
+		94F7CD40209A72FB00384117 /* AllEmojis.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = AllEmojis.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -637,6 +639,7 @@
 				949DBBEC1E23468F008812B9 /* View Controller */,
 				947B53DB1BE53F6500484D66 /* Icons */,
 				94A992401BBDC733003BA1D5 /* Supporting Files */,
+				94F7CD42209A733500384117 /* Resources */,
 			);
 			path = iMessageAnalyzer;
 			sourceTree = "<group>";
@@ -744,6 +747,14 @@
 				946D2A6B1BE55BF900270BF0 /* Statistics.m */,
 			);
 			name = Statistics;
+			sourceTree = "<group>";
+		};
+		94F7CD42209A733500384117 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				94F7CD40209A72FB00384117 /* AllEmojis.txt */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		94F8CDB31C3B39F500E58BB3 /* Constants */ = {
@@ -927,6 +938,7 @@
 				9465900E1C17ED70007D363A /* GraphViewController.xib in Resources */,
 				9480B1601BF7B48900ECDE38 /* more_icon.png in Resources */,
 				9438FD121BE07D2600B239BE /* MainViewController.xib in Resources */,
+				94F7CD41209A72FB00384117 /* AllEmojis.txt in Resources */,
 				946D2A711BE5EAA700270BF0 /* TextTableCellView.xib in Resources */,
 				945037131BF59F4700F995E7 /* SimpleAnalyticsPopUpViewController.xib in Resources */,
 				94F01DDE1BE852CF00B47D9D /* CalendarPopUpViewController.xib in Resources */,

@@ -56,6 +56,9 @@
 @property (strong, nonatomic) NSMutableArray<NSDictionary*> *friendWordsAndFrequencies;
 @property (strong, nonatomic) NSMutableArray<NSDictionary*> *friendWordsAndFrequenciesSearch;
 
+@property BOOL shouldFilterOutEmojis;
+@property (strong, nonatomic) NSSet *allEmojisSet;
+
 
 # pragma mark - Person information
 
@@ -115,12 +118,15 @@
         self.friendWordsAndFrequenciesSearch = [[NSMutableArray alloc] init];
         
         self.messageWithAttachmentAttributes = [Constants getMessageWithAttachmentAttributes];
+        
+        self.shouldFilterOutEmojis = YES;
     }
     
     return self;
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     
     [self.messagesTableView setSelectionHighlightStyle:NSTableViewSelectionHighlightStyleNone];
@@ -250,6 +256,10 @@
     NSMutableDictionary *myWordFrequencies = [[NSMutableDictionary alloc] init];
     NSMutableDictionary *friendWordFrequencies = [[NSMutableDictionary alloc] init];
     
+    if(self.shouldFilterOutEmojis && !self.allEmojisSet) {
+        self.allEmojisSet = [Constants getAllEmojisSet];
+    }
+    
     BOOL lastFromMeDoubleMessage;
     int lastMessageTimeDoubleMessage;
     Message *lastMessageDoubleMessage;
@@ -322,11 +332,47 @@
         lastMessageTimeConversationStarter = (int) [message.dateSent timeIntervalSinceReferenceDate];
         lastMessageConversationStarter = message;
         
-        NSArray *words = [message.messageText componentsSeparatedByString:@" "];
+        NSMutableString *messageText = [[NSMutableString alloc] init];
+        NSMutableArray *usedEmojis = [[NSMutableArray alloc] init];
+
+        //Filter out emojis: go through each word, remove attached emojis, store them separately
+        if(self.shouldFilterOutEmojis) {
+            [[message messageText] enumerateSubstringsInRange:NSMakeRange(0, [message.messageText length])
+                                                    options:NSStringEnumerationByComposedCharacterSequences
+                                                 usingBlock:^(NSString * _Nullable substring,
+                                                              NSRange substringRange,
+                                                              NSRange enclosingRange,
+                                                              BOOL * _Nonnull stop) {
+                                                     
+                                                     //If this is an emoji, keep track of it separately
+                                                     if([self.allEmojisSet containsObject:substring]) {
+                                                         [usedEmojis addObject:substring];
+                                                     }
+                                                     
+                                                     //Not an emoji, append to the string
+                                                     else {
+                                                         [messageText appendString:substring];
+                                                     }
+                                                 }
+             ];
+            
+            //Now that we have our emojis, append them all to the end space-separated
+            for(NSString *usedEmoji in usedEmojis) {
+                [messageText appendString:[NSString stringWithFormat:@" %@", usedEmoji]];
+            }
+        }
+        
+        //Do not filter out emojis: messageText is just as it is
+        else {
+            [messageText appendString:[message messageText]];
+        }
+        
+        //Go through each word (with emojis at the end, and add it to word count trackers
+        NSArray *words = [messageText componentsSeparatedByString:@" "];
         
         for(NSString *word in words) {
-            NSString *wordToUse = word; //[Constants getStrippedWord:word];
             
+            NSString *wordToUse = word; //[Constants getStrippedWord:word];
             NSNumber *frequency = message.isFromMe ? [myWordFrequencies objectForKey:wordToUse] : [friendWordFrequencies objectForKey:wordToUse];
             
             if(frequency) {
@@ -336,7 +382,7 @@
                 frequency = [NSNumber numberWithInt:1];
             }
             
-            if(word.length == 0) {
+            if([word length] == 0) {
                 continue;
             }
             
