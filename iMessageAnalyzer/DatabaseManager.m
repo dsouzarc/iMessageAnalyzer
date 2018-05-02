@@ -162,7 +162,7 @@ static NSString *pathToDB;
 {
     const char *query = "SELECT ROWID, guid, account_id, chat_identifier, service_name, group_id, display_name FROM chat";
     sqlite3_stmt *statement;
-    
+
     if(sqlite3_prepare_v2(_database, query, -1, &statement, NULL) == SQLITE_OK) {
         while(sqlite3_step(statement) == SQLITE_ROW) {
             int chatId = sqlite3_column_int(statement, 0);
@@ -172,7 +172,7 @@ static NSString *pathToDB;
             NSString *number = [self cleanNumber:chatIdentifier];
             const unsigned char *isIMessage = sqlite3_column_text(statement, 4);
             NSString *groupID = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 5)];
-            NSString *chatName = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 6)];
+            NSString *chatName = [NSString stringWithFormat:@"%s", sqlite3_column_text16(statement, 6)];
             
             Contact *contact = [self.allContacts objectForKey:number];
             NSString *name = contact ? contact.getName : @"";
