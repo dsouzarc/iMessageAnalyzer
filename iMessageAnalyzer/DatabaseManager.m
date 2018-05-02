@@ -472,7 +472,7 @@ static NSString *pathToDB;
     if(sqlite3_prepare(_database, [queryString UTF8String], -1, &statement, NULL) == SQLITE_OK) {
         while(sqlite3_step(statement) == SQLITE_ROW) {
             int rowID = sqlite3_column_int(statement, 0);
-            int date = sqlite3_column_int(statement, 1) / 1000;
+            int date = sqlite3_column_int(statement, 1);
             NSString *text = @"";
             
             const char *messageTextChar = (const char *)sqlite3_column_text(statement, 2);
