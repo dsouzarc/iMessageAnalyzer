@@ -340,25 +340,33 @@ static Constants *constants;
             [NSNumber numberWithInt:NSUnderlineStyleSingle], NSUnderlineStyleAttributeName, nil];
 }
 
-/** Returns a Set of all the Emojis from Resources/AllEmojis.txt */
+/** Returns a Set of all the Emojis from Resources/AllEmojis.txt.
+    To get the most recent version, run "EmojiFiesta on iOS and have it print out all the
+        emoji combinations.
+*/
 + (NSSet*) getAllEmojisSet
 {
     NSMutableSet *allEmojis = [[NSMutableSet alloc] init];
     NSError *error;
     
-    NSString *emojiFilePath = [[NSBundle mainBundle] pathForResource:@"AllEmojis" ofType:@"txt" inDirectory:@"Resources"];
-    NSString *allEmojisString = [NSString stringWithContentsOfFile:emojiFilePath encoding:NSUTF32StringEncoding error:&error];
+    NSString *emojiFilePath = [[NSBundle mainBundle] pathForResource:@"AllEmojis"
+                                                              ofType:@"txt"
+                                                         inDirectory:@"Resources"];
+    NSString *allEmojisString = [NSString stringWithContentsOfFile:emojiFilePath
+                                                          encoding:NSUTF32StringEncoding error:&error];
     
+    //Go through each emoji in the file, and add it to the Set
     if(!error) {
-        //Go through each emoji in the file, and add it to the Set
         [allEmojisString enumerateSubstringsInRange:NSMakeRange(0, [allEmojisString length])
                                             options:NSStringEnumerationByComposedCharacterSequences
-                                         usingBlock:^(NSString * _Nullable substring, NSRange substringRange, NSRange enclosingRange, BOOL * _Nonnull stop) {
+                                         usingBlock:^(NSString * _Nullable substring,
+                                                      NSRange substringRange,
+                                                      NSRange enclosingRange,
+                                                      BOOL * _Nonnull stop) {
                                              [allEmojis addObject:substring];
                                          }
          ];
     }
-    
     else {
         NSLog(@"ERROR READING ALL EMOJIS FROM: %@\t%@", emojiFilePath, [error description]);
     }
