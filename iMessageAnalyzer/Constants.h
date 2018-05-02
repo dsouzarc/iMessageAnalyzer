@@ -82,4 +82,7 @@ const static int MIN_CONVERSATION_STARTER = MAX_DOUBLE_MESSAGE + 1;
 
 + (NSDictionary*) getMessageWithAttachmentAttributes;
 
+// Returns a Set of all the Emojis from Resources/AllEmojis.txt
++ (NSSet*) getAllEmojisSet;
+
 @end

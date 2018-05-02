@@ -624,7 +624,6 @@ static NSString *orderByMostMessages = @"Most messages";
             }
         }
         else {
-
             [cell.contactName setStringValue:person.number];
         }
         
