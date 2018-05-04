@@ -420,7 +420,7 @@
     
     [self setTextFieldLong:self.myConversationStarter forTag:39];
     [self setTextFieldLong:self.friendConversationStarter forTag:40];
-    [self setTextFieldLong:(self.myDoubleMessage + self.friendDoubleMessage) forTag:41];
+    [self setTextFieldLong:(self.myConversationStarter + self.friendConversationStarter) forTag:41];
 }
 
 
