@@ -250,3 +250,5 @@ Movie attachments and PDFs are also shown and movies begin playing automatically
 
 ![Screenshot 28](https://github.com/dsouzarc/iMessageAnalyzer/blob/master/Screenshots/Screenshot_28.png)
 Double clicking a contact shows quick statistics and gives the option to view more icon (circle icon)
+
+im here
