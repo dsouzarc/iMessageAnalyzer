@@ -26,7 +26,7 @@
  *
  *              Constructor
  *
-*****************************************************************/
+ *****************************************************************/
 
 # pragma mark - Constructor
 
@@ -103,7 +103,7 @@
                 latestVersion = version;
             }
         }
-    
+        
         //If there's a later version, prompt for update
         if([latestVersionNumber isGreaterThan:myVersion] && latestVersion) {
             
@@ -141,7 +141,7 @@
  *
  *              StartupViewController Delegate
  *
-*****************************************************************/
+ *****************************************************************/
 
 # pragma mark - StartupViewController Delegate
 
@@ -184,7 +184,7 @@
  *
  *              Auxillary methods
  *
-*****************************************************************/
+ *****************************************************************/
 
 # pragma mark - Auxillary methods
 
@@ -250,7 +250,7 @@
         if(![fileManager fileExistsAtPath:iPhoneBackup]) {
             iPhoneBackup = [NSString stringWithFormat:@"%@/%@", filePath, fileName];
         }
-    
+        
         if([fileManager fileExistsAtPath:iPhoneBackup]) {
             
             NSError *error;
@@ -314,101 +314,155 @@
         }
         //-----------------
         // Open the database
-        sqlite3 *db;
-        sqlite3_stmt *stmt;
-        int rc;
-
-        NSString *databasePath = self.backupLocation;
-        rc = sqlite3_open([databasePath UTF8String], &db);
-        if (rc != SQLITE_OK) {
-            // Error handling goes here
-        }
-
-        // Prepare the SELECT statement
-        const char *sql = "SELECT ROWID, attributedBody FROM message WHERE text IS NULL AND attributedBody != '' ORDER BY date DESC LIMIT 10";
-        rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
-        if (rc != SQLITE_OK) {
-            // Error handling goes here
-        }
-
-        // Bind the parameter to the statement
-        rc = sqlite3_bind_text(stmt, 1, "some value", -1, SQLITE_STATIC);
-        if (rc != SQLITE_OK) {
-            // Error handling goes here
-        }
-
-        // Step through the result set
-        while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
-            // Extract the field of type blob
+        /*
+//        while (true) {
+            sqlite3 *db;
+            sqlite3_stmt *stmt;
+            int rc;
             
-            int rowid = sqlite3_column_int(stmt, 0);
-            NSLog(@"%d", rowid);
-
-            const void *blob = sqlite3_column_blob(stmt, 1);
-            int blob_size = sqlite3_column_bytes(stmt, 1);
-
-            NSLog(@"%s", (char *) blob);
+            NSString *databasePath = self.backupLocation;
+            rc = sqlite3_open([databasePath UTF8String], &db);
+            if (rc != SQLITE_OK) {
+                // Error handling goes here
+            }
             
-            // Convert the blob data to an NSDictionary
-            NSData *data = [NSData dataWithBytes:blob length:blob_size];
+            // Prepare the SELECT statement
+            const char *sql = "SELECT ROWID, attributedBody FROM message WHERE text IS NULL AND attributedBody != '' ORDER BY date DESC";
+            rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+            if (rc != SQLITE_OK) {
+                // Error handling goes here
+            }
             
-            const char *bytes = [data bytes];
-            char hexBuffer[2 * [data length] + 1]; // a buffer 2 times the size of data + 1 null character
-            int len = 0;
-            for (int i = 0; i < [data length]; i++) {
-                len += sprintf(hexBuffer + len, "%02x", bytes[i] & 0xff);
+            // Bind the parameter to the statement
+            rc = sqlite3_bind_text(stmt, 1, "some value", -1, SQLITE_STATIC);
+            if (rc != SQLITE_OK) {
+                // Error handling goes here
             }
-            NSString* hexString = [NSString stringWithUTF8String:hexBuffer];
-            NSRange range = [hexString rangeOfString:@"4e53537472696e67"];
-            if (range.location != NSNotFound) {
-                hexString = [hexString substringFromIndex:range.location + range.length];
-                hexString = [hexString substringFromIndex:12];
-            }
-            range = [hexString rangeOfString:@"8684"];
-            if (range.location != NSNotFound) {
-                hexString = [hexString substringToIndex:range.location];
-            }
-            NSLog(@"%@", hexString);
-//            hexString = [hexString stringByReplacingOccurrencesOfString:@" " withString:@""];
-            NSMutableData *newData= [[NSMutableData alloc] init];
-            unsigned char whole_byte;
-            char byte_chars[3] = {'\0','\0','\0'};
-            int i;
-            for (i=0; i < [hexString length]/2; i++) {
-                byte_chars[0] = [hexString characterAtIndex:i*2];
-                byte_chars[1] = [hexString characterAtIndex:i*2+1];
-                whole_byte = strtol(byte_chars, NULL, 16);
-                [newData appendBytes:&whole_byte length:1];
-            }
-            NSString *result = [[NSString alloc] initWithData:newData encoding:NSUTF8StringEncoding];
-            NSLog(@"%@", result);
             
-            // Update the row's text field
-//            NSString *updateSQL = [NSString stringWithFormat:@"UPDATE tablename SET text = '%@' WHERE rowid = %d", result, rowid];
-//            const char *update_stmt = [updateSQL UTF8String];
-//
-//            if (sqlite3_prepare_v2(db, update_stmt, -1, &updateStmt, NULL) == SQLITE_OK) {
-//                sqlite3_step(updateStmt);
-//                sqlite3_finalize(updateStmt);
+            NSMutableDictionary *toUpdate = [[NSMutableDictionary alloc] init];
+            
+            // Step through the result set
+            while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
+                // Extract the field of type blob
+                
+                int rowid = sqlite3_column_int(stmt, 0);
+                NSLog(@"%d", rowid);
+                
+                const void *blob = sqlite3_column_blob(stmt, 1);
+                int blob_size = sqlite3_column_bytes(stmt, 1);
+                
+                NSLog(@"%s", (char *) blob);
+                
+                NSData *data = [NSData dataWithBytes:blob length:blob_size];
+                
+                const char *bytes = [data bytes];
+                char hexBuffer[2 * [data length] + 1]; // a buffer 2 times the size of data + 1 null character
+                int len = 0;
+                for (int i = 0; i < [data length]; i++) {
+                    len += sprintf(hexBuffer + len, "%02x", bytes[i] & 0xff);
+                }
+                NSString* hexString = [NSString stringWithUTF8String:hexBuffer];
+                NSRange range = [hexString rangeOfString:@"4e53537472696e67"];
+                if (range.location != NSNotFound) {
+                    hexString = [hexString substringFromIndex:range.location + range.length];
+                    hexString = [hexString substringFromIndex:12];
+                }
+                range = [hexString rangeOfString:@"8684"];
+                if (range.location != NSNotFound) {
+                    hexString = [hexString substringToIndex:range.location];
+                }
+                NSLog(@"%@", hexString);
+                //            hexString = [hexString stringByReplacingOccurrencesOfString:@" " withString:@""];
+                NSMutableData *newData= [[NSMutableData alloc] init];
+                unsigned char whole_byte;
+                char byte_chars[3] = {'\0','\0','\0'};
+                int i;
+                for (i=0; i < [hexString length]/2; i++) {
+                    byte_chars[0] = [hexString characterAtIndex:i*2];
+                    byte_chars[1] = [hexString characterAtIndex:i*2+1];
+                    whole_byte = strtol(byte_chars, NULL, 16);
+                    [newData appendBytes:&whole_byte length:1];
+                }
+                NSString *result = [[NSString alloc] initWithData:newData encoding:NSUTF8StringEncoding];
+                NSLog(@"%@", result);
+                
+                if (!result) {
+                    continue;
+                }
+                
+                [toUpdate setObject:result forKey:[NSNumber numberWithInt:rowid]];
+                
+                // Update the row's text field
+                //            NSString *updateSQL = [NSString stringWithFormat:@"UPDATE tablename SET text = '%@' WHERE rowid = %d", result, rowid];
+                //            const char *update_stmt = [updateSQL UTF8String];
+                /*
+                 NSString *updateSQL = [NSString stringWithFormat:@"UPDATE message SET text = '%@' WHERE ROWID = %d", result, rowid];
+                 const char *updateSql = [updateSQL UTF8String];
+                 
+                 //            char *updateSql = "UPDATE message SET text = 'new_text' WHERE rowid = x";
+                 char *errMsg;
+                 int updateResult = sqlite3_exec(db, updateSql, NULL, NULL, &errMsg);
+                 if (updateResult != SQLITE_OK) {
+                 NSLog(@"Error");
+                 // Handle the error
+                 }
+                 
+                
+                NSLog(@"----------------------");
+            }
+            
+            // Finalize the statement
+            rc = sqlite3_finalize(stmt);
+            if (rc != SQLITE_OK) {
+                // Error handling goes here
+            }
+            
+            
+            
+            for (id key in toUpdate) {
+                NSString *value = [toUpdate objectForKey:key];
+                if (!value) {
+                    continue;
+                }
+                value = [value stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
+                NSString *sql = [NSString stringWithFormat:@"UPDATE message SET text = '%@' WHERE rowid = %@", value, key];
+                NSLog(@"%@", sql);
+                char *err_msg;
+                sqlite3_exec(db, [sql UTF8String], NULL, NULL, &err_msg);
+                if (err_msg != nil) {
+                    NSLog(@"SQL Error: %s", err_msg);
+                }
+            }
+            */
+            // Close the database
+//            rc = sqlite3_close(db);
+//            if (rc != SQLITE_OK) {
+//                // Error handling goes here
 //            }
-//            sqlite3_close(db);
-
-        }
+        /*
+            sql = "SELECT text FROM message WHERE rowid = 384496";
+            rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+            if (rc != SQLITE_OK) {
+                // Error handling goes here
+            }
             
-            NSLog(@"----------------------");
-        }
-
-        // Finalize the statement
-        rc = sqlite3_finalize(stmt);
-        if (rc != SQLITE_OK) {
-            // Error handling goes here
-        }
-
-        // Close the database
-        rc = sqlite3_close(db);
-        if (rc != SQLITE_OK) {
-            // Error handling goes here
-        }
+            // Bind the parameter to the statement
+            rc = sqlite3_bind_text(stmt, 1, "some value", -1, SQLITE_STATIC);
+            if (rc != SQLITE_OK) {
+                // Error handling goes here
+            }
+                        
+            // Step through the result set
+            while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
+                // Extract the field of type blob
+                
+                const unsigned char *text = sqlite3_column_text(stmt, 0);
+                NSLog(@"384496: %s", text);
+            }
+        */
+//        }
+        
+        
     }
 }
 
