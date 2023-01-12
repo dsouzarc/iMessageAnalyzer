@@ -365,7 +365,7 @@ static NSString *pathToDB;
                                                             "CASE WHEN LENGTH(date) >= 18 "
                                                                     "THEN (date / 1000000000) "
                                                                 "ELSE date END AS adjusted_date, "
-                                                            "date_read, is_from_me, cache_has_attachments, handle_id "
+                                                            "date_read, is_from_me, cache_has_attachments, handle_id, attributedBody "
                                                     "FROM message AS messageT "
                                                     "INNER JOIN chat_message_join AS chatMessageT "
                                                         "ON chatMessageT.chat_id IN (%@) "
@@ -386,6 +386,43 @@ static NSString *pathToDB;
             NSString *text = @"";
             if(sqlite3_column_text(statement, 2) != NULL) {
                 text = [NSString stringWithUTF8String: (const char*) sqlite3_column_text(statement, 2)];
+            } else {
+                const void *blob = sqlite3_column_blob(statement, 10);
+                int blob_size = sqlite3_column_bytes(statement, 10);
+                                
+                NSData *data = [NSData dataWithBytes:blob length:blob_size];
+                
+                const char *bytes = [data bytes];
+                char hexBuffer[2 * [data length] + 1]; // a buffer 2 times the size of data + 1 null character
+                int len = 0;
+                for (int i = 0; i < [data length]; i++) {
+                    len += sprintf(hexBuffer + len, "%02x", bytes[i] & 0xff);
+                }
+                NSString* hexString = [NSString stringWithUTF8String:hexBuffer];
+                NSRange range = [hexString rangeOfString:@"4e53537472696e67"];
+                if (range.location != NSNotFound) {
+                    hexString = [hexString substringFromIndex:range.location + range.length];
+                    hexString = [hexString substringFromIndex:12];
+                }
+                range = [hexString rangeOfString:@"8684"];
+                if (range.location != NSNotFound) {
+                    hexString = [hexString substringToIndex:range.location];
+                }
+                //            hexString = [hexString stringByReplacingOccurrencesOfString:@" " withString:@""];
+                NSMutableData *newData= [[NSMutableData alloc] init];
+                unsigned char whole_byte;
+                char byte_chars[3] = {'\0','\0','\0'};
+                int i;
+                for (i=0; i < [hexString length]/2; i++) {
+                    byte_chars[0] = [hexString characterAtIndex:i*2];
+                    byte_chars[1] = [hexString characterAtIndex:i*2+1];
+                    whole_byte = strtol(byte_chars, NULL, 16);
+                    [newData appendBytes:&whole_byte length:1];
+                }
+                NSString *result = [[NSString alloc] initWithData:newData encoding:NSUTF8StringEncoding];
+                if (result) {
+                    text = result;
+                }
             }
             
             const unsigned char *isIMessage = sqlite3_column_text(statement, 3);
